@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Moviles</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+    			<p:panelGrid columns="4" style="width:100%;">
+    				<f:facet name="header">
+    					<h:outputText value="#{beanProducto.headerText}" />
+    				</f:facet>
+    				<p:outputLabel value="Marca: " />
+    				<p:inputText value="#{beanProducto.producto.marca}" />
+    				
+    				<p:outputLabel value="Modelo: " />
+    				<p:inputText value="#{beanProducto.producto.modelo}" />
+    				
+    				<p:outputLabel value="Precio de último costo: " />
+    				<h:inputText value="#{beanProducto.producto.precioCosto}" disabled="true">
+    					<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+    				</h:inputText>
+    				
+    				<p:outputLabel value="Stock mínimo (Advertencia): " />
+    				<p:inputText value="#{beanProducto.producto.stockMinimo}" />
+    				
+    				<p:outputLabel value="Costo promedio(Prom. ult. 6 meses): " />
+    				<h:inputText value="#{beanProducto.producto.costoPromedio}" disabled="true" >
+    					<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+    				</h:inputText>
+    				
+    				<p:outputLabel value="Stock: " />
+    				<h:inputText value="#{beanProducto.getEnStock(beanProducto.producto)}" disabled="true" />
+    			</p:panelGrid>
+    			<p:panelGrid columns="2" style="width:100%;">	
+    				<p:outputLabel value="Descripción: " />
+    				<p:inputTextarea value="#{beanProducto.producto.descripcion}" autoResize="false"
+    				style="width:100%;" rows="3"/>    				
+    				
+   					<f:facet name="footer">
+   						<p:commandButton value="Guardar" update="messages" action="#{beanProducto.guardarProducto()}"/>
+   						<p:commandButton value="Cancelar" oncomplete="return confirm('CANCELAR PRODUCTO Y VOLVER?')"
+   						action="productos"/>
+   					</f:facet>	
+   				</p:panelGrid>
+   			</p:panel>
+	    	</h:form>
+	    </div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

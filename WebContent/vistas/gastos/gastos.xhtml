@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Gastos</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+				<h5>(*)Para reflejar la búsqueda debe hacer doble click sobre el botón Buscar</h5>
+		    	<p:panelGrid columns="5" cellpadding="5" style="width:50%;">
+		    		<f:facet name="header">
+		    			<h:outputText value="Filtros" />
+		    		</f:facet>
+		    		<p:outputLabel value="Desde: " />
+		    		<p:calendar value="#{beanGasto.fechaDesde}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+		    		<p:outputLabel value="Hasta: " />
+		    		<p:calendar value="#{beanGasto.fechaHasta}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+					<p:commandButton icon="ui-icon-search" update="contenedorGastos" action="#{beanGasto.filtro()}" />
+				</p:panelGrid>
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorGastos" widgetVar="gastoBusqueda" var="gasto"
+				value="#{beanGasto.listaGastos}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanGasto.filteredGastos}" emptyMessage="No existen Gastos" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nuevo" action="#{beanGasto.goGastoNuevo()}"/>
+						<p:outputLabel value="Gastos" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('gastoBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel>
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanGasto.generarReporte()}" target="_blank" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+										
+					<p:column style="text-align: center; width:70px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Baja" title="Baja" />
+						</f:facet>						
+						<p:row rendered="#{gasto.estado}">
+							<h:commandLink id="desactivar" title="Desactivar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA EL GASTO?')"
+								action="#{beanGasto.baja(gasto)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar el Gasto" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!gasto.estado}">
+							<h:graphicImage value="/images/desactivo.ico" width="20"
+									id="estadoActivar" title="Activar el Producto" />
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Fecha" filterBy="#{gasto.fecha}" 
+					filterStyle="display:none;" sortBy="#{gasto.fecha}">
+						<h:outputText value="#{gasto.fecha}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Descripción">
+						<h:outputText value="#{gasto.descripcion}" />
+					</p:column>
+					
+					<p:column headerText="Monto" style="text-align:right;">
+						<h:outputText value="$" />
+						<h:outputText value="#{gasto.monto}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>						
+					</p:column>
+				</p:dataTable>	 
+			</p:panel>
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

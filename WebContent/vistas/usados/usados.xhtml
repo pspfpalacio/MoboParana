@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Moviles Usados</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+				<h2 align="center">MÓVILES USADOS</h2>
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorProducto" widgetVar="productoBusqueda" var="producto"
+				value="#{beanProducto.listaProductos}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanProducto.filteredProductos}" emptyMessage="No existen Móviles" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nuevo" action="#{beanProducto.goUsadoNuevo()}"/>
+						<p:outputLabel value="Móviles Usados" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('productoBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanProducto.generarReporte('usados')}" target="_blank" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+											
+					<p:column style="text-align: center; width:40px;" id="modificar">
+						<f:facet name="header">
+							<h:outputText value="Mod." title="Modificar el Móvil Usado" />
+						</f:facet>						
+						<p:commandLink title="Modificar" action="#{beanProducto.goUsadoEditar(producto)}" >							
+							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
+						</p:commandLink>
+					</p:column>
+										
+					<p:column style="text-align: center; width:70px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Alta/Baja" title="Activar o Desactivar" />
+						</f:facet>						
+						<p:row rendered="#{producto.estado}">
+							<h:commandLink id="desactivar" title="Desactivar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA EL MÓVIL USADO?')"
+								action="#{beanProducto.baja(producto)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar el Móvil" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!producto.estado}">
+							<h:commandLink id="activar" title="Activar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE ALTA EL MÓVIL USADO?')"
+								action="#{beanProducto.alta(producto)}">
+								<h:graphicImage value="/images/desactivo.ico" width="20"
+									id="estadoActivar" title="Activar el Móvil" />
+							</h:commandLink>
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Marca y Modelo" filterBy="#{producto.nombre}" 
+					filterStyle="display:none;" sortBy="#{producto.nombre}">
+						<h:outputText value="#{producto.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Costo Promedio" filterBy="#{producto.precioCosto}" 
+					filterStyle="display:none;" sortBy="#{producto.precioCosto}" style="text-align:right;">
+						<h:outputText value="$" />
+						<h:outputText value="#{producto.precioCosto}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Descripción">
+						<h:outputText value="#{producto.descripcion}" />
+					</p:column>					
+					
+					<p:column headerText="Stock" style="text-align:center;">
+						<h:outputText value="#{producto.stock}" />
+					</p:column>
+					
+					<p:column headerText="Ajuste de Stock" style="text-align:center;">
+						<p:commandButton icon="ui-icon-clipboard" action="#{beanProducto.verStockUsado(producto)}"
+						disabled="#{!producto.estado}"  />
+					</p:column>
+				</p:dataTable>
+				
+				</p:panel>
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

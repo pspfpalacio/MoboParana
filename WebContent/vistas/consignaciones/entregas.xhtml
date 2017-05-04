@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Entregas</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+				<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+				<h3 align="center">Entregas</h3>
+		    	<p:panelGrid id="panelUno" columns="4" cellpadding="5" style="width:100%;">
+		    		<f:facet name="header">
+		    			<h:outputText value="Nueva" />
+		    		</f:facet>
+		    		<p:outputLabel value="Consignación: " />
+		    		<p:outputLabel value="#{beanEntregas.consignacion.id}" />
+		    		<p:outputLabel value="Cliente: " />
+		    		<p:outputLabel value="#{beanEntregas.consignacion.cliente.nombreNegocio}" />
+		    		<p:outputLabel value="Fecha: " />
+		    		<p:calendar value="#{beanEntregas.entregaConsignacion.fecha}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+		    		<p:outputLabel value="Monto($): " />
+		    		<p:inputText value="#{beanEntregas.entregaConsignacion.monto}" />
+		    	</p:panelGrid>
+		    	<p:panelGrid id="panelDos" columns="2" cellpadding="5" style="width:100%;">
+					<p:outputLabel value="Descripción/Concepto:" />
+					<p:inputTextarea value="#{beanEntregas.entregaConsignacion.concepto}" style="width:100%;" autoResize="false" rows="2"  />
+					<f:facet name="footer">
+						<p:commandButton icon="ui-icon-check" value="Confirmar" update="panelUno, panelDos, contenedorEntregas, messages" 
+						action="#{beanEntregas.guardar()}" onclick="return confirm('ESTA SEGURO QUE DESEA CONFIRMAR LA ENTREGA?')"/>
+						<p:commandButton icon="ui-icon-close" value="Cancelar" update="panelUno, panelDos" 
+						action="#{beanEntregas.cancelar()}"/>
+						<p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver" action="#{beanEntregas.volver()}" 
+						onclick="return confirm('ESTA SEGURO QUE DESEA VOLVER?')"/>
+					</f:facet>					
+				</p:panelGrid>
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorEntregas" var="entregas"
+				value="#{beanEntregas.listaEntregaConsignacions}" paginator="true" rows="30" resizableColumns="true"
+				emptyMessage="No existen Entregas" sortMode="multiple">
+					<f:facet name="header">
+						<p:outputLabel value="Entregas" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanEntregas.generarReporte()}" target="_blank" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+					
+					<p:column style="text-align: center; width:70px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Baja" title="Baja" />
+						</f:facet>						
+						<p:row rendered="#{entregas.estado}">
+							<h:commandLink id="desactivar" title="Desactivar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA LA ENTREGA?')"
+								action="#{beanEntregas.baja(entregas)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar la Entrega" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!entregas.estado}">
+							<h:graphicImage value="/images/desactivo.ico" width="20"
+									id="estadoActivar" />
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Comprobante" style="width:120px;text-align:center;">
+						<h:commandLink action="#{beanEntregas.generarReporteComprobante(entregas)}" >
+							<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+						</h:commandLink>
+					</p:column>
+					
+					<p:column headerText="Fecha" style="width:110px;text-align:center;">
+						<h:outputText value="#{entregas.fecha}" >
+							<f:convertDateTime pattern="dd/MM/yyyy" locale="tr"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Monto" style="width:110px;text-align:center;">
+						<h:outputText value="$" />
+						<h:outputText value="#{entregas.monto}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Descripción/Concepto" >
+						<h:outputText value="#{entregas.concepto}" />
+					</p:column>
+				</p:dataTable>	
+				</p:panel> 
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

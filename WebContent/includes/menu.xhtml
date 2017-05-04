@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition>
+	<div>
+		<p:menubar style="background:#FFD6D5;">
+			<p:menuitem value="Inicio" icon="ui-icon-home" action="inicio" process="@this"/>
+			<p:menuitem value="Stock" icon="ui-icon-suitcase" action="#{beanStock.goStock(beanLogueo.usuario)}" process="@this"/>
+			<p:menuitem value="Generar Venta" icon="ui-icon-cart" action="#{beanVentaCliente.goVenta(beanLogueo.usuario)}" process="@this"/>
+			<p:menuitem value="Listado Ventas" icon="ui-icon-clipboard" action="#{beanVentaCliente.goVentas(beanLogueo.usuario)}" process="@this"/>
+
+			<f:facet name="options">
+				<p:outputLabel value="                                   " />
+				<p:outputLabel value="#{beanLogueo.usuario.username}     " style="font-family:sans-serif;" />
+				
+				<p:commandButton icon="ui-icon-gear" action="#{beanLogueo.setting()}"
+					oncomplete="PF('dialogUsuario').show();" update="panelUser" process="@this"/>
+				<p:commandButton id="ButtonLogout" action="#{beanLogueo.logout()}" 
+					value="Logout" icon="ui-icon-extlink" ajax="false" url="/login.xhtml"/>
+			</f:facet>
+		</p:menubar>
+		<p:clock pattern="dd/MM/yyyy - hh:mm:ss" />
+		<p:dialog header="Usuario" widgetVar="dialogUsuario" id="dialogU" modal="true">
+			<p:outputPanel id="panelUser">
+   				<p:panelGrid columns="2">	   				
+   					
+   					<h:outputLabel for="username" value="Username: " />
+   					<p:inputText id="username" value="#{beanLogueo.usuario.username}" />
+   					<h:outputLabel for="nombre" value="Apellido y Nombres: " />
+   					<p:inputText id="nombre" value="#{beanLogueo.usuario.apellidoNombre}" />
+					<h:outputLabel value="Contraseña: " for="passNew"/>
+					<p:password id="passNew" value="#{beanLogueo.passNueva}" >
+						<p:ajax event="keyup" update="ok" listener="#{beanLogueo.handleKeyEvent()}"/>
+					</p:password>
+					<h:outputLabel value="Confirmar Contraseña: " for="confirmPassNew"/>
+					<p:column>
+						<p:password id="confirmPassNew" value="#{beanLogueo.confirmPass}" >
+				    		<p:ajax event="keyup" update="ok, guardar" listener="#{beanLogueo.handleKeyEvent()}"/>
+				    	</p:password>
+				    	<h:outputText id="ok" value="#{beanLogueo.textOk}" />
+			    	</p:column>
+			    	<h:outputLabel for="rol" value="Rol: " />
+			    	<p:selectOneMenu id="rol" value="#{beanLogueo.idRol}"  
+			    		style="width:200px;" disabled="#{beanLogueo.idRol != 1}">
+			    		<f:selectItems value="#{beanLogueo.listaRoles}" var="rol" itemLabel="#{rol.nombre}"
+			    		itemValue="#{rol.id}"/>
+			    	</p:selectOneMenu>
+   					<p:commandButton id="guardar" value="Guardar" disabled="#{!beanLogueo.checkButton}"
+   						oncomplete="PF('dialogUsuario').hide()" update="messages" action="#{beanLogueo.editarUsuario()}"/>
+   					<p:commandButton value="Cancelar"  
+   						oncomplete="PF('dialogUsuario').hide()" update="panelUser"/>
+   					
+   				</p:panelGrid>
+  				</p:outputPanel>
+		</p:dialog>
+		<p:idleMonitor onactive="PF('sessionTimeOutDialog').show()" timeout="3600000" process="@this"/>
+		<p:dialog header="Session Caducada!" widgetVar="sessionTimeOutDialog" modal="true" closable="false" 
+			width="400" visible="false">
+			
+			<h:outputText value="La sesión ha caducado, por favor, pulse sobre el siguiente botón para volver a acceder a la aplicación" />
+			<input id="confirmBackToLogin" type="button" value="Volver a acceder a la aplicación" 
+			onclick="window.location='#{facesContext.externalContext.requestContextPath}/login.xhtml';" />
+			
+		</p:dialog>
+	</div>
+	<script type="text/javascript">
+		  //<![CDATA[
+		  function logout(xhr, status, args) {
+		    setTimeout(function() {
+		      window.location = '/login.xhtml';
+		    }, 3600);
+		  }
+		//]]>
+	</script>
+	</ui:composition>
+</html>

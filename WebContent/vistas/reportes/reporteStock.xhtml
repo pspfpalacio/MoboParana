@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Reporte Stock</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario" onkeypress="return event.keyCode != 13">
+			<p:panel id="panelGral" style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<h2><p:outputLabel value="REPORTE DE STOCK" /></h2>
+				<p:panelGrid columns="4" style="width:100%;">
+					<f:facet name="header">
+						<h:outputText value="Seleccione Opciones" />
+					</f:facet>
+					<p:outputLabel value="Tipos de Producto: " />
+					<p:selectOneMenu value="#{beanReporte.idTipoProducto}" style="width:250px;">
+    					<f:selectItem itemLabel="Seleccione" itemValue="0"/>
+    					<f:selectItem itemLabel="Móviles" itemValue="1"/>
+    					<f:selectItem itemLabel="Accesorios" itemValue="2"/>    					
+    				</p:selectOneMenu>
+    				<p:outputLabel value="Estado: " />
+					<p:selectOneMenu value="#{beanReporte.idEstado}" style="width:250px;">    					
+    					<f:selectItem itemLabel="Todos" itemValue="0"/>
+    					<f:selectItem itemLabel="Activos" itemValue="1"/>
+    					<f:selectItem itemLabel="Desactivos" itemValue="2"/>
+    				</p:selectOneMenu>
+				</p:panelGrid>
+				<p:panelGrid columns="1" style="width:100%;">
+					<f:facet name="header">
+						<p:commandButton value="Buscar" icon="ui-icon-search" update="panelGral" 
+						action="#{beanReporte.buscarStock()}" />
+					</f:facet>
+				</p:panelGrid>
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorStock" widgetVar="stockBusqueda" var="stock" value="#{beanReporte.listaProductoUnidads}"
+				paginator="true" rows="30" resizableColumns="true"
+				emptyMessage="No existen Productos para los filtros seleccionados" >
+					<f:facet name="header">
+						<p:outputLabel value="Stock de Productos" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('stockBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">	
+							<h:commandLink action="#{beanReporte.generarXlsStock()}" >
+								<p:graphicImage value="../../images/xls-icon.ico" width="25" style="margin-right: 20px; float: left;" />
+							</h:commandLink>						
+							<h:commandLink action="#{beanReporte.generarPdfStock()}" target="_blank">
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+					
+					<p:column headerText="Marca y Modelo" filterBy="#{stock.marcaModelo}" 
+					filterStyle="display:none;">
+						<h:outputText value="#{stock.marcaModelo}" />
+					</p:column>
+					
+					<p:column headerText="Stock">
+						<h:outputText value="#{stock.stock}" />
+					</p:column>
+					
+					<p:column headerText="Imei" filterBy="#{stock.nroImei}" 
+					filterStyle="display:none;" rendered="#{beanReporte.idTipoProducto == 1}">
+						<h:outputText value="#{stock.nroImei}" />
+					</p:column>					
+				</p:dataTable>
+			</p:panel> 
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

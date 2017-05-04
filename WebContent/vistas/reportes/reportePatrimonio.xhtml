@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Ranking Productos</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<h2><p:outputLabel value="Patrimonio" /></h2>
+				<br/>				
+				<p:panelGrid columns="1" style="width:100%; margin_top:20px; text-align:center;" styleClass="panelGrid">
+					<f:facet name="header">
+						<h:outputLabel value="Patrimonio Actual" />
+						<h:commandLink action="#{beanReporte.reportePatrimonio()}" target="_blank">
+							<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;"/>
+						</h:commandLink>
+					</f:facet>
+				</p:panelGrid>
+				<p:panelGrid style="width:100%; margin_top:20px; text-align:center;" styleClass="panelGrid">
+					<f:facet name="header">
+						<p:row>
+				            <p:column colspan="4">CB Telefonía</p:column>
+				        </p:row>
+				        <p:row>
+				            <p:column colspan="2">Activos</p:column>
+				            <p:column colspan="2">Pasivos</p:column>
+				        </p:row>
+					</f:facet>
+					<p:row>
+				        <p:column style="font-weight: bold;">
+				        	Caja:
+				        </p:column>
+				        <p:column style="font-weight: bold;">
+				        	<p:outputLabel value="$"/>
+				        	<p:outputLabel id="montoCaja" value="#{beanReporte.totalCaja}">
+				        		<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+				        	</p:outputLabel>
+				        </p:column>
+				 
+				        <p:column rowspan="2" style="font-weight: bold;">
+				        	CuentaCorriente - Proveedores:
+				        </p:column>
+				        <p:column rowspan="2" style="font-weight: bold;">
+				        	<p:outputLabel value="$"/>
+				        	<p:outputLabel id="montoProveedor" value="#{beanReporte.totalccProveedor}" >
+				        		<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+				        	</p:outputLabel>
+				        </p:column>
+				    </p:row>
+				    <p:row>
+				        <p:column style="font-weight: bold;">
+				        	Stock - Accesorios:
+				        </p:column>
+				        <p:column style="font-weight: bold;">
+				        	<p:outputLabel value="$"/>
+				        	<p:outputLabel id="montoProducto" value="#{beanReporte.totalStockAccesorios}">
+				        		<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+				        	</p:outputLabel>
+				        </p:column>				        
+				    </p:row>
+				    <p:row>
+				        <p:column style="font-weight: bold;">
+				        	Stock - Móviles:
+				        </p:column>
+				        <p:column style="font-weight: bold;">
+				        	<p:outputLabel value="$"/>
+				        	<p:outputLabel id="montoProducto2" value="#{beanReporte.totalStockProductos}">
+				        		<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+				        	</p:outputLabel>
+				        </p:column>	
+				        
+				        <p:column rowspan="2" style="font-weight: bold;">
+				        	Gastos:
+				        </p:column>
+				        <p:column rowspan="2" style="font-weight: bold;">
+				        	<p:outputLabel value="$"/>
+				        	<p:outputLabel id="totalGastos" value="#{beanReporte.totalGastos}" >
+				        		<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+				        	</p:outputLabel>
+				        </p:column>			        
+				    </p:row>
+				    <p:row>
+				        <p:column style="font-weight: bold;">
+				        	CuentaCorriente - Clientes:
+				        </p:column>
+				        <p:column style="font-weight: bold;">
+				        	<p:outputLabel value="$"/>
+				        	<p:outputLabel id="montoCliente" value="#{beanReporte.totalccCliente}">
+				        		<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+				        	</p:outputLabel>
+				        </p:column>
+				    </p:row>
+				    <f:facet name="footer">
+				        <p:row>
+				            <p:column colspan="2" style="text-align: left;">
+				            	<p:outputLabel value="SubTotal Activos: $" />
+				                <p:outputLabel id="montoActivos" value="#{beanReporte.totalActivos}" >
+				                	<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+				        		</p:outputLabel>
+				            </p:column>
+				            <p:column colspan="2" style="text-align: left;">
+				            	<p:outputLabel value="SubTotal Pasivos: $" />
+				                <p:outputLabel id="montoPasivos" value="#{beanReporte.totalPasivos}" >
+				                	<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+				                </p:outputLabel>
+				            </p:column>
+				        </p:row>
+				        <p:row>
+				        	<p:column colspan="4" style="text-align: right;">
+				        		<p:outputLabel value="Total Patrimonio: $" />
+				        		<p:outputLabel id="montoTotal" value="#{beanReporte.totalPatrimonio}">
+				        			<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+				        		</p:outputLabel>
+				        	</p:column>
+				        </p:row>
+				    </f:facet>
+				</p:panelGrid>
+				
+			</p:panel>
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

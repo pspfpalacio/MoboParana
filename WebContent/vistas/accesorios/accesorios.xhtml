@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Accesorios</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<h2 align="center">ACCESORIOS</h2>
+				<br/>
+				<p:panelGrid columns="4" cellpadding="5" style="width:50%;">
+		    		<f:facet name="header">
+		    			<h:outputText value="Filtro" />
+		    		</f:facet>
+					<p:outputLabel value="Estado: " />
+					<p:selectOneMenu style="width:250px;" value="#{beanProducto.estado}">
+						<f:selectItem itemLabel="Todos" itemValue="0"/>
+						<f:selectItem itemLabel="Activos" itemValue="1"/>
+						<f:selectItem itemLabel="Desactivos" itemValue="2"/>						
+					</p:selectOneMenu>
+					<f:facet name="footer">
+						<p:commandButton icon="ui-icon-search" value="Buscar" update="panel" action="#{beanProducto.filtroAccesorios()}" />
+					</f:facet>					
+				</p:panelGrid>
+				<p:dataTable id="contenedorAccesorio" widgetVar="productoBusqueda" var="producto"
+				value="#{beanProducto.listaProductos}" paginator="true" rows="30" resizableColumns="true"
+				emptyMessage="No existen Accesorios" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nuevo" action="#{beanProducto.goAccesorioNuevo()}"/>
+						<p:outputLabel value="Accesorios" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('productoBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanProducto.generarReporte('accesorios')}" target="_blank" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+											
+					<p:column style="text-align: center; width:40px;" id="modificar">
+						<f:facet name="header">
+							<h:outputText value="Mod." title="Modificar el Producto" />
+						</f:facet>						
+						<p:commandLink title="Modificar" action="#{beanProducto.goAccesorioEditar(producto)}" 
+							disabled="#{!producto.estado}">							
+							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
+						</p:commandLink>
+					</p:column>
+										
+					<p:column style="text-align: center; width:70px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Alta/Baja" title="Activar o Desactivar" />
+						</f:facet>						
+						<p:row rendered="#{producto.estado}">
+							<h:commandLink id="desactivar" title="Desactivar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA EL ACCESORIO?')"
+								action="#{beanProducto.baja(producto)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar el Accesorio" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!producto.estado}">
+							<h:commandLink id="activar" title="Activar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE ALTA EL ACCESORIO?')"
+								action="#{beanProducto.alta(producto)}">
+								<h:graphicImage value="/images/desactivo.ico" width="20"
+									id="estadoActivar" title="Activar el Accesorio" />
+							</h:commandLink>
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Marca y Modelo" filterBy="#{producto.nombre}" 
+					filterStyle="display:none;" sortBy="#{producto.nombre}">
+						<h:outputText value="#{producto.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Costo Promedio" filterBy="#{producto.precioCosto}" 
+					filterStyle="display:none;" sortBy="#{producto.precioCosto}" style="text-align:right;">
+						<h:outputText value="$" />
+						<h:outputText value="#{producto.precioCosto}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Descripción">
+						<h:outputText value="#{producto.descripcion}" />
+					</p:column>					
+					
+					<p:column headerText="Stock" style="text-align:center;">
+						<h:outputText value="#{beanProducto.getEnStockAccesorio(producto)}" />
+					</p:column>
+					
+					<p:column headerText="Ajuste de Stock" style="text-align:center;">
+						<p:commandButton icon="ui-icon-clipboard" oncomplete="PF('dialogoStock').show()" update=":formulario:outputPanel" 
+						disabled="#{!producto.estado}" action="#{beanProducto.verStockAccesorio(producto)}"/>
+					</p:column>
+				</p:dataTable>
+				<p:dialog header="Stock" widgetVar="dialogoStock"
+					id="dialogo" modal="true">
+					<p:outputPanel id="outputPanel">
+						<h:panelGrid columns="1">
+							<p:outputLabel value="#{beanProducto.producto.nombre}" />
+						</h:panelGrid>
+						<h:panelGrid columns="5">
+							<p:outputLabel value="Precio de Compra ($): " />
+							<p:inputText id="precioC" value="#{beanProducto.precioCompra}" >
+								<f:convertNumber pattern="#,##0.00" maxFractionDigits="2"/>
+							</p:inputText>
+							
+							<p:outputLabel value="Cantidad: "/>
+							<p:inputMask id="cantidad" value="#{beanProducto.cantidad}" mask="9?99999999" />											
+							
+							<p:commandButton id="agregar" value="Agregar" update="cantidad, tablaStock, precioC, messages, :formulario:contenedorAccesorio" 
+							action="#{beanProducto.agregStock()}"/>
+							<p:defaultCommand target="agregar" />
+						</h:panelGrid>
+						<h:panelGrid columns="1">
+							<p:dataTable id="tablaStock" var="stock" value="#{beanProducto.listaStocks}" scrollRows="50" resizableColumns="true"
+							editable="true"	scrollable="true" liveScroll="true" scrollHeight="400" emptyMessage="No posee Stock">
+								<f:facet name="header">
+									<h:outputText value="Stock de Producto" />
+								</f:facet>
+								<p:ajax event="rowEdit" listener="#{beanProducto.onStockEdit(stock)}" 
+			    				update=":formulario:tablaStock, :formulario:contenedorAccesorio" />
+			       				<p:ajax event="rowEditCancel" listener="#{beanProducto.onStockCancel(stock)}" 
+			       				update=":formulario:tablaStock" />
+								<p:column headerText="Cantidad">
+									<p:cellEditor>
+										<f:facet name="output"><h:outputText value="#{stock.cantidad}" /></f:facet>
+										<f:facet name="input"><p:inputText id="cantidadInput" value="#{stock.cantidad}" /></f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column headerText="Precio de Compra">
+									<p:cellEditor>										
+										<f:facet name="output">
+											<h:outputText value="$" />
+											<h:outputText value="#{stock.precioCompra}" >
+												<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+											</h:outputText>
+										</f:facet>
+										<f:facet name="input"><p:inputText id="precioInput" value="#{stock.precioCompra}" /></f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column style="width:32px">
+						           <p:rowEditor />
+						       </p:column>
+							</p:dataTable>
+						</h:panelGrid>
+					</p:outputPanel>
+				</p:dialog>	
+				</p:panel>
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

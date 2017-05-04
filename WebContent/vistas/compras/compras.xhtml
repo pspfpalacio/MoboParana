@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Compras</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+				<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+				<h5>(*)Para reflejar la búsqueda debe hacer doble click sobre el botón Buscar</h5>
+		    	<p:panelGrid columns="4" cellpadding="5" style="width:50%;">
+		    		<f:facet name="header">
+		    			<h:outputText value="Filtros" />
+		    		</f:facet>
+		    		<p:outputLabel value="Desde: " />
+		    		<p:calendar value="#{beanCompra.fechaInicio}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+		    		<p:outputLabel value="Hasta: " />
+		    		<p:calendar value="#{beanCompra.fechaFin}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+					<p:outputLabel value="Proveedor: " />
+					<p:selectOneMenu style="width:250px;" value="#{beanCompra.idProveedor}" filter="true" filterMatchMode="contains">
+						<f:selectItem itemLabel="Todos" itemValue="0"/>
+						<f:selectItems value="#{beanCompra.listaProveedores}" var="prov" itemLabel="#{prov.nombreNegocio}" itemValue="#{prov.id}"/>
+					</p:selectOneMenu>
+					<f:facet name="footer">
+						<p:commandButton icon="ui-icon-search" value="Buscar" update="contenedorCompras" action="#{beanCompra.filtro()}" />
+					</f:facet>					
+				</p:panelGrid>
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorCompras" widgetVar="compraBusqueda" var="compra"
+				value="#{beanCompra.listaCompras}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanCompra.filteredCompras}" emptyMessage="No existen Compras" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nueva" action="#{beanCompra.goCompraNueva()}"/>
+						<p:outputLabel value="Compras" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('compraBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanCompra.generarReporteLista()}" target="_blank">
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+					
+					<p:column headerText="Comprobante" style="text-align:center;width:120px;">
+						<h:commandLink action="#{beanCompra.generarReporteComprobante(compra)}">
+							<p:graphicImage value="../../images/pdf-icon.png" width="20"  />
+						</h:commandLink>
+						<p:rowToggler />
+					</p:column>
+											
+					<p:column style="text-align: center; width:40px;" id="modificar">
+						<f:facet name="header">
+							<h:outputText value="Mod." title="Modificar la Compra" />
+						</f:facet>						
+						<p:commandLink title="Modificar" action="#{beanCompra.goCompraEditar(compra)}" disabled="#{!compra.estado}">							
+							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
+						</p:commandLink>
+					</p:column>
+										
+					<p:column style="text-align: center; width:70px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Baja" title="Desactivar" />
+						</f:facet>						
+						<p:row rendered="#{compra.estado}">
+							<h:commandLink id="desactivar" title="Desactivar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA LA COMPRA?')"
+								action="#{beanCompra.baja(compra)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar la Compra" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!compra.estado}">
+							<h:graphicImage value="/images/desactivo.ico" width="20"
+								id="estadoActivar" title="Compra deshabilitada" />
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Nro" filterBy="#{compra.id}" style="text-align:center; width:70px;"
+					filterStyle="display:none;" sortBy="#{compra.id}">
+						<h:outputText value="#{compra.id}" />
+					</p:column>
+					
+					<p:column headerText="Fecha" filterBy="#{compra.fecha}"
+					filterStyle="display:none;" sortBy="#{compra.fecha}">
+						<h:outputText value="#{compra.fecha}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Tipo" filterBy="#{compra.tipo}" filterStyle="display:none;"
+					sortBy="#{compra.tipo}">
+						<p:commandLink value="#{compra.tipo}" title="Modificar" oncomplete="PF('dialogo').show()" 
+						action="#{beanCompra.goEditarTipo(compra)}" disabled="#{!compra.estado}" update=":formulario:outputPanel"/>
+					</p:column>
+					
+					<p:column headerText="Proveedor" filterBy="#{compra.proveedore.nombreNegocio}"
+					filterStyle="display:none;">
+						<h:outputText value="#{compra.proveedore.nombreNegocio}" />
+					</p:column>
+					
+					<p:column headerText="Monto" filterBy="#{compra.monto}"
+					filterStyle="display:none;" style="width:140px;text-align:right;">
+						<h:outputText value="$" />
+						<h:outputText value="#{compra.monto}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:rowExpansion>
+						<p:dataTable value="#{beanCompra.getDetalleDeCompra(compra)}" var="detalle">
+							<f:facet name="header">
+								<h:outputText value="Detalle" />
+							</f:facet>
+							
+							<p:column headerText="Cantidad" style="text-align:center;">
+								<h:outputText value="#{detalle.cantidad}" />
+							</p:column>
+							
+							<p:column headerText="Producto">
+								<h:outputText value="#{detalle.producto.nombre}" />
+							</p:column>
+							
+							<p:column headerText="Precio de Compra">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.precioCompra}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Subtotal">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.subtotal}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+				</p:dataTable>	 
+				<p:dialog header="Cambiar tipo de Compra" widgetVar="dialogo"
+					id="dialog" modal="true">
+					<p:outputPanel id="outputPanel">
+						<h:panelGrid columns="4">
+							<p:outputLabel value="Nro:" />
+							<h:inputText value="#{beanCompra.compra.id}" disabled="true"/>
+							<p:outputLabel value="Fecha:" />
+							<h:inputText value="#{beanCompra.compra.fecha}" disabled="true" >
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:inputText>
+							<p:outputLabel value="Proveedor:" />
+							<h:inputText value="#{beanCompra.compra.proveedore.nombreNegocio}" disabled="true"/>
+							<p:outputLabel value="Tipo:" />
+							<p:selectOneRadio value="#{beanCompra.tipo}">
+		    					<f:selectItem itemLabel="c.c." itemValue="c.c."/>
+		    					<f:selectItem itemLabel="ctdo." itemValue="ctdo."/>
+		    				</p:selectOneRadio>	
+						</h:panelGrid>
+						<p:panelGrid columns="2" style="width:100%;">
+							<f:facet name="header">
+								<p:commandButton value="Guardar" onclick="return confirm('ESTA SEGURO QUE DESEA CAMBIAR EL TIPO DE COMPRA?')" 
+								update=":formulario:contenedorCompras"	oncomplete="PF('dialogo').hide()" action="#{beanCompra.editarTipo()}"/>
+								<p:commandButton value="Cancelar" oncomplete="PF('dialogo').hide()" 
+								onclick="return confirm('ESTA SEGURO QUE DESEA CANCELAR EL CAMBIO DE TIPO DE COMPRA?')"/>
+							</f:facet>
+						</p:panelGrid>
+					</p:outputPanel>
+				</p:dialog>
+				</p:panel>
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

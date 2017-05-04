@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Proveedores</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+				<h2 align="center">PROVEEDORES</h2>
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorProveedor" widgetVar="proveedorBusqueda" var="proveedor"
+				value="#{beanProveedor.listaProveedores}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanProveedor.filteredProveedores}" emptyMessage="No existen Proveedores" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nuevo" action="#{beanProveedor.goProveedorNuevo()}"/>
+						<p:outputLabel value="Proveedores" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('proveedorBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanProveedor.generarReporte()}" target="_blank" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+											
+					<p:column style="text-align: center; width:40px;" id="modificar">
+						<f:facet name="header">
+							<h:outputText value="Mod." title="Modificar el Proveedor" />
+						</f:facet>						
+						<p:commandLink title="Modificar" action="#{beanProveedor.goProveedorEditar(proveedor)}" >							
+							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
+						</p:commandLink>
+					</p:column>
+								
+					<p:column style="text-align: center; width:40px;">
+						<f:facet name="header">
+							<h:outputText value="C.C." title="CC"/>
+						</f:facet>
+						<p:commandButton icon="ui-icon-contact" style="width: 30px; height: 30px;" update=":formulario:messages"
+						action="#{beanCuentaCorriente.goCuentaCorrienteProveedor(proveedor, beanProveedor.usuario)}"/>
+					</p:column>
+										
+					<p:column style="text-align: center; width:70px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Alta/Baja" title="Activar o Desactivar" />
+						</f:facet>						
+						<p:row rendered="#{proveedor.estado}">
+							<h:commandLink id="desactivar" title="Desactivar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA EL PROVEEDOR?')"
+								action="#{beanProveedor.baja(proveedor)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar el Proveedor" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!proveedor.estado}">
+							<h:commandLink id="activar" title="Activar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE ALTA EL PROVEEDOR?')"
+								action="#{beanProveedor.alta(proveedor)}">
+								<h:graphicImage value="/images/desactivo.ico" width="20"
+									id="estadoActivar" title="Activar el Proveedor" />
+							</h:commandLink>
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Apellido y Nombres" filterBy="#{proveedor.apellidoNombre}" 
+					filterStyle="display:none;" sortBy="#{proveedor.apellidoNombre}">
+						<h:outputText value="#{proveedor.apellidoNombre}" />
+					</p:column>
+					
+					<p:column headerText="Nombre de Negocio" filterBy="#{proveedor.nombreNegocio}"
+					filterStyle="display:none;" sortBy="#{proveedor.nombreNegocio}">
+						<h:outputText value="#{proveedor.nombreNegocio}" />
+					</p:column>
+					
+					<p:column headerText="Dirección" >
+						<h:outputText value="#{proveedor.direccion}" />
+					</p:column>
+					
+					<p:column headerText="Teléfono" >
+						<h:outputText value="#{proveedor.telefono}" />
+					</p:column>
+					
+					<p:column headerText="e-mail">
+						<h:outputText value="#{proveedor.email}" />
+					</p:column>
+					
+					<p:column headerText="Banco" filterBy="#{proveedor.banco}"
+					filterStyle="display:none;">
+						<h:outputText value="#{proveedor.banco}" />
+					</p:column>
+					
+					<p:column headerText="Sucursal" filterBy="#{proveedor.sucursal}"
+					filterStyle="display:none;">
+						<h:outputText value="#{proveedor.sucursal}" />
+					</p:column>
+					
+					<p:column headerText="Nro Cuenta" filterBy="#{proveedor.nroCuenta}"
+					filterStyle="display:none;">
+						<h:outputText value="#{proveedor.nroCuenta}" />
+					</p:column>
+					
+					<p:column headerText="Nro Cliente" filterBy="#{proveedor.nroCliente}"
+					filterStyle="display:none;">
+						<h:outputText value="#{proveedor.nroCliente}" />
+					</p:column>
+					
+					<p:column headerText="Saldo" style="text-align:right;">
+						<h:outputText value="#{beanCuentaCorriente.getSaldoProveedor(proveedor)}" />
+					</p:column>
+				</p:dataTable>	
+			</p:panel> 
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

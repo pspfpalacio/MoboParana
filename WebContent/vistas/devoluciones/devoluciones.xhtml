@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Devoluciones</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+				<h5>(*)Para reflejar la búsqueda debe hacer doble click sobre el botón Buscar</h5>
+		    	<p:panelGrid columns="4" cellpadding="5" style="width:80%;">
+		    		<f:facet name="header">
+		    			<h:outputText value="Filtros" />
+		    		</f:facet>
+		    		<p:outputLabel value="Desde: " />
+		    		<p:calendar value="#{beanDevolucion.fechaDesde}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+		    		<p:outputLabel value="Hasta: " />
+		    		<p:calendar value="#{beanDevolucion.fechaHasta}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+		    		<p:outputLabel value="Cliente: " />
+		    		<p:selectOneMenu value="#{beanDevolucion.idCliente}" style="width:250px;"
+		    		filter="true" filterMatchMode="contains">
+		    			<f:selectItem itemLabel="Todos" itemValue="0"/>
+		    			<f:selectItems value="#{beanDevolucion.listaClientes}" var="cli" itemLabel="#{cli.nombreNegocio}" 
+		    			itemValue="#{cli.id}"/>
+		    		</p:selectOneMenu>
+		    		<p:outputLabel value="Producto: " />
+		    		<p:selectOneMenu value="#{beanDevolucion.idProducto}" style="width:250px;"
+		    		filter="true" filterMatchMode="contains">
+		    			<f:selectItem itemLabel="Todos" itemValue="0"/>
+		    			<f:selectItems value="#{beanDevolucion.listaProductos}" var="prod" itemLabel="#{prod.nombre}" 
+		    			itemValue="#{prod.id}"/>
+		    		</p:selectOneMenu>
+				</p:panelGrid>
+				<p:panelGrid columns="1" style="width:80%;">
+					<f:facet name="footer">	
+						<p:commandButton icon="ui-icon-search" value="Buscar" update="contenedorDevoluciones" action="#{beanDevolucion.filtro()}" />
+					</f:facet>
+				</p:panelGrid>
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorDevoluciones" widgetVar="devolucionBusqueda" var="devolucion"
+				value="#{beanDevolucion.listaDevoluciones}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanDevolucion.filteredDevoluciones}" emptyMessage="No existen Devoluciones" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nueva" action="#{beanDevolucion.goDevolucion()}"/>
+						<p:outputLabel value="Devoluciones" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('devolucionBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanDevolucion.generarReporteDevoluciones(beanDevolucion.listaDevoluciones)}" target="_blank" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+										
+					<p:column style="text-align: center; width:70px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Baja" title="Baja" />
+						</f:facet>						
+						<p:row rendered="#{devolucion.estado}">
+							<h:commandLink id="desactivar" title="Desactivar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA LA DEVOLUCIÓN?')"
+								action="#{beanDevolucion.baja(devolucion)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar la Devolución" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!devolucion.estado}">
+							<h:graphicImage value="/images/desactivo.ico" width="20"
+									id="estadoActivar" />
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Fecha" filterBy="#{devolucion.fecha}" 
+					filterStyle="display:none;" sortBy="#{devolucion.fecha}">
+						<h:outputText value="#{devolucion.fecha}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Cliente" filterBy="#{devolucion.cliente.nombreNegocio}"
+					filterStyle="display:none;" sortBy="#{devolucion.cliente.nombreNegocio}">
+						<h:outputText value="#{devolucion.cliente.nombreNegocio}" />
+					</p:column>
+					
+					<p:column headerText="Nro Imei" filterBy="#{devolucion.nroImei}"
+					filterStyle="display:none;" sortBy="#{devolucion.nroImei}">
+						<h:outputText value="#{devolucion.nroImei}" />
+					</p:column>
+					
+					<p:column headerText="Producto" filterBy="#{devolucion.telefono}"
+					filterStyle="display:none;" sortBy="#{devolucion.telefono}">
+						<h:outputText value="#{devolucion.telefono}" />
+					</p:column>
+					
+					<p:column headerText="Observaciones" filterBy="#{devolucion.descripcion}"
+					filterStyle="display:none;" sortBy="#{devolucion.descripcion}">
+						<h:outputText value="#{devolucion.descripcion}" />
+					</p:column>
+					
+					<p:column headerText="Ver" style="width:45px;">
+						<p:commandButton icon="ui-icon-search" disabled="#{!devolucion.estado}" action="#{beanDevolucion.verMovimiento(devolucion)}"
+						oncomplete="PF('dialogoMovimiento').show()"	style="width: 30px; height: 30px;" update=":formulario:outputPanel"/>
+					</p:column>
+				</p:dataTable>	 
+				<p:dialog header="Devolución" widgetVar="dialogoMovimiento"
+					id="dialogo" modal="true">
+					<p:outputPanel id="outputPanel">
+						<h:panelGrid columns="2" >
+							<f:facet name="header">
+								<p:outputLabel value="Devolución" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink action="#{beanDevolucion.generarReporteComprobante(beanDevolucion.devolucione)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							<p:outputLabel value="Fecha: " />
+		    				<p:calendar value="#{beanDevolucion.devolucione.fecha}" pattern="dd/MM/yyyy" 
+		    				mask="true" locale="tr" disabled="true"/>
+		    				<p:outputLabel value="Nro Imei: " />
+		    				<h:inputTextarea value="#{beanDevolucion.devolucione.nroImei}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Producto: " />
+		    				<h:inputTextarea value="#{beanDevolucion.devolucione.producto.nombre}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Cliente: " />
+		    				<h:inputText value="#{beanDevolucion.devolucione.cliente.nombreNegocio}" disabled="true" />
+		    				<p:outputLabel value="Nro. Movimiento: " />
+		    				<h:inputText value="#{beanDevolucion.devolucione.idMovimiento}" disabled="true" />
+		    				<p:outputLabel value="Movimiento: " />
+		    				<h:inputText value="#{beanDevolucion.devolucione.nombreMovimiento}" disabled="true" />
+		    				<p:outputLabel value="Observaciones: " />
+		    				<h:inputTextarea value="#{beanDevolucion.devolucione.descripcion}" style="width:100%;" rows="3" 
+		    				disabled="true"/>						
+						</h:panelGrid>
+					</p:outputPanel>
+				</p:dialog>
+			</p:panel>
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

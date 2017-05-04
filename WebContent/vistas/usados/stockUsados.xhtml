@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Ajuste de Stock</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+				<p:panelGrid columns="2" style="width:100%">
+					<f:facet name="header">
+						<h:outputText value="Ajuste de Stock" />
+					</f:facet>
+					<p:outputLabel value="Producto: " />
+					<p:outputLabel value="#{beanProducto.producto.nombre}" />
+				</p:panelGrid>
+				<p:panelGrid columns="4" style="width:100%;">
+					<p:outputLabel value="Precio de Compra ($): " />
+					<p:inputText id="precioC" value="#{beanProducto.precioCompra}" >
+						<f:convertNumber pattern="#,##0.00" maxFractionDigits="2"/>
+					</p:inputText>
+					
+					<p:outputLabel value="Descripción: "/>		
+					<p:inputTextarea id="descrip" value="#{beanProducto.descripcion}" style="width:100%;" rows="2"/>
+					
+					<p:outputLabel value="Nro. de Imei: "/>
+					<p:column>
+						<p:focus id="foco" for="imei"/>
+						<p:inputText id="imei" value="#{beanProducto.nroImei}"  />
+					</p:column>					
+					<f:facet name="footer">
+						<p:commandButton id="agregar" value="Agregar" update="foco, tablaImei, imei, precioC, descrip, messages" 
+						action="#{beanProducto.agregarStock()}"/>
+						<p:defaultCommand target="agregar" />
+					</f:facet>
+				</p:panelGrid>
+				<h:panelGrid columns="1" style="width:100%;">
+					<p:dataTable id="tablaImei" var="unidad" value="#{beanProducto.listaUnidadMovils}" scrollRows="50" resizableColumns="true" widgetVar="unidadBusqueda"
+					editable="true"	scrollable="true" liveScroll="true" scrollHeight="400" emptyMessage="No posee Stock" style="width:100%;" filteredValue="#{beanProducto.filteredUnidadMovils}">
+						<f:facet name="header">
+							<h:outputText value="Stock de Producto" />
+							<p:spacer width="20" />
+							<p:inputText id="globalFilter" onblur="PF('unidadBusqueda').filter()" placeholder="Buscar"/>
+						</f:facet>
+						<p:ajax event="rowEdit" listener="#{beanProducto.onCellEdit(unidad)}" 
+	    				update=":formulario:tablaImei" />
+	       				<p:ajax event="rowEditCancel" listener="#{beanProducto.onCellCancel(unidad)}" 
+	       				update=":formulario:tablaImei" />
+						<p:column headerText="Nro de Imei" filterBy="#{unidad.nroImei}" filterStyle="display:none;">
+							<h:outputText value="#{unidad.nroImei}" />
+							<h:outputText value=" - *" rendered="#{!unidad.estado}" />
+						</p:column>
+						<p:column headerText="Precio de Compra">
+							<p:cellEditor>
+								<f:facet name="output">
+									<p:outputLabel value="$" />
+									<h:outputText value="#{unidad.precioCompra}" >
+										<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+									</h:outputText>
+								</f:facet>
+								<f:facet name="input">
+									<p:outputLabel value="$" />
+									<p:inputText id="precioInput" value="#{unidad.precioCompra}" >
+										<f:convertNumber pattern="#,##0.00" maxFractionDigits="2"/>
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						<p:column headerText="En Consignación">
+							<p:outputLabel rendered="#{unidad.enConsignacion}"><span class="ui-icon ui-icon-check" /></p:outputLabel>
+							<h:outputText value="-" rendered="#{!unidad.enConsignacion}" />
+						</p:column>
+						<p:column headerText="Descripción">
+			              <p:cellEditor>
+			                  <f:facet name="output"><h:outputText value="#{unidad.descripcion}" /></f:facet>
+			                  <f:facet name="input"><p:inputTextarea id="modelInput" value="#{unidad.descripcion}"/></f:facet>
+			              </p:cellEditor>
+			          	</p:column>
+						<p:column headerText="Eliminar del Stock" style="text-align:center;">
+							<p:commandButton icon="ui-icon-close" update="tablaImei" action="#{beanProducto.quitarStock(unidad)}" 
+							disabled="#{beanProducto.enConsignacionVenta(unidad)}"/>
+						</p:column>
+						<p:column style="width:32px">
+				           <p:rowEditor rendered="#{!unidad.enCompra}"/>
+				       </p:column>
+					</p:dataTable>
+					<p:outputLabel value="El asterísco (*) a continuación del nro de imei, indica que el producto ha sido devuelto por una falla." />
+				</h:panelGrid>
+				<p:panelGrid columns="2" style="width:100%;">
+					<f:facet name="header">
+						<p:commandButton value="Guardar" onclick="return confirm('ESTA SEGURO QUE DESEA GUARDAR LOS CAMBIOS REALIZADOS?')" 
+							 action="#{beanProducto.guardarStockUsados()}"/>
+						<p:commandButton value="Cancelar" onclick="return confirm('ESTA SEGURO QUE DESEA CANCELAR Y VOLVER?')" action="usados"/>
+					</f:facet>
+				</p:panelGrid>
+			</p:panel>
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition>
+	<f:view>
+		<h:head>
+			<link rel="shortcut icon" type="image/x-icon"
+				href="../../images/icono.ico" />
+			<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+			<script type="text/javascript">
+				 PrimeFaces.locales['tr'] = {
+						       closeText: 'Cerrar',
+						       prevText: 'Anterior',
+						       nextText: 'Siguiente',
+						       currentText: 'Hoy',
+						       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+						           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+						       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+						           'Jul','Ago','Sep','Oct','Nov','Dic'],
+						       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+						       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+						       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+						       weekHeader: 'Hf',
+						       firstDay: 1,
+						       isRTL: false,
+						       showMonthAfterYear: false,
+						       yearSuffix: '',
+						       month: 'Mes',
+						       week: 'Semana',
+						       day: 'Día',
+						       allDayText : 'Todos los días'
+	    				};
+					function foco(elemento){
+						document.getElementById(elemento).focus();
+						};
+				</script>
+			<title>Venta</title>
+		</h:head>
+		<h:body>
+			<div class="wrapper">
+				<ui:include src="/includes/header.xhtml" />
+				<h:form id="formulario" onkeypress="return event.keyCode != 13">
+				<p:panel style="background:#D27C7A;min-height:900px;">
+					<p:growl id="messages" showDetail="false" />
+					<ui:include src="/includes/menubar.xhtml" />
+					<br/>
+					<br/>
+	    			<p:panelGrid id="cabecera" columns="4" style="width:100%;">
+	    				<f:facet name="header">
+	    					<h:outputText value="Venta de Consignación" />
+	    				</f:facet>
+	    				
+	    				<p:outputLabel value="Fecha: " />
+	    				<p:calendar value="#{beanVentaConsignacion.ventasCon.fecha}" pattern="dd/MM/yyyy" mask="true" locale="tr" />    				
+	    				
+	    				<p:outputLabel value="Cliente: " />
+	    				<h:inputText disabled="true" value="#{beanVentaConsignacion.ventasCon.cliente.nombreNegocio}" />
+	    				
+	    				<p:outputLabel value="Saldo ($): " />
+	    				<p:inputText value="#{beanVentaConsignacion.ventasCon.cliente.saldo}" disabled="true">
+	    					<f:convertNumber pattern="#,##0.00" maxFractionDigits="2"/>
+	    				</p:inputText>
+	    				
+	    			</p:panelGrid>
+	    			<p:separator />
+	   				<p:dataTable id="detalleTable" value="#{beanVentaConsignacion.listaVentasConsDetalles}" var="detalle" emptyMessage="No existen detalles">
+	   					<f:facet name="header">
+	   						<h:outputText value="Detalle de Venta" />
+	   					</f:facet>   					
+	   					<p:column headerText="Cantidad" style="width:120px;text-align:center;">
+	   						<h:outputText value="#{detalle.cantidad}" />
+	   						<p:rowToggler />
+	   					</p:column>
+	   					<p:column headerText="Producto">
+	   						<h:outputText value="#{detalle.producto.nombre}" />
+	   					</p:column>
+	   					<p:column headerText="Subtotal" style="width:150px;text-align:right;">
+	   						<h:outputText value="$" />
+	   						<h:outputText value="#{detalle.subtotal}" >
+	   							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+	   						</h:outputText>
+	   					</p:column>
+	   					<p:column headerText="Quitar" style="width:100px;text-align:center;">
+	   						<p:commandButton icon="ui-icon-close" action="#{beanVentaConsignacion.quitarProductoVenta(detalle)}"  
+	   						update="detalleTable" />
+	   					</p:column>
+	   					<p:rowExpansion>
+	   						<p:dataTable value="#{detalle.ventasConsDetalleUnidads}" var="unidad"  
+	   						emptyMessage="No existen items" style="width:100%;" resizableColumns="true">
+	   							<f:facet name="header">
+	   								<h:outputText value="Móviles" />
+	   							</f:facet>
+	   							<p:column headerText="Quitar" style="width:45px;text-align:center;">
+		   							<p:commandLink style="float:left;margin-right:10px" styleClass="ui-icon ui-icon-close" 
+						        	action="#{beanVentaConsignacion.quitarUnidadDetalleVenta(detalle, unidad)}" update=":formulario:detalleTable" />
+					        	</p:column>
+					        	<p:column headerText="Nro Imei">
+	   								<h:outputText value="#{unidad.nroImei}" />
+	   							</p:column>
+	   							<p:column headerText="Precio Venta" style="width:110px;text-align:center;">
+	   								<h:outputText value="$ #{unidad.precioVenta}" >
+	   									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+	   								</h:outputText>
+	   							</p:column>
+	   						</p:dataTable>
+	   					</p:rowExpansion>
+	   					<f:facet name="footer" style="text-align:right;">
+	   						<p:column style="text-align:right;">
+	   							<p:outputLabel value="Cantidad Total: " />
+	   							<h:outputText value="#{beanVentaConsignacion.cantidadTotal}" />
+	   							<h:outputText value="  " />
+	   							<p:outputLabel value="Monto Total: $" />
+	   							<h:outputText value="#{beanVentaConsignacion.montoTotal}" >
+		   							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+		   						</h:outputText>
+	   						</p:column>
+	   					</f:facet>
+	   				</p:dataTable>
+	   				<p:panelGrid columns="2" style="width:100%;">
+	   					<f:facet name="header">
+	   						<p:commandButton value="Aceptar" onclick="return confirm('ESTA SEGURO QUE QUIERE CONFIRMAR LA VENTA?')" 
+	   						action="#{beanVentaConsignacion.guardarVenta()}"/>
+	   						<p:commandButton value="Volver" onclick="return confirm('ESTA SEGURO QUE DESEA CANCELAR LA VENTA Y VOLVER?')" 
+	   						action="#{beanVentaConsignacion.cancelarVenta()}"/>
+	   					</f:facet>
+	   				</p:panelGrid>		
+	   			</p:panel>	
+		    	</h:form>
+		    </div>
+		</h:body>
+	</f:view>
+	</ui:composition>
+</html>

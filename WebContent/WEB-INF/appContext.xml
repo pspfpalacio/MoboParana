@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+	
+	<context:annotation-config />
+	<context:component-scan base-package="dao.impl" />
+	<bean id="BeanCajaDAO" class="dao.impl.DAOCajaImpl" />
+	<bean id="BeanClienteDAO" class="dao.impl.DAOClienteImpl" />
+	<bean id="BeanCompraDAO" class="dao.impl.DAOCompraImpl" />
+	<bean id="BeanCompraDetalleDAO" class="dao.impl.DAOCompraDetalleImpl" />
+	<bean id="BeanCompraDetalleUnidadDAO" class="dao.impl.DAOCompraDetalleUnidadImpl" />
+	<bean id="BeanCuentaCorrienteDAO" class="dao.impl.DAOCuentaCorrienteImpl" />
+	<bean id="BeanGastoDAO" class="dao.impl.DAOGastoImpl" />
+	<bean id="BeanListaPrecioDAO" class="dao.impl.DAOListaPrecioImpl" />
+	<bean id="BeanPagoDAO" class="dao.impl.DAOPagoImpl" />
+	<bean id="BeanParametroDAO" class="dao.impl.DAOParametroImpl" />
+	<bean id="BeanProductoDAO" class="dao.impl.DAOProductoImpl" />
+	<bean id="BeanProveedorDAO" class="dao.impl.DAOProveedorImpl" />
+	<bean id="BeanRoleDAO" class="dao.impl.DAORoleImpl" />
+	<bean id="BeanRoleVistaDAO" class="dao.impl.DAORoleVistaImpl" />
+	<bean id="BeanUnidadMovilDAO" class="dao.impl.DAOUnidadMovilImpl" />
+	<bean id="BeanUsuarioDAO" class="dao.impl.DAOUsuarioImpl" />
+	<bean id="BeanVentaConsignacionDetalleDAO" class="dao.impl.DAOVentaConsignacionDetalleImpl" />
+	<bean id="BeanVentaConsignacionDetalleUnidadDAO" class="dao.impl.DAOVentaConsignacionDetalleUnidadImpl" />
+	<bean id="BeanVentaConsignacionDAO" class="dao.impl.DAOVentaConsignacionImpl" />
+	<bean id="BeanVistaDAO" class="dao.impl.DAOVistaImpl" />
+	<bean id="BeanConsignacionDAO" class="dao.impl.DAOConsignacionImpl" />
+	<bean id="BeanConsignacionDetalleDAO" class="dao.impl.DAOConsignacionDetalleImpl" />
+	<bean id="BeanConsignacionDetalleUnidadDAO" class="dao.impl.DAOConsignacionDetalleUnidadImpl" />
+	<bean id="BeanVentaDAO" class="dao.impl.DAOVentaImpl" />
+	<bean id="BeanVentaDetalleDAO" class="dao.impl.DAOVentaDetalleImpl" />
+	<bean id="BeanVentaDetalleUnidadDAO" class="dao.impl.DAOVentaDetalleUnidadImpl" />
+	<bean id="BeanGarantiasClienteDAO" class="dao.impl.DAOGarantiasClienteImpl" />
+	<bean id="BeanGarantiasProveedorDAO" class="dao.impl.DAOGarantiasProveedorImpl" />
+	<bean id="BeanDevolucionDAO" class="dao.impl.DAODevolucionImpl" />
+	<bean id="BeanRubroDAO" class="dao.impl.DAORubroImpl" />
+	<bean id="BeanStockDAO" class="dao.impl.DAOStockImpl" />
+	<bean id="BeanStockVentaDetalleDAO" class="dao.impl.DAOStockVentaDetalleImpl" />
+	<bean id="BeanEntregaConsignacionDAO" class="dao.impl.DAOEntregaConsignacionImpl" />
+	<bean id="BeanCuotaDAO" class="dao.impl.DAOCuotaImpl" />
+	<bean id="BeanCuotaDetalleDAO" class="dao.impl.DAOCuotaDetalleImpl" />
+	<bean id="BeanCuotaVentaDAO" class="dao.impl.DAOCuotaVentaImpl" />
+	<bean id="BeanCuotaVentaDetalleDAO" class="dao.impl.DAOCuotaVentaDetalleImpl" />
+	<bean id="BeanEConsignacionDAO" class="dao.impl.DAOEConsignacionImpl" />
+	<bean id="BeanEConsignacionDetalleDAO" class="dao.impl.DAOEConsignacionDetalleImpl" />
+	<bean id="BeanEConsignacionDetalleUnidadDAO" class="dao.impl.DAOEConsignacionDetalleUnidadImpl" />
+	<bean id="BeanMensajeDAO" class="dao.impl.DAOMensajeImpl" />
+
+</beans>

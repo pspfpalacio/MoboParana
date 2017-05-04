@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="MoboParana">
+		<class>model.entity.Caja</class>
+		<class>model.entity.Cliente</class>
+		<class>model.entity.Compra</class>
+		<class>model.entity.ComprasDetalle</class>
+		<class>model.entity.ComprasDetalleUnidad</class>
+		<class>model.entity.CuentasCorrientesCliente</class>
+		<class>model.entity.CuentasCorrientesProveedore</class>
+		<class>model.entity.Gasto</class>
+		<class>model.entity.ListaPrecio</class>
+		<class>model.entity.ListaPrecioProducto</class>
+		<class>model.entity.Mensaje</class>
+		<class>model.entity.PagosCliente</class>
+		<class>model.entity.PagosProveedore</class>
+		<class>model.entity.Parametro</class>
+		<class>model.entity.Producto</class>
+		<class>model.entity.Proveedore</class>
+		<class>model.entity.Role</class>
+		<class>model.entity.RolesVista</class>
+		<class>model.entity.Rubro</class>
+		<class>model.entity.UnidadMovil</class>
+		<class>model.entity.Usuario</class>
+		<class>model.entity.Vista</class>
+		<class>model.entity.Consignacion</class>
+		<class>model.entity.ConsignacionsDetalle</class>
+		<class>model.entity.ConsignacionsDetalleUnidad</class>
+		<class>model.entity.Venta</class>
+		<class>model.entity.VentasCon</class>
+		<class>model.entity.VentasConsDetalle</class>
+		<class>model.entity.VentasConsDetalleUnidad</class>
+		<class>model.entity.VentasDetalle</class>
+		<class>model.entity.VentasDetalleUnidad</class>
+		<class>model.entity.Devolucione</class>
+		<class>model.entity.Stock</class>
+		<class>model.entity.StocksVentasDetalle</class>
+		<class>model.entity.EntregaConsignacion</class>
+		<class>model.entity.Cuota</class>
+		<class>model.entity.CuotasDetalle</class>
+		<class>model.entity.CuotasVenta</class>
+		<class>model.entity.CuotasVentasDetalle</class>
+		<class>model.entity.GarantiasCliente</class>
+		<class>model.entity.GarantiasProveedore</class>
+		<class>model.entity.EConsignacion</class>
+		<class>model.entity.EConsignacionsDetalle</class>
+		<class>model.entity.EConsignacionsDetalleUnidad</class>
+		<properties>
+			<property name="javax.persistence.jdbc.password" value="root" />
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mobodb_prod" />
+			<property name="javax.persistence.logging.level" value="ALL" />
+		</properties>
+	</persistence-unit>
+</persistence>

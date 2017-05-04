@@ -1,0 +1,696 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Cuenta Corriente</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+		    	<h1><h:outputText value="#{beanCuentaCorriente.cliente.apellidoNombre} - #{beanCuentaCorriente.cliente.nombreNegocio}" /></h1>
+		    	<h5>(*)Para reflejar la búsqueda debe hacer doble click sobre el botón Buscar</h5>
+				<p:panelGrid columns="4" style="width:100%; text-align:center;">
+					<p:outputLabel value="Fecha Desde: " />
+				    <p:calendar value="#{beanCuentaCorriente.fechaInicio}" />
+				    
+				    <p:outputLabel value="Hasta: " />
+				    <p:calendar value="#{beanCuentaCorriente.fechaFin}" />
+				</p:panelGrid>
+				<p:panelGrid columns="3" style="width:100%; text-align:center;" >
+					<p:outputLabel value="Producto: " />
+				    <p:selectOneMenu value="#{beanCuentaCorriente.idProducto}" filter="true" filterMatchMode="contains">
+    					<f:selectItem itemLabel="Todos los movimientos" itemValue="0"/>
+    					<f:selectItems value="#{beanCuentaCorriente.listaProductos}" var="prod" itemLabel="#{prod.nombre}" 
+    					itemValue="#{prod.id}"/>
+    				</p:selectOneMenu>
+    				<p:selectBooleanButton value="#{beanCuentaCorriente.onVenta}" onLabel="Ventas" offLabel="Ventas Consignación"  />
+    			</p:panelGrid>	
+    			<p:panelGrid columns="1" style="width:100%; text-align:center;">
+				    <f:facet name="header">
+				    	<p:commandButton icon="ui-icon-search" value="Buscar" action="#{beanCuentaCorriente.filtroCliente()}" 
+				    	update=":formulario:cuentaTable" />
+				    </f:facet>
+				</p:panelGrid>		
+				<p:dataTable id="cuentaTable" widgetVar="cuentaBusqueda" var="cuenta"
+				value="#{beanCuentaCorriente.listaCuentasCorrientesClientes}" resizableColumns="true" 
+				scrollable="true" scrollHeight="500" scrollWidth="100%"  
+				emptyMessage="No existen Registros" sortMode="multiple" >					
+					<f:facet name="header">					
+						<p:outputLabel value="Movimientos: #{fn:length(beanCuentaCorriente.filteredCuentasCorrientesClientes)} en total" />						
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('cuentaBusqueda').filter()" 
+							placeholder="Buscar" style="height:17px; font-size:samller;"/>
+						</p:outputPanel>						
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanCuentaCorriente.generarReporteCliente()}" target="_blank">
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel> 
+					</f:facet>					
+					
+					<p:column sortBy="#{cuenta.fecha}" filterBy="#{cuenta.fecha}"
+						filterMatchMode="contains" filterStyle="display:none;" style="width:80px;">
+						<f:facet name="header">
+							<h:outputText value="Fecha" title="Fecha"/>
+						</f:facet>
+						<h:outputText value="#{cuenta.fecha}" >
+							<f:convertDateTime timeZone="America/Argentina/Buenos_Aires" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="#{cuenta.detalle}" filterBy="#{cuenta.detalle}"
+						filterMatchMode="contains" filterStyle="display:none;">
+						<f:facet name="header">
+							<h:outputText value="Detalle" title="Detalle" />
+						</f:facet>
+						<h:outputText value="#{cuenta.detalle}" />
+					</p:column>					
+					
+					<p:column sortBy="#{cuenta.debe}" filterBy="#{cuenta.debe}"
+						filterMatchMode="contains" filterStyle="display:none;" style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Debe" title="Debe" />
+						</f:facet>
+						<h:outputText value="$" />
+						<h:outputText value="#{cuenta.debe}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="#{cuenta.haber}" filterBy="#{cuenta.haber}" 
+						filterMatchMode="contains" filterStyle="display:none;" style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Entregas" title="Entregas" />
+						</f:facet>
+						<h:outputText value="$" />
+						<h:outputText value="#{cuenta.haber}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="#{cuenta.saldo}" filterBy="#{cuenta.saldo}"
+						filterMatchMode="contains" filterStyle="display:none;" style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Saldo" title="Saldo" />
+						</f:facet>
+						<h:outputText value="$" />
+						<h:outputText value="#{cuenta.saldo}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column style="text-align:center; width:110px;">
+						<f:facet name="header">
+							<h:outputText value="Ver Movimiento" title="Ver"/>
+						</f:facet>
+						<p:commandButton icon="ui-icon-search" disabled="#{cuenta.idMovimiento == 0}" oncomplete="PF('dialogoMovimiento').show()"
+						action="#{beanCuentaCorriente.verMovimientoCliente(cuenta)}" style="width: 30px; height: 30px;" update=":formulario:outputPanel"/>
+					</p:column>
+				</p:dataTable>
+				<p:panelGrid columns="5" style="width:100%;">
+					<f:facet name="header">
+						<p:commandButton value="volver" action="clientes"/>
+					</f:facet>
+				</p:panelGrid>
+				<p:dialog header="Movimiento de Cuenta Corriente" widgetVar="dialogoMovimiento"
+					id="dialogo" modal="true">
+					<p:outputPanel id="outputPanel">
+						<h:panelGrid columns="2" rendered="#{beanCuentaCorriente.pago}">
+							<f:facet name="header">
+								<p:outputLabel value="Pago" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink action="#{beanPago.generarReporte(beanCuentaCorriente.pagoCliente.id, 0)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							<p:outputLabel value="Fecha: "/>
+							<h:inputText value="#{beanCuentaCorriente.pagoCliente.fecha}" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:inputText>
+							
+							<p:outputLabel value="Cliente: " />
+							<h:inputText value="#{beanCuentaCorriente.pagoCliente.cliente.nombreNegocio}" disabled="true"/>
+							
+							<p:outputLabel value="Monto: $" />
+							<h:inputText value="#{beanCuentaCorriente.pagoCliente.monto}" disabled="true" >
+								<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+							</h:inputText>
+							
+							<p:outputLabel value="Concepto: " />
+							<h:inputTextarea value="#{beanCuentaCorriente.pagoCliente.concepto}" disabled="true" />
+						</h:panelGrid>
+						<h:panelGrid columns="2" rendered="#{beanCuentaCorriente.panelEntrega}">
+							<f:facet name="header">
+								<p:outputLabel value="Entrega de Consignacion" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink disabled="true" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							<p:outputLabel value="Fecha: "/>
+							<h:inputText value="#{beanCuentaCorriente.entregaConsignacion.fecha}" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:inputText>
+							
+							<p:outputLabel value="Consignacion nro.: " />
+							<h:inputText value="#{beanCuentaCorriente.entregaConsignacion.consignacion.id}" disabled="true"/>
+							
+							<p:outputLabel value="Cliente: " />
+							<h:inputText value="#{beanCuentaCorriente.entregaConsignacion.consignacion.cliente.nombreNegocio}" disabled="true"/>
+							
+							<p:outputLabel value="Monto: $" />
+							<h:inputText value="#{beanCuentaCorriente.entregaConsignacion.monto}" disabled="true" >
+								<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+							</h:inputText>
+							
+							<p:outputLabel value="Concepto: " />
+							<h:inputTextarea value="#{beanCuentaCorriente.entregaConsignacion.concepto}" disabled="true" />						
+						</h:panelGrid>
+						<h:panelGrid columns="2" rendered="#{beanCuentaCorriente.panelCuota}">
+							<f:facet name="header">
+								<p:outputLabel value="Pago de Cuota de Consignacion" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink disabled="true" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							<p:outputLabel value="Fecha de Pago: "/>
+							<h:inputText value="#{beanCuentaCorriente.cuotasDetalle.fechaAlta}" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:inputText>
+							
+							<p:outputLabel value="Consignacion nro.: " />
+							<h:inputText value="#{beanCuentaCorriente.cuotasDetalle.cuota.consignacion.id}" disabled="true"/>
+							
+							<p:outputLabel value="Cliente: " />
+							<h:inputText value="#{beanCuentaCorriente.cuotasDetalle.cuota.consignacion.cliente.nombreNegocio}" disabled="true"/>
+							
+							<p:outputLabel value="Cuota: " />
+							<h:inputText value="#{beanCuentaCorriente.cuotasDetalle.descripcion}" disabled="true"/>
+							
+							<p:outputLabel value="Equipo: " />
+							<h:inputText value="#{beanCuentaCorriente.cuotasDetalle.cuota.equipo}" disabled="true"/>
+							
+							<p:outputLabel value="Imei: " />
+							<h:inputText value="#{beanCuentaCorriente.cuotasDetalle.cuota.nroImei}" disabled="true"/>
+							
+							<p:outputLabel value="Monto: $" />
+							<h:inputText value="#{beanCuentaCorriente.cuotasDetalle.monto}" disabled="true" >
+								<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+							</h:inputText>					
+						</h:panelGrid>
+						<p:panelGrid columns="2" rendered="#{beanCuentaCorriente.panelVenta}" style="width:100%;text-align:center;">
+							<f:facet name="header">
+								<p:outputLabel value="Venta" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink action="#{beanVenta.generarReporteComprobante(beanCuentaCorriente.venta)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							
+							<p:outputLabel value="Número: " />
+							<h:inputText value="#{beanCuentaCorriente.venta.id}" disabled="true"/>
+							
+							<p:outputLabel value="Fecha: "/>
+							<h:inputText value="#{beanCuentaCorriente.venta.fecha}" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:inputText>
+							
+							<p:outputLabel value="Cliente: " />
+							<h:inputText value="#{beanCuentaCorriente.venta.cliente.nombreNegocio}" disabled="true"/>
+							
+							<p:outputLabel value="Tipo: " />
+							<h:inputText value="#{beanCuentaCorriente.venta.tipo}" disabled="true" />
+						</p:panelGrid>
+						<p:dataTable value="#{beanVenta.getDetalleDeVenta(beanCuentaCorriente.venta)}" var="detalle" rendered="#{beanCuentaCorriente.panelVenta}"
+						scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150">
+							<f:facet name="header">
+								<h:outputText value="Detalle" />
+							</f:facet>
+							<p:column headerText="Cantidad">
+								<h:outputText value="#{detalle.cantidad}" />
+							</p:column>
+							<p:column headerText="Detalle">
+								<h:outputText value="#{detalle.producto.nombre}" />
+							</p:column>
+							<p:column headerText="Precio Unitario">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.precioVenta}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Subtotal">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.subtotal}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+							<f:facet name="footer">
+								<h:outputText value="Monto Total: $" />
+								<h:outputText value="#{beanCuentaCorriente.venta.monto}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</f:facet>
+						</p:dataTable>
+						<h:panelGrid columns="2" rendered="#{beanCuentaCorriente.panelCuotaVenta}">
+							<f:facet name="header">
+								<p:outputLabel value="Pago de Cuota de Venta" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink disabled="true" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							<p:outputLabel value="Fecha de Pago: "/>
+							<h:inputText value="#{beanCuentaCorriente.cuotasVentasDetalle.fechaAlta}" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:inputText>
+							
+							<p:outputLabel value="Venta nro.: " />
+							<h:inputText value="#{beanCuentaCorriente.cuotasVentasDetalle.cuotasVenta.venta.id}" disabled="true"/>
+							
+							<p:outputLabel value="Cliente: " />
+							<h:inputText value="#{beanCuentaCorriente.cuotasVentasDetalle.cuotasVenta.venta.cliente.nombreNegocio}" disabled="true"/>
+							
+							<p:outputLabel value="Cuota: " />
+							<h:inputText value="#{beanCuentaCorriente.cuotasVentasDetalle.descripcion}" disabled="true"/>
+							
+							<p:outputLabel value="Equipo: " />
+							<h:inputText value="#{beanCuentaCorriente.cuotasVentasDetalle.cuotasVenta.equipo}" disabled="true"/>
+							
+							<p:outputLabel value="Imei: " />
+							<h:inputText value="#{beanCuentaCorriente.cuotasVentasDetalle.cuotasVenta.nroImei}" disabled="true"/>
+							
+							<p:outputLabel value="Monto: " />
+							<h:inputText value="#{beanCuentaCorriente.cuotasVentasDetalle.monto}" disabled="true" >
+								<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+							</h:inputText>					
+						</h:panelGrid>
+						<p:panelGrid columns="2" rendered="#{beanCuentaCorriente.panelVentaCons}" style="width:100%;text-align:center;">
+							<f:facet name="header">
+								<p:outputLabel value="Venta de Consignación" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink action="#{beanVentaConsignacion.generarReporteComprobante(beanCuentaCorriente.ventasCon)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							
+							<p:outputLabel value="Número: " />
+							<h:inputText value="#{beanCuentaCorriente.ventasCon.id}" disabled="true"/>
+							
+							<p:outputLabel value="Fecha: "/>
+							<h:inputText value="#{beanCuentaCorriente.ventasCon.fecha}" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:inputText>
+							
+							<p:outputLabel value="Cliente: " />
+							<h:inputText value="#{beanCuentaCorriente.ventasCon.cliente.nombreNegocio}" disabled="true"/>
+							
+							<p:outputLabel value="Tipo: " />
+							<h:inputText value="#{beanCuentaCorriente.ventasCon.tipo}" disabled="true" />
+						</p:panelGrid>
+						<p:dataTable value="#{beanVentaConsignacion.getDetalleDeVenta(beanCuentaCorriente.ventasCon)}" var="detalle" 
+						rendered="#{beanCuentaCorriente.panelVentaCons}" scrollRows="40" scrollable="true" liveScroll="true" 
+						scrollHeight="150">
+							<f:facet name="header">
+								<h:outputText value="Detalle de Venta" />
+							</f:facet>
+							<p:column headerText="Cantidad">
+								<h:outputText value="#{detalle.cantidad}" />
+								<p:rowToggler />
+							</p:column>
+							<p:column headerText="Detalle">
+								<h:outputText value="#{detalle.producto.nombre}" />
+							</p:column>
+							<p:column headerText="Subtotal">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.subtotal}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+							<p:rowExpansion>
+								<p:dataTable value="#{beanVentaConsignacion.getDetalleUnidadVendidaConsignacion(detalle)}" var="unidad">
+									<f:facet name="header">
+										<h:outputText value="Detalle" />
+									</f:facet>
+									<p:column headerText="Nro. Imei">
+										<h:outputText value="#{unidad.nroImei}" />
+									</p:column>
+									<p:column headerText="Precio Unitario">
+										<h:outputText value="$" />
+										<h:outputText value="#{unidad.precioVenta}" >
+											<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+										</h:outputText>
+									</p:column>
+								</p:dataTable>
+							</p:rowExpansion>
+							<f:facet name="footer">
+								<h:outputText value="Monto Total: $" />
+								<h:outputText value="#{beanCuentaCorriente.ventasCon.monto}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</f:facet>
+						</p:dataTable>
+						<p:panelGrid columns="2" rendered="#{beanCuentaCorriente.panelConsignacion}" style="width:100%; text-align:center;">
+							<f:facet name="header">
+								<p:outputLabel value="Consignación" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink action="#{beanConsignacion.generarReporteComprobante(beanCuentaCorriente.consignacion)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+														
+							<p:outputLabel value="Cliente: " />
+							<h:inputText value="#{beanCuentaCorriente.consignacion.cliente.nombreNegocio}" disabled="true"/>
+						</p:panelGrid>
+						<p:dataTable value="#{beanConsignacion.getDetalleConsignacionVendido(beanCuentaCorriente.consignacion)}" var="detalle" rendered="#{beanCuentaCorriente.panelConsignacion}"
+						scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="300">
+							<f:facet name="header">
+								<h:outputText value="Detalle" />
+							</f:facet>
+							<p:column headerText="Cantidad">
+								<h:outputText value="#{detalle.cantidad}" />
+								<p:rowToggler />
+							</p:column>
+							<p:column headerText="Detalle">
+								<h:outputText value="#{detalle.producto.nombre}" />
+							</p:column>
+							<p:column headerText="Precio Unitario">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.precioVenta}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Subtotal">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.subtotal}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+							<p:rowExpansion>
+								<p:dataTable value="#{beanConsignacion.getDetalleUnidadConsignacionVendido(detalle)}" var="unidad">
+									<f:facet name="header">
+										<h:outputText value="Detalle" />
+									</f:facet>
+									<p:column headerText="Vendido" style="width:80px;">
+										<h:outputText value="Si" rendered="#{unidad.vendido}"/>
+										<h:outputText value="No" rendered="#{!unidad.vendido}"/>
+									</p:column>
+									<p:column headerText="Nro. Imei">
+										<h:outputText value="#{unidad.nroImei}" />
+									</p:column>
+									<p:column headerText="Fecha Alta">
+										<h:outputText value="#{unidad.fechaAlta}" >
+											<f:convertDateTime pattern="dd/MM/yyyy"/>
+										</h:outputText>
+									</p:column>
+									<p:column headerText="Fecha Venta">
+										<h:outputText value="#{unidad.fechaVenta}" >
+											<f:convertDateTime pattern="dd/MM/yyyy"/>
+										</h:outputText>
+									</p:column>
+								</p:dataTable>
+							</p:rowExpansion>
+							<f:facet name="footer">
+								<h:outputText value="Monto Total: $" />
+								<h:outputText value="#{beanCuentaCorriente.consignacion.monto}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</f:facet>
+						</p:dataTable>
+					</p:outputPanel>
+				</p:dialog>
+				<br/>
+				<p:separator rendered="#{beanCuentaCorriente.existeGarantia}" />
+				<br/>
+				<p:dataTable id="contenedorGarantias" widgetVar="garantiaBusqueda" var="garantia" rendered="#{beanCuentaCorriente.existeGarantia}"
+				value="#{beanCuentaCorriente.listaGarantiasClientes}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanCuentaCorriente.filteredGarantiasClientes}" emptyMessage="No existen Garantias" sortMode="multiple">
+					<f:facet name="header">
+						<p:outputLabel value="Garantias" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('garantiaBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink target="_blank" action="#{beanGarantia.generarReporteCliente(beanCuentaCorriente.listaGarantiasClientes)}">
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+					
+					<p:column headerText="Fecha" filterBy="#{garantia.fechaIngreso}" 
+					filterStyle="display:none;" sortBy="#{garantia.fechaIngreso}" style="width:100px;">
+						<h:outputText value="#{garantia.fechaIngreso}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Producto c/falla" filterBy="#{garantia.producto1.nombre}"
+					filterStyle="display:none;" sortBy="#{garantia.producto1.nombre}">
+						<h:outputText value="#{garantia.producto1.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Unidad c/falla" filterBy="#{garantia.imeiFalla}"
+					filterStyle="display:none;" >
+						<h:outputText value="#{garantia.imeiFalla}" />
+					</p:column>
+					
+					<p:column headerText="Cerrada" style="width:80px;">
+						<h:outputText rendered="#{garantia.finalizado}" value="SI" />
+						<h:outputText rendered="#{!garantia.finalizado}" value="NO" />
+					</p:column>					
+					
+					<p:column headerText="Resolución">
+						<h:outputText value="#{garantia.resolucion}" />
+					</p:column>
+					
+					<p:column headerText="Ver" style="width:45px;">
+						<p:commandButton icon="ui-icon-search" disabled="#{!garantia.estado}" action="#{beanGarantia.verMovimientoCliente(garantia)}"
+						oncomplete="PF('dialogoGarantia').show()"	style="width: 30px; height: 30px;" update=":formulario:outputGarantia"/>
+					</p:column>
+				</p:dataTable>	 
+				<br/>
+				<p:separator rendered="#{beanCuentaCorriente.existeGarantia}" />
+				<br/>
+				<p:dialog header="Garantía" widgetVar="dialogoGarantia"
+					id="dialogoG" modal="true">
+					<p:outputPanel id="outputGarantia">
+						<h:panelGrid columns="2" rendered="#{!beanGarantia.garantiasCliente.finalizado}">
+							<f:facet name="header">
+								<p:outputLabel value="Garantía" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink action="#{beanGarantia.generarReporteComprobanteCliente(beanGarantia.garantiasCliente)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							<p:outputLabel value="Fecha de Ingreso: " />
+		    				<p:calendar value="#{beanGarantia.garantiasCliente.fechaIngreso}" pattern="dd/MM/yyyy" 
+		    				mask="true" locale="tr" disabled="true"/>
+		    				<p:outputLabel value="Nro Imei de Unidad con falla: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.imeiFalla}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Producto: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.producto1.nombre}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Cliente: " />
+		    				<h:inputText value="#{beanGarantia.garantiasCliente.cliente.nombreNegocio}" disabled="true" />
+		    				<p:outputLabel value="Falla inicial: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.falla}" style="width:100%;" rows="3" 
+		    				disabled="true"/>
+		    				<p:outputLabel value="Cerrada: " />
+		    				<h:inputText value="SI" rendered="#{beanGarantia.garantiasCliente.finalizado}" disabled="true"/>
+		    				<h:inputText value="NO" rendered="#{!beanGarantia.garantiasCliente.finalizado}" disabled="true"/>	    				
+		    				<p:outputLabel value="Observaciones: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.observaciones}" style="width:100%;" rows="3" disabled="true"/>							
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2" rendered="#{beanGarantia.garantiasCliente.finalizado}">
+							<f:facet name="header">
+								<p:outputLabel value="Garantía" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink action="#{beanGarantia.generarReporteComprobanteCliente(beanGarantia.garantiasCliente)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							<p:outputLabel value="Fecha de Ingreso: " />
+		    				<p:calendar value="#{beanGarantia.garantiasCliente.fechaIngreso}" pattern="dd/MM/yyyy" 
+		    				mask="true" locale="tr" disabled="true"/>
+		    				<p:outputLabel value="Nro Imei de Unidad con falla: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.imeiFalla}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Producto: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.producto1.nombre}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Cliente: " />
+		    				<h:inputText value="#{beanGarantia.garantiasCliente.cliente.nombreNegocio}" disabled="true" />
+		    				<p:outputLabel value="Falla inicial: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.falla}" style="width:100%;" rows="3" 
+		    				disabled="true"/>
+		    				<p:outputLabel value="Cerrada: " />
+		    				<h:inputText value="SI" rendered="#{beanGarantia.garantiasCliente.finalizado}" disabled="true"/>
+		    				<h:inputText value="NO" rendered="#{!beanGarantia.garantiasCliente.finalizado}" disabled="true"/>
+		    				<p:outputLabel value="Resolución: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.resolucion}" style="width:100%;" rows="3" 
+		    				disabled="true"/>
+		    				
+		    				<p:outputLabel value="Nro Imei de Unidad de cambio: " rendered="#{beanGarantia.opcion2}"/>
+		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.imeiReintegro}" style="width:100%;" rows="1" cols="1" 
+		    				disabled="true" rendered="#{beanGarantia.opcion2}"/>
+		    						    				
+		    				<p:outputLabel value="Acción realizada: " rendered="#{beanGarantia.opcion3}"/>		    				
+		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.accionRealizar}"  rendered="#{beanGarantia.opcion3}" 
+		    				disabled="true" style="width:300px;" rows="1" cols="1"/>
+		    				
+		    				<p:outputLabel value="Falla definitiva: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.fallaDefinitiva}" style="width:100%;" rows="3" disabled="true"/>	    				
+		    				<p:outputLabel value="Observaciones: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.observaciones}" style="width:100%;" rows="3" disabled="true"/>
+							
+						</h:panelGrid>
+					</p:outputPanel>
+				</p:dialog>
+				<br/>
+				<p:dataTable id="contenedorDevoluciones" widgetVar="devolucionBusqueda" var="devolucion" rendered="#{beanCuentaCorriente.existeDevolucion}"
+				value="#{beanCuentaCorriente.listaDevolucionClientes}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanCuentaCorriente.filteredDevolucionClientes}" emptyMessage="No existen Devoluciones" sortMode="multiple">
+					<f:facet name="header">
+						<p:outputLabel value="Devoluciones" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('devolucionBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink target="_blank" action="#{beanDevolucion.generarReporteDevoluciones(beanCuentaCorriente.listaDevolucionClientes)}">
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+					
+					<p:column headerText="Fecha" filterBy="#{devolucion.fecha}" 
+					filterStyle="display:none;" sortBy="#{devolucion.fecha}">
+						<h:outputText value="#{devolucion.fecha}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Nro Imei" filterBy="#{devolucion.nroImei}"
+					filterStyle="display:none;" sortBy="#{devolucion.nroImei}">
+						<h:outputText value="#{devolucion.nroImei}" />
+					</p:column>
+					
+					<p:column headerText="Producto" filterBy="#{devolucion.telefono}"
+					filterStyle="display:none;" sortBy="#{devolucion.telefono}">
+						<h:outputText value="#{devolucion.telefono}" />
+					</p:column>
+					
+					<p:column headerText="Observaciones" filterBy="#{devolucion.descripcion}"
+					filterStyle="display:none;" sortBy="#{devolucion.descripcion}">
+						<h:outputText value="#{devolucion.descripcion}" />
+					</p:column>
+					
+					<p:column headerText="Ver" style="width:45px;">
+						<p:commandButton icon="ui-icon-search" action="#{beanDevolucion.verMovimiento(devolucion)}"
+						oncomplete="PF('dialogoDevolucion').show()"	style="width: 30px; height: 30px;" update=":formulario:outputDevolucion"/>
+					</p:column>
+				</p:dataTable>	 
+				<br/>
+				<p:separator rendered="#{beanCuentaCorriente.existeDevolucion}" />
+				<br/>
+				<p:dialog header="Devolución" widgetVar="dialogoDevolucion"
+					id="dialogoD" modal="true">
+					<p:outputPanel id="outputDevolucion">
+						<h:panelGrid columns="2">
+							<f:facet name="header">
+								<p:outputLabel value="Devolución" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink action="#{beanDevolucion.generarReporteComprobante(beanDevolucion.devolucione)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							<p:outputLabel value="Fecha de Ingreso: " />
+		    				<p:calendar value="#{beanDevolucion.devolucione.fecha}" pattern="dd/MM/yyyy" 
+		    				mask="true" locale="tr" disabled="true"/>
+		    				<p:outputLabel value="Nro Imei de Unidad: " />
+		    				<h:inputTextarea value="#{beanDevolucion.devolucione.nroImei}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Producto: " />
+		    				<h:inputTextarea value="#{beanDevolucion.devolucione.producto.nombre}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Cliente: " />
+		    				<h:inputText value="#{beanDevolucion.devolucione.cliente.nombreNegocio}" disabled="true" />	    	
+		    				<p:outputLabel value="Nro. Movimiento: " />
+		    				<h:inputText value="#{beanDevolucion.devolucione.idMovimiento}" disabled="true" />
+		    				<p:outputLabel value="Movimiento: " />
+		    				<h:inputText value="#{beanDevolucion.devolucione.nombreMovimiento}" disabled="true" />			
+		    				<p:outputLabel value="Observaciones: " />
+		    				<h:inputTextarea value="#{beanDevolucion.devolucione.descripcion}" style="width:100%;" rows="3" disabled="true"/>							
+						</h:panelGrid>
+					</p:outputPanel>
+				</p:dialog>
+			</p:panel>	
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

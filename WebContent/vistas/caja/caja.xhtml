@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Caja</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+				<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+				<h5>(*)Para reflejar la búsqueda debe hacer doble click sobre el botón Buscar</h5>
+		    	<p:panelGrid columns="5" cellpadding="5" style="width:50%;">
+		    		<f:facet name="header">
+		    			<h:outputText value="Filtros" />
+		    		</f:facet>
+		    		<p:outputLabel value="Desde: " />
+		    		<p:calendar value="#{beanCaja.fechaDesde}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+		    		<p:outputLabel value="Hasta: " />
+		    		<p:calendar value="#{beanCaja.fechaHasta}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+					<p:commandButton icon="ui-icon-search" update="contenedorCaja" action="#{beanCaja.filtro()}"/>
+				</p:panelGrid>
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorCaja" widgetVar="cajaBusqueda" var="caja"
+				value="#{beanCaja.listaCajas}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanCaja.filteredCajas}" emptyMessage="No existen Movimientos de Caja" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nuevo" action="#{beanCaja.nuevo()}" oncomplete="PF('dialogoCaja').show()"/>
+						<p:outputLabel value="Movimientos de Caja" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('cajaBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanCaja.generarReporte()}" target="_blank" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+					
+					<p:column headerText="Fecha" filterBy="#{caja.fecha}" 
+					filterStyle="display:none;" sortBy="#{caja.fecha}" style="width:100px;">
+						<h:outputText value="#{caja.fecha}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Concepto" filterBy="#{caja.concepto}"
+					filterStyle="display:none;">
+						<h:outputText value="#{caja.concepto}" />
+					</p:column>
+					
+					<p:column headerText="Monto" style="text-align:right;width:120px;" >
+						<h:outputText value="$" />
+						<h:outputText value="#{caja.monto}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Saldo" style="text-align:right;width:120px;">
+						<h:outputText value="$" />
+						<h:outputText value="#{caja.saldo}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+				<p:dialog header="Movimiento de Caja" widgetVar="dialogoCaja"
+					id="dialogo" closable="false" closeOnEscape="false" modal="true">
+					<p:outputPanel id="outputPanel">
+						<h:panelGrid columns="2">
+							<p:outputLabel value="Fecha: "/>
+							<p:calendar value="#{beanCaja.caja.fecha}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+							
+							<p:outputLabel value="Tipo de Movimiento: " />
+							<p:selectOneMenu value="#{beanCaja.tipo}" >
+								<f:selectItem itemLabel="Entrada de Dinero" itemValue="0"/>
+								<f:selectItem itemLabel="Salida de Dinero" itemValue="1"/>
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Monto ($): " />
+							<p:inputText value="#{beanCaja.caja.monto}" />
+						</h:panelGrid>
+						<h:panelGrid columns="2">
+							<p:outputLabel value="Descripción/Concepto: " />
+							<p:inputTextarea value="#{beanCaja.caja.concepto}" autoResize="false" style="width:100%;" rows="3" />
+							
+							<p:commandButton value="Guardar" action="#{beanCaja.guardar()}" update="contenedorCaja, outputPanel, messages" 
+							oncomplete="PF('dialogoCaja').hide()"/>
+							<p:commandButton value="Cancelar" update="contenedorCaja" oncomplete="PF('dialogoCaja').hide()"/>
+						</h:panelGrid>
+					</p:outputPanel>
+				</p:dialog>	 
+				</p:panel>
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

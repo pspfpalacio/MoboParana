@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<div>
+		<p:messages id="mensaje" showDetail="true" autoUpdate="true" closable="true" />
+		<p:menubar style="background:#FFD6D5;">
+			<p:menuitem value="Inicio" icon="ui-icon-home" action="index" process="@this"/>
+			<p:submenu label="Personas" rendered="#{beanLogueo.submenuPersona}">
+				<p:menuitem value="Clientes" action="#{beanCliente.goClientes(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuCliente}" process="@this"/>
+				<p:menuitem value="Proveedores" action="#{beanProveedor.goProveedores(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuProveedor}" process="@this"/>
+			</p:submenu>
+			<p:submenu label="Productos" rendered="#{beanLogueo.submenuProducto}">
+				<p:menuitem value="Accesorios" action="#{beanProducto.goAccesorios(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuAccesorio}" process="@this"/>
+				<p:menuitem value="Móviles" action="#{beanProducto.goProductos(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuProducto}" process="@this"/>
+				<p:menuitem value="Lista de Precio" action="#{beanListaPrecio.goListasPrecios(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuListaPrecio}" process="@this"/>
+				<p:menuitem value="Compras" action="#{beanCompra.goCompras(beanLogueo.usuario)}"
+				rendered="#{beanLogueo.menuCompra}" process="@this"/>
+			</p:submenu>
+			<p:submenu label="Usuarios" rendered="#{beanLogueo.submenuUsuario}">
+				<p:menuitem value="Roles" action="#{beanRole.goRoles(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuRol}" process="@this"/>
+				<p:menuitem value="Usuarios" action="#{beanUsuario.goUsuarios(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuUsuario}" process="@this"/>
+			</p:submenu>
+			<p:submenu label="Pagos/Movimientos" rendered="#{beanLogueo.submenuPagoMovimiento}">
+				<p:submenu label="Pagos" rendered="#{beanLogueo.submenuPago}">
+					<p:menuitem value="Pago de Cliente" action="#{beanPago.goPagoCliente(beanLogueo.usuario)}"
+					rendered="#{beanLogueo.menuPagoCliente}" process="@this"/>
+					<p:menuitem value="Pago a Proveedor" action="#{beanPago.goPagoProveedor(beanLogueo.usuario)}"
+					rendered="#{beanLogueo.menuPagoProveedor}" process="@this"/>
+				</p:submenu>
+				<p:submenu label="Crédito/Débito" rendered="#{beanLogueo.submenuCreditoDebito}">
+					<p:menuitem value="Crédito/Débito a Cliente" action="#{beanCreditoDebito.goCreditoDebitoCliente(beanLogueo.usuario)}"
+					rendered="#{beanLogueo.menuCreditoDebitoCliente}" process="@this"/>
+					<p:menuitem value="Crédito/Débito a Proveedor" action="#{beanCreditoDebito.goCreditoDebitoProveedor(beanLogueo.usuario)}"
+					rendered="#{beanLogueo.menuCreditoDebitoProveedor}" process="@this"/>
+				</p:submenu>				
+				<p:menuitem value="Gastos" action="#{beanGasto.goGastos(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuGasto}" process="@this"/>
+				<p:menuitem value="Caja" action="#{beanCaja.goCajas(beanLogueo.usuario)}"
+				rendered="#{beanLogueo.menuCaja}" process="@this"/>
+			</p:submenu>
+			<p:submenu label="Ventas" rendered="#{beanLogueo.submenuVenta}">
+				<p:menuitem value="Consignaciones" action="#{beanConsignacion.goConsignaciones(beanLogueo.usuario)}"
+				rendered="#{beanLogueo.menuConsignacion}" process="@this"/>
+				<p:menuitem value="Ventas" action="#{beanVenta.goVentas(beanLogueo.usuario)}"
+				rendered="#{beanLogueo.menuVenta}" process="@this"/>
+			</p:submenu>
+			<p:submenu label="Garantía/Devolución" rendered="#{beanLogueo.submenuGarantiasDevoluciones}">
+				<p:menuitem value="Garantías/Cliente" action="#{beanGarantia.goGarantiasClientes(beanLogueo.usuario)}"
+				rendered="#{beanLogueo.menuGarantia}" process="@this"/>
+				<p:menuitem value="Garantías/Proveedor" action="#{beanGarantia.goGarantiasProveedor(beanLogueo.usuario)}"
+				rendered="#{beanLogueo.menuGarantia}" process="@this"/>
+				<p:menuitem value="Devoluciones" action="#{beanDevolucion.goDevoluciones(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuDevolucion}" process="@this"/>
+			</p:submenu>
+			<p:submenu label="Reportes" rendered="#{beanLogueo.submenuReportes}">
+				<p:menuitem value="Ranking de Clientes" action="#{beanReporte.goRankingCliente(beanLogueo.usuario)}"
+				rendered="#{beanLogueo.menuRankingCliente}" process="@this" />
+				<p:menuitem value="Ranking de Proveedores" action="#{beanReporte.goRankingProveedor(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuRankingProveedor}" style="width:240px;" process="@this"/>
+				<p:menuitem value="Ranking de Productos" action="#{beanReporte.goRankingProducto(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuProducto}" process="@this"/>
+				<p:menuitem value="Ganancias" action="#{beanReporte.goGanacias(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuGanancia}" process="@this"/>
+				<p:menuitem value="Ganancias Por Venta" action="#{beanReporte.goGanaciasVenta(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuGanancia}" process="@this"/>
+				<p:menuitem value="Patrimonio" action="#{beanReporte.goPatrimonio(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuPatrimonio}" process="@this"/>
+				<p:menuitem value="Reporte Dinámico" action="#{beanReporte.goReporteDinamico(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuPatrimonio}" process="@this"/>
+				<p:menuitem value="Reporte de Stock" action="#{beanReporte.goReporteStock(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuProducto}" process="@this"/>
+			</p:submenu>			
+			<p:menuitem value="Busqueda" icon="ui-icon-search" action="#{beanBuscar.goBusqueda(beanLogueo.usuario)}" 
+			rendered="#{beanLogueo.menuBusqueda}" process="@this"/>			
+			<p:menuitem value="Mensajes #{beanMensaje.mensajeNuevo}" icon="ui-icon-mail-closed" action="#{beanMensaje.goMensajes(beanLogueo.usuario)}" process="@this" />		
+
+			<f:facet name="options">
+				<p:commandLink rendered="#{beanMensaje.onIdle()}" />
+				<p:commandLink rendered="#{beanProducto.checkStocks()}" action="#{beanProducto.goStocksMinimo()}">				
+					<h:graphicImage value="/images/exclam.gif" width="20"
+					id="icoStock" title="Móviles por debajo del stock minimo" />
+				</p:commandLink>
+				<p:outputLabel value="                                   " />
+				<p:outputLabel value="#{beanLogueo.usuario.username}     " style="font-family:sans-serif;" />
+				<p:commandButton ajax="false" icon="ui-icon-arrowthick-1-s" rendered="false"
+				onclick="return confirm('Esta seguro que desea realizar el backup de la BD?')">
+					
+				</p:commandButton>
+				<p:commandButton icon="ui-icon-gear" action="#{beanLogueo.setting()}"
+					oncomplete="PF('dialogUsuario').show();" update="panelUser" process="@this"/>
+				<p:commandButton id="ButtonLogout" action="#{beanLogueo.logout()}" 
+					value="Logout" icon="ui-icon-extlink" ajax="false" url="/login.xhtml"/>
+			</f:facet>
+		</p:menubar>
+		<p:clock pattern="dd/MM/yyyy - hh:mm:ss" />
+		<p:dialog header="Usuario" widgetVar="dialogUsuario" id="dialogU" modal="true">
+			<p:outputPanel id="panelUser">
+   				<p:panelGrid columns="2">	   				
+   					
+   					<h:outputLabel for="username" value="Username: " />
+   					<p:inputText id="username" value="#{beanLogueo.usuario.username}" />
+   					<h:outputLabel for="nombre" value="Apellido y Nombres: " />
+   					<p:inputText id="nombre" value="#{beanLogueo.usuario.apellidoNombre}" />
+					<h:outputLabel value="Contraseña: " for="passNew"/>
+					<p:password id="passNew" value="#{beanLogueo.passNueva}" >
+						<p:ajax event="blur" update="ok" listener="#{beanLogueo.handleKeyEvent()}"/>
+					</p:password>
+					<h:outputLabel value="Confirmar Contraseña: " for="confirmPassNew"/>
+					<p:column>
+						<p:password id="confirmPassNew" value="#{beanLogueo.confirmPass}" >
+				    		<p:ajax event="blur" update="ok, guardar" listener="#{beanLogueo.handleKeyEvent()}"/>
+				    	</p:password>
+				    	<h:outputText id="ok" value="#{beanLogueo.textOk}" />
+			    	</p:column>
+			    	<h:outputLabel for="rol" value="Rol: " />
+			    	<p:selectOneMenu id="rol" value="#{beanLogueo.idRol}"  
+			    		style="width:200px;" disabled="#{beanLogueo.idRol != 1}">
+			    		<f:selectItems value="#{beanLogueo.listaRoles}" var="rol" itemLabel="#{rol.nombre}"
+			    		itemValue="#{rol.id}"/>
+			    	</p:selectOneMenu>
+   					<p:commandButton id="guardar" value="Guardar" disabled="#{!beanLogueo.checkButton}"
+   						oncomplete="PF('dialogUsuario').hide()" update="messages" action="#{beanLogueo.editarUsuario()}"/>
+   					<p:commandButton value="Cancelar"  
+   						oncomplete="PF('dialogUsuario').hide()" update="panelUser"/>
+   					
+   				</p:panelGrid>
+  				</p:outputPanel>
+		</p:dialog>	    
+		
+		<p:idleMonitor id="active" onactive="PF('sessionTimeOutDialog').show()" timeout="3600000" process="@this"/>
+		<p:dialog header="Session Caducada!" widgetVar="sessionTimeOutDialog" modal="true" closable="false" 
+			width="400" visible="false">
+			
+			<h:outputText value="La sesión ha caducado, por favor, pulse sobre el siguiente botón para volver a acceder a la aplicación" />
+			<input id="confirmBackToLogin" type="button" value="Volver a acceder a la aplicación" 
+			onclick="window.location='#{facesContext.externalContext.requestContextPath}/login.xhtml';" />
+			
+		</p:dialog>
+	</div>
+	<script type="text/javascript">
+		  //<![CDATA[
+		  function logout(xhr, status, args) {
+		    setTimeout(function() {
+		      window.location = '/login.xhtml';
+		    }, 3600);
+		  }
+		//]]>
+	</script>
+	</ui:composition>
+</html>

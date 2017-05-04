@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Roles</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorRol" widgetVar="rolBusqueda" var="rol"
+				value="#{beanRole.listaRoles}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanRole.filteredRoles}" emptyMessage="No existen Roles" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nuevo" action="#{beanRole.goRolNuevo()}"/>
+						<p:outputLabel value="Roles" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('rolBusqueda').filter()" placeholder="Buscar" />
+						</p:outputPanel> 
+					</f:facet>
+											
+					<p:column style="text-align: center; width:40px;" id="modificar">
+						<f:facet name="header">
+							<h:outputText value="Mod." title="Modificar el Rol" />
+						</f:facet>						
+						<p:commandLink title="Modificar" action="#{beanRole.goRolEditar(rol)}" disabled="#{rol.id == 1 || rol.id == 3}">							
+							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
+						</p:commandLink>
+					</p:column>
+					
+					<p:column headerText="Nombre" filterBy="#{rol.nombre}" 
+					filterStyle="display:none;" sortBy="#{rol.nombre}">
+						<h:outputText value="#{rol.nombre}" />
+					</p:column>
+				</p:dataTable>	 
+			</p:panel>
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

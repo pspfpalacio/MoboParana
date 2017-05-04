@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Garantia</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario" onkeypress="return event.keyCode != 13">
+				<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
+					<p:growl id="messages" showDetail="false" />
+					<ui:include src="/includes/menubar.xhtml" />
+					<br/>
+					<br/>
+					<p:panelGrid style="width:100%;" rendered="#{beanGarantia.abrir}">
+		    			<p:panelGrid columns="2" style="width:100%;">
+		    				<f:facet name="header">
+		    					<h3><h:outputText value="#{beanGarantia.headerText}" /></h3>
+		    				</f:facet>
+		    				<p:outputLabel value="Fecha de Ingreso: " />
+		    				<p:calendar value="#{beanGarantia.garantiasProveedor.fechaIngreso}" pattern="dd/MM/yyyy" 
+		    				mask="true" locale="tr" />
+		    				<p:outputLabel value="Nro Imei de Unidad con falla: " />
+		    				<p:autoComplete id="nroImei1" minQueryLength="4" value="#{beanGarantia.unidadMovil}"
+		    				completeMethod="#{beanGarantia.completeText}" converter="unidadConverter" placeholder="Nro de Imei.." 
+		    				var="unidad" itemLabel="#{unidad.nroImei}" itemValue="#{unidad}" forceSelection="true" scrollHeight="300" size="40" >
+		    					<p:ajax event="blur" update="producto" />
+		    					<p:column>
+					                <h:outputText value="#{unidad.nroImei}" />
+					            </p:column>
+					 
+					            <p:column>
+					                <h:outputText value="#{unidad.producto.nombre}" />
+					            </p:column>
+		    				</p:autoComplete>
+		    				<p:outputLabel value="Producto: " />
+		    				<h:inputTextarea id="producto" value="#{beanGarantia.unidadMovil.producto.nombre}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Proveedor: " />
+		    				<p:selectOneMenu value="#{beanGarantia.idProveedor}" filter="true" filterMatchMode="contains"
+		    				style="width:250px;" >
+		    					<f:selectItem itemLabel="Seleccione proveedor.." itemValue="0"/>
+		    					<f:selectItems value="#{beanGarantia.listaProveedores}" var="prov" itemLabel="#{prov.nombreNegocio}"
+		    					itemValue="#{prov.id}"/>
+		    				</p:selectOneMenu>
+		    				<p:outputLabel value="Concepto: " />		    				
+		    				<p:selectBooleanButton value="#{beanGarantia.concepto}" onLabel="Entrega por garantía" offLabel="Entrega por reparación" />
+		    				<p:outputLabel value="Falla: " />
+		    				<p:inputTextarea value="#{beanGarantia.garantiasProveedor.falla}" style="width:100%;" rows="3" />
+		    				<p:outputLabel value="Observaciones: " />
+		    				<p:inputTextarea value="#{beanGarantia.garantiasProveedor.observaciones}" style="width:100%;" rows="3" />
+		    			</p:panelGrid>
+	    				<p:panelGrid columns="2" style="width:100%;">
+		    				<f:facet name="header">
+		    					<p:commandButton icon="ui-icon-disk" value="Generar" update="messages"
+	    						onclick="return confirm('ESTA SEGURO QUE DESEA CONFIRMAR?')" action="#{beanGarantia.guardarProveedor()}"/>
+	    						<p:commandButton icon="ui-icon-disk" value="Cancelar" action="garantiasproveedores"
+	    						onclick="return confirm('ESTA SEGURO QUE DESEA CANCELAR Y VOLVER?')" />
+		    				</f:facet>
+		    			</p:panelGrid>
+	   				</p:panelGrid>
+	   				<p:panelGrid style="width:100%;" rendered="#{beanGarantia.cerrar}">
+		    			<p:panelGrid columns="2" style="width:100%;">
+		    				<f:facet name="header">
+		    					<h3><h:outputText value="#{beanGarantia.headerText}" /></h3>
+		    				</f:facet>
+		    				<p:outputLabel value="Fecha de Ingreso: " />
+		    				<p:calendar value="#{beanGarantia.garantiasProveedor.fechaIngreso}" pattern="dd/MM/yyyy" 
+		    				mask="true" locale="tr" disabled="true"/>
+		    				<p:outputLabel value="Nro Imei de Unidad con falla: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.imeiFalla}" disabled="true"
+		    				style="width:300px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Producto: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.producto1.nombre}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Proveedor: " />
+		    				<h:inputText value="#{beanGarantia.garantiasProveedor.proveedore.nombreNegocio}" disabled="true" />
+		    				<p:outputLabel value="Concepto: " />
+		    				<h:inputText value="#{beanGarantia.garantiasProveedor.concepto}" disabled="true" />
+		    				<p:outputLabel value="Falla inicial: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.falla}" style="width:100%;" rows="3" 
+		    				disabled="true"/>
+		    				<p:outputLabel value="Costo: " rendered="#{beanGarantia.porReparacion}"/>
+		    				<p:inputText label="Costo" value="#{beanGarantia.garantiasProveedor.costo}" rendered="#{beanGarantia.porReparacion}" />
+		    				<p:outputLabel value="Resolución: " />
+		    				<p:selectOneMenu value="#{beanGarantia.idResolucion}" filter="true" filterMatchMode="contains"
+		    				style="width:250px;" rendered="#{beanGarantia.porReparacion}">
+		    					<f:selectItem itemLabel="Reparado" itemValue="0"/>
+		    					<f:selectItem itemLabel="Sin Reparación" itemValue="1"/>
+		    				</p:selectOneMenu>	
+		    				<p:selectOneMenu value="#{beanGarantia.idResolucion}" filter="true" filterMatchMode="contains"
+		    				style="width:250px;" rendered="#{beanGarantia.porGarantia}">
+		    				<p:ajax event="change" update="panel,opcion1,opcion2,opcion3" listener="#{beanGarantia.onChangeResolucion()}" />
+		    					<f:selectItem itemLabel="Mismo Equipo" itemValue="0"/>
+		    					<f:selectItem itemLabel="Cambio de Equipo" itemValue="1"/>
+		    					<f:selectItem itemLabel="No posee arreglo" itemValue="2"/>
+		    				</p:selectOneMenu>	    				
+		    			</p:panelGrid>	
+		    			<p:panelGrid id="opcion1" columns="2" style="width:100%;" rendered="#{beanGarantia.opcion1}">
+		    				<p:outputLabel value="Falla definitiva: " />
+		    				<p:inputTextarea value="#{beanGarantia.garantiasProveedor.fallaDefinitiva}" style="width:100%;" rows="3"/>	    				
+		    				<p:outputLabel value="Observaciones: " />
+		    				<p:inputTextarea value="#{beanGarantia.garantiasProveedor.observaciones}" style="width:100%;" rows="3" />
+		    			</p:panelGrid>
+		    			<p:panelGrid id="opcion2" columns="2" style="width:100%;" rendered="#{beanGarantia.opcion2}">
+		    				<p:outputLabel value="Nro Imei de Unidad de cambio: " />
+		    				<p:inputText value="#{beanGarantia.garantiasProveedor.imeiReintegro}" />
+		    				<p:outputLabel value="Producto: " />
+		    				<h:inputText value="#{beanGarantia.garantiasProveedor.producto1.nombre}" disabled="true"/>		    				
+		    				<p:outputLabel value="Falla definitiva: " />
+		    				<p:inputTextarea value="#{beanGarantia.garantiasProveedor.fallaDefinitiva}" style="width:100%;" rows="3"/>	    				
+		    				<p:outputLabel value="Observaciones: " />
+		    				<p:inputTextarea value="#{beanGarantia.garantiasProveedor.observaciones}" style="width:100%;" rows="3" />
+		    			</p:panelGrid>
+		    			<p:panelGrid id="opcion3" columns="2" style="width:100%;" rendered="#{beanGarantia.opcion3}">
+		    				<p:outputLabel value="Acción a realizar: " />		    				
+		    				<p:selectBooleanButton value="#{beanGarantia.ningunaAccion}" onLabel="Ninguna acción" offLabel="Monto a favor" />
+		    				<p:outputLabel value="Falla definitiva: " />
+		    				<p:inputTextarea value="#{beanGarantia.garantiasProveedor.fallaDefinitiva}" style="width:100%;" rows="3"/>	    				
+		    				<p:outputLabel value="Observaciones: " />
+		    				<p:inputTextarea value="#{beanGarantia.garantiasProveedor.observaciones}" style="width:100%;" rows="3" />
+		    			</p:panelGrid>
+	    				<p:panelGrid columns="2" style="width:100%;">
+		    				<f:facet name="header">
+		    					<p:commandButton icon="ui-icon-disk" value="Cerrar" update="messages"
+	    						onclick="return confirm('ESTA SEGURO QUE DESEA CONFIRMAR?')" action="#{beanGarantia.confirmarProveedor()}"/>
+	    						<p:commandButton icon="ui-icon-disk" value="Cancelar" action="garantiasproveedores"
+	    						onclick="return confirm('ESTA SEGURO QUE DESEA CANCELAR Y VOLVER?')" />
+		    				</f:facet>
+		    			</p:panelGrid>
+		    		</p:panelGrid>
+   				</p:panel>		
+	    	</h:form>
+	    </div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

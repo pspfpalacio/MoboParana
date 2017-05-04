@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Usuario</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+    			<p:panelGrid columns="4" style="width:100%;">
+    				<f:facet name="header">
+    					<h:outputText value="#{beanUsuario.headerText}" />
+    				</f:facet>
+    				<p:outputLabel value="Apellido y Nombre: " />
+    				<p:inputText value="#{beanUsuario.usuario.apellidoNombre}" />
+    				
+    				<p:outputLabel value="Username: " />
+    				<p:inputText value="#{beanUsuario.usuario.username}" />
+    				
+    				<p:outputLabel value="Contraseña: " />
+    				<p:password id="pass" value="#{beanUsuario.newPass}" >
+						<p:ajax event="blur" update="okText, guardarUser" listener="#{beanUsuario.handleKeyEvent()}"/>
+					</p:password>
+    				
+    				<p:outputLabel value="Repita Contraseña: " />
+    				<p:column>
+    					<p:password id="confirmPass" value="#{beanUsuario.repeatPass}">
+				    		<p:ajax event="blur" update="okText, guardarUser" listener="#{beanUsuario.handleKeyEvent()}"/>
+				    	</p:password>
+				    	<h:outputText id="okText" value="#{beanUsuario.texto}"  />
+    				</p:column>
+    				
+    				<p:outputLabel value="Rol: " />
+    				<p:selectOneMenu value="#{beanUsuario.idRole}" filter="true" filterMatchMode="contains">
+    					<p:ajax event="change" update="clientes" />
+    					<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
+    					<f:selectItems value="#{beanUsuario.listaRoles}" var="rol" itemLabel="#{rol.nombre}"
+    					itemValue="#{rol.id}"/>
+    				</p:selectOneMenu>
+    				
+    				<p:outputLabel value="Cliente: " />
+    				<p:selectOneMenu id="clientes" value="#{beanUsuario.idCliente}" filter="true" filterMatchMode="contains" disabled="#{beanUsuario.idRole != 3}">    					
+    					<f:selectItems value="#{beanUsuario.listaClientes}" var="cliente" itemLabel="#{cliente.nombreNegocio}"
+    					itemValue="#{cliente.id}"/>
+    				</p:selectOneMenu>
+    			</p:panelGrid>
+    			<p:panelGrid columns="2" style="width:100%;">    				
+   					<f:facet name="footer">
+   						<p:commandButton id="guardarUser" value="Guardar" update="messages" action="#{beanUsuario.guardar()}" 
+   						disabled="#{beanUsuario.checkPass}"/>
+   						<p:commandButton value="Cancelar" oncomplete="return confirm('CANCELAR USUARIO Y VOLVER?')"
+   						action="usuarios"/>
+   					</f:facet>	
+   				</p:panelGrid>
+   			</p:panel>
+	    	</h:form>
+	    </div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

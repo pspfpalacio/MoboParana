@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Ganancia - Venta</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<h2><p:outputLabel value="Ganancia por Venta" /></h2>
+				<p:panelGrid columns="3" style="width:100%;">
+					<f:facet name="header">
+						<h:outputText value="Ganancia por Venta" />
+					</f:facet>
+					<p:outputLabel value="Nro. de Venta: " />
+					<h:inputText value="#{beanReporte.nroVenta}" />
+					<p:selectBooleanButton value="#{beanReporte.onVenta}" onLabel="Ventas" offLabel="Ventas Consignación"  />
+				</p:panelGrid>
+		    	<p:panelGrid columns="4" cellpadding="5" style="width:100%;">
+					<p:outputLabel value="Desde: " />
+					<p:calendar value="#{beanReporte.fechaDesde}" pattern="dd/MM/yyyy" locale="tr" mask="true" />
+					<p:outputLabel value="Hasta: " />
+					<p:calendar value="#{beanReporte.fechaHasta}" pattern="dd/MM/yyyy" locale="tr" mask="true" />
+				</p:panelGrid>
+				<p:panelGrid columns="1" style="width:100%;">
+					<f:facet name="header">
+						<p:commandButton value="Buscar" icon="ui-icon-search" update="formulario, contenedorGanancia, panelGanancia, messages" 
+						action="#{beanReporte.buscarGananciaVenta()}" />
+					</f:facet>
+				</p:panelGrid>
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorGanancia" widgetVar="gananciaBusqueda" var="ganancia" value="#{beanReporte.listaGanancia}"
+				paginator="true" rows="10" resizableColumns="true"
+				emptyMessage="No existen Ganancias en ese periodo de tiempo" rendered="#{beanReporte.gananciaVentas}">
+					<f:facet name="header">
+						<p:outputLabel value="Ganancia por Venta" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('gananciaBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanReporte.reporteGanancia()}" target="_blank">
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+					
+					<p:column headerText="Nro de Venta" filterBy="#{ganancia.id}" 
+					filterStyle="display:none;">
+						<h:commandLink action="#{beanReporte.verGananciaVenta(ganancia)}" value="#{ganancia.id}"/>
+					</p:column>
+					
+					<p:column headerText="Fecha de Venta">
+						<h:outputText value="#{ganancia.fecha}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Cliente" filterBy="#{ganancia.cliente}" 
+					filterStyle="display:none;">
+						<h:outputText value="#{ganancia.cliente}" />
+					</p:column>
+					
+					<p:column headerText="Tipo">
+						<h:outputText value="#{ganancia.tipo}" />
+					</p:column>
+					
+					<p:column headerText="Costo">
+						<h:outputText value="#{ganancia.costo}" >
+							<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Monto de Venta">
+						<h:outputText value="#{ganancia.monto}" >
+							<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ganancia Obtenida">
+						<h:outputText value="#{ganancia.ganancia}" >
+							<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+						</h:outputText>
+					</p:column>
+					<f:facet name="footer">
+						<h:outputText value="Cantidad de Ventas: #{beanReporte.cantidadTotal}"/>
+						<h:outputText value=" - Monto Total: "/>
+						<h:outputText value="#{beanReporte.montoTotal}">
+							<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+						</h:outputText>
+						<h:outputText value=" - Ganancia Total: " />
+						<h:outputText value="#{beanReporte.gananciaTotal}" >
+							<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+						</h:outputText>
+					</f:facet>
+				</p:dataTable>	
+				<br />
+				<p:panel id="panelGanancia" toggleable="true" toggleSpeed="500" 
+				 rendered="#{beanReporte.gananciaProductos}">
+				 <f:facet name="header">
+				 	<h:commandLink action="#{beanReporte.gananciaDeVenta()}" target="_blank">
+						<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+					</h:commandLink>
+					<h:outputText value="Ganancia de Venta" />
+				 </f:facet>
+			        <h:panelGrid columns="5" style="width:100%" cellpadding="10">
+			        	<h:outputText value="Clase de Venta: " />
+			            <h:outputText value="#{beanReporte.gananciaObj.clase}" />
+			            <h:outputText value="Nro Venta: " />
+			            <h:outputText value="#{beanReporte.gananciaObj.id}" />
+			            <h:outputText value="Fecha: " />
+			            <h:outputText value="#{beanReporte.gananciaObj.fecha}" >
+			            	<f:convertDateTime pattern="dd/MM/yyyy"/>
+			            </h:outputText>
+			            <h:outputText value="Cliente: " />
+			            <h:outputText value="#{beanReporte.gananciaObj.cliente}" />
+			            <h:outputText value="Tipo de Venta: " />
+						<h:outputText value="#{beanReporte.gananciaObj.tipo}" />
+					</h:panelGrid>
+					
+						<p:dataTable var="detalle" value="#{beanReporte.gananciaObj.listaGananciaDetalle}">
+						    <p:column headerText="Cantidad">
+						        <h:outputText value="#{detalle.cantidad}" />
+						    </p:column>
+						 
+						    <p:column headerText="Producto">
+						        <h:outputText value="#{detalle.producto.nombre}" />
+						    </p:column>
+						 
+						    <p:column headerText="Subtotal">
+						        <h:outputText value="$#{detalle.montoString}" />
+						    </p:column>
+						 
+						    <p:column headerText="Costo">
+						        <h:outputText value="$#{detalle.costoString}" />
+						    </p:column>
+						    
+						    <p:column headerText="Ganancia">
+						        <h:outputText value="$#{detalle.gananciaString}" />
+						    </p:column>
+						</p:dataTable>
+					<h:panelGrid style="width:100%;text-align:center;">
+						<f:facet name="footer">
+							<h:outputText value="Monto Total: $#{beanReporte.gananciaObj.montoString}" />
+							<h:outputText value=" - Costo Total: $#{beanReporte.gananciaObj.costoString}" />
+							<h:outputText value=" - Ganancia Total: $#{beanReporte.gananciaObj.gananciaString}" />
+						</f:facet>
+			        </h:panelGrid>
+			    </p:panel>	
+			</p:panel> 
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

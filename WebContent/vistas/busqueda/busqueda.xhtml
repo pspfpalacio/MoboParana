@@ -1,0 +1,717 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+				function foco(elemento){
+					document.getElementById(elemento).focus();
+					};
+			</script>
+		<title>Busqueda</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario" onkeypress="return event.keyCode != 13">
+				<p:panel id="panelGral" style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+    			<p:panelGrid columns="2" style="width:100%;">
+    				<f:facet name="header">
+    					<h:outputText value="Utilice una Opción para la Búsqueda" />
+    				</f:facet>
+    				
+    				<p:outputLabel value="Coloque Nro de Imei: " />
+    				<p:autoComplete id="autoComplete" minQueryLength="4" value="#{beanBuscar.unidadMovil}" completeMethod="#{beanBuscar.completeText}" converter="unidadConverter"
+    				effect="fade" placeholder="Nro de Imei.." var="unidad" itemLabel="#{unidad.nroImei}" itemValue="#{unidad}" forceSelection="true" scrollHeight="300" size="40">
+    					<p:column>
+			                <h:outputText value="#{unidad.nroImei}" />
+			            </p:column>
+			 
+			            <p:column>
+			                <h:outputText value="#{unidad.producto.nombre}" />
+			            </p:column>
+    				</p:autoComplete>
+    			</p:panelGrid>
+    			<p:panelGrid columns="4" style="width:100%;">
+    				<p:outputLabel value="Productos: " />
+    				<p:selectOneMenu value="#{beanBuscar.idProducto}" filter="true" filterMatchMode="contains">
+    					<p:ajax event="change" update="listaPrecio" />
+    					<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
+    					<f:selectItems value="#{beanBuscar.listaProductos}" var="prod" itemLabel="#{prod.nombre}" itemValue="#{prod.id}"/>
+    				</p:selectOneMenu>
+    				<p:outputLabel value="Listas de Precio: " />
+    				<p:selectOneMenu id="listaPrecio" value="#{beanBuscar.idListaPrecio}" filter="true" filterMatchMode="contains" disabled="#{beanBuscar.idProducto == 0}">
+    					<f:selectItem itemLabel="Ninguna" itemValue="0"/>
+    					<f:selectItems value="#{beanBuscar.listaListaPrecios}" var="lista" itemLabel="#{lista.nombre}" itemValue="#{lista.id}"/>
+    				</p:selectOneMenu>
+    			</p:panelGrid>
+    			<p:panelGrid columns="1" style="width:100%;">
+    				<f:facet name="header">
+    					<p:commandButton icon="ui-icon-search" value="Buscar" action="#{beanBuscar.buscar()}" 
+    					update="panelGral, messages"
+		   				 
+		   				/>
+    				</f:facet>    				
+    			</p:panelGrid>
+    			<p:separator rendered="#{beanBuscar.panelProducto}"/>
+    			<p:panelGrid id="panelproducto" columns="2" rendered="#{beanBuscar.panelProducto}" style="width:100%;">
+    				<f:facet name="header">
+    					<h:outputText value="Producto" />
+    				</f:facet>
+    				<p:outputLabel value="Tipo: " />
+    				<h:inputText value="#{beanBuscar.producto.rubro.nombre}" disabled="true" style="width:100%;"/>
+    				<p:outputLabel value="Marca y Modelo: " />
+    				<h:inputText value="#{beanBuscar.producto.nombre}" disabled="true" style="width:100%;"/>
+    				<p:outputLabel value="Nro de Imei: " />
+    				<h:inputText value="#{beanBuscar.nroImei}" disabled="true" style="width:100%;" />
+    				<p:outputLabel value="Descripción: " />
+    				<h:inputText value="#{beanBuscar.producto.descripcion}" disabled="true" style="width:100%;" />
+    				<p:outputLabel value="Stock: " />
+    				<h:inputText value="#{beanBuscar.producto.stock}" disabled="true" style="width:100%;" />
+    				<p:outputLabel value="#{beanBuscar.disponibleConsignacion}" rendered="#{beanBuscar.panelConsignacion}" />
+    			</p:panelGrid>
+    			<p:separator rendered="#{beanBuscar.panelListaPrecio}"/>
+    			<p:panelGrid id="panellistaprecio" columns="4" rendered="#{beanBuscar.panelListaPrecio}" style="width:100%;">
+    				<f:facet name="header">
+    					<h:outputText value="Descripción del Producto en Lista" />
+    				</f:facet>
+    				<p:outputLabel value="Tipo: " />
+    				<h:inputText value="#{beanBuscar.producto.rubro.nombre}" disabled="true" style="width:100%;"/>
+    				<p:outputLabel value="Marca y Modelo: " />
+    				<h:inputText value="#{beanBuscar.producto.nombre}" disabled="true" style="width:100%;"/>    				
+    				<p:outputLabel value="Stock: " />
+    				<h:inputText value="#{beanBuscar.producto.stock}" disabled="true" style="width:100%;" />
+    				<p:outputLabel value="En consignación: " />
+    				<h:inputText value="#{beanBuscar.producto.enConsignacion}" disabled="true" style="width:100%;" />
+    				    				
+    				<p:outputLabel value="Lista de Precio: " />
+    				<h:inputText value="#{beanBuscar.listaProducto.listaPrecio.nombre}" disabled="true" style="width:100%;" />
+    				<p:outputLabel value="Precio de Costo: " />
+    				<h:inputText value="#{beanBuscar.producto.precioCosto}" disabled="true" style="width:100%;" >
+    					<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+    				</h:inputText>
+    				<p:outputLabel value="Costo Promedio: " />
+    				<h:inputText value="#{beanBuscar.producto.costoPromedio}" disabled="true" style="width:100%;" >
+    					<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+    				</h:inputText>
+    				<p:outputLabel value="Precio de Venta: " />
+    				<h:inputText value="#{beanBuscar.listaProducto.precioVenta}" disabled="true" style="width:100%;" >
+    					<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+    				</h:inputText>
+    			</p:panelGrid>
+    			<p:separator rendered="#{beanBuscar.panelStocks}"/>
+    			<p:dataTable id="panelStock" rendered="#{beanBuscar.panelStocks}" value="#{beanBuscar.listaStocks}" var="stock" >
+    				<f:facet name="header">
+    					<h:outputText value="Stock disponible de Producto" />
+    				</f:facet>
+    				<p:column headerText="Stock">
+    					<h:outputText value="#{stock.cantidad}" />
+    					<p:rowToggler />
+    				</p:column>
+    				<p:column headerText="Precio de Compra">
+    					<h:outputText value="#{stock.precio}" >
+    						<f:convertNumber pattern="#,##0.00" maxFractionDigits="2"/>
+    					</h:outputText>
+    				</p:column>
+    				<p:rowExpansion>
+    					<p:dataList value="#{stock.listaUnidadMovils}" var="unidad" type="unordered">
+    						<h:outputText value="#{unidad.nroImei}" />
+    					</p:dataList>
+    				</p:rowExpansion>
+    			</p:dataTable>
+    			<p:separator rendered="#{beanBuscar.panelGarantiaCliente}"/>
+    			<p:panelGrid style="width:100%;" rendered="#{beanBuscar.panelGarantiaCliente}">
+	    			<p:panelGrid style="width:100%;" columns="2" rendered="#{!beanBuscar.garantiasCliente.finalizado}">
+						<f:facet name="header">
+							<p:outputLabel value="Garantía de Cliente" />
+							<p:spacer width="20" />
+							<p:outputPanel style="float:right;">							
+								<h:commandLink action="#{beanGarantia.generarReporteComprobanteCliente(beanBuscar.garantiasCliente)}" >
+									<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+								</h:commandLink>
+							</p:outputPanel>
+						</f:facet>
+						<p:outputLabel value="Fecha de Ingreso: " />
+	    				<p:calendar value="#{beanBuscar.garantiasCliente.fechaIngreso}" pattern="dd/MM/yyyy" 
+	    				mask="true" locale="tr" disabled="true"/>
+	    				<p:outputLabel value="Nro Imei de Unidad con falla: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.imeiFalla}" disabled="true"
+	    				style="width:430px;" rows="1" cols="1"/>
+	    				<p:outputLabel value="Producto: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.producto1.nombre}" disabled="true"
+	    				style="width:430px;" rows="1" cols="1"/>
+	    				<p:outputLabel value="Cliente: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.cliente.nombreNegocio}" disabled="true" 
+	    				style="width:100%;" rows="1" cols="1"/>
+	    				<p:outputLabel value="Falla inicial: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.falla}" style="width:100%;" rows="3" 
+	    				disabled="true"/>
+	    				<p:outputLabel value="Cerrada: " />
+	    				<h:inputText value="SI" rendered="#{beanBuscar.garantiasCliente.finalizado}" disabled="true"/>
+	    				<h:inputText value="NO" rendered="#{!beanBuscar.garantiasCliente.finalizado}" disabled="true"/>	    				
+	    				<p:outputLabel value="Observaciones: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.observaciones}" style="width:100%;" rows="3" disabled="true"/>							
+					</p:panelGrid>						
+					<p:panelGrid style="width:100%;" columns="2" rendered="#{beanBuscar.garantiasCliente.finalizado}">
+						<f:facet name="header">
+							<p:outputLabel value="Garantía de Cliente" />
+							<p:spacer width="20" />
+							<p:outputPanel style="float:right;">							
+								<h:commandLink action="#{beanGarantia.generarReporteComprobanteCliente(beanBuscar.garantiasCliente)}" >
+									<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+								</h:commandLink>
+							</p:outputPanel>
+						</f:facet>
+						<p:outputLabel value="Fecha de Ingreso: " />
+	    				<p:calendar value="#{beanBuscar.garantiasCliente.fechaIngreso}" pattern="dd/MM/yyyy" 
+	    				mask="true" locale="tr" disabled="true"/>
+	    				<p:outputLabel value="Nro Imei de Unidad con falla: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.imeiFalla}" disabled="true"
+	    				style="width:430px;" rows="1" cols="1"/>
+	    				<p:outputLabel value="Producto: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.producto1.nombre}" disabled="true"
+	    				style="width:430px;" rows="1" cols="1"/>
+	    				<p:outputLabel value="Cliente: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.cliente.nombreNegocio}" disabled="true" 
+	    				style="width:100%;" rows="1" cols="1"/>
+	    				<p:outputLabel value="Falla inicial: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.falla}" style="width:100%;" rows="3" 
+	    				disabled="true"/>
+	    				<p:outputLabel value="Cerrada: " />
+	    				<h:inputText value="SI" rendered="#{beanBuscar.garantiasCliente.finalizado}" disabled="true"/>
+	    				<h:inputText value="NO" rendered="#{!beanBuscar.garantiasCliente.finalizado}" disabled="true"/>
+	    				<p:outputLabel value="Resolución: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.resolucion}" style="width:100%;" rows="3" 
+	    				disabled="true"/>
+	    				
+	    				<p:outputLabel value="Nro Imei de Unidad de cambio: " rendered="#{beanBuscar.opcionGarantia2}"/>
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.imeiReintegro}" style="width:100%;" rows="1" cols="1" 
+	    				disabled="true" rendered="#{beanBuscar.opcionGarantia2}"/>
+	    						    				
+	    				<p:outputLabel value="Acción realizada: " rendered="#{beanBuscar.opcionGarantia3}"/>		    				
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.accionRealizar}"  rendered="#{beanBuscar.opcionGarantia3}" 
+	    				disabled="true" style="width:300px;" rows="1" cols="1"/>
+	    				
+	    				<p:outputLabel value="Falla definitiva: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.fallaDefinitiva}" style="width:100%;" rows="3" disabled="true"/>	    				
+	    				<p:outputLabel value="Observaciones: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasCliente.observaciones}" style="width:100%;" rows="3" disabled="true"/>
+						
+					</p:panelGrid>
+				</p:panelGrid>
+				<p:separator rendered="#{beanBuscar.panelGarantiaProveedor}"/>
+    			<p:panelGrid style="width:100%;" rendered="#{beanBuscar.panelGarantiaProveedor}">
+	    			<p:panelGrid style="width:100%;" columns="2" rendered="#{!beanBuscar.garantiasProveedor.finalizado}">
+						<f:facet name="header">
+							<p:outputLabel value="Garantía de Proveedor" />
+							<p:spacer width="20" />
+							<p:outputPanel style="float:right;">							
+								<h:commandLink action="#{beanGarantia.generarReporteComprobanteProveedor(beanBuscar.garantiasProveedor)}" >
+									<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+								</h:commandLink>
+							</p:outputPanel>
+						</f:facet>
+						<p:outputLabel value="Fecha de Ingreso: " />
+	    				<p:calendar value="#{beanBuscar.garantiasProveedor.fechaIngreso}" pattern="dd/MM/yyyy" 
+	    				mask="true" locale="tr" disabled="true"/>
+	    				<p:outputLabel value="Nro Imei de Unidad con falla: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.imeiFalla}" disabled="true"
+	    				style="width:430px;" rows="1" cols="1"/>
+	    				<p:outputLabel value="Producto: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.producto1.nombre}" disabled="true"
+	    				style="width:430px;" rows="1" cols="1"/>
+	    				<p:outputLabel value="Cliente: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.proveedore.nombreNegocio}" disabled="true" 
+	    				style="width:100%;" rows="1" cols="1"/>
+	    				<p:outputLabel value="Falla inicial: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.falla}" style="width:100%;" rows="3" 
+	    				disabled="true"/>
+	    				<p:outputLabel value="Cerrada: " />
+	    				<h:inputText value="SI" rendered="#{beanBuscar.garantiasProveedor.finalizado}" disabled="true"/>
+	    				<h:inputText value="NO" rendered="#{!beanBuscar.garantiasProveedor.finalizado}" disabled="true"/>	    				
+	    				<p:outputLabel value="Observaciones: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.observaciones}" style="width:100%;" rows="3" disabled="true"/>							
+					</p:panelGrid>						
+					<p:panelGrid style="width:100%;" columns="2" rendered="#{beanBuscar.garantiasProveedor.finalizado}">
+						<f:facet name="header">
+							<p:outputLabel value="Garantía de Proveedor" />
+							<p:spacer width="20" />
+							<p:outputPanel style="float:right;">							
+								<h:commandLink action="#{beanGarantia.generarReporteComprobanteProveedor(beanBuscar.garantiasProveedor)}">
+									<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+								</h:commandLink>
+							</p:outputPanel>
+						</f:facet>
+						<p:outputLabel value="Fecha de Ingreso: " />
+	    				<p:calendar value="#{beanBuscar.garantiasProveedor.fechaIngreso}" pattern="dd/MM/yyyy" 
+	    				mask="true" locale="tr" disabled="true"/>
+	    				<p:outputLabel value="Nro Imei de Unidad con falla: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.imeiFalla}" disabled="true"
+	    				style="width:430px;" rows="1" cols="1"/>
+	    				<p:outputLabel value="Producto: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.producto1.nombre}" disabled="true"
+	    				style="width:430px;" rows="1" cols="1"/>
+	    				<p:outputLabel value="Proveedor: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.proveedore.nombreNegocio}" disabled="true" 
+	    				style="width:100%;" rows="1" cols="1"/>
+	    				<p:outputLabel value="Falla inicial: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.falla}" style="width:100%;" rows="3" 
+	    				disabled="true"/>
+	    				<p:outputLabel value="Cerrada: " />
+	    				<h:inputText value="SI" rendered="#{beanBuscar.garantiasProveedor.finalizado}" disabled="true"/>
+	    				<h:inputText value="NO" rendered="#{!beanBuscar.garantiasProveedor.finalizado}" disabled="true"/>	    				
+	    				
+	    				<p:outputLabel value="Costo: " rendered="#{beanBuscar.garantiasProveedor.costo != 0}"/>
+	    				<h:inputText value="$ #{beanBuscar.garantiasProveedor.costo}" disabled="true" rendered="#{beanBuscar.garantiasProveedor.costo != 0}"/>
+	    				<p:outputLabel value="Resolución: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.resolucion}" style="width:100%;" rows="3" 
+	    				disabled="true"/>
+	    				
+	    				<p:outputLabel value="Nro Imei de Unidad de cambio: " rendered="#{beanBuscar.opcionGarantia2}"/>
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.imeiReintegro}" style="width:100%;" rows="1" cols="1" 
+	    				disabled="true" rendered="#{beanBuscar.opcionGarantia2}"/>
+	    						    				
+	    				<p:outputLabel value="Acción realizada: " rendered="#{beanBuscar.opcionGarantia3}"/>		    				
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.accionRealizar}"  rendered="#{beanBuscar.opcionGarantia3}" 
+	    				disabled="true" style="width:300px;" rows="1" cols="1"/>
+	    				
+	    				<p:outputLabel value="Falla definitiva: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.fallaDefinitiva}" style="width:100%;" rows="3" disabled="true"/>	    				
+	    				<p:outputLabel value="Observaciones: " />
+	    				<h:inputTextarea value="#{beanBuscar.garantiasProveedor.observaciones}" style="width:100%;" rows="3" disabled="true"/>
+					</p:panelGrid>
+				</p:panelGrid>
+    			<p:separator rendered="#{beanBuscar.panelConsignacionProducto}"/>
+    			<p:dataTable id="contenedorConsignacion" var="consignacion"	value="#{beanBuscar.listaConsignacions}" paginator="true" rows="30" resizableColumns="true"
+				emptyMessage="No existen Consignaciones" sortMode="multiple" rendered="#{beanBuscar.panelConsignacionProducto}">
+					<f:facet name="header">
+						<p:outputLabel value="Móvil disponible(Sin Vender) en Consignaciones" />
+					</f:facet>
+					
+					<p:column headerText="Comprobante" style="width:120px;text-align:center;">
+						<h:commandLink action="#{beanConsignacion.generarReporteComprobante(consignacion)}">
+							<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+						</h:commandLink>
+						<p:rowToggler />
+					</p:column>
+					
+					<p:column headerText="Nro" filterBy="#{consignacion.id}" style="width:80px;text-align:center;"
+					filterStyle="display:none;" sortBy="#{consignacion.id}">
+						<h:outputText value="#{consignacion.id}" />
+					</p:column>
+					
+					<p:column headerText="Fecha" filterBy="#{consignacion.fecha}" style="width:110px;text-align:center;"
+					filterStyle="display:none;" sortBy="#{consignacion.fecha}">
+						<h:outputText value="#{consignacion.fecha}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Cliente" filterBy="#{consignacion.cliente.nombreNegocio}"
+					filterStyle="display:none;">
+						<h:outputText value="#{consignacion.cliente.nombreNegocio}" />
+					</p:column>
+					
+					<p:column headerText="Monto" filterBy="#{consignacion.monto}"
+					filterStyle="display:none;" style="width:100px;text-align:right;">
+						<h:outputText value="$" />
+						<h:outputText value="#{consignacion.monto}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:rowExpansion>
+						<p:dataTable value="#{beanConsignacion.getDetalleConsignacion(consignacion)}" var="detalle">
+							<f:facet name="header">
+								<h:outputText value="Detalle" />
+							</f:facet>
+							
+							<p:column headerText="Cantidad">
+								<h:outputText value="#{detalle.cantidad}" />
+							</p:column>
+							
+							<p:column headerText="Producto">
+								<h:outputText value="#{detalle.producto.nombre}" />
+							</p:column>
+							
+							<p:column headerText="Precio de Venta">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.precioVenta}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Subtotal">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.subtotal}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+				</p:dataTable>	
+				<p:separator rendered="#{beanBuscar.panelVentaProducto}"/>
+				<p:dataTable id="contenedorVentas" var="venta"	value="#{beanBuscar.listaVentas}" paginator="true" rows="30" resizableColumns="true"
+				emptyMessage="No existen Ventas" sortMode="multiple" rendered="#{beanBuscar.panelVentaProducto}">
+					<f:facet name="header">
+						<p:outputLabel value="Móviles Vendidos" />
+					</f:facet>
+					
+					<p:column headerText="Comprobante" style="width:120px;text-align:center;">
+						<h:commandLink action="#{beanVenta.generarReporteComprobante(venta)}">
+							<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+						</h:commandLink>
+						<p:rowToggler />
+					</p:column>
+					
+					<p:column headerText="Nro" filterBy="#{venta.id}" style="width:80px;text-align:center;"
+					filterStyle="display:none;" sortBy="#{venta.id}">
+						<h:outputText value="#{venta.id}" />
+					</p:column>
+					
+					<p:column headerText="Fecha" filterBy="#{venta.fecha}" style="width:110px;text-align:center;"
+					filterStyle="display:none;" sortBy="#{venta.fecha}">
+						<h:outputText value="#{venta.fecha}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Cliente" filterBy="#{venta.cliente.nombreNegocio}"
+					filterStyle="display:none;">
+						<h:outputText value="#{venta.cliente.nombreNegocio}" />
+					</p:column>
+					
+					<p:column headerText="Monto" filterBy="#{venta.monto}"
+					filterStyle="display:none;" style="width:100px;text-align:right;">
+						<h:outputText value="$" />
+						<h:outputText value="#{venta.monto}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:rowExpansion>
+						<p:dataTable value="#{beanVenta.getDetalleDeVenta(venta)}" var="detalle">
+							<f:facet name="header">
+								<h:outputText value="Detalle" />
+							</f:facet>
+							
+							<p:column headerText="Cantidad">
+								<h:outputText value="#{detalle.cantidad}" />
+							</p:column>
+							
+							<p:column headerText="Producto">
+								<h:outputText value="#{detalle.producto.nombre}" />
+							</p:column>
+							
+							<p:column headerText="Precio de Venta">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.precioVenta}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Subtotal">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.subtotal}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+				</p:dataTable>	
+    			<p:separator rendered="#{beanBuscar.panelCompra}" />
+    			<p:panelGrid id="panelcompra" columns="4" style="width:100%;" rendered="#{beanBuscar.panelCompra}">
+    				<f:facet name="header">
+    					<h:outputText value="Compra" />
+    					<p:spacer width="20" />
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanCompra.generarReporteComprobante(beanBuscar.compra)}" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+							</h:commandLink>
+						</p:outputPanel>
+    				</f:facet>
+    				<p:outputLabel value="Número:" />
+    				<h:inputText value="#{beanBuscar.compra.id}" disabled="true" />
+    				
+    				<p:outputLabel value="Fecha: " />
+    				<h:inputText value="#{beanBuscar.compra.fecha}" disabled="true">
+    					<f:convertDateTime pattern="dd/MM/yyyy"/>
+    				</h:inputText>    				
+    				
+    				<p:outputLabel value="Proveedor: " />
+    				<h:inputText value="#{beanBuscar.compra.proveedore.nombreNegocio}" disabled="true" />
+    				
+    				<p:outputLabel value="Tipo" />
+    				<h:inputText value="#{beanBuscar.compra.tipo}" disabled="true" />
+    			</p:panelGrid>
+    			<p:dataTable id="tablecompra" rendered="#{beanBuscar.tableCompra}" 
+    			value="#{beanCompra.getDetalleDeCompra(beanBuscar.compra)}" var="detalle" >
+    				<f:facet name="header">
+    					<h:outputText value="Detalle de Compra" />
+    				</f:facet>
+    				<p:column headerText="Cantidad" style="width:120px;">
+    					<h:outputText value="#{detalle.cantidad}" />
+    				</p:column>
+    				<p:column headerText="Producto">
+    					<h:outputText value="#{detalle.producto.nombre}" />
+    				</p:column>
+    				<p:column headerText="Precio Unitario" style="width:150px;">
+    					<h:outputText value="$" />
+    					<h:outputText value="#{detalle.precioCompra}" >
+    						<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+    					</h:outputText>
+    				</p:column>
+    				<p:column headerText="Subtotal" style="width:150px;">
+    					<h:outputText value="$" />
+    					<h:outputText value="#{detalle.subtotal}" >
+    						<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+    					</h:outputText>
+    				</p:column>
+    				<f:facet name="footer">
+    					<h:outputText value="Monto Total: $" />
+    					<h:outputText value="#{beanBuscar.compra.monto}" >
+    						<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+    					</h:outputText>
+    				</f:facet>
+    			</p:dataTable>
+    			<p:separator rendered="#{beanBuscar.panelVenta}" />
+   				<p:panelGrid id="panelventa" columns="4" style="width:100%" rendered="#{beanBuscar.panelVenta}">
+   					<f:facet name="header">
+    					<h:outputText value="Venta" />
+    					<p:spacer width="20" />
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanVenta.generarReporteComprobante(beanBuscar.venta)}" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+							</h:commandLink>
+						</p:outputPanel>
+    				</f:facet>
+    				<p:outputLabel value="Número:" />
+    				<h:inputText value="#{beanBuscar.venta.id}" disabled="true" />
+    				
+    				<p:outputLabel value="Fecha: " />
+    				<h:inputText value="#{beanBuscar.venta.fecha}" disabled="true">
+    					<f:convertDateTime pattern="dd/MM/yyyy"/>
+    				</h:inputText>    				
+    				
+    				<p:outputLabel value="Cliente: " />
+    				<h:inputText value="#{beanBuscar.venta.cliente.nombreNegocio}" disabled="true" />
+    				
+    				<p:outputLabel value="Tipo" />
+    				<h:inputText value="#{beanBuscar.venta.tipo}" disabled="true" />
+   				</p:panelGrid>
+   				<p:dataTable id="tableventa" rendered="#{beanBuscar.tableVenta}" value="#{beanVenta.getDetalleDeVenta(beanBuscar.venta)}" var="detalle" >
+    				<f:facet name="header">
+    					<h:outputText value="Detalle de Venta" />
+    				</f:facet>
+    				<p:column headerText="Cantidad" style="width:120px;">
+    					<h:outputText value="#{detalle.cantidad}" />
+    				</p:column>
+    				<p:column headerText="Producto">
+    					<h:outputText value="#{detalle.producto.nombre}" />
+    				</p:column>
+    				<p:column headerText="Precio Unitario" style="width:150px;">
+    					<h:outputText value="$" />
+    					<h:outputText value="#{detalle.precioVenta}" >
+    						<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+    					</h:outputText>
+    				</p:column>
+    				<p:column headerText="Subtotal" style="width:150px;">
+    					<h:outputText value="$" />
+    					<h:outputText value="#{detalle.subtotal}" >
+    						<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+    					</h:outputText>
+    				</p:column>
+    				<f:facet name="footer">
+    					<h:outputText value="Monto Total: $" />
+    					<h:outputText value="#{beanBuscar.venta.monto}" >
+    						<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+    					</h:outputText>
+    				</f:facet>
+    			</p:dataTable>
+    			<p:separator rendered="#{beanBuscar.panelConsignacion}" />
+    			<p:panelGrid id="panelconsignacion" columns="4" style="width:100%" rendered="#{beanBuscar.panelConsignacion}">
+   					<f:facet name="header">
+    					<h:outputText value="Consignación" />
+    					<p:spacer width="20" />
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanConsignacion.generarReporteComprobante(beanBuscar.consignacion)}" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+							</h:commandLink>
+						</p:outputPanel>
+    				</f:facet>
+    				<p:outputLabel value="Número:" />
+    				<h:inputText value="#{beanBuscar.consignacion.id}" disabled="true" />
+    				
+    				<p:outputLabel value="Fecha: " />
+    				<h:inputText value="#{beanBuscar.consignacion.fecha}" disabled="true">
+    					<f:convertDateTime pattern="dd/MM/yyyy"/>
+    				</h:inputText>    				
+    				
+    				<p:outputLabel value="Cliente: " />
+    				<h:inputText value="#{beanBuscar.consignacion.cliente.nombreNegocio}" disabled="true" />
+   				</p:panelGrid>
+   				<p:dataTable id="tableconsignacion" rendered="#{beanBuscar.tableConsignacion}" value="#{beanConsignacion.getDetalleConsignacion(beanBuscar.consignacion)}" var="detalle" >
+    				<f:facet name="header">
+    					<h:outputText value="Detalle de Consignación" />
+    				</f:facet>
+    				<p:column headerText="Cantidad" style="width:120px;">
+    					<h:outputText value="#{detalle.cantidad}" />
+    				</p:column>
+    				<p:column headerText="Producto">
+    					<h:outputText value="#{detalle.producto.nombre}" />
+    				</p:column>
+    				<p:column headerText="Precio Unitario" style="width:150px;">
+    					<h:outputText value="$" />
+    					<h:outputText value="#{detalle.precioVenta}" >
+    						<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+    					</h:outputText>
+    				</p:column>
+    				<p:column headerText="Subtotal" style="width:150px;">
+    					<h:outputText value="$" />
+    					<h:outputText value="#{detalle.subtotal}" >
+    						<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+    					</h:outputText>
+    				</p:column>
+    				<f:facet name="footer">
+    					<h:outputText value="Monto Total: $" />
+    					<h:outputText value="#{beanBuscar.consignacion.monto}" >
+    						<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+    					</h:outputText>
+    				</f:facet>
+    			</p:dataTable>    
+    			<p:separator rendered="#{beanBuscar.panelVentaCons}" />
+   				<p:panelGrid id="panelventacons" columns="4" style="width:100%" rendered="#{beanBuscar.panelVentaCons}">
+   					<f:facet name="header">
+    					<h:outputText value="Venta de Consignación" />
+    					<p:spacer width="20" />
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanVentaConsignacion.generarReporteComprobante(beanBuscar.ventasCon)}" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+							</h:commandLink>
+						</p:outputPanel>
+    				</f:facet>
+    				<p:outputLabel value="Número:" />
+    				<h:inputText value="#{beanBuscar.ventasCon.id}" disabled="true" />
+    				
+    				<p:outputLabel value="Fecha: " />
+    				<h:inputText value="#{beanBuscar.ventasCon.fecha}" disabled="true">
+    					<f:convertDateTime pattern="dd/MM/yyyy"/>
+    				</h:inputText>    				
+    				
+    				<p:outputLabel value="Cliente: " />
+    				<h:inputText value="#{beanBuscar.ventasCon.cliente.nombreNegocio}" disabled="true" />
+    				
+    				<p:outputLabel value="Tipo" />
+    				<h:inputText value="#{beanBuscar.ventasCon.tipo}" disabled="true" />
+   				</p:panelGrid>
+   				<p:dataTable id="tableventacons" rendered="#{beanBuscar.tableVentaCons}" value="#{beanVentaConsignacion.getDetalleDeVenta(beanBuscar.ventasCon)}" var="detalle" >
+    				<f:facet name="header">
+    					<h:outputText value="Detalle de Venta" />
+    				</f:facet>
+    				<p:column headerText="Cantidad" style="width:120px;">
+    					<h:outputText value="#{detalle.cantidad}" />
+    					<p:rowToggler />
+    				</p:column>
+    				<p:column headerText="Producto">
+    					<h:outputText value="#{detalle.producto.nombre}" />
+    				</p:column>
+    				<p:column headerText="Subtotal" style="width:150px;">
+    					<h:outputText value="$" />
+    					<h:outputText value="#{detalle.subtotal}" >
+    						<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+    					</h:outputText>
+    				</p:column>
+    				<p:rowExpansion>
+						<p:dataTable value="#{beanVentaConsignacion.getDetalleUnidadVendidaConsignacion(detalle)}" var="unidad">
+							<f:facet name="header">
+								<h:outputText value="Detalle" />
+							</f:facet>
+							<p:column headerText="Nro. Imei">
+								<h:outputText value="#{unidad.nroImei}" />
+							</p:column>
+							<p:column headerText="Precio Unitario">
+								<h:outputText value="#{unidad.precioVenta}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+    				<f:facet name="footer">
+    					<h:outputText value="Monto Total: $" />
+    					<h:outputText value="#{beanBuscar.ventasCon.monto}" >
+    						<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+    					</h:outputText>
+    				</f:facet>
+    			</p:dataTable>			
+    			<p:separator rendered="#{beanBuscar.panelDevolucion}"/>
+    			<p:panelGrid id="paneldevolucion" columns="4" style="width:100%" rendered="#{beanBuscar.panelDevolucion}">
+   					<f:facet name="header">
+    					<h:outputText value="Devolución" />
+    					<p:spacer width="20" />
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanDevolucion.generarReporteComprobante(beanBuscar.devolucion)}" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+							</h:commandLink>
+						</p:outputPanel>
+    				</f:facet>
+    				<p:outputLabel value="Fecha de Ingreso: " />
+		    		<p:calendar value="#{beanBuscar.devolucion.fecha}" pattern="dd/MM/yyyy" 
+		    		mask="true" locale="tr" disabled="true"/>
+		    		<p:outputLabel value="Nro Imei: " />
+		    		<h:inputTextarea value="#{beanBuscar.devolucion.nroImei}" disabled="true"
+		    		style="width:430px;" rows="1" cols="1"/>
+		    		<p:outputLabel value="Producto: " />
+		    		<h:inputTextarea value="#{beanBuscar.devolucion.producto.nombre}" disabled="true"
+		    		style="width:430px;" rows="1" cols="1"/>
+		    		<p:outputLabel value="Cliente: " />
+		    		<h:inputText value="#{beanBuscar.devolucion.cliente.nombreNegocio}" disabled="true" />
+		    		<p:outputLabel value="Nro. Movimiento: " />
+		    		<h:inputText value="#{beanBuscar.devolucion.idMovimiento}" disabled="true" />
+		    		<p:outputLabel value="Movimiento: " />
+		    		<h:inputText value="#{beanBuscar.devolucion.nombreMovimiento}" disabled="true" />
+		    		<p:outputLabel value="Observaciones: " />
+		    		<h:inputTextarea value="#{beanBuscar.devolucion.descripcion}" style="width:100%;" rows="3" 
+		    		disabled="true"/>
+    			</p:panelGrid>
+    			<p:separator />
+    			</p:panel>
+	    	</h:form>
+	    </div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

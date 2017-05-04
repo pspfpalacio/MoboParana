@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Cuotas</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+				<p:panel style="background:#D27C7A;min-height:900px;">
+					<p:growl id="messages" showDetail="false" />
+					<ui:include src="/includes/menubar.xhtml" />
+					
+					<h3 align="center">Cuotas</h3>
+					
+					<p:panelGrid id="panel" columns="1" cellpadding="10" style="width:100%;">
+						<h:outputText value="Equipos Vendidos" />
+						<p:selectManyMenu id="manymenu" value="#{beanCuota.selectedMoviles}" showCheckbox="true" style="width:800px;">
+							<f:selectItems value="#{beanCuota.listaConsignacionsDetalleUnidads}" var="unidad" 
+							itemLabel="#{unidad.nroImei} - #{unidad.unidadMovil.producto.nombre}" itemValue="#{unidad.nroImei}"/>
+						</p:selectManyMenu>
+						<p:column>
+							<p:outputLabel value="Primer Vencimiento: " />
+							<p:calendar value="#{beanCuota.primerVencimiento}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+							<p:outputLabel value=" Cant. Cuotas: " />
+							<p:inputText value="#{beanCuota.cantCuota}" style="width:25px;" />
+							<p:outputLabel value=" Interés(%): " />
+							<p:inputText value="#{beanCuota.interes}" style="width:25px;" />
+						</p:column>
+						<f:facet name="footer">
+							<p:commandButton icon="ui-icon-clipboard" value="Generar Cuotas" action="#{beanCuota.generarCuotas()}"
+							update="formulario, panel, contenedorCuotas, contenedorDetalleCuotas, messages" 
+							onclick="return confirm('ESTA SEGURO QUE DESEA CONFIRMAR LAS CUOTAS?')"/>
+							<p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver" action="#{beanCuota.volver()}" 
+							onclick="return confirm('ESTA SEGURO QUE DESEA VOLVER?')"/>
+						</f:facet>
+					</p:panelGrid>		    	
+					<br/>
+					<br/>
+					<p:dataTable id="contenedorCuotas" var="cuota" value="#{beanCuota.listaCuotas}" 
+					paginator="true" rows="30" resizableColumns="true" emptyMessage="No existen Cuotas" sortMode="multiple">
+						<f:facet name="header">
+							<p:outputLabel value="Cuotas" />
+							<p:spacer width="20" />
+							<p:outputPanel style="float:right;">							
+								<h:commandLink action="#{beanCuota.generarReporte()}" target="_blank" >
+									<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+								</h:commandLink>
+							</p:outputPanel>
+						</f:facet>
+						<!-- 
+						<p:column style="width:5px;">
+							<p:rowToggler />
+						</p:column>
+						 -->
+						<p:column style="text-align: center; width:20px;">
+							<f:facet name="header">
+								<h:outputText value="Baja" title="Baja" />
+							</f:facet>						
+							<p:row rendered="#{cuota.estado}">
+								<h:commandLink title="Desactivar"
+									onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA LAS CUOTAS?')"
+									action="#{beanCuota.bajaDeCuota(cuota)}">
+								 	<h:graphicImage value="/images/activo.ico" width="20"
+										title="Desactivar la Entrega" /> 
+								</h:commandLink>
+							</p:row>						
+							<p:row rendered="#{!cuota.estado}">
+								<h:graphicImage value="/images/desactivo.ico" width="20" />
+							</p:row>
+						</p:column>
+						
+						<p:column headerText="Comprobante" style="width:70px;text-align:center;">
+							<h:commandLink action="#{beanCuota.generarReporteCuotas(cuota)}" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+							</h:commandLink>
+						</p:column>
+						
+						<p:column headerText="Fecha de Alta" style="width:70px;text-align:center;">
+							<h:outputText value="#{cuota.fechaAlta}" >
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:outputText>
+						</p:column>
+						
+						<p:column headerText="Equipo" style="width:220px;text-align:center;">
+							<h:outputText value="#{cuota.equipo}" />
+						</p:column>
+						
+						<p:column headerText="Nro Imei" style="width:110px;text-align:center;">
+							<h:outputText value="#{cuota.nroImei}" />
+						</p:column>
+						
+						<p:column headerText="Cant. Cuotas" style="width:80px;text-align:center;" >
+							<h:outputText value="#{cuota.cantCuotas}" />
+						</p:column>
+						
+						<p:column headerText="Interes" style="width:40px;text-align:center;" >
+							<h:outputText value="%" />
+							<h:outputText value="#{cuota.interes}" />
+						</p:column>
+						
+						<p:column headerText="Monto Total" style="width:90px;text-align:center;" >
+							<h:outputText value="$" />
+							<h:outputText value="#{cuota.montoTotal}" >
+								<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+							</h:outputText>
+						</p:column>
+						
+						<p:column style="text-align:center; width:110px;">
+							<f:facet name="header">
+								<h:outputText value="Ver Detalle" title="Ver"/>
+							</f:facet>
+							<p:commandButton icon="ui-icon-search" oncomplete="PF('dialogoMovimiento').show()"
+							action="#{beanCuota.verDetalle(cuota)}" style="width: 30px; height: 30px;" 
+							update=":formulario:outputPanel"/>
+						</p:column>
+						
+						<p:rowExpansion rendered="false">
+							<p:dataTable value="#{cuota.cuotasDetalles}" var="detalle">
+								<f:facet name="header">
+									<h:outputText value="Detalle de Cuotas" />
+								</f:facet>
+								
+								<p:column headerText="Paga" style="text-align: center; width:40px;" >					
+									<p:row rendered="#{detalle.pago}">
+										<h:commandLink title="Baja"
+											onclick="return confirm('ESTA SEGURO QUE DESEA CANCELAR EL PAGO DE LA CUOTA?')"
+											action="#{beanCuota.bajaDePago(detalle)}">
+									 		<h:graphicImage value="/images/ok.png" width="30"
+											title="Cancelar pago" /> 
+										</h:commandLink>
+									</p:row>						
+									<p:row rendered="#{!detalle.pago}">
+									 	<h:graphicImage value="/images/elim.png" width="20"
+											title="Cuota impaga" />
+									</p:row>
+								</p:column>
+								
+								<p:column headerText="Comprobante" style="width:70px;text-align:center;">
+									<h:commandLink action="#{beanCuota.generarReporteComprobante(detalle)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:column>
+								
+								<p:column headerText="Cuota" >
+									<h:outputText value="#{detalle.descripcion}" />
+								</p:column>
+								
+								<p:column headerText="Fecha de Vencimiento">
+									<h:outputText value="#{detalle.fechaVencimiento}" >
+										<f:convertDateTime pattern="dd/MM/yyyy"/>
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="Monto">
+									<h:outputText value="$" />
+									<h:outputText value="#{detalle.monto}" >
+										<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:rowExpansion>
+					</p:dataTable>	
+					<br/>
+					<br/>	
+					<p:dataTable id="contenedorDetalleCuotas" var="detalleCuota" value="#{beanCuota.listaCuotasDetalles}" 
+						paginator="true" rows="30" resizableColumns="true" emptyMessage="No existen Cuotas" sortMode="multiple">
+						<f:facet name="header">
+							<p:outputLabel value="Cuotas por vencer" />
+							<p:spacer width="20" />
+							<p:outputPanel style="float:right;">							
+								<h:commandLink action="#{beanCuota.generarReportePorVencer()}" target="_blank" >
+									<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+								</h:commandLink>
+							</p:outputPanel>
+						</f:facet>
+						
+						<p:column style="text-align: center; width:20px;" >
+							<f:facet name="header">
+								<h:outputText value="Pago" title="Pago" />
+							</f:facet>						
+							<p:row rendered="#{!detalleCuota.pago}">
+								<h:commandLink title="Desactivar"
+									onclick="return confirm('ESTA SEGURO QUE DESEA PAGAR LA CUOTA?')"
+									action="#{beanCuota.pagarCuota(detalleCuota)}">
+								 	<h:graphicImage value="/images/pago_rojo1.jpg" width="20"
+										title="Pagar la cuota" /> 
+								</h:commandLink>
+							</p:row>						
+							<p:row rendered="#{detalleCuota.pago}">
+							 	<h:graphicImage value="/images/pago.jpg" width="30"
+									title="Cuota paga" />
+							</p:row>
+						</p:column>
+						
+						<p:column headerText="Comprobante" style="width:70px;text-align:center;">
+							<h:commandLink action="#{beanCuota.generarReporteComprobante(detalleCuota)}" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+							</h:commandLink>
+						</p:column>
+						
+						<p:column headerText="Equipo" style="width:210px;text-align:center;">
+							<h:outputText value="#{detalleCuota.cuota.equipo}" />
+						</p:column>
+						
+						<p:column headerText="Nro Imei" style="width:110px;text-align:center;">
+							<h:outputText value="#{detalleCuota.cuota.nroImei}" />
+						</p:column>
+						
+						<p:column headerText="Cuota" style="width:40px;text-align:center;">
+							<h:outputText value="#{detalleCuota.descripcion}" />
+						</p:column>
+						
+						<p:column headerText="Fecha de Venc." style="width:90px;text-align:center;">
+							<h:outputText value="#{detalleCuota.fechaVencimientoString}" />
+						</p:column>
+						
+						<p:column headerText="Monto" style="width:60px;text-align:center;">
+							<h:outputText value="$" />
+							<h:outputText value="#{detalleCuota.monto}" >
+								<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+							</h:outputText>
+						</p:column>
+					</p:dataTable>
+					<p:dialog header="Detalle de Cuota" widgetVar="dialogoMovimiento"
+					id="dialogo" modal="true">
+						<p:outputPanel id="outputPanel">
+							<h:panelGrid columns="4" style="width:100%;">
+								<f:facet name="header">
+									<p:outputLabel value="CUOTAS" />
+									<p:spacer width="20" />
+									<p:outputPanel style="float:right;">							
+										<h:commandLink action="#{beanCuota.generarReporteCuotas(beanCuota.cuota)}" >
+											<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+										</h:commandLink>
+									</p:outputPanel>
+								</f:facet>
+								<p:outputLabel value="Fecha de Alta: "/>
+								<h:inputText value="#{beanCuota.cuota.fechaAlta}" disabled="true">
+									<f:convertDateTime pattern="dd/MM/yyyy"/>
+								</h:inputText>
+								
+								<p:outputLabel value="Equipo: " />
+								<h:inputText value="#{beanCuota.cuota.equipo}" disabled="true"/>
+								
+								<p:outputLabel value="Nro de Imei: " />
+								<h:inputText value="#{beanCuota.cuota.nroImei}" disabled="true" />
+								
+								<p:outputLabel value="Cantidad de cuotas: " />
+								<h:inputText value="#{beanCuota.cuota.cantCuotas}" disabled="true" />
+								
+								<p:outputLabel value="Interes: (%)" />
+								<h:inputText value="#{beanCuota.cuota.interes}" disabled="true" />
+								
+								<p:outputLabel value="Monto Total: ($)" />
+								<h:inputText value="#{beanCuota.cuota.montoTotal}" disabled="true" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:inputText>
+							</h:panelGrid>
+							<p:dataTable value="#{beanCuota.getDetallesDeCuota(beanCuota.cuota)}" var="detalle" scrollable="true"
+							scrollRows="6" scrollHeight="300" scrollWidth="100%">
+								<f:facet name="header">
+									<h:outputText value="Todas las Cuotas" />
+								</f:facet>
+								<p:column headerText="Paga" style="text-align: center; width:40px;" >					
+									<p:row rendered="#{detalle.pago}">
+										<h:commandLink title="Baja"
+											onclick="return confirm('ESTA SEGURO QUE DESEA CANCELAR EL PAGO DE LA CUOTA?')"
+											action="#{beanCuota.bajaDePago(detalle)}">
+									 		<h:graphicImage value="/images/ok.png" width="30"
+											title="Cancelar pago" /> 
+										</h:commandLink>
+									</p:row>						
+									<p:row rendered="#{!detalle.pago}">
+									 	<h:graphicImage value="/images/elim.png" width="20"
+											title="Cuota impaga" />
+									</p:row>
+								</p:column>
+								
+								<p:column headerText="Comprobante" style="width:70px;text-align:center;">
+									<h:commandLink action="#{beanCuota.generarReporteComprobante(detalle)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:column>
+								
+								<p:column headerText="Cuota" >
+									<h:outputText value="#{detalle.descripcion}" />
+								</p:column>
+								
+								<p:column headerText="Fecha de Vencimiento">
+									<h:outputText value="#{detalle.fechaVencimientoString}" />
+								</p:column>
+								
+								<p:column headerText="Monto">
+									<h:outputText value="$" />
+									<h:outputText value="#{detalle.monto}" >
+										<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:outputPanel>
+					</p:dialog>
+				</p:panel> 
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

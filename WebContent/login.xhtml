@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+		<h:head>
+			<link rel="shortcut icon" type="image/x-icon"
+				href="#{request.contextPath}/images/icono.ico" />
+			<link rel="stylesheet" href="#{request.contextPath}/includes/estilo.css"
+				type="text/css" />
+			<title>Login</title>
+		</h:head>		
+		<f:metadata>
+			<f:event type="preRenderView" listener="#{beanLogueo.postLoad()}" />
+		</f:metadata>
+			<h:body style="width:100%;">
+				<div>
+				<div>
+					<img alt="HEADER" src="images/oie_banner.jpg" width="100%" align="middle"/>
+				</div>
+				<h:form id="formularioLogin">
+					<p:panel style="background:#D27C7A;min-height:900px;">
+					<p:growl id="mensajes" showDetail="true" life="2000" />  
+					<br/>
+					<br/>
+					<br/>
+					<br/> 
+					<br/> 
+					<h:panelGrid columns="1" style="width: 30%; text-align:center; margin-left: auto;
+								margin-right: auto; border: 0px solid transparent;" >
+						<p:column style="text-align:center;">
+					      <p:panelGrid columns="2" cellpadding="5" style="text-align:center;">
+					      	<f:facet name="header">
+					      		Login
+					      	</f:facet>
+					        <p:outputLabel for="username" value="Usuario:" />
+					        <p:inputText value="#{beanLogueo.nombreLogin}" id="username"
+					           required="true" label="username" />
+					        <p:outputLabel for="password" value="Contraseña:" />
+					        <p:password value="#{beanLogueo.passLogin}" id="password" required="true"
+					           label="password" />
+					        <f:facet name="footer">
+					          <p:commandButton id="loginButton" value="Login"
+					             action="#{beanLogueo.login()}" update=":mensajes"
+					             oncomplete="manejarLogin(xhr, status, args)" ajax="false"/>
+					        </f:facet>
+					      </p:panelGrid>
+				      </p:column>
+				      <p:column>
+						</p:column>
+					</h:panelGrid>
+					</p:panel>
+				</h:form>			
+				</div>
+			</h:body>		
+		
+		<script type="text/javascript">
+  			//<![CDATA[
+  			function manejarLogin(xhr, status, args) {
+    			if (!args.validationFailed && args.estaLogeado) {
+      				setTimeout(function() {
+        			window.location = args.view;
+      				}, 500);
+    			}
+  			}
+			//]]>
+		</script>
+	</f:view>
+	</ui:composition>
+</html>

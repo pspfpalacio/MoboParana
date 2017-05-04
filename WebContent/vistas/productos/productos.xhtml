@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Moviles</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<h2 align="center">MÓVILES</h2>
+				<br/>
+				<p:panelGrid columns="4" cellpadding="5" style="width:50%;">
+		    		<f:facet name="header">
+		    			<h:outputText value="Filtro" />
+		    		</f:facet>
+					<p:outputLabel value="Estado: " />
+					<p:selectOneMenu style="width:250px;" value="#{beanProducto.estado}">
+						<f:selectItem itemLabel="Todos" itemValue="0"/>
+						<f:selectItem itemLabel="Activos" itemValue="1"/>
+						<f:selectItem itemLabel="Desactivos" itemValue="2"/>						
+					</p:selectOneMenu>
+					<f:facet name="footer">
+						<p:commandButton icon="ui-icon-search" value="Buscar" update="panel" action="#{beanProducto.filtroProducto()}" />
+					</f:facet>					
+				</p:panelGrid>
+				<p:dataTable id="contenedorProducto" widgetVar="productoBusqueda" var="producto"
+				value="#{beanProducto.listaProductos}" paginator="true" rows="30" resizableColumns="true"
+				emptyMessage="No existen Móviles" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nuevo" action="#{beanProducto.goProductoNuevo()}"/>
+						<p:outputLabel value="Móviles" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('productoBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanProducto.generarReporte('productos')}" target="_blank" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+											
+					<p:column style="text-align: center; width:40px;" id="modificar">
+						<f:facet name="header">
+							<h:outputText value="Mod." title="Modificar el Producto" />
+						</f:facet>						
+						<p:commandLink title="Modificar" action="#{beanProducto.goProductoEditar(producto)}" >							
+							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
+						</p:commandLink>
+					</p:column>
+										
+					<p:column style="text-align: center; width:40px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Baja" title="Activar o Desactivar" />
+						</f:facet>						
+						<p:row rendered="#{producto.estado}">
+							<h:commandLink id="desactivar" title="Desactivar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA EL MÓVIL?')"
+								action="#{beanProducto.baja(producto)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar el Móvil" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!producto.estado}">
+							<h:commandLink id="activar" title="Activar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE ALTA EL MÓVIL?')"
+								action="#{beanProducto.alta(producto)}">
+								<h:graphicImage value="/images/desactivo.ico" width="20"
+									id="estadoActivar" title="Activar el Móvil" />
+							</h:commandLink>
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Marca y Modelo" filterBy="#{producto.nombre}" 
+					filterStyle="display:none;" sortBy="#{producto.nombre}">
+						<h:outputText value="#{producto.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Último Costo" filterBy="#{producto.precioCosto}" 
+					filterStyle="display:none;" style="text-align:right;">
+						<h:outputText value="$" />
+						<h:outputText value="#{producto.precioCosto}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="C. Promedio" filterBy="#{producto.costoPromedio}" 
+					filterStyle="display:none;" style="text-align:right;">
+						<h:outputText value="$" />
+						<h:outputText value="#{producto.costoPromedio}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Descripción">
+						<h:outputText value="#{producto.descripcion}" />
+					</p:column>					
+					
+					<p:column headerText="Stock" style="text-align:center;">
+						<h:outputText value="#{beanProducto.getEnStock(producto)}" />
+					</p:column>
+					
+					<p:column headerText="En Consignación" style="text-align:center;">
+						<p:commandLink value="#{beanProducto.getEnConsignacion(producto)}" title="Ver" oncomplete="PF('dialogo').show()" 
+						action="#{beanProducto.verEnConsignacion(producto)}" update=":formulario:panel"/>
+					</p:column>
+					
+					<p:column headerText="Ajuste de Stock" style="text-align:center;">
+						<p:commandButton icon="ui-icon-clipboard" action="#{beanProducto.verStock(producto)}" />
+					</p:column>
+				</p:dataTable>
+				<p:dialog header="Móviles en Consignación - Escape para Salir" widgetVar="dialogo"
+					id="dialog" modal="true" closeOnEscape="true" closable="false" focus="outputPanel">
+					<p:outputPanel id="outputPanel">
+						<h:panelGrid columns="2">
+							<p:outputLabel value="Producto: " />
+							<h:inputText value="#{beanProducto.producto.nombre}" disabled="true"/>
+						</h:panelGrid>
+						<p:dataTable id="tablaImei" var="unidad" value="#{beanProducto.listaUnidadMovils}" scrollRows="50" resizableColumns="true" widgetVar="unidadBusqueda"
+						editable="true"	scrollable="true" liveScroll="true" scrollHeight="400" emptyMessage="No posee Unidades en Consignación" style="width:100%;" >
+							<f:facet name="header">
+								<h:outputText value="Unidades en Consignación" />
+								<p:spacer width="20" />
+								<p:inputText id="globalFilter" onblur="PF('unidadBusqueda').filter()" placeholder="Buscar"/>
+							</f:facet>
+							<p:column headerText="Nro de Imei" filterBy="#{unidad.nroImei}" filterStyle="display:none;">
+								<h:outputText value="#{unidad.nroImei}" />
+								<h:outputText value=" - *" rendered="#{!unidad.estado}" />
+							</p:column>
+							<p:column headerText="Precio de Compra">
+								<h:outputText value="#{unidad.precioCompra}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Descripción">
+								<h:outputText value="#{unidad.descripcion}"/>
+				          	</p:column>
+						</p:dataTable>
+					</p:outputPanel>
+				</p:dialog>
+				</p:panel>
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

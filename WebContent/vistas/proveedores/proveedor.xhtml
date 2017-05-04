@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Proveedor</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+    			<p:panelGrid columns="4" style="width:100%;">
+    				<f:facet name="header">
+    					<h:outputText value="#{beanProveedor.headerText}" />
+    				</f:facet>
+    				<p:outputLabel value="Apellido y Nombres: " />
+    				<p:inputText value="#{beanProveedor.proveedor.apellidoNombre}" />
+    				
+    				<p:outputLabel value="Nombre de Negocio: " />
+    				<p:inputText value="#{beanProveedor.proveedor.nombreNegocio}" />
+    				
+    				<p:outputLabel value="Dirección: " />
+    				<p:inputText value="#{beanProveedor.proveedor.direccion}" />
+    				
+    				<p:outputLabel value="Tel./Cel.: " />
+    				<p:inputText value="#{beanProveedor.proveedor.telefono}" />
+    				
+    				<p:outputLabel value="E-mail: " />
+    				<p:inputText value="#{beanProveedor.proveedor.email}" />
+    				
+    				<p:outputLabel value="Banco: " />
+    				<p:inputText value="#{beanProveedor.proveedor.banco}" />
+    				
+    				<p:outputLabel value="Sucursal: " />
+    				<p:inputText value="#{beanProveedor.proveedor.sucursal}" />
+    				
+    				<p:outputLabel value="Nro-Cliente: " />
+    				<p:inputText value="#{beanProveedor.proveedor.nroCliente}" />
+    				
+    				<p:outputLabel value="Nro-Cuenta: " />
+    				<p:inputText value="#{beanProveedor.proveedor.nroCuenta}" />
+    				
+    				<p:outputLabel value="Saldo ($): " />
+    				<p:inputText value="#{beanProveedor.saldo}" />
+   					<f:facet name="footer">
+   						<p:commandButton value="Guardar" update="messages" action="#{beanProveedor.guardarProveedor()}"/>
+   						<p:commandButton value="Cancelar" oncomplete="return confirm('CANCELAR PROVEEDOR Y VOLVER?')"
+   						action="proveedores"/>
+   					</f:facet>   				
+   				</p:panelGrid>
+	    	</p:panel>
+	    	</h:form>
+	    </div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

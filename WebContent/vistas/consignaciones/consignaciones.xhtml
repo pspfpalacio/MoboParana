@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Consignaciones</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+				<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+				<p:panelGrid columns="2" cellpadding="5" style="width:57%;">
+		    		<f:facet name="header">
+		    			<h:outputText value="Buscar Productos disponibles para la Venta" />
+		    		</f:facet>
+		    		<p:outputLabel value="Productos disponibles: " />
+					<p:selectOneMenu value="#{beanConsignacion.idProducto}" filter="true" filterMatchMode="contains">
+						<f:selectItem itemLabel="Todos" itemValue="0"/>
+						<f:selectItems value="#{beanConsignacion.listaProductos}" var="prod" itemLabel="#{prod.nombre}" itemValue="#{prod.id}"/>
+					</p:selectOneMenu>
+					<f:facet name="footer">
+						<p:commandButton icon="ui-icon-search" value="Buscar" update="panel, contenedorConsignacion" action="#{beanConsignacion.filtroProducto()}" />
+					</f:facet>
+		    	</p:panelGrid>
+		    	<br/>
+		    	<br/>
+		    	<p:commandButton icon="" value="Ver Cuotas Por Vencer" action="#{beanCuota.verCuotas(beanConsignacion.usuario)}" />
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorConsignacion" widgetVar="consignacionBusqueda" var="consignacion" stickyHeader="true"
+				value="#{beanConsignacion.listaConsignacions}" paginator="true" rows="30" resizableColumns="true"
+				emptyMessage="No existen Consignaciones" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nueva" action="#{beanConsignacion.goConsignacionNueva()}"/>
+						<p:outputLabel value="Consignaciones" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('consignacionBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanConsignacion.generarReporteLista()}" target="_blank" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+					
+					<p:column headerText="Cliente" filterBy="#{consignacion.cliente.nombreNegocio}"
+					filterStyle="display:none;">
+						<h:outputText value="#{consignacion.cliente.nombreNegocio}" />
+						<!-- <p:rowToggler /> -->
+					</p:column>
+					
+					<p:column headerText="Reporte" style="width:80px;text-align:center;" rendered="false">
+						<h:commandLink action="#{beanConsignacion.generarReporteComprobante(consignacion)}">
+							<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+						</h:commandLink>
+						
+					</p:column>
+					
+					<p:column style="text-align: center; width:60px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Baja" title="Desactivar" />
+						</f:facet>						
+						<p:row rendered="#{consignacion.estado}">
+							<h:commandLink id="desactivar" title="Desactivar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA LA CONSIGNACION?')"
+								action="#{beanConsignacion.baja(consignacion)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar la Consignacion" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!consignacion.estado}">
+							<h:graphicImage value="/images/desactivo.ico" width="20"
+								id="estadoActivar" title="Consignacion deshabilitada" />
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Agregar" style="text-align:center;width:80px;">
+						<p:commandButton icon="ui-icon-plusthick" disabled="#{!consignacion.estado}"
+						action="#{beanConsignacion.goAgregar(consignacion)}" process="@this"/>
+					</p:column>
+					
+					<p:column headerText="Quitar" style="text-align:center;width:80px;">
+						<p:commandButton icon="ui-icon-minusthick" disabled="#{!consignacion.estado}"
+						action="#{beanConsignacion.goQuitar(consignacion)}" />
+					</p:column>
+					
+					<p:column headerText="Gen. Venta" style="text-align:center;width:100px;">
+						<p:commandButton icon="ui-icon-newwin" disabled="#{!consignacion.estado}"
+						action="#{beanVentaConsignacion.goGenerarVenta(consignacion, beanConsignacion.usuario)}" />
+					</p:column>
+					
+					<p:column headerText="Ver Stock" style="text-align:center;width:95px;">
+						<p:commandButton icon="ui-icon-newwin" disabled="#{!consignacion.estado}"
+						action="#{beanConsignacion.goVerStock(consignacion)}" />
+					</p:column>					
+					
+					<p:column headerText="Ventas" disabled="#{!consignacion.estado}" style="text-align:center;width:80px;">
+						<p:commandButton icon="ui-icon-newwin" disabled="#{!consignacion.estado}"
+						action="#{beanVentaConsignacion.goVentas(consignacion, beanConsignacion.usuario)}" />
+					</p:column>
+					
+					<p:column headerText="Ent. Móviles" disabled="#{consignacion.estado}" style="text-align:center;width:90px;">
+						<p:commandButton icon="ui-icon-newwin" disabled="#{!consignacion.estado}"
+						action="#{beanConsignacion.goEntregasMoviles(consignacion)}" />
+					</p:column>
+					
+					<p:column headerText="Entregas" style="text-align:center;width:80px;">
+						<p:commandButton icon="ui-icon-newwin" disabled="#{!consignacion.estado}"
+						action="#{beanEntregas.goEntregaConsignacion(consignacion, beanConsignacion.usuario)}" />
+					</p:column>
+					
+					<p:column headerText="Cuotas" disabled="#{!consignacion.estado}" style="text-align:center;width:70px;">
+						<p:commandButton icon="ui-icon-newwin" disabled="#{!consignacion.estado}"
+						action="#{beanCuota.goCuota(consignacion, beanConsignacion.usuario)}" />
+					</p:column>	
+											
+					<p:column style="text-align: center; width:40px;" id="modificar" rendered="false">
+						<f:facet name="header">
+							<h:outputText value="Mod." title="Modificar la Consignación" />
+						</f:facet>						
+						<p:commandLink title="Modificar" action="#{beanConsignacion.goConsignacionEditar(consignacion)}" 
+						disabled="#{!consignacion.estado}">							
+							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
+						</p:commandLink>
+					</p:column><!-- 					
+					
+					<p:rowExpansion>
+						<p:dataTable value="#{beanConsignacion.getDetalleConsignacion(consignacion)}" var="detalle">
+							<f:facet name="header">
+								<h:outputText value="Detalle" />
+							</f:facet>
+							
+							<p:column headerText="Cantidad">
+								<h:outputText value="#{detalle.cantidad}" />
+							</p:column>
+							
+							<p:column headerText="Producto">
+								<h:outputText value="#{detalle.producto.nombre}" />
+							</p:column>
+							
+							<p:column headerText="Precio de Venta">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.precioVenta}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Subtotal">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.subtotal}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion> -->
+				</p:dataTable>	
+				</p:panel> 
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

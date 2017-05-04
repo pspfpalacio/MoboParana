@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Ranking Proveedores</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<h2><p:outputLabel value="Ranking de Compra por Proveedor" /></h2>
+		    	<p:panelGrid columns="4" cellpadding="5" style="width:100%;">
+					<p:outputLabel value="Desde: " />
+					<p:calendar value="#{beanReporte.fechaDesde}" pattern="dd/MM/yyyy" locale="tr" mask="true" />
+					<p:outputLabel value="Hasta: " />
+					<p:calendar value="#{beanReporte.fechaHasta}" pattern="dd/MM/yyyy" locale="tr" mask="true" />
+				</p:panelGrid>
+				<p:panelGrid columns="1" style="width:100%;">
+					<f:facet name="header">
+						<p:commandButton value="Buscar" icon="ui-icon-search" update="contenedorRanking" action="#{beanReporte.buscarRankingProveedor()}" />
+					</f:facet>
+				</p:panelGrid>
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorRanking" widgetVar="rankingBusqueda" var="ranking" value="#{beanReporte.listaRankingProveedor}"
+				paginator="true" rows="30" resizableColumns="true"
+				emptyMessage="No existen Compras Realizadas" sortMode="multiple">
+					<f:facet name="header">
+						<p:outputLabel value="Ranking de Compra por Proveedores" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('rankingBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanReporte.reporteRankingProveedor()}" target="_blank">
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+					
+					<p:column headerText="Proveedor" filterBy="#{ranking.proveedor.nombreNegocio}" 
+					filterStyle="display:none;">
+						<h:outputText value="#{ranking.proveedor.nombreNegocio}" />
+						<p:rowToggler />
+					</p:column>
+					
+					<p:column headerText="Monto de las Compras">
+						<h:outputText value="$" />
+						<h:outputText value="#{ranking.monto}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Cantidad de Compras">
+						<h:outputText value="#{ranking.cantidad}" />
+					</p:column>
+					
+					<p:rowExpansion>
+						<p:dataTable value="#{ranking.listaCompras}" var="compra" paginator="true" rows="8">
+							<f:facet name="header">
+								<p:outputLabel value="Compras" />
+							</f:facet>
+							<p:column headerText="Nro.">
+								<h:outputText value="#{compra.id}" />
+							</p:column>
+							<p:column headerText="Fecha">
+								<h:outputText value="#{compra.fecha}" >
+									<f:convertDateTime pattern="dd/MM/yyyy"/>
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Tipo">
+								<h:outputText value="#{compra.tipo}" />
+							</p:column>
+							<p:column headerText="Proveedor">
+								<h:outputText value="#{compra.proveedore.nombreNegocio}" />
+							</p:column>
+							<p:column headerText="Monto">
+								<h:outputText value="$" />
+								<h:outputText value="#{compra.monto}">
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+					<f:facet name="footer">
+						<h:outputText value="Cantidad de Compras: #{beanReporte.cantidadTotal}" />
+						<h:outputText value=" - Monto Total: $" />
+						<h:outputText value="#{beanReporte.montoTotal}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</f:facet>
+				</p:dataTable>	
+			</p:panel> 
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

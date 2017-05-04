@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Lista de Precio</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+				<h:outputText value="(*) Importante: Si actualiza la lista de precio se perderán los cambios realizados sobre la misma." />
+    			<p:panelGrid columns="2" style="width:50%;">
+    				<f:facet name="header">
+    					<h:outputText value="#{beanListaPrecio.headerText}" />
+    				</f:facet>
+    				<p:outputLabel value="Nombre: " />
+    				<p:inputText value="#{beanListaPrecio.listaPrecio.nombre}" />
+    				
+    				<p:outputLabel value="Rubro: " />
+    				<p:selectOneMenu value="#{beanListaPrecio.idRubro}" >
+    					<f:selectItem itemValue="0" itemLabel="Todos"/>
+    					<f:selectItem itemValue="1" itemLabel="MÓVILES"/>
+    					<f:selectItem itemValue="2" itemLabel="ACCESORIOS"/>
+    				</p:selectOneMenu>
+    				
+    				<p:outputLabel value="Porcentaje: " />
+    				<p:inputMask mask="9?999999" value="#{beanListaPrecio.porcentaje}" />
+    				<f:facet name="footer">
+    					<p:commandButton icon="ui-icon-refresh" value="Actualizar" action="#{beanListaPrecio.actualizarPrecioVenta()}" 
+    					update="contenedorProducto, messages" />
+    				</f:facet>
+    			</p:panelGrid>
+    			<h:outputText value="(*)Si desea que se actualice el Porcentaje (%) desde el Precio de Venta ($), debe colocar el primero en cero (0)." />
+    			<p:dataTable id="contenedorProducto" widgetVar="productoBusqueda" var="producto" scrollable="true" 
+					value="#{beanListaPrecio.listaPrecioProductos}" stickyHeader="true" editable="true" sortMode="multiple" scrollRows="50"
+					emptyMessage="No existen Productos" scrollHeight="500">
+    				<f:facet name="header">
+    					<p:outputLabel value="Productos" />
+						<p:spacer width="20" />
+						<p:inputText id="globalFilter" onblur="PF('productoBusqueda').filter()" placeholder="Buscar"/>
+    				</f:facet>
+    				
+    				<p:ajax event="rowEdit" listener="#{beanListaPrecio.onCellEdit(producto)}" 
+    				update=":formulario:contenedorProducto, precioVenta, porcentaje" />
+       				<p:ajax event="rowEditCancel" listener="#{beanListaPrecio.onCellCancel(producto)}" 
+       				update=":formulario:contenedorProducto" />
+       				
+       				<p:column headerText="Tipo">
+       					<h:outputText value="#{producto.producto.rubro.nombre}" />
+       				</p:column>
+    				
+    				<p:column headerText="Marca" filterBy="#{producto.producto.marca}" 
+					filterStyle="display:none;" sortBy="#{producto.producto.marca}">
+						<h:outputText value="#{producto.producto.marca}" />
+					</p:column>
+					
+					<p:column headerText="Modelo" filterBy="#{producto.producto.modelo}" 
+					filterStyle="display:none;" sortBy="#{producto.producto.modelo}">
+						<h:outputText value="#{producto.producto.modelo}" />
+					</p:column>
+					
+					<p:column headerText="Costo" style="text-align:right;">
+						<h:outputText value="$" />
+						<h:outputText value="#{producto.producto.costoPromedio}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0"/>
+						</h:outputText>
+					</p:column>
+    				
+    				<p:column headerText="Porcentaje (%)">
+		              <p:cellEditor>
+		                  <f:facet name="output">
+		                  	<p:outputLabel value="%" />
+		                  	<h:outputText id="porcentaje" value="#{producto.porcentaje}" >
+		                  		<f:convertNumber maxFractionDigits="2"/>
+		                  	</h:outputText>
+		                  </f:facet>
+		                  <f:facet name="input"><p:outputLabel value="%" /><p:inputText id="modelInput" value="#{producto.porcentaje}"/></f:facet>
+		              </p:cellEditor>
+		          	</p:column>
+			 
+			        <p:column headerText="Precio de Venta" style="text-align:right;">
+			        	<p:cellEditor>
+			        		<f:facet name="output">
+					        	<p:outputLabel value="$" />
+								<h:outputText id="precioVenta" value="#{producto.precioVenta}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</f:facet>
+							<f:facet name="input"><p:outputLabel value="$" /><p:inputText id="inputPrecioVenta" value="#{producto.precioVenta}"/></f:facet>
+						</p:cellEditor>						
+					</p:column>
+					
+					<p:column style="width:32px">
+			           <p:rowEditor />
+			       </p:column>
+    			</p:dataTable>
+    			<p:panelGrid columns="1" style="width:100%;">    				
+   					<f:facet name="footer">
+   						<p:commandButton value="Guardar" update="messages" onclick="return confirm('ESTA SEGURO QUE DESEA GUARDAR LA LISTA DE PRECIO?')" 
+   						action="#{beanListaPrecio.guardar()}" />
+   						<p:commandButton value="Cancelar" onclick="return confirm('CANCELAR LISTA DE PRECIO Y VOLVER?')"
+   						action="listasprecios"/>
+   					</f:facet>	
+   				</p:panelGrid>
+   			</p:panel>
+	    	</h:form>
+	    </div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

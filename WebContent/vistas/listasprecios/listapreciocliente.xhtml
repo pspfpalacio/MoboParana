@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Reporte Lista de Precio</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+    			<p:panelGrid columns="2" style="width:50%;">
+    				<f:facet name="header">
+    					<h:outputText value="Selección de Productos para Lista de Precios" />
+    				</f:facet>
+    				<p:outputLabel value="Nombre: " />
+    				<p:outputLabel value="#{beanListaPrecio.listaPrecio.nombre}" />
+    			</p:panelGrid>
+    			<h:outputText value="(*)Seleccione los productos que necesita para el reporte del siguiente listado" />
+    			<p:dataTable id="contenedorProducto" widgetVar="productoBusqueda" var="precioProducto" scrollable="true" 
+    				selection="#{beanListaPrecio.selectedPrecioDinamica}" rowKey="#{precioProducto.id}"
+					value="#{beanListaPrecio.listaPrecioDinamica}" scrollRows="50"
+					filteredValue="#{beanListaPrecio.filteredPrecioDinamica}" emptyMessage="No existen Productos" scrollHeight="500">
+    				<f:facet name="header">
+    					<p:outputLabel value="Productos" />
+						<p:spacer width="20" />
+						<p:inputText id="globalFilter" onblur="PF('productoBusqueda').filter()" placeholder="Buscar"/>
+    				</f:facet>
+    				
+    				<p:column headerText="Selec." selectionMode="multiple" style="width:5%;text-align:center"/>
+       				
+       				<p:column headerText="Tipo">
+       					<h:outputText value="#{precioProducto.tipo}" />
+       				</p:column>
+    				
+    				<p:column headerText="Producto" filterBy="#{precioProducto.producto}" 
+					filterStyle="display:none;" sortBy="#{precioProducto.producto}">
+						<h:outputText value="#{precioProducto.producto}" />
+					</p:column>
+					
+					<p:column headerText="Costo" style="text-align:right;">
+						<h:outputText value="$" />
+						<h:outputText value="#{precioProducto.costo}" />
+					</p:column>
+    				
+    				<p:column headerText="Porcentaje (%)">
+	                  	<p:outputLabel value="%" />
+	                  	<h:outputText value="#{precioProducto.porcentaje}" />
+		          	</p:column>
+			 
+			        <p:column headerText="Precio de Venta" style="text-align:right;">
+			        	<h:outputText value="$" />
+			        	<h:outputText id="precioVenta" value="#{precioProducto.precio}" />
+					</p:column>
+					
+    			</p:dataTable>
+    			<p:panelGrid columns="1" style="width:100%;">    				
+   					<f:facet name="header">
+   						<p:commandButton value="Reporte para Clientes" update="messages" ajax="false"
+   						action="#{beanListaPrecio.generarComprobanteDinamico('listaPrecioCliente')}" />
+   						<p:commandButton value="Reporte de Sistema" update="messages" ajax="false"
+   						action="#{beanListaPrecio.generarComprobanteDinamico('listaPrecio')}"/>
+   						<p:commandButton value="Volver" action="listasprecios" />
+   					</f:facet>	
+   				</p:panelGrid>
+   			</p:panel>
+	    	</h:form>
+	    </div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

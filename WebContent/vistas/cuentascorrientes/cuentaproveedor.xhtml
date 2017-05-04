@@ -1,0 +1,376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Cuenta Corriente</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+		    	<h1><h:outputText value="#{beanCuentaCorriente.proveedor.apellidoNombre} - #{beanCuentaCorriente.proveedor.nombreNegocio}" /></h1>
+		    	<h5>(*)Para reflejar la búsqueda debe hacer doble click sobre el botón Buscar</h5>
+				<p:panelGrid columns="5" style="width:100%; text-align:center;">
+					<p:outputLabel value="Fecha Desde: " />
+				    <p:calendar value="#{beanCuentaCorriente.fechaInicio}" />
+				    
+				    <p:outputLabel value="Hasta: " />
+				    <p:calendar value="#{beanCuentaCorriente.fechaFin}" />
+				    
+				    <p:commandButton icon="ui-icon-search" value="Buscar" action="#{beanCuentaCorriente.filtroProveedor()}" update="cuentaTable"/>
+				</p:panelGrid>
+				<p:dataTable id="cuentaTable" widgetVar="cuentaBusqueda" var="cuenta"
+				value="#{beanCuentaCorriente.listaCuentasCorrientesProveedores}" resizableColumns="true" liveScroll="true" scrollRows="50"
+				scrollable="true" scrollHeight="500" scrollWidth="100%" filteredValue="#{beanCuentaCorriente.filteredCuentasCorrientesProveedores}" 
+				emptyMessage="No existen Registros" sortMode="multiple" >					
+					<f:facet name="header">					
+						<p:outputLabel value="Movimientos: #{fn:length(beanCuentaCorriente.filteredCuentasCorrientesProveedores)} en total" />						
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('cuentaBusqueda').filter()" 
+							placeholder="Buscar" style="height:17px; font-size:samller;"/>
+						</p:outputPanel>						
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanCuentaCorriente.generarReporteProveedor()}" target="_blank">
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel> 
+					</f:facet>					
+					
+					<p:column sortBy="#{cuenta.fecha}" filterBy="#{cuenta.fecha}"
+						filterMatchMode="contains" filterStyle="display:none;" style="width:80px;">
+						<f:facet name="header">
+							<h:outputText value="Fecha" title="Fecha"/>
+						</f:facet>
+						<h:outputText value="#{cuenta.fecha}" >
+							<f:convertDateTime timeZone="America/Argentina/Buenos_Aires" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="#{cuenta.detalle}" filterBy="#{cuenta.detalle}"
+						filterMatchMode="contains" filterStyle="display:none;">
+						<f:facet name="header">
+							<h:outputText value="Detalle" title="Detalle" />
+						</f:facet>
+						<h:outputText value="#{cuenta.detalle}" />
+					</p:column>					
+					
+					<p:column sortBy="#{cuenta.debe}" filterBy="#{cuenta.debe}"
+						filterMatchMode="contains" filterStyle="display:none;" style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Debe" title="Debe" />
+						</f:facet>
+						<h:outputText value="$" />
+						<h:outputText value="#{cuenta.debe}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="#{cuenta.haber}" filterBy="#{cuenta.haber}" 
+						filterMatchMode="contains" filterStyle="display:none;" style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Entregas" title="Entregas" />
+						</f:facet>
+						<h:outputText value="$" />
+						<h:outputText value="#{cuenta.haber}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="#{cuenta.saldo}" filterBy="#{cuenta.saldo}"
+						filterMatchMode="contains" filterStyle="display:none;" style="width:100px;">
+						<f:facet name="header">
+							<h:outputText value="Saldo" title="Saldo" />
+						</f:facet>
+						<h:outputText value="$" />
+						<h:outputText value="#{cuenta.saldo}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column style="text-align:center; width:110px;">
+						<f:facet name="header">
+							<h:outputText value="Ver Movimiento" title="Ver"/>
+						</f:facet>
+						<p:commandButton icon="ui-icon-search" disabled="#{cuenta.idMovimiento == 0}" oncomplete="PF('dialogoMovimiento').show()"
+						 action="#{beanCuentaCorriente.verMovimientoProveedor(cuenta)}" style="width: 30px; height: 30px;" update=":formulario:outputPanel" />
+					</p:column>
+				</p:dataTable>
+				<p:panelGrid columns="5" style="width:100%;">
+					<f:facet name="header">
+						<p:commandButton value="volver" action="proveedores"/>
+					</f:facet>
+				</p:panelGrid>
+				<p:dialog header="Movimiento de Cuenta Corriente" widgetVar="dialogoMovimiento"
+					id="dialogo" modal="true">
+					<p:outputPanel id="outputPanel">
+						<h:panelGrid columns="2" rendered="#{beanCuentaCorriente.pago}">
+							<f:facet name="header">
+								<p:outputLabel value="Pago" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink action="#{beanPago.generarReporte(0, beanCuentaCorriente.pagoProveedore.id)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							<p:outputLabel value="Fecha: "/>
+							<h:inputText value="#{beanCuentaCorriente.pagoProveedore.fecha}" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:inputText>
+							
+							<p:outputLabel value="Cliente: " />
+							<h:inputText value="#{beanCuentaCorriente.pagoProveedore.proveedore.nombreNegocio}" disabled="true"/>
+							
+							<p:outputLabel value="Monto: $" />
+							<h:inputText value="#{beanCuentaCorriente.pagoProveedore.monto}" disabled="true" >
+								<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+							</h:inputText>
+							
+							<p:outputLabel value="Concepto: " />
+							<h:inputTextarea value="#{beanCuentaCorriente.pagoProveedore.concepto}" disabled="true" />
+						</h:panelGrid>
+						<p:panelGrid columns="2" rendered="#{beanCuentaCorriente.panelCompra}" style="width:100%;text-align:center;">
+							<f:facet name="header">
+								<p:outputLabel value="Compra" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink action="#{beanCompra.generarReporteComprobante(beanCuentaCorriente.compra)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							
+							<p:outputLabel value="Número: " />
+							<h:inputText value="#{beanCuentaCorriente.compra.id}" disabled="true"/>
+							
+							<p:outputLabel value="Fecha: "/>
+							<h:inputText value="#{beanCuentaCorriente.compra.fecha}" disabled="true">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:inputText>
+							
+							<p:outputLabel value="Cliente: " />
+							<h:inputText value="#{beanCuentaCorriente.compra.proveedore.nombreNegocio}" disabled="true"/>
+							
+							<p:outputLabel value="Tipo: " />
+							<h:inputText value="#{beanCuentaCorriente.compra.tipo}" disabled="true" />
+						</p:panelGrid>
+						<p:dataTable value="#{beanCompra.getDetalleDeCompra(beanCuentaCorriente.compra)}" var="detalle" rendered="#{beanCuentaCorriente.panelCompra}"
+						scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="150" style="width:100%;">
+							<f:facet name="header">
+								<h:outputText value="Detalle" />
+							</f:facet>
+							<p:column headerText="Cantidad">
+								<h:outputText value="#{detalle.cantidad}" />
+							</p:column>
+							<p:column headerText="Detalle">
+								<h:outputText value="#{detalle.producto.nombre}" />
+							</p:column>
+							<p:column headerText="Precio Unitario">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.precioCompra}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Subtotal">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.subtotal}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+							<f:facet name="footer">
+								<h:outputText value="Monto Total: $" />
+								<h:outputText value="#{beanCuentaCorriente.compra.monto}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</f:facet>
+						</p:dataTable>
+					</p:outputPanel>
+				</p:dialog>
+				<br/>
+				<p:separator rendered="#{beanCuentaCorriente.existeGarantia}" />
+				<br/>
+				<p:dataTable id="contenedorGarantias" widgetVar="garantiaBusqueda" var="garantia" rendered="#{beanCuentaCorriente.existeGarantia}"
+				value="#{beanCuentaCorriente.listaGarantiasProveedores}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanCuentaCorriente.filteredGarantiasProveedores}" emptyMessage="No existen Garantias" sortMode="multiple">
+					<f:facet name="header">
+						<p:outputLabel value="Garantias" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('garantiaBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink target="_blank" action="#{beanGarantia.generarReporteProveedores(beanCuentaCorriente.listaGarantiasProveedores)}">
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+					
+					<p:column headerText="Fecha" filterBy="#{garantia.fechaIngreso}" 
+					filterStyle="display:none;" sortBy="#{garantia.fechaIngreso}" style="width:100px;">
+						<h:outputText value="#{garantia.fechaIngreso}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Producto c/falla" filterBy="#{garantia.producto1.nombre}"
+					filterStyle="display:none;" sortBy="#{garantia.producto1.nombre}" style="width:400px;">
+						<h:outputText value="#{garantia.producto1.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Unidad c/falla" filterBy="#{garantia.imeiFalla}"
+					filterStyle="display:none;" style="width:200px;">
+						<h:outputText value="#{garantia.imeiFalla}" />
+					</p:column>
+					
+					<p:column headerText="Cerrada" style="width:80px;">
+						<h:outputText rendered="#{garantia.finalizado}" value="SI" />
+						<h:outputText rendered="#{!garantia.finalizado}" value="NO" />
+					</p:column>
+					
+					<p:column headerText="Concepto" style="width:210px;">
+						<h:outputText value="#{garantia.concepto}" />
+					</p:column>					
+					
+					<p:column headerText="Resolución">
+						<h:outputText value="#{garantia.resolucion}" />
+					</p:column>
+					
+					<p:column headerText="Ver" style="width:45px;">
+						<p:commandButton icon="ui-icon-search" disabled="#{!garantia.estado}" action="#{beanGarantia.verMovimientoProveedor(garantia)}"
+						oncomplete="PF('dialogoGarantia').show()" style="width: 30px; height: 30px;" update=":formulario:outputGarantia"/>
+					</p:column>
+				</p:dataTable>
+				<br/>
+				<p:separator rendered="#{beanCuentaCorriente.existeGarantia}" />
+				<br/> 
+				<p:dialog header="Garantía de Proveedor" widgetVar="dialogoGarantia"
+					id="dialogoG" modal="true">
+					<p:outputPanel id="outputGarantia">
+						<h:panelGrid columns="2" rendered="#{!beanGarantia.garantiasProveedor.finalizado}">
+							<f:facet name="header">
+								<p:outputLabel value="Ticket Abierto" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink action="#{beanGarantia.generarReporteComprobanteProveedor(beanGarantia.garantiasProveedor)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							<p:outputLabel value="Fecha de Ingreso: " />
+		    				<p:calendar value="#{beanGarantia.garantiasProveedor.fechaIngreso}" pattern="dd/MM/yyyy" 
+		    				mask="true" locale="tr" disabled="true"/>
+		    				<p:outputLabel value="Nro Imei de Unidad con falla: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.imeiFalla}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Producto: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.producto1.nombre}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Proveedor: " />
+		    				<h:inputText value="#{beanGarantia.garantiasProveedor.proveedore.nombreNegocio}" disabled="true" />
+		    				<p:outputLabel value="Concepto: " />		    				
+		    				<h:inputText value="#{beanGarantia.garantiasProveedor.concepto}" disabled="true" />
+		    				<p:outputLabel value="Falla inicial: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.falla}" style="width:100%;" rows="3" 
+		    				disabled="true"/>
+		    				<p:outputLabel value="Cerrada: " />
+		    				<h:inputText value="SI" rendered="#{beanGarantia.garantiasProveedor.finalizado}" disabled="true"/>
+		    				<h:inputText value="NO" rendered="#{!beanGarantia.garantiasProveedor.finalizado}" disabled="true"/>	    				
+		    				<p:outputLabel value="Observaciones: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.observaciones}" style="width:100%;" rows="3" disabled="true"/>							
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2" rendered="#{beanGarantia.garantiasProveedor.finalizado}">
+							<f:facet name="header">
+								<p:outputLabel value="Ticket Cerrado" />
+								<p:spacer width="20" />
+								<p:outputPanel style="float:right;">							
+									<h:commandLink action="#{beanGarantia.generarReporteComprobanteProveedor(beanGarantia.garantiasProveedor)}" >
+										<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+									</h:commandLink>
+								</p:outputPanel>
+							</f:facet>
+							<p:outputLabel value="Fecha de Ingreso: " />
+		    				<p:calendar value="#{beanGarantia.garantiasProveedor.fechaIngreso}" pattern="dd/MM/yyyy" 
+		    				mask="true" locale="tr" disabled="true"/>
+		    				<p:outputLabel value="Nro Imei de Unidad con falla: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.imeiFalla}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Producto: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.producto1.nombre}" disabled="true"
+		    				style="width:430px;" rows="1" cols="1"/>
+		    				<p:outputLabel value="Proveedor: " />
+		    				<h:inputText value="#{beanGarantia.garantiasProveedor.proveedore.nombreNegocio}" disabled="true" />
+		    				<p:outputLabel value="Falla inicial: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.falla}" style="width:100%;" rows="3" 
+		    				disabled="true"/>
+		    				<p:outputLabel value="Cerrada: " />
+		    				<h:inputText value="SI" rendered="#{beanGarantia.garantiasProveedor.finalizado}" disabled="true"/>
+		    				<h:inputText value="NO" rendered="#{!beanGarantia.garantiasProveedor.finalizado}" disabled="true"/>
+		    				<p:outputLabel value="Costo: " rendered="#{beanGarantia.garantiasProveedor.costo != 0}"/>
+		    				<h:inputText value="#{beanGarantia.garantiasProveedor.costo}" disabled="true" rendered="#{beanGarantia.garantiasProveedor.costo != 0}"/>
+		    				<p:outputLabel value="Resolución: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.resolucion}" style="width:100%;" rows="3" 
+		    				disabled="true"/>
+		    				
+		    				<p:outputLabel value="Nro Imei de Unidad de cambio: " rendered="#{beanGarantia.opcion2}"/>
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.imeiReintegro}" style="width:100%;" rows="1" cols="1" 
+		    				disabled="true" rendered="#{beanGarantia.opcion2}"/>
+		    						    				
+		    				<p:outputLabel value="Acción realizada: " rendered="#{beanGarantia.opcion3}"/>		    				
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.accionRealizar}"  rendered="#{beanGarantia.opcion3}" 
+		    				disabled="true" style="width:300px;" rows="1" cols="1"/>
+		    				
+		    				<p:outputLabel value="Falla definitiva: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.fallaDefinitiva}" style="width:100%;" rows="3" disabled="true"/>	    				
+		    				<p:outputLabel value="Observaciones: " />
+		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.observaciones}" style="width:100%;" rows="3" disabled="true"/>
+							
+						</h:panelGrid>
+					</p:outputPanel>
+				</p:dialog>
+			</p:panel>
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

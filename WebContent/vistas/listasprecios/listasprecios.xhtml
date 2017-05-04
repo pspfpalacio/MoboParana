@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>	
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Listas de Precios</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />			
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<h2 align="center">LISTAS DE PRECIO</h2>
+				<p:dataTable id="contenedorListaPrecio" widgetVar="listaPrecioBusqueda" var="listaPrecio"
+				value="#{beanListaPrecio.listaPrecios}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanListaPrecio.filteredPrecios}" emptyMessage="No existen Listas de Precio" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nuevo" action="#{beanListaPrecio.goListaPrecioNueva()}"/>
+						<p:outputLabel value="Listas de Precios" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('listaPrecioBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+					</f:facet>
+											
+					<p:column style="text-align: center; width:40px;" id="modificar">
+						<f:facet name="header">
+							<h:outputText value="Mod." title="Modificar la Lista de Precio" />
+						</f:facet>						
+						<p:commandLink title="Modificar" action="#{beanListaPrecio.goListaPrecioEditar(listaPrecio)}">							
+							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
+						</p:commandLink>
+					</p:column>
+										
+					<p:column style="text-align: center; width:70px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Alta/Baja" title="Activar o Desactivar" />
+						</f:facet>						
+						<p:row rendered="#{listaPrecio.estado}">
+							<h:commandLink id="desactivar" title="Desactivar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA LA LISTA DE PRECIO?')"
+								action="#{beanListaPrecio.baja(listaPrecio)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar la Lista de Precio" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!listaPrecio.estado}">
+							<h:commandLink id="activar" title="Activar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE ALTA LA LISTA DE PRECIO?')"
+								action="#{beanListaPrecio.alta(listaPrecio)}">
+								<h:graphicImage value="/images/desactivo.ico" width="20"
+									id="estadoActivar" title="Activar la Lista de Precio" />
+							</h:commandLink>
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Reporte" style="width:120px;text-align:center;">
+						<h:commandLink action="#{beanListaPrecio.generarComprobante(listaPrecio, 'listaPrecio')}">
+							<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+						</h:commandLink>
+					</p:column>
+					
+					<p:column headerText="Reporte P/Cliente" style="width:180px;text-align:center;">
+						<h:commandLink action="#{beanListaPrecio.generarComprobante(listaPrecio, 'listaPrecioCliente')}">
+							<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+						</h:commandLink>
+					</p:column>
+					
+					<p:column headerText="Reporte Dinámico" style="width:180px;text-align:center;">
+						<p:commandButton icon="ui-icon-clipboard" action="#{beanListaPrecio.goListaPrecioDinamica(listaPrecio)}" />
+					</p:column>
+					
+					<p:column headerText="Nombre" filterBy="#{listaPrecio.nombre}" 
+					filterStyle="display:none;" sortBy="#{listaPrecio.nombre}">
+						<h:outputText value="#{listaPrecio.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Rubro">
+						<h:outputText rendered="#{listaPrecio.rubro != NULL}" value="#{listaPrecio.rubro.nombre}" />
+						<h:outputText rendered="#{listaPrecio.rubro == NULL}" value="Todos" />
+					</p:column>
+					
+					<p:column headerText="Editar Tipo" style="width:100px;text-align:center;">
+						<p:commandButton icon="ui-icon-gear" oncomplete="PF('dialogo').show()" disabled="#{!listaPrecio.estado}"
+						action="#{beanListaPrecio.goEditarTipo(listaPrecio)}" update=":formulario:outputPanel"/>
+					</p:column>
+
+				</p:dataTable>	
+				<p:dialog header="Opciones" widgetVar="dialogo"
+					id="dialogo" modal="true" style="width:400px;">
+					<h3>Opciones</h3>
+					<p:outputPanel id="outputPanel" style="margin-bottom:10px;width:400px;" >
+						<p:selectOneRadio id="customRadio" value="#{beanListaPrecio.tipo}" layout="custom" disabled="">
+				            <f:selectItem itemLabel="Base" itemValue="1" />
+				            <f:selectItem itemLabel="Relación con Base" itemValue="2" />
+				            <f:selectItem itemLabel="Ninguna" itemValue="3" />
+				        </p:selectOneRadio>
+				 
+				        <h:panelGrid columns="2" cellpadding="5">
+				            <p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+				            <h:outputText for="opt1" value="Lista Base " />
+				 
+				            <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+				            <h:outputLabel for="opt2" value="Relación con Base" />
+				 
+				            <p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+				            <h:outputLabel for="opt3" value="Ninguna" />
+				        </h:panelGrid>		
+				        <h:panelGrid style="width:500px;">
+				        <f:facet name="header">
+				        <p:commandButton value="Guardar" action="#{beanListaPrecio.actualizarTipo()}"
+				        update="contenedorListaPrecio, outputPanel, messages" oncomplete="PF('dialogo').hide()"/>
+				        <p:commandButton value="Cerrar" onclick="PF('dialogo').hide()" />
+				        </f:facet>
+				        </h:panelGrid>			        
+					</p:outputPanel>
+					<h:panelGrid style="width:500px;">
+					<h:outputText value="(*)Nota: Al seleccionar una lista como base se quitará la selección de la lista base anterior, y se realizará la actualización en cascada con las relacionadas. 
+					Al seleccionar una lista en relación con base, esta se actualizará a los porcentajes actuales tomando como base el precio de venta de la lista base, y cada vez que se actualice la lista 
+					base, actulizará los precios de venta de las listas relacionadas." />
+					</h:panelGrid>
+				</p:dialog>
+			</p:panel> 
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

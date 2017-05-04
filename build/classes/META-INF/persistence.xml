@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="MoboParana">
+		<class>model.entity.Caja</class>
+		<class>model.entity.Cliente</class>
+		<class>model.entity.Compra</class>
+		<class>model.entity.ComprasDetalle</class>
+		<class>model.entity.ComprasDetalleUnidad</class>
+		<class>model.entity.CuentasCorrientesCliente</class>
+		<class>model.entity.CuentasCorrientesProveedore</class>
+		<class>model.entity.Gasto</class>
+		<class>model.entity.ListaPrecio</class>
+		<class>model.entity.ListaPrecioProducto</class>
+		<class>model.entity.PagosCliente</class>
+		<class>model.entity.PagosProveedore</class>
+		<class>model.entity.Producto</class>
+		<class>model.entity.Proveedore</class>
+		<class>model.entity.Role</class>
+		<class>model.entity.RolesVista</class>
+		<class>model.entity.UnidadMovil</class>
+		<class>model.entity.Usuario</class>
+		<class>model.entity.Vista</class>
+		<properties>
+			<property name="javax.persistence.jdbc.password" value="root" />
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mobodb" />
+			<property name="javax.persistence.logging.level" value="ALL" />
+		</properties>
+	</persistence-unit>
+</persistence>

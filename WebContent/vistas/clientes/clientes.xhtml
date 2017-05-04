@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Clientes</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+				<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<h2 align="center">CLIENTES</h2>
+				<br/>
+		    	<p:panelGrid columns="5" cellpadding="5" style="width:80%;">
+		    		<f:facet name="header">
+		    			<h:outputText value="Filtros" />
+		    		</f:facet>
+					<p:outputLabel value="Lista de Precio: " />
+					<p:selectOneMenu value="#{beanCliente.idListaPrecio}" filter="true" filterMatchMode="contains">
+						<f:selectItem itemLabel="Todos" itemValue="0"/>
+						<f:selectItems value="#{beanCliente.listaPrecios}" var="lista" itemLabel="#{lista.nombre}"
+						itemValue="#{lista.id}"/>
+					</p:selectOneMenu>
+					<p:commandButton icon="ui-icon-search" update="contenedorCliente" action="#{beanCliente.filtroClientes()}" />
+				</p:panelGrid>
+				<p:dataTable id="contenedorCliente" widgetVar="clienteBusqueda" var="cliente"
+				value="#{beanCliente.listaClientes}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanCliente.filteredClientes}"	emptyMessage="No existen Clientes" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nuevo" action="#{beanCliente.goClienteNuevo()}"/>
+						<p:outputLabel value="Clientes" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('clienteBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">							
+							<h:commandLink action="#{beanCliente.generarReporte()}" target="_blank" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+											
+					<p:column style="text-align: center; width:40px;" id="modificar">
+						<f:facet name="header">
+							<h:outputText value="Mod." title="Modificar el Cliente" />
+						</f:facet>						
+						<p:commandLink title="Modificar" action="#{beanCliente.goClienteEditar(cliente)}" >							
+							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
+						</p:commandLink>
+					</p:column>
+								
+					<p:column style="text-align: center; width:40px;">
+						<f:facet name="header">
+							<h:outputText value="C.C." title="CC"/>
+						</f:facet>
+						<p:commandButton icon="ui-icon-contact" style="width: 30px; height: 30px;" update=":formulario:messages"
+						action="#{beanCuentaCorriente.goCuentaCorrienteCliente(cliente, beanCliente.usuario)}"/>
+					</p:column>
+										
+					<p:column style="text-align: center; width:70px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Alta/Baja" title="Activar o Desactivar" />
+						</f:facet>						
+						<p:row rendered="#{cliente.estado}">
+							<h:commandLink id="desactivar" title="Desactivar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA EL CLIENTE?')"
+								action="#{beanCliente.baja(cliente)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar el Cliente" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!cliente.estado}">
+							<h:commandLink id="activar" title="Activar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE ALTA EL CLIENTE?')"
+								action="#{beanCliente.alta(cliente)}">
+								<h:graphicImage value="/images/desactivo.ico" width="20"
+									id="estadoActivar" title="Activar el Cliente" />
+							</h:commandLink>
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Apellido y Nombres" filterBy="#{cliente.apellidoNombre}" 
+					filterStyle="display:none;" sortBy="#{cliente.apellidoNombre}">
+						<h:outputText value="#{cliente.apellidoNombre}" />
+					</p:column>
+					
+					<p:column headerText="Nombre de Negocio" filterBy="#{cliente.nombreNegocio}"
+					filterStyle="display:none;" sortBy="#{cliente.nombreNegocio}">
+						<h:outputText value="#{cliente.nombreNegocio}" />
+					</p:column>
+					
+					<p:column headerText="Lista de Precio" filterBy="#{cliente.listaPrecio.nombre}"
+					filterStyle="display:none;" >
+						<h:outputText value="#{cliente.listaPrecio.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Dirección" filterBy="#{cliente.direccion}"
+					filterStyle="display:none;">
+						<h:outputText value="#{cliente.direccion}" />
+					</p:column>
+					
+					<p:column headerText="Teléfono" filterBy="#{cliente.telefono}"
+					filterStyle="display:none;">
+						<h:outputText value="#{cliente.telefono}" />
+					</p:column>
+					
+					<p:column headerText="e-mail" filterBy="#{cliente.email}"
+					filterStyle="display:none;">
+						<h:outputText value="#{cliente.email}" />
+					</p:column>
+					
+					<p:column headerText="Saldo" style="text-align:right;">
+						<h:outputText value="#{beanCuentaCorriente.getSaldoCliente(cliente)}" />
+					</p:column>
+				</p:dataTable>	
+				</p:panel> 
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

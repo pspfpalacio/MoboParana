@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Ventas Consignacion</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+				<h5>(*)Para reflejar la búsqueda debe hacer doble click sobre el botón Buscar</h5>
+		    	<p:panelGrid columns="4" cellpadding="5" style="width:50%;">
+		    		<f:facet name="header">
+		    			<h:outputText value="Filtros" />
+		    		</f:facet>
+		    		<p:outputLabel value="Desde: " />
+		    		<p:calendar value="#{beanVentaConsignacion.fechaInicio}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+		    		<p:outputLabel value="Hasta: " />
+		    		<p:calendar value="#{beanVentaConsignacion.fechaFin}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+					<f:facet name="footer">
+						<p:commandButton icon="ui-icon-search" value="Buscar" update="contenedorVentas" action="#{beanVentaConsignacion.filtro()}" />
+					</f:facet>					
+				</p:panelGrid>
+				<br/>
+				<br/>
+				<p:dataTable id="contenedorVentas" widgetVar="ventaBusqueda" var="venta"
+				value="#{beanVentaConsignacion.listaVentasCons}" paginator="true" rows="30" resizableColumns="true"
+				filteredValue="#{beanVentaConsignacion.filteredVentasCons}" emptyMessage="No existen Ventas" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nueva" action="#{beanVentaConsignacion.goGenerarVenta(beanVentaConsignacion.consignacion, beanVentaConsignacion.usuario)}"/>
+						<p:outputLabel value="Ventas" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('ventaBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">	
+							<h:commandLink action="#{beanVentaConsignacion.generarExcelLista()}" >
+								<p:graphicImage value="../../images/xls-icon.ico" width="25" style="margin-right: 20px; float: left;" />
+							</h:commandLink>						
+							<h:commandLink action="#{beanVentaConsignacion.generarReporteLista()}" target="_blank" >
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+					
+					<p:column headerText="Comprobante" style="width:120px;text-align:center;">
+						<h:commandLink action="#{beanVentaConsignacion.generarReporteComprobante(venta)}">
+							<p:graphicImage value="../../images/pdf-icon.png" width="20" />
+						</h:commandLink>
+						<p:rowToggler />
+					</p:column>
+					
+					<p:column style="text-align: center; width:40px;" id="modificar">
+						<f:facet name="header">
+							<h:outputText value="Mod." title="Modificar" />
+						</f:facet>						
+						<p:commandLink title="Modificar" action="#{beanVentaConsignacion.goVentaEditar(venta)}" disabled="#{!venta.estado}">							
+							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
+						</p:commandLink>
+					</p:column>
+										
+					<p:column style="text-align: center; width:70px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Baja" title="Desactivar" />
+						</f:facet>						
+						<p:row rendered="#{venta.estado}">
+							<h:commandLink id="desactivar" title="Desactivar"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA LA VENTA?')"
+								action="#{beanVentaConsignacion.baja(venta)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar la Venta" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!venta.estado}">
+							<h:graphicImage value="/images/desactivo.ico" width="20"
+								id="estadoActivar" title="Venta deshabilitada" />
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Nro" filterBy="#{venta.id}" style="width:40px;"
+					filterStyle="display:none;" sortBy="#{venta.id}">
+						<h:outputText value="#{venta.id}" />
+					</p:column>
+					
+					<p:column headerText="Fecha" filterBy="#{venta.fecha}"
+					filterStyle="display:none;" sortBy="#{venta.fecha}">
+						<h:outputText value="#{venta.fecha}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Cliente" filterBy="#{venta.cliente.nombreNegocio}"
+					filterStyle="display:none;">
+						<h:outputText value="#{venta.cliente.nombreNegocio}" />
+					</p:column>
+					
+					<p:column headerText="Monto" filterBy="#{venta.monto}"
+					filterStyle="display:none;">
+						<h:outputText value="$" />
+						<h:outputText value="#{venta.monto}" >
+							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Usuario" filterBy="#{venta.usuario1.username}"
+					filterStyle="display:none;">
+						<h:outputText value="#{venta.usuario1.username}" />
+					</p:column>
+					
+					<p:rowExpansion>
+						<p:dataTable value="#{beanVentaConsignacion.getDetalleDeVenta(venta)}" var="detalle">
+							<f:facet name="header">
+								<h:outputText value="Detalle" />
+							</f:facet>
+							
+							<p:column headerText="Cantidad" style="text-align:center;">
+								<h:outputText value="#{detalle.cantidad}" />
+							</p:column>
+							
+							<p:column headerText="Producto">
+								<h:outputText value="#{detalle.producto.nombre}" />
+							</p:column>
+							
+							<p:column headerText="Subtotal">
+								<h:outputText value="$" />
+								<h:outputText value="#{detalle.subtotal}" >
+									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+				</p:dataTable>	
+				<p:panelGrid columns="1" style="width:100%;">
+		    		<f:facet name="header">
+		    			<p:commandButton value="Volver" action="#{beanConsignacion.goConsignaciones(beanVentaConsignacion.usuario)}" />
+		    		</f:facet>
+		    	</p:panelGrid>
+			</p:panel> 
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

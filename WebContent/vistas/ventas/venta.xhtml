@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+				function foco(elemento){
+					document.getElementById(elemento).focus();
+					};
+			</script>
+		<title>Venta</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario" onkeypress="return event.keyCode != 13">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+    			<p:panelGrid id="cabecera" columns="4" style="width:100%;">
+    				<f:facet name="header">
+    					<h:outputText value="#{beanVenta.headerText}" />
+    				</f:facet>
+    				
+    				<p:outputLabel value="Número: " />
+    				<p:inputText disabled="true" value="#{beanVenta.nroVenta}" />
+    				
+    				<p:outputLabel value="Fecha: " />
+    				<p:calendar value="#{beanVenta.venta.fecha}" pattern="dd/MM/yyyy" mask="true" locale="tr" 
+    				disabled="#{!beanVenta.nueva}"/>    				
+    				
+    				<p:outputLabel value="Cliente: " />
+    				<p:selectOneMenu value="#{beanVenta.idCliente}" filter="true" filterMatchMode="contains"
+    				style="width:250px;" disabled="#{!beanVenta.nueva}">
+    					<p:ajax event="change" listener="#{beanVenta.onChangeCliente()}" 
+    					update="cabecera, tipoVenta, saldo, saldo2, consumidor, consumidor2"/>
+    					<f:selectItem itemLabel="Venta Directa" itemValue="0"/>
+    					<f:selectItems value="#{beanVenta.listaClientes}" var="cli" itemLabel="#{cli.nombreNegocio}"
+    					itemValue="#{cli.id}"/>
+    				</p:selectOneMenu>
+    				
+    				<p:outputLabel value="Tipo: " />
+    				<p:selectOneRadio id="tipoVenta" value="#{beanVenta.tipo}" disabled="#{beanVenta.modificarTipo}">
+    					<f:selectItem itemLabel="c.c." itemValue="c.c."/>
+    					<f:selectItem itemLabel="ctdo." itemValue="ctdo."/>
+    				</p:selectOneRadio>
+    				
+    				<p:outputLabel id="saldo" rendered="#{beanVenta.idCliente != 0}" value="Saldo ($): " />
+    				<p:inputText id="saldo2" rendered="#{beanVenta.idCliente != 0}" value="#{beanVenta.cliente.saldo}" disabled="true">
+    					<f:convertNumber pattern="#,##0.00" maxFractionDigits="2"/>
+    				</p:inputText>
+    				
+    				<p:outputLabel id="consumidor" rendered="#{beanVenta.idCliente == 0}" value="Cons. Final: " />
+    				<p:inputText id="consumidor2" rendered="#{beanVenta.idCliente == 0}" value="#{beanVenta.venta.consumidorFinal}" />
+    				
+    			</p:panelGrid>
+    			<p:separator />
+    			<p:panel id="panel">
+    			<p:panelGrid columns="2" style="width:100%;">
+    				<p:outputLabel value="Seleccione Tipo de Producto a Vender" />
+    				<p:selectOneMenu value="#{beanVenta.idTipo}" >
+    					<p:ajax event="change" listener="#{beanVenta.onChangeTipo()}" 
+    					update="panel, panel1, panel2, panel3" />
+    					<f:selectItem itemLabel="Ninguno" itemValue="0"/>
+    					<f:selectItem itemLabel="Móviles" itemValue="1"/>
+    					<f:selectItem itemLabel="Accesorios" itemValue="2"/>
+    				</p:selectOneMenu>
+    			</p:panelGrid>	
+   				<p:panelGrid id="panel1" columns="4" style="width:100%" rendered="#{beanVenta.panelMovil}">
+   					<p:outputLabel value="Nro Imei: " />
+    				<p:autoComplete id="nroImei" minQueryLength="4" value="#{beanVenta.unidadMovil}" completeMethod="#{beanVenta.completeText}" converter="unidadConverter"
+    				 placeholder="Nro de Imei.." var="unidad" itemLabel="#{unidad.nroImei}" itemValue="#{unidad}" forceSelection="true" scrollHeight="300" size="40">
+    					<p:ajax event="itemSelect" update="messages, precio, producto, producto1, producto2" listener="#{beanVenta.onBlurNroImei()}" />
+    					<p:column>
+			                <h:outputText value="#{unidad.nroImei}" />
+			            </p:column>
+			 
+			            <p:column>
+			                <h:outputText value="#{unidad.producto.nombre}" />
+			            </p:column>
+    				</p:autoComplete>
+   					
+   					<p:outputLabel value="Precio de Venta ($): " />
+   					<p:inputText id="precio" value="#{beanVenta.precioVenta}" >
+   						<f:convertNumber pattern="#,##0.00" maxFractionDigits="2"/>
+   					</p:inputText>
+   				</p:panelGrid>
+   				<p:panelGrid id="panel2" columns="2" style="width:100%;" rendered="#{beanVenta.panelMovil}">   					
+					<p:outputLabel value="Tipo: " />
+					<h:inputText id="producto" value="#{beanVenta.producto.rubro.nombre}" disabled="true" style="width:100%;"/>
+					<p:outputLabel value="Marca y Modelo: " />
+					<h:inputText id="producto1" value="#{beanVenta.producto.nombre}" disabled="true" style="width:100%;"/>
+					<p:outputLabel value="Descripción: " />
+					<h:inputText id="producto2" value="#{beanVenta.producto.descripcion}" disabled="true" style="width:100%;"/>   					
+   				</p:panelGrid>
+   				<p:panelGrid id="panel3" columns="4" style="width:100%;" rendered="#{beanVenta.panelAccesorio}">
+   					<p:outputLabel value="Accesorio: " />
+   					<p:selectOneMenu id="accesorio" value="#{beanVenta.idProducto}" filter="true" filterMatchMode="contains">
+   						<p:ajax event="change" listener="#{beanVenta.onChangeAccesorio()}" update="precioVenta2, stockDisponible" />
+   						<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
+   						<f:selectItems value="#{beanVenta.listaProductos}" var="prod" itemLabel="#{prod.nombre}" 
+   						itemValue="#{prod.id}"/>
+   					</p:selectOneMenu>
+   					
+   					<p:outputLabel value="Stock Disponible: " />
+   					<h:inputText id="stockDisponible" value="#{beanVenta.stockDisponible}" disabled="true"/>
+   					
+   					<p:outputLabel value="Precio de Venta ($): " />
+   					<p:inputText id="precioVenta2" value="#{beanVenta.precioVenta}" >
+   						<f:convertNumber pattern="#,##0.00" maxFractionDigits="2"/>
+   					</p:inputText>
+   					
+   					<p:outputLabel value="Cantidad: " />
+   					<p:inputText id="cantidad" value="#{beanVenta.cantidad}" />
+   				</p:panelGrid>
+   				</p:panel>
+   				<p:panelGrid columns="1" style="width:100%;">	
+   					<f:facet name="header">
+   						<p:commandButton id="add" value="Agregar" action="#{beanVenta.agregarProducto()}" 
+   						update="detalleTable, messages, nroImei, precio, producto, producto1, producto2, precioVenta2, accesorio, cantidad, stockDisponible"/>
+   						<p:defaultCommand target="add" />
+   					</f:facet>
+   				</p:panelGrid>
+   				<p:dataTable id="detalleTable" value="#{beanVenta.listaVentasDetalles}" var="detalle" emptyMessage="No existen detalles">
+   					<f:facet name="header">
+   						<h:outputText value="Detalle de Venta" />
+   					</f:facet>   					
+   					<p:column headerText="Cantidad" style="width:120px;text-align:center;">
+   						<h:outputText value="#{detalle.cantidad}" />
+   						<p:rowToggler rendered="#{!detalle.accesorio}"/>
+   					</p:column>
+   					<p:column headerText="Producto">
+   						<h:outputText value="#{detalle.producto.nombre}" />
+   					</p:column>
+   					<p:column headerText="Precio de Venta" style="width:150px;text-align:right;">
+   						<h:outputText value="$" />
+   						<h:outputText value="#{detalle.precioVenta}" >
+   							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+   						</h:outputText>
+   					</p:column>
+   					<p:column headerText="Subtotal" style="width:150px;text-align:right;">
+   						<h:outputText value="$" />
+   						<h:outputText value="#{detalle.subtotal}" >
+   							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+   						</h:outputText>
+   					</p:column>
+   					<p:column headerText="Quitar" style="width:100px;text-align:center;">
+   						<p:commandButton icon="ui-icon-close" action="#{beanVenta.quitarProducto(detalle)}" disabled="#{beanVenta.noBajaDetalle(detalle)}" 
+   						update="detalleTable" />
+   					</p:column>
+   					<p:rowExpansion>
+   						<p:dataList value="#{detalle.ventasDetalleUnidads}" var="unidad" type="unordered" 
+   						emptyMessage="No existen items" style="width:100%;" itemType="none">
+   							<f:facet name="header">
+   								<h:outputText value="Números de Imei" />
+   							</f:facet>	
+   							<p:commandLink style="float:left;margin-right:10px" styleClass="ui-icon ui-icon-close" disabled="#{beanVenta.noBajaUnidad(unidad)}"
+				        	action="#{beanVenta.quitarUnidadDetalle(detalle, unidad)}" update=":formulario:detalleTable" />
+   							<h:outputText value="#{unidad.nroImei}" />
+   						</p:dataList>
+   					</p:rowExpansion>
+   					<f:facet name="footer" style="text-align:right;">
+   						<p:column style="text-align:right;">
+   							<p:outputLabel value="Cantidad Total: " />
+   							<h:outputText value="#{beanVenta.cantidadTotal}" />
+   							<h:outputText value="  " />
+   							<p:outputLabel value="Monto Total: $" />
+   							<h:outputText value="#{beanVenta.montoTotal}" >
+	   							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+	   						</h:outputText>
+   						</p:column>
+   					</f:facet>
+   				</p:dataTable>
+   				<p:panelGrid columns="2" style="width:100%;">
+   					<f:facet name="header">
+   						<p:commandButton value="Aceptar" onclick="return confirm('ESTA SEGURO QUE QUIERE CONFIRMAR LA VENTA?')" action="#{beanVenta.guardar()}" 
+   						rendered="#{beanVenta.nueva}"/>
+   						<p:commandButton value="Aceptar" onclick="return confirm('ESTA SEGURO QUE QUIERE CONFIRMAR LA MODIFICAIÓN DE LA VENTA?')" action="#{beanVenta.modifcar()}" 
+   						rendered="#{!beanVenta.nueva}"/>
+   						<p:commandButton value="Cancelar" onclick="return confirm('ESTA SEGURO QUE DESEA CANCELAR LA VENTA Y VOLVER?')" action="ventas"/>
+   					</f:facet>
+   				</p:panelGrid>		
+   			</p:panel>	
+	    	</h:form>
+	    </div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>
