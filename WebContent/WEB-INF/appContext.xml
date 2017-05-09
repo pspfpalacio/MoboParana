@@ -49,5 +49,6 @@
 	<bean id="BeanEConsignacionDetalleDAO" class="dao.impl.DAOEConsignacionDetalleImpl" />
 	<bean id="BeanEConsignacionDetalleUnidadDAO" class="dao.impl.DAOEConsignacionDetalleUnidadImpl" />
 	<bean id="BeanMensajeDAO" class="dao.impl.DAOMensajeImpl" />
+	<bean id="BeanTecnicoDAO" class="dao.impl.DAOTecnicoImpl" />
 
 </beans>

@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Técnicos</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />				
+				<h2 align="center">TÉCNICOS</h2>				
+				<p:dataTable id="contenedorTecnicos" widgetVar="tecnicoBusqueda" var="tecnico"
+				value="#{beanTecnico.listaTecnicos}" paginator="true" rows="30" resizableColumns="true"
+				emptyMessage="No existen Técnicos" sortMode="multiple">
+					<f:facet name="header">
+						<p:commandButton value="Nuevo" action="#{beanTecnico.goNuevo()}"/>
+						<p:outputLabel value="Técnicos" />
+						<p:spacer width="20" />
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('tecnicoBusqueda').filter()" placeholder="Buscar"/>
+						</p:outputPanel> 
+						<p:outputPanel style="float:right;">	
+							<h:commandLink action="#{beanTecnico.generarXls()}" >
+								<p:graphicImage value="../../images/xls-icon.ico" width="25" style="margin-right: 20px; float: left;" />
+							</h:commandLink>							
+							<h:commandLink action="#{beanTecnico.generarPdf()}" target="_blank">
+								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
+							</h:commandLink>
+						</p:outputPanel>
+					</f:facet>
+											
+					<p:column style="text-align: center; width:40px;" id="modificar">
+						<f:facet name="header">
+							<h:outputText value="Mod." title="Modificar el Técnico" />
+						</f:facet>						
+						<p:commandLink title="Modificar" action="#{beanTecnico.goEditar(tecnico)}" >							
+							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
+						</p:commandLink>
+					</p:column>
+										
+					<p:column style="text-align: center; width:70px;" id="act_desact">
+						<f:facet name="header">
+							<h:outputText value="Alta/Baja" title="Activar o Desactivar" />
+						</f:facet>						
+						<p:row rendered="#{tecnico.estado}">
+							<h:commandLink id="desactivar" title="Desactivar el Técnico"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE BAJA EL TÉCNICO?')"
+								action="#{beanTecnico.baja(tecnico)}">
+							 	<h:graphicImage value="/images/activo.ico" width="20"
+									id="estadoDesactivar" title="Desactivar el Técnico" /> 
+							</h:commandLink>
+						</p:row>						
+						<p:row rendered="#{!tecnico.estado}">
+							<h:commandLink id="activar" title="Activar el Técnico"
+								onclick="return confirm('ESTA SEGURO QUE DESEA DAR DE ALTA EL TÉCNICO?')"
+								action="#{beanTecnico.alta(tecnico)}">
+								<h:graphicImage value="/images/desactivo.ico" width="20"
+									id="estadoActivar" title="Activar el Técnico" />
+							</h:commandLink>
+						</p:row>
+					</p:column>
+					
+					<p:column headerText="Apellido y Nombres" filterBy="#{tecnico.apellidoNombre}" 
+					filterStyle="display:none;" sortBy="#{tecnico.apellidoNombre}">
+						<h:outputText value="#{tecnico.apellidoNombre}" />
+					</p:column>
+					
+					<p:column headerText="Dirección" >
+						<h:outputText value="#{tecnico.direccion}" />
+					</p:column>
+					
+					<p:column headerText="Teléfono Cel" >
+						<h:outputText value="#{tecnico.telefonoCel}" />
+					</p:column>
+					
+					<p:column headerText="Teléfono Fijo" >
+						<h:outputText value="#{tecnico.telefonoFijo}" />
+					</p:column>
+					
+					<p:column headerText="E-mail">
+						<h:outputText value="#{tecnico.email}" />
+					</p:column>
+				</p:dataTable>	
+			</p:panel> 
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

@@ -319,6 +319,18 @@ public class Usuario implements Serializable {
 	//bi-directional many-to-one association to Mensaje
 	@OneToMany(mappedBy="usuario")
 	private List<Mensaje> mensajes;
+	
+	//bi-directional many-to-one association to Tecnico
+	@OneToMany(mappedBy="usuario1")
+	private List<Tecnico> tecnicos1;
+
+	//bi-directional many-to-one association to Tecnico
+	@OneToMany(mappedBy="usuario2")
+	private List<Tecnico> tecnicos2;
+
+	//bi-directional many-to-one association to Tecnico
+	@OneToMany(mappedBy="usuario3")
+	private List<Tecnico> tecnicos3;
 
 	public Usuario() {
 	}
@@ -1811,6 +1823,72 @@ public class Usuario implements Serializable {
 		mensaje.setUsuario(null);
 
 		return mensaje;
+	}
+	
+	public List<Tecnico> getTecnicos1() {
+		return this.tecnicos1;
+	}
+
+	public void setTecnicos1(List<Tecnico> tecnicos1) {
+		this.tecnicos1 = tecnicos1;
+	}
+
+	public Tecnico addTecnicos1(Tecnico tecnicos1) {
+		getTecnicos1().add(tecnicos1);
+		tecnicos1.setUsuario1(this);
+
+		return tecnicos1;
+	}
+
+	public Tecnico removeTecnicos1(Tecnico tecnicos1) {
+		getTecnicos1().remove(tecnicos1);
+		tecnicos1.setUsuario1(null);
+
+		return tecnicos1;
+	}
+
+	public List<Tecnico> getTecnicos2() {
+		return this.tecnicos2;
+	}
+
+	public void setTecnicos2(List<Tecnico> tecnicos2) {
+		this.tecnicos2 = tecnicos2;
+	}
+
+	public Tecnico addTecnicos2(Tecnico tecnicos2) {
+		getTecnicos2().add(tecnicos2);
+		tecnicos2.setUsuario2(this);
+
+		return tecnicos2;
+	}
+
+	public Tecnico removeTecnicos2(Tecnico tecnicos2) {
+		getTecnicos2().remove(tecnicos2);
+		tecnicos2.setUsuario2(null);
+
+		return tecnicos2;
+	}
+
+	public List<Tecnico> getTecnicos3() {
+		return this.tecnicos3;
+	}
+
+	public void setTecnicos3(List<Tecnico> tecnicos3) {
+		this.tecnicos3 = tecnicos3;
+	}
+
+	public Tecnico addTecnicos3(Tecnico tecnicos3) {
+		getTecnicos3().add(tecnicos3);
+		tecnicos3.setUsuario3(this);
+
+		return tecnicos3;
+	}
+
+	public Tecnico removeTecnicos3(Tecnico tecnicos3) {
+		getTecnicos3().remove(tecnicos3);
+		tecnicos3.setUsuario3(null);
+
+		return tecnicos3;
 	}
 
 }

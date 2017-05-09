@@ -58,8 +58,8 @@ public class DAOGarantiasClienteImpl implements Serializable, DAOGarantiasClient
 					+ "g.fechaBaja = :pFechaBaja, g.fechaIngreso = :pFechaIngreso, g.fechaMod = :pFechaMod, g.fechaVentaConsignacion = :pFechaVentaConsignacion, "
 					+ "g.finalizado = :pFinalizado, g.idConVenta = :pIdConVenta, g.idMovimiento = :pIdMovimiento, g.imeiFalla = :pImeiFalla, g.imeiReintegro = :pImeiReintegro, "
 					+ "g.nombreMovimiento = :pNombreMovimiento, g.observaciones = :pObservaciones, g.precioUnidad = :pPrecioUnidad, g.producto1 = :pProductoFalla, "
-					+ "g.producto2 = :pProductoReintegro, g.resolucion = :pResolucion, g.telefonoFalla = :pTelefonoFalla, g.telefonoReintegro = :pTelefonoReintegro, "
-					+ "g.usuario1 = :pUsuarioAlta, g.usuario2 = :pUsuarioBaja, g.usuario3 = :pUsuarioMod, g.vendido = :pVendido "
+					+ "g.producto2 = :pProductoReintegro, g.resolucion = :pResolucion, g.tecnico = :pTecnico, g.telefonoFalla = :pTelefonoFalla, "
+					+ "g.telefonoReintegro = :pTelefonoReintegro, g.usuario1 = :pUsuarioAlta, g.usuario2 = :pUsuarioBaja, g.usuario3 = :pUsuarioMod, g.vendido = :pVendido "
 					+ "WHERE g.id = :pId");
 			locQuery.setParameter("pAccionRealizar", garantiasCliente.getAccionRealizar());
 			locQuery.setParameter("pCliente", garantiasCliente.getCliente());
@@ -83,6 +83,7 @@ public class DAOGarantiasClienteImpl implements Serializable, DAOGarantiasClient
 			locQuery.setParameter("pProductoFalla", garantiasCliente.getProducto1());
 			locQuery.setParameter("pProductoReintegro", garantiasCliente.getProducto2());
 			locQuery.setParameter("pResolucion", garantiasCliente.getResolucion());
+			locQuery.setParameter("pTecnico", garantiasCliente.getTecnico());
 			locQuery.setParameter("pTelefonoFalla", garantiasCliente.getTelefonoFalla());
 			locQuery.setParameter("pTelefonoReintegro", garantiasCliente.getTelefonoReintegro());
 			locQuery.setParameter("pUsuarioAlta", garantiasCliente.getUsuario1());

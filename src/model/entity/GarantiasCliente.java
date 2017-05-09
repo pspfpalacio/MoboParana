@@ -101,6 +101,11 @@ public class GarantiasCliente implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="id_producto_reintegro")
 	private Producto producto2;
+	
+	//bi-directional many-to-one association to Tecnico
+	@ManyToOne
+	@JoinColumn(name="id_tecnico")
+	private Tecnico tecnico;
 
 	//bi-directional many-to-one association to Usuario
 	@ManyToOne
@@ -326,6 +331,14 @@ public class GarantiasCliente implements Serializable {
 
 	public void setProducto2(Producto producto2) {
 		this.producto2 = producto2;
+	}
+	
+	public Tecnico getTecnico() {
+		return this.tecnico;
+	}
+
+	public void setTecnico(Tecnico tecnico) {
+		this.tecnico = tecnico;
 	}
 
 	public Usuario getUsuario1() {

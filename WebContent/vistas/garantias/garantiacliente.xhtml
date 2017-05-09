@@ -78,6 +78,13 @@
 		    					<f:selectItems value="#{beanGarantia.listaClientes}" var="cli" itemLabel="#{cli.nombreNegocio}"
 		    					itemValue="#{cli.id}"/>
 		    				</p:selectOneMenu>
+		    				<p:outputLabel value="Técnico: " />
+		    				<p:selectOneMenu value="#{beanGarantia.idTecnico}" filter="true" filterMatchMode="contains"
+		    				style="width:250px;" >
+		    					<f:selectItem itemLabel="Seleccione técnico.." itemValue="0"/>
+		    					<f:selectItems value="#{beanGarantia.listaTecnicos}" var="tec" itemLabel="#{tec.apellidoNombre}"
+		    					itemValue="#{tec.id}"/>
+		    				</p:selectOneMenu>
 		    				<p:outputLabel value="Falla: " />
 		    				<p:inputTextarea value="#{beanGarantia.garantiasCliente.falla}" style="width:100%;" rows="3" />
 		    				<p:outputLabel value="Observaciones: " />

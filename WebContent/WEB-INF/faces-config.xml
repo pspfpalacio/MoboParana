@@ -273,6 +273,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/clientes/clientes.xhtml</from-view-id>
@@ -544,6 +549,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -819,6 +829,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/proveedores/proveedores.xhtml</from-view-id>
@@ -1090,6 +1105,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -1365,6 +1385,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/productos/productos.xhtml</from-view-id>
@@ -1638,6 +1663,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/productos/producto.xhtml</from-view-id>
@@ -1909,6 +1939,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -2189,6 +2224,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/listasprecios/listaprecio.xhtml</from-view-id>
@@ -2460,6 +2500,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -2735,6 +2780,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/usuarios/usuario.xhtml</from-view-id>
@@ -3006,6 +3056,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -3281,6 +3336,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/roles/role.xhtml</from-view-id>
@@ -3552,6 +3612,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -3827,6 +3892,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/pagos/pagoproveedor.xhtml</from-view-id>
@@ -4098,6 +4168,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -4373,6 +4448,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/creditodebito/creditodebitoproveedor.xhtml</from-view-id>
@@ -4644,6 +4724,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -4919,6 +5004,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/cuentascorrientes/cuentacliente.xhtml</from-view-id>
@@ -5190,6 +5280,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -5465,6 +5560,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/gastos/gastos.xhtml</from-view-id>
@@ -5736,6 +5836,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -6011,6 +6116,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/compras/compras.xhtml</from-view-id>
@@ -6282,6 +6392,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -6567,6 +6682,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/compras/compra.xhtml</from-view-id>
@@ -6838,6 +6958,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -7113,6 +7238,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/ventas/venta.xhtml</from-view-id>
@@ -7384,6 +7514,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -7719,6 +7854,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/consignaciones/consignacion.xhtml</from-view-id>
@@ -7997,6 +8137,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/busqueda/busqueda.xhtml</from-view-id>
@@ -8268,6 +8413,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -8543,6 +8693,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/devoluciones/devoluciones.xhtml</from-view-id>
@@ -8814,6 +8969,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -9089,6 +9249,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/garantias/garantiasclientes.xhtml</from-view-id>
@@ -9360,6 +9525,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -9635,6 +9805,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/reportes/rankingProducto.xhtml</from-view-id>
@@ -9906,6 +10081,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -10181,6 +10361,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/reportes/reporteGanancia.xhtml</from-view-id>
@@ -10452,6 +10637,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -10727,6 +10917,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/rubros/rubros.xhtml</from-view-id>
@@ -10998,6 +11193,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -11273,6 +11473,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/accesorios/accesorios.xhtml</from-view-id>
@@ -11544,6 +11749,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -11819,6 +12029,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/productos/stock.xhtml</from-view-id>
@@ -12090,6 +12305,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -12365,6 +12585,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/usados/usado.xhtml</from-view-id>
@@ -12636,6 +12861,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -12911,6 +13141,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/reportes/reporteGananciaVenta.xhtml</from-view-id>
@@ -13182,6 +13417,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -13460,6 +13700,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -13743,6 +13988,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -14043,6 +14293,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/consignaciones/vercuotas.xhtml</from-view-id>
@@ -14334,6 +14589,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -14637,6 +14897,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -14947,6 +15212,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/productos/sinstocks.xhtml</from-view-id>
@@ -15218,6 +15488,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -15493,6 +15768,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/garantias/garantiaproveedor.xhtml</from-view-id>
@@ -15764,6 +16044,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -16074,6 +16359,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/ventas/cuotasventa.xhtml</from-view-id>
@@ -16350,6 +16640,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -16630,6 +16925,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/listasprecios/listapreciocliente.xhtml</from-view-id>
@@ -16906,6 +17206,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -17186,6 +17491,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/consignaciones/historicoventasconsignacion.xhtml</from-view-id>
@@ -17464,6 +17774,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/consignaciones/stockconsignacion.xhtml</from-view-id>
@@ -17740,6 +18055,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -18025,6 +18345,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/consignaciones/quitarconsignacion.xhtml</from-view-id>
@@ -18303,6 +18628,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/reportes/reporteDinamico.xhtml</from-view-id>
@@ -18576,6 +18906,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/reportes/reporteStock.xhtml</from-view-id>
@@ -18847,6 +19182,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -19224,6 +19564,11 @@
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/vistas/consignaciones/consignacionentregas.xhtml</from-view-id>
@@ -19500,6 +19845,11 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -19801,6 +20151,577 @@
   <navigation-case>
    <from-outcome>mensajes</from-outcome>
    <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/vistas/tecnicos/tecnicos.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>clientes</from-outcome>
+   <to-view-id>/vistas/clientes/clientes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>index</from-outcome>
+   <to-view-id>/index.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>cliente</from-outcome>
+   <to-view-id>/vistas/clientes/cliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>proveedores</from-outcome>
+   <to-view-id>/vistas/proveedores/proveedores.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>proveedor</from-outcome>
+   <to-view-id>/vistas/proveedores/proveedor.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>productos</from-outcome>
+   <to-view-id>/vistas/productos/productos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>producto</from-outcome>
+   <to-view-id>/vistas/productos/producto.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>listasprecios</from-outcome>
+   <to-view-id>/vistas/listasprecios/listasprecios.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>listaprecio</from-outcome>
+   <to-view-id>/vistas/listasprecios/listaprecio.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>usuarios</from-outcome>
+   <to-view-id>/vistas/usuarios/usuarios.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>usuario</from-outcome>
+   <to-view-id>/vistas/usuarios/usuario.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>roles</from-outcome>
+   <to-view-id>/vistas/roles/roles.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>role</from-outcome>
+   <to-view-id>/vistas/roles/role.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>pagocliente</from-outcome>
+   <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>pagoproveedor</from-outcome>
+   <to-view-id>/vistas/pagos/pagoproveedor.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>creditodebitocliente</from-outcome>
+   <to-view-id>/vistas/creditodebito/creditodebitocliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>creditodebitoproveedor</from-outcome>
+   <to-view-id>/vistas/creditodebito/creditodebitoproveedor.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>caja</from-outcome>
+   <to-view-id>/vistas/caja/caja.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>cuentacliente</from-outcome>
+   <to-view-id>/vistas/cuentascorrientes/cuentacliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>cuentaproveedor</from-outcome>
+   <to-view-id>/vistas/cuentascorrientes/cuentaproveedor.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gastos</from-outcome>
+   <to-view-id>/vistas/gastos/gastos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gasto</from-outcome>
+   <to-view-id>/vistas/gastos/gasto.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>compras</from-outcome>
+   <to-view-id>/vistas/compras/compras.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>ventas</from-outcome>
+   <to-view-id>/vistas/ventas/ventas.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>compra</from-outcome>
+   <to-view-id>/vistas/compras/compra.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>editarcompra</from-outcome>
+   <to-view-id>/vistas/compras/editarcompra.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>venta</from-outcome>
+   <to-view-id>/vistas/ventas/venta.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>consignaciones</from-outcome>
+   <to-view-id>/vistas/consignaciones/consignaciones.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>consignacion</from-outcome>
+   <to-view-id>/vistas/consignaciones/consignacion.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>busqueda</from-outcome>
+   <to-view-id>/vistas/busqueda/busqueda.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>devolucion</from-outcome>
+   <to-view-id>/vistas/devoluciones/devolucion.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>devoluciones</from-outcome>
+   <to-view-id>/vistas/devoluciones/devoluciones.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>garantiacliente</from-outcome>
+   <to-view-id>/vistas/garantias/garantiacliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>garantiasclientes</from-outcome>
+   <to-view-id>/vistas/garantias/garantiasclientes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>rankingCliente</from-outcome>
+   <to-view-id>/vistas/reportes/rankingCliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>rankingProducto</from-outcome>
+   <to-view-id>/vistas/reportes/rankingProducto.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>rankingProveedor</from-outcome>
+   <to-view-id>/vistas/reportes/rankingProveedor.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>reporteGanancia</from-outcome>
+   <to-view-id>/vistas/reportes/reporteGanancia.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>reportePatrimonio</from-outcome>
+   <to-view-id>/vistas/reportes/reportePatrimonio.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>rubros</from-outcome>
+   <to-view-id>/vistas/rubros/rubros.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>rubro</from-outcome>
+   <to-view-id>/vistas/rubros/rubro.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>accesorios</from-outcome>
+   <to-view-id>/vistas/accesorios/accesorios.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>accesorio</from-outcome>
+   <to-view-id>/vistas/accesorios/accesorio.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>stock</from-outcome>
+   <to-view-id>/vistas/productos/stock.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>usados</from-outcome>
+   <to-view-id>/vistas/usados/usados.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>usado</from-outcome>
+   <to-view-id>/vistas/usados/usado.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>stockUsados</from-outcome>
+   <to-view-id>/vistas/usados/stockUsados.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>reporteGananciaVenta</from-outcome>
+   <to-view-id>/vistas/reportes/reporteGananciaVenta.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>sinstocks</from-outcome>
+   <to-view-id>/vistas/productos/sinstocks.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>garantiasproveedores</from-outcome>
+   <to-view-id>/vistas/garantias/garantiasproveedores.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>garantiaproveedor</from-outcome>
+   <to-view-id>/vistas/garantias/garantiaproveedor.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>reporteDinamico</from-outcome>
+   <to-view-id>/vistas/reportes/reporteDinamico.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>reporteStock</from-outcome>
+   <to-view-id>/vistas/reportes/reporteStock.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>mensajes</from-outcome>
+   <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnico</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnico.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/vistas/tecnicos/tecnico.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>clientes</from-outcome>
+   <to-view-id>/vistas/clientes/clientes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>index</from-outcome>
+   <to-view-id>/index.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>cliente</from-outcome>
+   <to-view-id>/vistas/clientes/cliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>proveedores</from-outcome>
+   <to-view-id>/vistas/proveedores/proveedores.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>proveedor</from-outcome>
+   <to-view-id>/vistas/proveedores/proveedor.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>productos</from-outcome>
+   <to-view-id>/vistas/productos/productos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>producto</from-outcome>
+   <to-view-id>/vistas/productos/producto.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>listasprecios</from-outcome>
+   <to-view-id>/vistas/listasprecios/listasprecios.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>listaprecio</from-outcome>
+   <to-view-id>/vistas/listasprecios/listaprecio.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>usuarios</from-outcome>
+   <to-view-id>/vistas/usuarios/usuarios.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>usuario</from-outcome>
+   <to-view-id>/vistas/usuarios/usuario.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>roles</from-outcome>
+   <to-view-id>/vistas/roles/roles.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>role</from-outcome>
+   <to-view-id>/vistas/roles/role.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>pagocliente</from-outcome>
+   <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>pagoproveedor</from-outcome>
+   <to-view-id>/vistas/pagos/pagoproveedor.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>creditodebitocliente</from-outcome>
+   <to-view-id>/vistas/creditodebito/creditodebitocliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>creditodebitoproveedor</from-outcome>
+   <to-view-id>/vistas/creditodebito/creditodebitoproveedor.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>caja</from-outcome>
+   <to-view-id>/vistas/caja/caja.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>cuentacliente</from-outcome>
+   <to-view-id>/vistas/cuentascorrientes/cuentacliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>cuentaproveedor</from-outcome>
+   <to-view-id>/vistas/cuentascorrientes/cuentaproveedor.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gastos</from-outcome>
+   <to-view-id>/vistas/gastos/gastos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gasto</from-outcome>
+   <to-view-id>/vistas/gastos/gasto.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>compras</from-outcome>
+   <to-view-id>/vistas/compras/compras.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>ventas</from-outcome>
+   <to-view-id>/vistas/ventas/ventas.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>compra</from-outcome>
+   <to-view-id>/vistas/compras/compra.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>editarcompra</from-outcome>
+   <to-view-id>/vistas/compras/editarcompra.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>venta</from-outcome>
+   <to-view-id>/vistas/ventas/venta.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>consignaciones</from-outcome>
+   <to-view-id>/vistas/consignaciones/consignaciones.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>consignacion</from-outcome>
+   <to-view-id>/vistas/consignaciones/consignacion.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>busqueda</from-outcome>
+   <to-view-id>/vistas/busqueda/busqueda.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>devolucion</from-outcome>
+   <to-view-id>/vistas/devoluciones/devolucion.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>devoluciones</from-outcome>
+   <to-view-id>/vistas/devoluciones/devoluciones.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>garantiacliente</from-outcome>
+   <to-view-id>/vistas/garantias/garantiacliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>garantiasclientes</from-outcome>
+   <to-view-id>/vistas/garantias/garantiasclientes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>rankingCliente</from-outcome>
+   <to-view-id>/vistas/reportes/rankingCliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>rankingProducto</from-outcome>
+   <to-view-id>/vistas/reportes/rankingProducto.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>rankingProveedor</from-outcome>
+   <to-view-id>/vistas/reportes/rankingProveedor.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>reporteGanancia</from-outcome>
+   <to-view-id>/vistas/reportes/reporteGanancia.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>reportePatrimonio</from-outcome>
+   <to-view-id>/vistas/reportes/reportePatrimonio.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>rubros</from-outcome>
+   <to-view-id>/vistas/rubros/rubros.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>rubro</from-outcome>
+   <to-view-id>/vistas/rubros/rubro.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>accesorios</from-outcome>
+   <to-view-id>/vistas/accesorios/accesorios.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>accesorio</from-outcome>
+   <to-view-id>/vistas/accesorios/accesorio.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>stock</from-outcome>
+   <to-view-id>/vistas/productos/stock.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>usados</from-outcome>
+   <to-view-id>/vistas/usados/usados.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>usado</from-outcome>
+   <to-view-id>/vistas/usados/usado.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>stockUsados</from-outcome>
+   <to-view-id>/vistas/usados/stockUsados.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>reporteGananciaVenta</from-outcome>
+   <to-view-id>/vistas/reportes/reporteGananciaVenta.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>sinstocks</from-outcome>
+   <to-view-id>/vistas/productos/sinstocks.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>garantiasproveedores</from-outcome>
+   <to-view-id>/vistas/garantias/garantiasproveedores.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>garantiaproveedor</from-outcome>
+   <to-view-id>/vistas/garantias/garantiaproveedor.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>reporteDinamico</from-outcome>
+   <to-view-id>/vistas/reportes/reporteDinamico.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>reporteStock</from-outcome>
+   <to-view-id>/vistas/reportes/reporteStock.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>mensajes</from-outcome>
+   <to-view-id>/vistas/mensajes/mensajes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnicos</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>tecnico</from-outcome>
+   <to-view-id>/vistas/tecnicos/tecnico.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
