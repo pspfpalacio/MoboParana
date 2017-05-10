@@ -192,6 +192,18 @@ public class DAOGarantiasClienteImpl implements Serializable, DAOGarantiasClient
 		return lista;
 	}
 	
+	public List<GarantiasCliente> getLista(Date fechaInicio,
+			Date fechaFin) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT g FROM GarantiasCliente g WHERE g.estado = :pEstado AND "
+				+ "g.fechaIngreso BETWEEN :pInicio AND :pFin", GarantiasCliente.class);
+		locQuery.setParameter("pEstado", true);		
+		locQuery.setParameter("pInicio", fechaInicio);
+		locQuery.setParameter("pFin", fechaFin);
+		List<GarantiasCliente> lista = locQuery.getResultList();
+		return lista;
+	}
+	
 	public List<GarantiasCliente> getLista(boolean finalizado) {
 		inicializar();
 		Query locQuery = em.createQuery("SELECT g FROM GarantiasCliente g WHERE g.estado = :pEstado "

@@ -7954,6 +7954,11 @@
    <PROCESS-ITEM-OUTPUT ID="tecnicos::#vistas#tecnicos#tecnicos.xhtml"
     NAME="output54" PATH="/vistas/tecnicos/tecnicos.xhtml"
     TARGET="rules:#vistas#tecnicos#tecnicos.xhtml" TITLE="tecnicos" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="editargarantiacliente::#vistas#garantias#editargarantiacliente.xhtml"
+    NAME="output55" PATH="/vistas/garantias/editargarantiacliente.xhtml"
+    TARGET="rules:#vistas#garantias#editargarantiacliente.xhtml"
+    TITLE="editargarantiacliente" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#vistas#reportes#rankingCliente.xhtml"
@@ -17082,6 +17087,243 @@
     TARGET="rules:#vistas#clientes#clientes.xhtml" TITLE="clientes" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT ID="index::#index.xhtml" NAME="output1"
     PATH="/index.xhtml" TARGET="rules:#index.xhtml" TITLE="index" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="cliente::#vistas#clientes#cliente.xhtml"
+    NAME="output2" PATH="/vistas/clientes/cliente.xhtml"
+    TARGET="rules:#vistas#clientes#cliente.xhtml" TITLE="cliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="proveedores::#vistas#proveedores#proveedores.xhtml"
+    NAME="output3" PATH="/vistas/proveedores/proveedores.xhtml"
+    TARGET="rules:#vistas#proveedores#proveedores.xhtml"
+    TITLE="proveedores" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="proveedor::#vistas#proveedores#proveedor.xhtml" NAME="output4"
+    PATH="/vistas/proveedores/proveedor.xhtml"
+    TARGET="rules:#vistas#proveedores#proveedor.xhtml" TITLE="proveedor" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="productos::#vistas#productos#productos.xhtml" NAME="output5"
+    PATH="/vistas/productos/productos.xhtml"
+    TARGET="rules:#vistas#productos#productos.xhtml" TITLE="productos" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="producto::#vistas#productos#producto.xhtml"
+    NAME="output6" PATH="/vistas/productos/producto.xhtml"
+    TARGET="rules:#vistas#productos#producto.xhtml" TITLE="producto" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="listasprecios::#vistas#listasprecios#listasprecios.xhtml"
+    NAME="output7" PATH="/vistas/listasprecios/listasprecios.xhtml"
+    TARGET="rules:#vistas#listasprecios#listasprecios.xhtml"
+    TITLE="listasprecios" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="listaprecio::#vistas#listasprecios#listaprecio.xhtml"
+    NAME="output8" PATH="/vistas/listasprecios/listaprecio.xhtml"
+    TARGET="rules:#vistas#listasprecios#listaprecio.xhtml"
+    TITLE="listaprecio" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="usuarios::#vistas#usuarios#usuarios.xhtml"
+    NAME="output9" PATH="/vistas/usuarios/usuarios.xhtml"
+    TARGET="rules:#vistas#usuarios#usuarios.xhtml" TITLE="usuarios" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="usuario::#vistas#usuarios#usuario.xhtml"
+    NAME="output10" PATH="/vistas/usuarios/usuario.xhtml"
+    TARGET="rules:#vistas#usuarios#usuario.xhtml" TITLE="usuario" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="roles::#vistas#roles#roles.xhtml"
+    NAME="output11" PATH="/vistas/roles/roles.xhtml"
+    TARGET="rules:#vistas#roles#roles.xhtml" TITLE="roles" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="role::#vistas#roles#role.xhtml"
+    NAME="output12" PATH="/vistas/roles/role.xhtml"
+    TARGET="rules:#vistas#roles#role.xhtml" TITLE="role" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="pagocliente::#vistas#pagos#pagocliente.xhtml" NAME="output13"
+    PATH="/vistas/pagos/pagocliente.xhtml"
+    TARGET="rules:#vistas#pagos#pagocliente.xhtml" TITLE="pagocliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output14" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
+    NAME="output15"
+    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
+    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
+    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
+    NAME="output16"
+    PATH="/vistas/creditodebito/creditodebitoproveedor.xhtml"
+    TARGET="rules:#vistas#creditodebito#creditodebitoproveedor.xhtml"
+    TITLE="creditodebitoproveedor" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="caja::#vistas#caja#caja.xhtml"
+    NAME="output17" PATH="/vistas/caja/caja.xhtml"
+    TARGET="rules:#vistas#caja#caja.xhtml" TITLE="caja" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="cuentacliente::#vistas#cuentascorrientes#cuentacliente.xhtml"
+    NAME="output18" PATH="/vistas/cuentascorrientes/cuentacliente.xhtml"
+    TARGET="rules:#vistas#cuentascorrientes#cuentacliente.xhtml"
+    TITLE="cuentacliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="cuentaproveedor::#vistas#cuentascorrientes#cuentaproveedor.xhtml"
+    NAME="output19"
+    PATH="/vistas/cuentascorrientes/cuentaproveedor.xhtml"
+    TARGET="rules:#vistas#cuentascorrientes#cuentaproveedor.xhtml"
+    TITLE="cuentaproveedor" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="gastos::#vistas#gastos#gastos.xhtml"
+    NAME="output20" PATH="/vistas/gastos/gastos.xhtml"
+    TARGET="rules:#vistas#gastos#gastos.xhtml" TITLE="gastos" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="gasto::#vistas#gastos#gasto.xhtml"
+    NAME="output21" PATH="/vistas/gastos/gasto.xhtml"
+    TARGET="rules:#vistas#gastos#gasto.xhtml" TITLE="gasto" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="compras::#vistas#compras#compras.xhtml"
+    NAME="output22" PATH="/vistas/compras/compras.xhtml"
+    TARGET="rules:#vistas#compras#compras.xhtml" TITLE="compras" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="ventas::#vistas#ventas#ventas.xhtml"
+    NAME="output23" PATH="/vistas/ventas/ventas.xhtml"
+    TARGET="rules:#vistas#ventas#ventas.xhtml" TITLE="ventas" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="compra::#vistas#compras#compra.xhtml"
+    NAME="output24" PATH="/vistas/compras/compra.xhtml"
+    TARGET="rules:#vistas#compras#compra.xhtml" TITLE="compra" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="editarcompra::#vistas#compras#editarcompra.xhtml"
+    NAME="output25" PATH="/vistas/compras/editarcompra.xhtml"
+    TARGET="rules:#vistas#compras#editarcompra.xhtml"
+    TITLE="editarcompra" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="venta::#vistas#ventas#venta.xhtml"
+    NAME="output26" PATH="/vistas/ventas/venta.xhtml"
+    TARGET="rules:#vistas#ventas#venta.xhtml" TITLE="venta" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="consignaciones::#vistas#consignaciones#consignaciones.xhtml"
+    NAME="output27" PATH="/vistas/consignaciones/consignaciones.xhtml"
+    TARGET="rules:#vistas#consignaciones#consignaciones.xhtml"
+    TITLE="consignaciones" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="consignacion::#vistas#consignaciones#consignacion.xhtml"
+    NAME="output28" PATH="/vistas/consignaciones/consignacion.xhtml"
+    TARGET="rules:#vistas#consignaciones#consignacion.xhtml"
+    TITLE="consignacion" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="busqueda::#vistas#busqueda#busqueda.xhtml"
+    NAME="output29" PATH="/vistas/busqueda/busqueda.xhtml"
+    TARGET="rules:#vistas#busqueda#busqueda.xhtml" TITLE="busqueda" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="devolucion::#vistas#devoluciones#devolucion.xhtml"
+    NAME="output30" PATH="/vistas/devoluciones/devolucion.xhtml"
+    TARGET="rules:#vistas#devoluciones#devolucion.xhtml"
+    TITLE="devolucion" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="devoluciones::#vistas#devoluciones#devoluciones.xhtml"
+    NAME="output31" PATH="/vistas/devoluciones/devoluciones.xhtml"
+    TARGET="rules:#vistas#devoluciones#devoluciones.xhtml"
+    TITLE="devoluciones" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="garantiacliente::#vistas#garantias#garantiacliente.xhtml"
+    NAME="output32" PATH="/vistas/garantias/garantiacliente.xhtml"
+    TARGET="rules:#vistas#garantias#garantiacliente.xhtml"
+    TITLE="garantiacliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="garantiasclientes::#vistas#garantias#garantiasclientes.xhtml"
+    NAME="output33" PATH="/vistas/garantias/garantiasclientes.xhtml"
+    TARGET="rules:#vistas#garantias#garantiasclientes.xhtml"
+    TITLE="garantiasclientes" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="rankingCliente::#vistas#reportes#rankingCliente.xhtml"
+    NAME="output34" PATH="/vistas/reportes/rankingCliente.xhtml"
+    TARGET="rules:#vistas#reportes#rankingCliente.xhtml"
+    TITLE="rankingCliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="rankingProducto::#vistas#reportes#rankingProducto.xhtml"
+    NAME="output35" PATH="/vistas/reportes/rankingProducto.xhtml"
+    TARGET="rules:#vistas#reportes#rankingProducto.xhtml"
+    TITLE="rankingProducto" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="rankingProveedor::#vistas#reportes#rankingProveedor.xhtml"
+    NAME="output36" PATH="/vistas/reportes/rankingProveedor.xhtml"
+    TARGET="rules:#vistas#reportes#rankingProveedor.xhtml"
+    TITLE="rankingProveedor" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="reporteGanancia::#vistas#reportes#reporteGanancia.xhtml"
+    NAME="output37" PATH="/vistas/reportes/reporteGanancia.xhtml"
+    TARGET="rules:#vistas#reportes#reporteGanancia.xhtml"
+    TITLE="reporteGanancia" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="reportePatrimonio::#vistas#reportes#reportePatrimonio.xhtml"
+    NAME="output38" PATH="/vistas/reportes/reportePatrimonio.xhtml"
+    TARGET="rules:#vistas#reportes#reportePatrimonio.xhtml"
+    TITLE="reportePatrimonio" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="rubros::#vistas#rubros#rubros.xhtml"
+    NAME="output39" PATH="/vistas/rubros/rubros.xhtml"
+    TARGET="rules:#vistas#rubros#rubros.xhtml" TITLE="rubros" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="rubro::#vistas#rubros#rubro.xhtml"
+    NAME="output40" PATH="/vistas/rubros/rubro.xhtml"
+    TARGET="rules:#vistas#rubros#rubro.xhtml" TITLE="rubro" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="accesorios::#vistas#accesorios#accesorios.xhtml" NAME="output41"
+    PATH="/vistas/accesorios/accesorios.xhtml"
+    TARGET="rules:#vistas#accesorios#accesorios.xhtml"
+    TITLE="accesorios" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="accesorio::#vistas#accesorios#accesorio.xhtml" NAME="output42"
+    PATH="/vistas/accesorios/accesorio.xhtml"
+    TARGET="rules:#vistas#accesorios#accesorio.xhtml" TITLE="accesorio" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="stock::#vistas#productos#stock.xhtml"
+    NAME="output43" PATH="/vistas/productos/stock.xhtml"
+    TARGET="rules:#vistas#productos#stock.xhtml" TITLE="stock" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="usados::#vistas#usados#usados.xhtml"
+    NAME="output44" PATH="/vistas/usados/usados.xhtml"
+    TARGET="rules:#vistas#usados#usados.xhtml" TITLE="usados" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="usado::#vistas#usados#usado.xhtml"
+    NAME="output45" PATH="/vistas/usados/usado.xhtml"
+    TARGET="rules:#vistas#usados#usado.xhtml" TITLE="usado" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="stockUsados::#vistas#usados#stockUsados.xhtml" NAME="output46"
+    PATH="/vistas/usados/stockUsados.xhtml"
+    TARGET="rules:#vistas#usados#stockUsados.xhtml" TITLE="stockUsados" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="reporteGananciaVenta::#vistas#reportes#reporteGananciaVenta.xhtml"
+    NAME="output47" PATH="/vistas/reportes/reporteGananciaVenta.xhtml"
+    TARGET="rules:#vistas#reportes#reporteGananciaVenta.xhtml"
+    TITLE="reporteGananciaVenta" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="sinstocks::#vistas#productos#sinstocks.xhtml" NAME="output48"
+    PATH="/vistas/productos/sinstocks.xhtml"
+    TARGET="rules:#vistas#productos#sinstocks.xhtml" TITLE="sinstocks" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="garantiasproveedores::#vistas#garantias#garantiasproveedores.xhtml"
+    NAME="output49" PATH="/vistas/garantias/garantiasproveedores.xhtml"
+    TARGET="rules:#vistas#garantias#garantiasproveedores.xhtml"
+    TITLE="garantiasproveedores" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="garantiaproveedor::#vistas#garantias#garantiaproveedor.xhtml"
+    NAME="output50" PATH="/vistas/garantias/garantiaproveedor.xhtml"
+    TARGET="rules:#vistas#garantias#garantiaproveedor.xhtml"
+    TITLE="garantiaproveedor" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="reporteDinamico::#vistas#reportes#reporteDinamico.xhtml"
+    NAME="output51" PATH="/vistas/reportes/reporteDinamico.xhtml"
+    TARGET="rules:#vistas#reportes#reporteDinamico.xhtml"
+    TITLE="reporteDinamico" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="reporteStock::#vistas#reportes#reporteStock.xhtml"
+    NAME="output52" PATH="/vistas/reportes/reporteStock.xhtml"
+    TARGET="rules:#vistas#reportes#reporteStock.xhtml"
+    TITLE="reporteStock" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="mensajes::#vistas#mensajes#mensajes.xhtml"
+    NAME="output53" PATH="/vistas/mensajes/mensajes.xhtml"
+    TARGET="rules:#vistas#mensajes#mensajes.xhtml" TITLE="mensajes" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="tecnicos::#vistas#tecnicos#tecnicos.xhtml"
+    NAME="output54" PATH="/vistas/tecnicos/tecnicos.xhtml"
+    TARGET="rules:#vistas#tecnicos#tecnicos.xhtml" TITLE="tecnicos" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="tecnico::#vistas#tecnicos#tecnico.xhtml"
+    NAME="output55" PATH="/vistas/tecnicos/tecnico.xhtml"
+    TARGET="rules:#vistas#tecnicos#tecnico.xhtml" TITLE="tecnico" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#vistas#garantias#editargarantiacliente.xhtml"
+  PATH="/vistas/garantias/editargarantiacliente.xhtml"
+  SHAPE="1416,8496,50,25" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#vistas#garantias#editargarantiacliente.xhtml:0"
+   NAME="item" PATH="/vistas/garantias/editargarantiacliente.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="index::#index.xhtml" NAME="output"
+    PATH="/index.xhtml" TARGET="rules:#index.xhtml" TITLE="index" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="clientes::#vistas#clientes#clientes.xhtml"
+    NAME="output1" PATH="/vistas/clientes/clientes.xhtml"
+    TARGET="rules:#vistas#clientes#clientes.xhtml" TITLE="clientes" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT ID="cliente::#vistas#clientes#cliente.xhtml"
     NAME="output2" PATH="/vistas/clientes/cliente.xhtml"
     TARGET="rules:#vistas#clientes#cliente.xhtml" TITLE="cliente" model-entity="JSFProcessItemOutput"/>

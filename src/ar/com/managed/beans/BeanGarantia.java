@@ -2656,6 +2656,48 @@ public class BeanGarantia implements Serializable {
 		return retorno;
 	}
 	
+	public String editarCliente() {
+		String retorno = "";	
+		FacesMessage msg = null;
+		try {
+			if (!garantiasCliente.getFalla().isEmpty() && garantiasCliente.getFalla() != null && idTecnico != 0) {				
+				tecnico = tecnicoDAO.get(idTecnico);
+				garantiasCliente.setFechaMod(new Date());
+				garantiasCliente.setUsuario3(usuario);
+				garantiasCliente.setTecnico(tecnico);
+				int uptGarantia = garantiasClienteDAO.update(garantiasCliente);
+				if (uptGarantia != 0) {
+					idCliente = 0;
+					idProducto = 0;
+					idTecnico = 0;
+					listaGarantiasClientes = new ArrayList<GarantiasCliente>();
+					filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
+					listaGarantiasClientes = garantiasClienteDAO.getLista();
+					filteredGarantiasClientes = listaGarantiasClientes;
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Garantía registrada!", null);
+					retorno = "garantiasclientes";
+				} else {
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket de garantía.", null);
+				}				
+			} else {
+				String mensaje = "";				
+				if (garantiasCliente.getFalla().isEmpty() || garantiasCliente.getFalla() == null) {
+					mensaje = mensaje + "Falla, ";
+				}
+				if (idTecnico == 0) {
+					mensaje = mensaje + "Técnico.";
+				}
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Los siguientes parámetros no pueden estar vacíos. "
+						+ "Parámetros: " + mensaje, null);
+			}
+		} catch(Exception e) {
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al iniciar el Ticket de Garantía. "
+					+ "Error original: " + e.getMessage(), null);
+		}		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		return retorno;
+	}
+	
 	public String guardarProveedor() {
 		String retorno = "";	
 		FacesMessage msg = null;

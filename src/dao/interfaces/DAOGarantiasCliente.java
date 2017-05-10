@@ -29,6 +29,8 @@ public interface DAOGarantiasCliente {
 	
 	public List<GarantiasCliente> getLista(Cliente cliente, Producto productoFalla);
 	
+	public List<GarantiasCliente> getLista(Date fechaInicio, Date fechaFin);
+	
 	public List<GarantiasCliente> getLista(boolean finalizado);
 	
 	public List<GarantiasCliente> getLista(boolean finalizado, Date fechaInicio, Date fechaFin);

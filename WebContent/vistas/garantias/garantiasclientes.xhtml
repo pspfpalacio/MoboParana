@@ -80,7 +80,7 @@
 				<br/>
 				<p:dataTable id="contenedorGarantias" widgetVar="garantiaBusqueda" var="garantia"
 				value="#{beanGarantia.listaGarantiasClientes}" paginator="true" rows="30" resizableColumns="true"
-				filteredValue="#{beanGarantia.filteredGarantiasClientes}" emptyMessage="No existen Garantias" sortMode="multiple">
+				emptyMessage="No existen Garantias" sortMode="multiple">
 					<f:facet name="header">
 						<p:commandButton value="Abrir Ticket" action="#{beanGarantia.goNuevaGarantiaCliente()}"/>
 						<p:outputLabel value="Garantias" />
@@ -188,6 +188,9 @@
 		    				style="width:430px;" rows="1" cols="1"/>
 		    				<p:outputLabel value="Cliente: " />
 		    				<h:inputText value="#{beanGarantia.garantiasCliente.cliente.nombreNegocio}" disabled="true" />
+		    				<p:outputLabel value="Técnico: " />
+		    				<h:inputText value="#{beanGarantia.garantiasCliente.tecnico.apellidoNombre}" disabled="true" rendered="#{beanGarantia.garantiasCliente.tecnico != null}" />
+		    				<h:inputText value=" - " disabled="true" rendered="#{beanGarantia.garantiasCliente.tecnico == null}" />
 		    				<p:outputLabel value="Falla inicial: " />
 		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.falla}" style="width:100%;" rows="3" 
 		    				disabled="true"/>
@@ -219,6 +222,9 @@
 		    				style="width:430px;" rows="1" cols="1"/>
 		    				<p:outputLabel value="Cliente: " />
 		    				<h:inputText value="#{beanGarantia.garantiasCliente.cliente.nombreNegocio}" disabled="true" />
+		    				<p:outputLabel value="Técnico: " />
+		    				<h:inputText value="#{beanGarantia.garantiasCliente.tecnico.apellidoNombre}" disabled="true" rendered="#{beanGarantia.garantiasCliente.tecnico != null}" />
+		    				<h:inputText value=" - " disabled="true" rendered="#{beanGarantia.garantiasCliente.tecnico == null}" />
 		    				<p:outputLabel value="Falla inicial: " />
 		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.falla}" style="width:100%;" rows="3" 
 		    				disabled="true"/>
