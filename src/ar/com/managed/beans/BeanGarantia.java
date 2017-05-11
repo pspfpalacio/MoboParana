@@ -4562,6 +4562,11 @@ public class BeanGarantia implements Serializable {
 			} else {
 				garantias.setTipo("NO");
 			}
+			if (garan.getTecnico() != null) {
+				garantias.setTecnico(garan.getTecnico().getApellidoNombre());
+			} else {
+				garantias.setTecnico(" - ");
+			}
 			listGarantia.add(garantias);
 		}
 		if(idCliente == 0){
@@ -4645,6 +4650,11 @@ public class BeanGarantia implements Serializable {
 			garantias.setPersona(garanCliente.getCliente().getApellidoNombre());
 			garantias.setProducto(garanCliente.getTelefonoFalla());
 			garantias.setResolucion(garanCliente.getResolucion());
+			if (garanCliente.getTecnico() != null) {
+				garantias.setTecnico(garanCliente.getTecnico().getApellidoNombre());
+			} else {
+				garantias.setTecnico(" - ");
+			}
 			garantias.setTipo("Ticket de Garantía Cerrado");
 		} else {
 			garantias.setAccion(" - ");
@@ -4657,6 +4667,11 @@ public class BeanGarantia implements Serializable {
 			garantias.setPersona(garanCliente.getCliente().getApellidoNombre());
 			garantias.setProducto(garanCliente.getTelefonoFalla());
 			garantias.setResolucion(" - ");
+			if (garanCliente.getTecnico() != null) {
+				garantias.setTecnico(garanCliente.getTecnico().getApellidoNombre());
+			} else {
+				garantias.setTecnico(" - ");
+			}
 			garantias.setTipo("Ticket de Garantía Abierto");
 		}
 		listGarantia.add(garantias);
