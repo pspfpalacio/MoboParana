@@ -92,7 +92,7 @@
 					</p:column>
 					
 					<p:column headerText="Último Costo" filterBy="#{producto.precioCosto}" 
-					filterStyle="display:none;" style="text-align:right;">
+					filterStyle="display:none;" style="text-align:right;width:110px;" >
 						<h:outputText value="$" />
 						<h:outputText value="#{producto.precioCosto}" >
 							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
@@ -100,27 +100,27 @@
 					</p:column>
 					
 					<p:column headerText="C. Promedio" filterBy="#{producto.costoPromedio}" 
-					filterStyle="display:none;" style="text-align:right;">
+					filterStyle="display:none;" style="text-align:right;width:110px;">
 						<h:outputText value="$" />
 						<h:outputText value="#{producto.costoPromedio}" >
 							<f:convertNumber maxFractionDigits="2" pattern="#,##0"/>
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Descripción">
+					<p:column headerText="Descripción" style="text-align:center;width:100px;">
 						<h:outputText value="#{producto.descripcion}" />
 					</p:column>					
 					
-					<p:column headerText="Stock" style="text-align:center;">
+					<p:column headerText="Stock" style="text-align:center;width:60px;">
 						<h:outputText value="#{beanProducto.getEnStock(producto)}" />
 					</p:column>
 					
-					<p:column headerText="En Consignación" style="text-align:center;">
+					<p:column headerText="En Consig." style="text-align:center;width:85px;">
 						<p:commandLink value="#{beanProducto.getEnConsignacion(producto)}" title="Ver" oncomplete="PF('dialogo').show()" 
 						action="#{beanProducto.verEnConsignacion(producto)}" update=":formulario:panel"/>
 					</p:column>
 					
-					<p:column headerText="Ajuste de Stock" style="text-align:center;">
+					<p:column headerText="Ajuste de Stock" style="text-align:center;width:130px;">
 						<p:commandButton icon="ui-icon-clipboard" action="#{beanProducto.verStock(producto)}" />
 					</p:column>
 				</p:dataTable>

@@ -164,7 +164,7 @@ public class DAOGarantiasClienteImpl implements Serializable, DAOGarantiasClient
 	public List<GarantiasCliente> getLista(Cliente cliente) {
 		inicializar();
 		Query locQuery = em.createQuery("SELECT g FROM GarantiasCliente g WHERE g.estado = :pEstado "
-				+ "AND g.cliente = :pCliente", GarantiasCliente.class);
+				+ "AND g.cliente = :pCliente ORDER BY g.fechaIngreso DESC", GarantiasCliente.class);
 		locQuery.setParameter("pEstado", true);
 		locQuery.setParameter("pCliente", cliente);
 		List<GarantiasCliente> lista = locQuery.getResultList();
@@ -174,7 +174,7 @@ public class DAOGarantiasClienteImpl implements Serializable, DAOGarantiasClient
 	public List<GarantiasCliente> getLista(Producto productoFalla) {
 		inicializar();
 		Query locQuery = em.createQuery("SELECT g FROM GarantiasCliente g WHERE g.estado = :pEstado "
-				+ "AND g.producto1 = :pProductoFalla", GarantiasCliente.class);
+				+ "AND g.producto1 = :pProductoFalla ORDER BY g.fechaIngreso DESC", GarantiasCliente.class);
 		locQuery.setParameter("pEstado", true);
 		locQuery.setParameter("pProductoFalla", productoFalla);
 		List<GarantiasCliente> lista = locQuery.getResultList();
@@ -184,7 +184,7 @@ public class DAOGarantiasClienteImpl implements Serializable, DAOGarantiasClient
 	public List<GarantiasCliente> getLista(Cliente cliente, Producto productoFalla) {
 		inicializar();
 		Query locQuery = em.createQuery("SELECT g FROM GarantiasCliente g WHERE g.estado = :pEstado "
-				+ "AND g.cliente = :pCliente AND g.producto1 = :pProductoFalla", GarantiasCliente.class);
+				+ "AND g.cliente = :pCliente AND g.producto1 = :pProductoFalla ORDER BY g.fechaIngreso DESC", GarantiasCliente.class);
 		locQuery.setParameter("pEstado", true);
 		locQuery.setParameter("pCliente", cliente);
 		locQuery.setParameter("pProductoFalla", productoFalla);
@@ -196,10 +196,51 @@ public class DAOGarantiasClienteImpl implements Serializable, DAOGarantiasClient
 			Date fechaFin) {
 		inicializar();
 		Query locQuery = em.createQuery("SELECT g FROM GarantiasCliente g WHERE g.estado = :pEstado AND "
-				+ "g.fechaIngreso BETWEEN :pInicio AND :pFin", GarantiasCliente.class);
+				+ "g.fechaIngreso BETWEEN :pInicio AND :pFin ORDER BY g.fechaIngreso DESC", GarantiasCliente.class);
 		locQuery.setParameter("pEstado", true);		
 		locQuery.setParameter("pInicio", fechaInicio);
 		locQuery.setParameter("pFin", fechaFin);
+		List<GarantiasCliente> lista = locQuery.getResultList();
+		return lista;
+	}
+	
+	public List<GarantiasCliente> getLista(Date fechaInicio,
+			Date fechaFin, Cliente cliente) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT g FROM GarantiasCliente g WHERE g.estado = :pEstado AND "
+				+ "g.fechaIngreso BETWEEN :pInicio AND :pFin AND g.cliente = :pCliente ORDER BY g.fechaIngreso DESC", GarantiasCliente.class);
+		locQuery.setParameter("pEstado", true);		
+		locQuery.setParameter("pInicio", fechaInicio);
+		locQuery.setParameter("pFin", fechaFin);
+		locQuery.setParameter("pCliente", cliente);
+		List<GarantiasCliente> lista = locQuery.getResultList();
+		return lista;
+	}
+	
+	public List<GarantiasCliente> getLista(Date fechaInicio,
+			Date fechaFin, Producto productoFalla) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT g FROM GarantiasCliente g WHERE g.estado = :pEstado AND "
+				+ "g.fechaIngreso BETWEEN :pInicio AND :pFin AND g.producto1 = :pProductoFalla ORDER BY g.fechaIngreso DESC", GarantiasCliente.class);
+		locQuery.setParameter("pEstado", true);		
+		locQuery.setParameter("pInicio", fechaInicio);
+		locQuery.setParameter("pFin", fechaFin);
+		locQuery.setParameter("pProductoFalla", productoFalla);
+		List<GarantiasCliente> lista = locQuery.getResultList();
+		return lista;
+	}
+	
+	public List<GarantiasCliente> getLista(Date fechaInicio,
+			Date fechaFin, Cliente cliente, Producto productoFalla) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT g FROM GarantiasCliente g WHERE g.estado = :pEstado AND "
+				+ "g.fechaIngreso BETWEEN :pInicio AND :pFin AND g.cliente = :pCliente AND g.producto1 = :pProductoFalla "
+				+ "ORDER BY g.fechaIngreso DESC", GarantiasCliente.class);
+		locQuery.setParameter("pEstado", true);		
+		locQuery.setParameter("pInicio", fechaInicio);
+		locQuery.setParameter("pFin", fechaFin);
+		locQuery.setParameter("pCliente", cliente);
+		locQuery.setParameter("pProductoFalla", productoFalla);
 		List<GarantiasCliente> lista = locQuery.getResultList();
 		return lista;
 	}

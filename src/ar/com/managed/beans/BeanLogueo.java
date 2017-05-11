@@ -1503,7 +1503,7 @@ public class BeanLogueo implements Serializable {
 			}
 			producto.setPrecioCosto(ultimoCosto);
 			int updateo = productoDAO.update(producto);
-			System.out.println("Producto " + producto.getNombre() + " Actualizó: " + updateo + " con ultimo costo: " + ultimoCosto);
+			System.out.println("Móvil: " + producto.getNombre() + " Actualizó: " + updateo + " con ultimo costo: " + ultimoCosto);
 		}
 	}
 

@@ -2529,6 +2529,42 @@ public class BeanGarantia implements Serializable {
 		}
 	}
 	
+	public void buscarCliente() {
+		listaGarantiasClientes = new ArrayList<GarantiasCliente>();
+		if (fechaDesde == null && fechaHasta == null && idCliente == 0 && idProducto == 0) {
+			listaGarantiasClientes = garantiasClienteDAO.getLista();
+		}
+		if (fechaDesde != null && fechaHasta != null && idCliente == 0 && idProducto == 0) {
+			listaGarantiasClientes = garantiasClienteDAO.getLista(fechaDesde, fechaHasta);
+		}
+		if (fechaDesde == null && fechaHasta == null && idCliente != 0 && idProducto != 0) {
+			Cliente cli = clienteDAO.get(idCliente);
+			Producto prod = productoDAO.get(idProducto);
+			listaGarantiasClientes = garantiasClienteDAO.getLista(cli, prod);
+		}
+		if (fechaDesde == null && fechaHasta == null && idCliente != 0 && idProducto == 0) {
+			Cliente cli = clienteDAO.get(idCliente);
+			listaGarantiasClientes = garantiasClienteDAO.getLista(cli);
+		}
+		if (fechaDesde == null && fechaHasta == null && idCliente == 0 && idProducto != 0) {
+			Producto prod = productoDAO.get(idProducto);
+			listaGarantiasClientes = garantiasClienteDAO.getLista(prod);
+		}
+		if (fechaDesde != null && fechaHasta != null && idCliente != 0 && idProducto == 0) {
+			Cliente cli = clienteDAO.get(idCliente);
+			listaGarantiasClientes = garantiasClienteDAO.getLista(fechaDesde, fechaHasta, cli);
+		}
+		if (fechaDesde != null && fechaHasta != null && idCliente == 0 && idProducto != 0) {
+			Producto prod = productoDAO.get(idProducto);
+			listaGarantiasClientes = garantiasClienteDAO.getLista(fechaDesde, fechaHasta, prod);
+		}
+		if (fechaDesde != null && fechaHasta != null && idCliente != 0 && idProducto != 0) {
+			Cliente cli = clienteDAO.get(idCliente);
+			Producto prod = productoDAO.get(idProducto);
+			listaGarantiasClientes = garantiasClienteDAO.getLista(fechaDesde, fechaHasta, cli, prod);
+		}
+	}
+	
 	public String guardarCliente() {
 		String retorno = "";	
 		FacesMessage msg = null;
