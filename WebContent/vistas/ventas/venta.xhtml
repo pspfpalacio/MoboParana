@@ -45,7 +45,7 @@
 		<div class="wrapper">
 			<ui:include src="/includes/header.xhtml" />
 			<h:form id="formulario" onkeypress="return event.keyCode != 13">
-			<p:panel style="background:#D27C7A;min-height:900px;">
+			<p:panel id="panelGeneral" style="background:#D27C7A;min-height:900px;">
 				<p:growl id="messages" showDetail="false" />
 				<ui:include src="/includes/menubar.xhtml" />
 				<br/>
@@ -66,7 +66,7 @@
     				<p:selectOneMenu value="#{beanVenta.idCliente}" filter="true" filterMatchMode="contains"
     				style="width:250px;" disabled="#{!beanVenta.nueva}">
     					<p:ajax event="change" listener="#{beanVenta.onChangeCliente()}" 
-    					update="cabecera, tipoVenta, saldo, saldo2, consumidor, consumidor2"/>
+    					update="cabecera, tipoVenta, saldo, saldo2, consumidor, consumidor2, panelFooter"/>
     					<f:selectItem itemLabel="Venta Directa" itemValue="0"/>
     					<f:selectItems value="#{beanVenta.listaClientes}" var="cli" itemLabel="#{cli.nombreNegocio}"
     					itemValue="#{cli.id}"/>
@@ -76,15 +76,23 @@
     				<p:selectOneRadio id="tipoVenta" value="#{beanVenta.tipo}" disabled="#{beanVenta.modificarTipo}">
     					<f:selectItem itemLabel="c.c." itemValue="c.c."/>
     					<f:selectItem itemLabel="ctdo." itemValue="ctdo."/>
-    				</p:selectOneRadio>
+    				</p:selectOneRadio>   				
     				
     				<p:outputLabel id="saldo" rendered="#{beanVenta.idCliente != 0}" value="Saldo ($): " />
     				<p:inputText id="saldo2" rendered="#{beanVenta.idCliente != 0}" value="#{beanVenta.cliente.saldo}" disabled="true">
     					<f:convertNumber pattern="#,##0.00" maxFractionDigits="2"/>
-    				</p:inputText>
+    				</p:inputText>    				
     				
     				<p:outputLabel id="consumidor" rendered="#{beanVenta.idCliente == 0}" value="Cons. Final: " />
     				<p:inputText id="consumidor2" rendered="#{beanVenta.idCliente == 0}" value="#{beanVenta.venta.consumidorFinal}" />
+    				
+    				<p:outputLabel value="Lista de Precio: " />
+    				<p:selectOneMenu id="lista" value="#{beanVenta.idListaPrecio}" filter="true" filterMatchMode="contains"
+    				style="width:250px;">
+    					<p:ajax event="change" listener="#{beanVenta.onChangeListaPrecio()}" update="precio"/>
+    					<f:selectItems value="#{beanVenta.listaPrecios}" var="lista" itemLabel="#{lista.nombre}"
+    					itemValue="#{lista.id}"/>
+    				</p:selectOneMenu>
     				
     			</p:panelGrid>
     			<p:separator />
@@ -162,14 +170,8 @@
    						<h:outputText value="#{detalle.cantidad}" />
    						<p:rowToggler rendered="#{!detalle.accesorio}"/>
    					</p:column>
-   					<p:column headerText="Producto">
+   					<p:column headerText="Marca y modelo">
    						<h:outputText value="#{detalle.producto.nombre}" />
-   					</p:column>
-   					<p:column headerText="Precio de Venta" style="width:150px;text-align:right;">
-   						<h:outputText value="$" />
-   						<h:outputText value="#{detalle.precioVenta}" >
-   							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
-   						</h:outputText>
    					</p:column>
    					<p:column headerText="Subtotal" style="width:150px;text-align:right;">
    						<h:outputText value="$" />
@@ -182,15 +184,24 @@
    						update="detalleTable" />
    					</p:column>
    					<p:rowExpansion>
-   						<p:dataList value="#{detalle.ventasDetalleUnidads}" var="unidad" type="unordered" 
-   						emptyMessage="No existen items" style="width:100%;" itemType="none">
+   						<p:dataTable value="#{detalle.ventasDetalleUnidads}" var="unidad"  
+   						emptyMessage="No existen items" style="width:100%;" resizableColumns="true">
    							<f:facet name="header">
-   								<h:outputText value="Números de Imei" />
-   							</f:facet>	
-   							<p:commandLink style="float:left;margin-right:10px" styleClass="ui-icon ui-icon-close" disabled="#{beanVenta.noBajaUnidad(unidad)}"
-				        	action="#{beanVenta.quitarUnidadDetalle(detalle, unidad)}" update=":formulario:detalleTable" />
-   							<h:outputText value="#{unidad.nroImei}" />
-   						</p:dataList>
+   								<h:outputText value="Móviles" />
+   							</f:facet>
+   							<p:column headerText="Quitar" style="width:45px;text-align:center;">				        		
+				        		<p:commandLink style="float:left;margin-right:10px" styleClass="ui-icon ui-icon-close" disabled="#{beanVenta.noBajaUnidad(unidad)}"
+				        		action="#{beanVenta.quitarUnidadDetalle(detalle, unidad)}" update=":formulario:detalleTable" />
+				        	</p:column>
+				        	<p:column headerText="Nro Imei">
+   								<h:outputText value="#{unidad.nroImei}" />
+   							</p:column>
+   							<p:column headerText="Precio Unitario" style="width:130px;text-align:center;">
+   								<h:outputText value="#{unidad.precioVenta}" >
+   									<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+   								</h:outputText>
+   							</p:column>
+   						</p:dataTable>
    					</p:rowExpansion>
    					<f:facet name="footer" style="text-align:right;">
    						<p:column style="text-align:right;">
@@ -204,13 +215,13 @@
    						</p:column>
    					</f:facet>
    				</p:dataTable>
-   				<p:panelGrid columns="2" style="width:100%;">
+   				<p:panelGrid id="panelFooter" columns="2" style="width:100%;">
    					<f:facet name="header">
-   						<p:commandButton value="Aceptar" onclick="return confirm('ESTA SEGURO QUE QUIERE CONFIRMAR LA VENTA?')" action="#{beanVenta.guardar()}" 
+   						<p:commandButton value="Aceptar" onclick="return confirm('REGISTRAR VENTA #{beanVenta.tipo.toUpperCase()}?')" action="#{beanVenta.guardar()}" 
    						rendered="#{beanVenta.nueva}"/>
-   						<p:commandButton value="Aceptar" onclick="return confirm('ESTA SEGURO QUE QUIERE CONFIRMAR LA MODIFICAIÓN DE LA VENTA?')" action="#{beanVenta.modifcar()}" 
+   						<p:commandButton value="Aceptar" onclick="return confirm('REGISTRAR EDICIÓN VENTA #{beanVenta.tipo.toUpperCase()}?')" action="#{beanVenta.modifcar()}" 
    						rendered="#{!beanVenta.nueva}"/>
-   						<p:commandButton value="Cancelar" onclick="return confirm('ESTA SEGURO QUE DESEA CANCELAR LA VENTA Y VOLVER?')" action="ventas"/>
+   						<p:commandButton value="Cancelar" onclick="return confirm('CANCELAR VENTA Y VOLVER?')" action="ventas"/>
    					</f:facet>
    				</p:panelGrid>		
    			</p:panel>	

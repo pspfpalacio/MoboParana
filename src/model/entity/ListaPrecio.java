@@ -74,6 +74,14 @@ public class ListaPrecio implements Serializable {
 	//bi-directional many-to-one association to EConsignacionsDetalleUnidad
 	@OneToMany(mappedBy="listaPrecio")
 	private List<EConsignacionsDetalleUnidad> EConsignacionsDetalleUnidads;
+	
+	//bi-directional many-to-one association to VentasDetalle
+	@OneToMany(mappedBy="listaPrecio")
+	private List<VentasDetalle> ventasDetalles;
+	
+	//bi-directional many-to-one association to VentasDetalleUnidad
+	@OneToMany(mappedBy="listaPrecio")
+	private List<VentasDetalleUnidad> ventasDetalleUnidads;
 
 	public ListaPrecio() {
 	}
@@ -238,6 +246,50 @@ public class ListaPrecio implements Serializable {
 		EConsignacionsDetalleUnidad.setListaPrecio(null);
 
 		return EConsignacionsDetalleUnidad;
+	}
+	
+	public List<VentasDetalle> getVentasDetalles() {
+		return this.ventasDetalles;
+	}
+
+	public void setVentasDetalles(List<VentasDetalle> ventasDetalles) {
+		this.ventasDetalles = ventasDetalles;
+	}
+
+	public VentasDetalle addVentasDetalle(VentasDetalle ventasDetalle) {
+		getVentasDetalles().add(ventasDetalle);
+		ventasDetalle.setListaPrecio(this);
+
+		return ventasDetalle;
+	}
+
+	public VentasDetalle removeVentasDetalle(VentasDetalle ventasDetalle) {
+		getVentasDetalles().remove(ventasDetalle);
+		ventasDetalle.setListaPrecio(null);
+
+		return ventasDetalle;
+	}
+	
+	public List<VentasDetalleUnidad> getVentasDetalleUnidads() {
+		return this.ventasDetalleUnidads;
+	}
+
+	public void setVentasDetalleUnidads(List<VentasDetalleUnidad> ventasDetalleUnidads) {
+		this.ventasDetalleUnidads = ventasDetalleUnidads;
+	}
+
+	public VentasDetalleUnidad addVentasDetalleUnidad(VentasDetalleUnidad ventasDetalleUnidad) {
+		getVentasDetalleUnidads().add(ventasDetalleUnidad);
+		ventasDetalleUnidad.setListaPrecio(this);
+
+		return ventasDetalleUnidad;
+	}
+
+	public VentasDetalleUnidad removeVentasDetalleUnidad(VentasDetalleUnidad ventasDetalleUnidad) {
+		getVentasDetalleUnidads().remove(ventasDetalleUnidad);
+		ventasDetalleUnidad.setListaPrecio(null);
+
+		return ventasDetalleUnidad;
 	}
 
 }
