@@ -29,6 +29,7 @@ import ar.com.clases.reportes.VentasRanking;
 import dao.interfaces.DAOCaja;
 import dao.interfaces.DAOCliente;
 import dao.interfaces.DAOCompra;
+import dao.interfaces.DAOCuentaCorriente;
 import dao.interfaces.DAOGasto;
 import dao.interfaces.DAOProducto;
 import dao.interfaces.DAOProveedor;
@@ -44,6 +45,8 @@ import dao.interfaces.DAOVentaDetalleUnidad;
 import model.entity.Caja;
 import model.entity.Cliente;
 import model.entity.Compra;
+import model.entity.CuentasCorrientesCliente;
+import model.entity.CuentasCorrientesProveedore;
 import model.entity.Gasto;
 import model.entity.Producto;
 import model.entity.Proveedore;
@@ -112,6 +115,9 @@ public class BeanReporte implements Serializable {
 	
 	@ManagedProperty(value = "#{BeanVentaConsignacionDetalleUnidadDAO}")
 	private DAOVentaConsignacionDetalleUnidad ventaConsignacionDetalleUnidadDAO;
+	
+	@ManagedProperty(value = "#{BeanCuentaCorrienteDAO}")
+	private DAOCuentaCorriente cuentaCorrienteDAO;
 	
 	private List<RankingCliente> listaRankingCliente;
 	private List<RankingCliente> filteredRankingCliente;
@@ -282,6 +288,14 @@ public class BeanReporte implements Serializable {
 	public void setVentaConsignacionDetalleUnidadDAO(
 			DAOVentaConsignacionDetalleUnidad ventaConsignacionDetalleUnidadDAO) {
 		this.ventaConsignacionDetalleUnidadDAO = ventaConsignacionDetalleUnidadDAO;
+	}
+
+	public DAOCuentaCorriente getCuentaCorrienteDAO() {
+		return cuentaCorrienteDAO;
+	}
+
+	public void setCuentaCorrienteDAO(DAOCuentaCorriente cuentaCorrienteDAO) {
+		this.cuentaCorrienteDAO = cuentaCorrienteDAO;
 	}
 
 	public List<RankingCliente> getListaRankingCliente() {
@@ -1583,11 +1597,11 @@ public class BeanReporte implements Serializable {
 		totalStockAccesorios = 0;
 		List<Proveedore> listaProveedores = proveedorDAO.getLista(true);
 		for (Proveedore proveedore : listaProveedores) {
-			totalccProveedor = totalccProveedor + proveedore.getSaldo();
+			totalccProveedor = totalccProveedor + getSaldoProveedor(proveedore);
 		}
 		List<Cliente> listaClientes = clienteDAO.getLista(true);
 		for (Cliente cliente : listaClientes) {
-			totalccCliente = totalccCliente +  cliente.getSaldo();
+			totalccCliente = totalccCliente + getSaldoCliente(cliente);
 		}
 		Rubro rub = new Rubro();
 		rub.setId(1);
@@ -1619,6 +1633,30 @@ public class BeanReporte implements Serializable {
 		totalPasivos = totalccProveedor + totalGastos;
 		totalPatrimonio = totalActivos - totalPasivos;
 		return "reportePatrimonio";
+	}
+	
+	public float getSaldoCliente(Cliente cli) {
+		List<CuentasCorrientesCliente> listCuentasCorrientes = cuentaCorrienteDAO.getLista(cli);
+//		DecimalFormat formatoMonto = new DecimalFormat("$###,##0.00");
+		float saldo = 0;		
+		if (!listCuentasCorrientes.isEmpty()) {
+			CuentasCorrientesCliente ccCliente = listCuentasCorrientes.get(0);
+			saldo = ccCliente.getSaldo();
+		}
+//		String saldoCli = formatoMonto.format(saldo);
+		return saldo;
+	}
+	
+	public float getSaldoProveedor(Proveedore prov) {
+		List<CuentasCorrientesProveedore> listCuentasCorrientes = cuentaCorrienteDAO.getListaProveedor(prov);
+//		DecimalFormat formatoMonto = new DecimalFormat("$###,##0.00");
+		float saldo = 0;		
+		if (!listCuentasCorrientes.isEmpty()) {
+			CuentasCorrientesProveedore ccProveedor = listCuentasCorrientes.get(0);
+			saldo = ccProveedor.getSaldo();
+		}
+//		String saldoProv = formatoMonto.format(saldo);
+		return saldo;
 	}
 	
 	public void reportePatrimonio(){
