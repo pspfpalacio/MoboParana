@@ -68,27 +68,6 @@
 					</f:facet>
 					<p:row>
 				        <p:column style="font-weight: bold;">
-				        	Caja:
-				        </p:column>
-				        <p:column style="font-weight: bold;">
-				        	<p:outputLabel value="$"/>
-				        	<p:outputLabel id="montoCaja" value="#{beanReporte.totalCaja}">
-				        		<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
-				        	</p:outputLabel>
-				        </p:column>
-				 
-				        <p:column rowspan="2" style="font-weight: bold;">
-				        	CuentaCorriente - Proveedores:
-				        </p:column>
-				        <p:column rowspan="2" style="font-weight: bold;">
-				        	<p:outputLabel value="$"/>
-				        	<p:outputLabel id="montoProveedor" value="#{beanReporte.totalccProveedor}" >
-				        		<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
-				        	</p:outputLabel>
-				        </p:column>
-				    </p:row>
-				    <p:row>
-				        <p:column style="font-weight: bold;">
 				        	Stock - Accesorios:
 				        </p:column>
 				        <p:column style="font-weight: bold;">
@@ -96,7 +75,17 @@
 				        	<p:outputLabel id="montoProducto" value="#{beanReporte.totalStockAccesorios}">
 				        		<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
 				        	</p:outputLabel>
-				        </p:column>				        
+				        </p:column>	
+				 
+				        <p:column style="font-weight: bold;">
+				        	CuentaCorriente - Proveedores:
+				        </p:column>
+				        <p:column style="font-weight: bold;">
+				        	<p:outputLabel value="$"/>
+				        	<p:outputLabel id="montoProveedor" value="#{beanReporte.totalccProveedor}" >
+				        		<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+				        	</p:outputLabel>
+				        </p:column>
 				    </p:row>
 				    <p:row>
 				        <p:column style="font-weight: bold;">

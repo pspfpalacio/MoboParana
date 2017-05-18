@@ -644,6 +644,10 @@ public class BeanBuscar implements Serializable {
 			}
 			if(unidadMovil.getId() != 0 && idProducto == 0){
 				nroImei = unidadMovil.getNroImei();
+				if (unidadMovil.getBajaStock()) {
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El móvil ha sido dado de baja desde el stock, debe buscar y volver a guardar la compra para volver a habilitarlo.", null);
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+				}
 	//			UnidadMovil unidad = unidadMovilDAO.get(nroImei);
 				if(unidadMovil.getId() != 0){
 					producto = unidadMovil.getProducto();

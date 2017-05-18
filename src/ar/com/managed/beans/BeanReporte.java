@@ -139,6 +139,7 @@ public class BeanReporte implements Serializable {
 	private Ganancia gananciaObj;
 	private Date fechaDesde;
 	private Date fechaHasta;
+	private String encabezado;
 	private int cantidadTotal;
 	private int idProducto;
 	private int nroVenta;
@@ -456,6 +457,14 @@ public class BeanReporte implements Serializable {
 
 	public void setFechaHasta(Date fechaHasta) {
 		this.fechaHasta = fechaHasta;
+	}
+
+	public String getEncabezado() {
+		return encabezado;
+	}
+
+	public void setEncabezado(String encabezado) {
+		this.encabezado = encabezado;
 	}
 
 	public int getCantidadTotal() {
@@ -1363,71 +1372,76 @@ public class BeanReporte implements Serializable {
 					cantidadTotal = 0;
 					montoTotal = 0;
 					gananciaTotal = 0;
-					List<Ganancia> listAux = new ArrayList<Ganancia>();			
-					List<Venta> listaVenta = ventaDAO.getLista(true, fechaDesde, fechaHasta);
-					for (Venta venta : listaVenta) {
-						Ganancia ganancia = new Ganancia();
-						float costo = 0;
-						List<VentasDetalle> listaVentasDetalle = ventaDetalleDAO.getLista(venta);
-						for (VentasDetalle ventasDetalle : listaVentasDetalle) {
-							if(ventasDetalle.getAccesorio()){
-								List<StocksVentasDetalle> listaStocks = stockVentaDetalleDAO.getLista(ventasDetalle);
-								for (StocksVentasDetalle stocksVentasDetalle : listaStocks) {
-									Stock stock = stocksVentasDetalle.getStock();
-									int cantDetalle = stocksVentasDetalle.getCantidad();
-									float costoStock = stock.getPrecioCompra() * cantDetalle;
-									costo = costo + costoStock;
-								}
-							}else{
-								for (VentasDetalleUnidad ventasDetalleUnidad : ventaDetalleUnidadDAO.getLista(ventasDetalle)) {
-									costo = costo + ventasDetalleUnidad.getPrecioCompra();
+					List<Ganancia> listAux = new ArrayList<Ganancia>();		
+					if (onVenta) {
+						encabezado = "ventas";
+						List<Venta> listaVenta = ventaDAO.getLista(true, fechaDesde, fechaHasta);
+						for (Venta venta : listaVenta) {
+							Ganancia ganancia = new Ganancia();
+							float costo = 0;
+							List<VentasDetalle> listaVentasDetalle = ventaDetalleDAO.getLista(venta);
+							for (VentasDetalle ventasDetalle : listaVentasDetalle) {
+								if(ventasDetalle.getAccesorio()){
+									List<StocksVentasDetalle> listaStocks = stockVentaDetalleDAO.getLista(ventasDetalle);
+									for (StocksVentasDetalle stocksVentasDetalle : listaStocks) {
+										Stock stock = stocksVentasDetalle.getStock();
+										int cantDetalle = stocksVentasDetalle.getCantidad();
+										float costoStock = stock.getPrecioCompra() * cantDetalle;
+										costo = costo + costoStock;
+									}
+								}else{
+									for (VentasDetalleUnidad ventasDetalleUnidad : ventaDetalleUnidadDAO.getLista(ventasDetalle)) {
+										costo = costo + ventasDetalleUnidad.getPrecioCompra();
+									}
 								}
 							}
+							float fGanancia = venta.getMonto() - costo;
+							ganancia.setClase("Venta");
+							ganancia.setId(venta.getId());
+							ganancia.setFecha(venta.getFecha());
+							if (venta.getCliente() != null) {
+								ganancia.setCliente(venta.getCliente().getNombreNegocio());
+							} else {
+								ganancia.setCliente(venta.getConsumidorFinal());
+							}
+							ganancia.setTipo(venta.getTipo());
+							ganancia.setCosto(costo);
+							ganancia.setGanancia(fGanancia);
+							//ganancia.setListaVentasDetalle(listaVentasDetalle);
+							ganancia.setMonto(venta.getMonto());
+							cantidadTotal = cantidadTotal + 1;
+							montoTotal = montoTotal + venta.getMonto();
+							gananciaTotal = gananciaTotal + fGanancia;
+							listAux.add(ganancia);
 						}
-						float fGanancia = venta.getMonto() - costo;
-						ganancia.setClase("Venta");
-						ganancia.setId(venta.getId());
-						ganancia.setFecha(venta.getFecha());
-						if (venta.getCliente() != null) {
-							ganancia.setCliente(venta.getCliente().getNombreNegocio());
-						} else {
-							ganancia.setCliente(venta.getConsumidorFinal());
+					} else {
+						encabezado = "ventas de consignación";
+						List<VentasCon> listaVentasCon = ventaConsignacionDAO.getLista(true, fechaDesde, fechaHasta);
+						for (VentasCon ventCon : listaVentasCon) {
+							Ganancia ganancia = new Ganancia();
+							float costo = 0;
+							List<VentasConsDetalle> listaVentasConsDetalle = ventaConsignacionDetalleDAO.getLista(ventCon);
+							for (VentasConsDetalle ventasConsDetalle : listaVentasConsDetalle) {
+								List<VentasConsDetalleUnidad> listaUnidads = ventaConsignacionDetalleUnidadDAO.getLista(ventCon);
+								for (VentasConsDetalleUnidad ventasConsDetalleUnidad : listaUnidads) {
+									costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
+								}							
+							}
+							float fGanancia = ventCon.getMonto() - costo;
+							ganancia.setClase("Venta de Consignación");
+							ganancia.setId(ventCon.getId());
+							ganancia.setFecha(ventCon.getFecha());
+							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
+							ganancia.setTipo(ventCon.getTipo());
+							ganancia.setCosto(costo);
+							ganancia.setGanancia(fGanancia);
+							//ganancia.setListaVentasDetalle(listaVentasDetalle);
+							ganancia.setMonto(ventCon.getMonto());						
+							cantidadTotal = cantidadTotal + 1;
+							montoTotal = montoTotal + ventCon.getMonto();
+							gananciaTotal = gananciaTotal + fGanancia;
+							listAux.add(ganancia);
 						}
-						ganancia.setTipo(venta.getTipo());
-						ganancia.setCosto(costo);
-						ganancia.setGanancia(fGanancia);
-						//ganancia.setListaVentasDetalle(listaVentasDetalle);
-						ganancia.setMonto(venta.getMonto());
-						cantidadTotal = cantidadTotal + 1;
-						montoTotal = montoTotal + venta.getMonto();
-						gananciaTotal = gananciaTotal + fGanancia;
-						listAux.add(ganancia);
-					}
-					List<VentasCon> listaVentasCon = ventaConsignacionDAO.getLista(true, fechaDesde, fechaHasta);
-					for (VentasCon ventCon : listaVentasCon) {
-						Ganancia ganancia = new Ganancia();
-						float costo = 0;
-						List<VentasConsDetalle> listaVentasConsDetalle = ventaConsignacionDetalleDAO.getLista(ventCon);
-						for (VentasConsDetalle ventasConsDetalle : listaVentasConsDetalle) {
-							List<VentasConsDetalleUnidad> listaUnidads = ventaConsignacionDetalleUnidadDAO.getLista(ventCon);
-							for (VentasConsDetalleUnidad ventasConsDetalleUnidad : listaUnidads) {
-								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
-							}							
-						}
-						float fGanancia = ventCon.getMonto() - costo;
-						ganancia.setClase("Venta de Consignación");
-						ganancia.setId(ventCon.getId());
-						ganancia.setFecha(ventCon.getFecha());
-						ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
-						ganancia.setTipo(ventCon.getTipo());
-						ganancia.setCosto(costo);
-						ganancia.setGanancia(fGanancia);
-						//ganancia.setListaVentasDetalle(listaVentasDetalle);
-						ganancia.setMonto(ventCon.getMonto());						
-						cantidadTotal = cantidadTotal + 1;
-						montoTotal = montoTotal + ventCon.getMonto();
-						gananciaTotal = gananciaTotal + fGanancia;
-						listAux.add(ganancia);
 					}
 					Collections.sort(listAux, new Comparator(){
 						@Override
@@ -1600,7 +1614,13 @@ public class BeanReporte implements Serializable {
 		}
 		List<Cliente> listaClientes = clienteDAO.getLista(true);
 		for (Cliente cliente : listaClientes) {
+			System.out.println("Cliente " + cliente.getNombreNegocio());
+			System.out.println("Saldo en cliente " + cliente.getSaldo());
+			System.out.println("Saldo metodo " + getSaldoCliente(cliente));	
+			System.out.println("Total antes cc " + totalccCliente);
 			totalccCliente = totalccCliente + getSaldoCliente(cliente);
+			System.out.println("Total cc " + totalccCliente);
+			System.out.println(" ");
 		}
 		Rubro rub = new Rubro();
 		rub.setId(1);

@@ -72,7 +72,7 @@
 				paginator="true" rows="10" resizableColumns="true"
 				emptyMessage="No existen Ganancias en ese periodo de tiempo" rendered="#{beanReporte.gananciaVentas}">
 					<f:facet name="header">
-						<p:outputLabel value="Ganancia por Venta" />
+						<p:outputLabel value="Ganancia por #{beanReporte.encabezado}" />
 						<p:spacer width="20" />
 						<p:outputPanel style="float:right;">
 							<p:inputText id="globalFilter" onblur="PF('gananciaBusqueda').filter()" placeholder="Buscar"/>
