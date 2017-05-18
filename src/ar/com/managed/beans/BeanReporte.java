@@ -1605,7 +1605,12 @@ public class BeanReporte implements Serializable {
 		Rubro rub = new Rubro();
 		rub.setId(1);
 		List<UnidadMovil> listaUnidadMovils = unidadMovilDAO.getListaEnStock(true, true, false, rub);
+		System.out.println("size " + listaUnidadMovils.size());
 		for (UnidadMovil unidadMovil : listaUnidadMovils) {
+			System.out.println("Movil " + unidadMovil.getProducto().getNombre());
+			System.out.println("Imei " + unidadMovil.getNroImei());
+			System.out.println("Precio Compra " + unidadMovil.getPrecioCompra());
+			System.out.println("Total hasta el momento " + totalStockProductos);
 			totalStockProductos = totalStockProductos + unidadMovil.getPrecioCompra();
 		}
 //		rub = new Rubro();
