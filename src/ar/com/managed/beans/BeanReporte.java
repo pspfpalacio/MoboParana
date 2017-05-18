@@ -1265,7 +1265,6 @@ public class BeanReporte implements Serializable {
 		return "reporteGananciaVenta";
 	}
 	
-	//Cambiar este
 	public void buscarGananciaVenta() {
 		if (nroVenta != 0) {
 			gananciaVentas = false;
