@@ -126,9 +126,11 @@ public class DAOUnidadMovilImpl implements Serializable, DAOUnidadMovil {
 	
 	public UnidadMovil getBajaStock(String nroImei) {
 		inicializar();
-		Query locQuery = em.createQuery("SELECT u FROM UnidadMovil u WHERE u.nroImei = :pNroImei AND u.bajaStock = :pBajaStock", UnidadMovil.class);
+		Query locQuery = em.createQuery("SELECT u FROM UnidadMovil u WHERE u.nroImei = :pNroImei AND u.bajaStock = :pBajaStock "
+				+ "AND u.eliminado = :pEliminado", UnidadMovil.class);
 		locQuery.setParameter("pNroImei", nroImei);
 		locQuery.setParameter("pBajaStock", true);
+		locQuery.setParameter("pEliminado", false);
 		UnidadMovil unidadMovil = new UnidadMovil();
 		try{
 			unidadMovil = (UnidadMovil) locQuery.getSingleResult();

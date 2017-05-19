@@ -82,9 +82,7 @@
     			<p:panelGrid columns="1" style="width:100%;">
     				<f:facet name="header">
     					<p:commandButton icon="ui-icon-search" value="Buscar" action="#{beanBuscar.buscar()}" 
-    					update="panelGral, messages"
-		   				 
-		   				/>
+    					update="panelGral, messages" />
     				</f:facet>    				
     			</p:panelGrid>
     			<p:separator rendered="#{beanBuscar.panelProducto}"/>
@@ -102,8 +100,12 @@
     				<h:inputText value="#{beanBuscar.producto.descripcion}" disabled="true" style="width:100%;" />
     				<p:outputLabel value="Stock: " />
     				<h:inputText value="#{beanBuscar.producto.stock}" disabled="true" style="width:100%;" />
-    				<p:outputLabel value="#{beanBuscar.disponibleConsignacion}" rendered="#{beanBuscar.panelConsignacion}" />
+    				<p:outputLabel value="#{beanBuscar.disponibleConsignacion}" rendered="#{beanBuscar.panelConsignacion}" />    				
     			</p:panelGrid>
+    			<p:panelGrid columns="2" rendered="#{beanBuscar.panelProducto}" style="width:100%;text-align:right;">
+    				<p:commandButton value="Volver al stock" rendered="#{beanBuscar.bajaStock}" action="#{beanBuscar.volverStock()}"
+    				onclick="return confirm('ESTA SEGURO QUE DESEA VOLVER EL MÓVIL AL STOCK?')" />
+    			</p:panelGrid>    			
     			<p:separator rendered="#{beanBuscar.panelListaPrecio}"/>
     			<p:panelGrid id="panellistaprecio" columns="4" rendered="#{beanBuscar.panelListaPrecio}" style="width:100%;">
     				<f:facet name="header">
