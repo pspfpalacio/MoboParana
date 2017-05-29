@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<title>Técnico</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menubar.xhtml" />
+				<br/>
+				<br/>
+    			<p:panelGrid columns="4" style="width:100%;">
+    				<f:facet name="header">
+    					<h:outputText value="#{beanTecnico.headerText}" />
+    				</f:facet>
+    				<p:outputLabel value="Apellido y Nombres: " />
+    				<p:inputText value="#{beanTecnico.tecnico.apellidoNombre}" />
+    				
+    				<p:outputLabel value="Dirección: " />
+    				<p:inputText value="#{beanTecnico.tecnico.direccion}" />
+    				
+    				<p:outputLabel value="Tel./Fijo: " />
+    				<p:inputText value="#{beanTecnico.tecnico.telefonoFijo}" />
+    				
+    				<p:outputLabel value="Tel./Cel.: " />
+    				<p:inputText value="#{beanTecnico.tecnico.telefonoCel}" />
+    				
+    				<p:outputLabel value="E-mail: " />
+    				<p:inputText value="#{beanTecnico.tecnico.email}" />
+    				    				
+   					<f:facet name="footer">
+   						<p:commandButton value="Guardar" update="messages" action="#{beanTecnico.guardar()}"/>
+   						<p:commandButton value="Cancelar" oncomplete="return confirm('CANCELAR TECNICO Y VOLVER?')"
+   						action="#{beanTecnico.goTecnicos(beanTecnico.usuario)}"/>
+   					</f:facet>   				
+   				</p:panelGrid>
+	    	</p:panel>
+	    	</h:form>
+	    </div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

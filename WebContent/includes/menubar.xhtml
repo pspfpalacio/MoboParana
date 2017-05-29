@@ -8,13 +8,15 @@
 
 	<ui:composition>
 	<div>
-		<p:messages id="mensaje" showDetail="true" autoUpdate="true" closable="true" />
+		<p:messages id="mensaje" showDetail="false" autoUpdate="true" closable="true" />
 		<p:menubar style="background:#FFD6D5;">
 			<p:menuitem value="Inicio" icon="ui-icon-home" action="index" process="@this"/>
 			<p:submenu label="Personas" rendered="#{beanLogueo.submenuPersona}">
 				<p:menuitem value="Clientes" action="#{beanCliente.goClientes(beanLogueo.usuario)}" 
 				rendered="#{beanLogueo.menuCliente}" process="@this"/>
 				<p:menuitem value="Proveedores" action="#{beanProveedor.goProveedores(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuProveedor}" process="@this"/>
+				<p:menuitem value="Técnicos" action="#{beanTecnico.goTecnicos(beanLogueo.usuario)}" 
 				rendered="#{beanLogueo.menuProveedor}" process="@this"/>
 			</p:submenu>
 			<p:submenu label="Productos" rendered="#{beanLogueo.submenuProducto}">

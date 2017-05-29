@@ -469,29 +469,46 @@ public class BeanProducto implements Serializable {
 	
 	public void alta(Producto prod){
 		FacesMessage msg = null;
-		prod.setEstado(true);
-		prod.setFechaAlta(new Date());
-		prod.setUsuario1(usuario);
-		if(productoDAO.update(prod) != 0){
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alta de Producto!", null);
-		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al dar de Alta el Producto, "
-					+ "inténtelo nuevamente!", null);
-		}
+		try {
+			prod.setEstado(true);
+			prod.setFechaAlta(new Date());
+			prod.setUsuario1(usuario);
+			if(productoDAO.update(prod) != 0){
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alta registrada.", null);
+			}else{
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al registrar el alta, "
+						+ "inténtelo nuevamente.", null);
+			}
+		} catch (Exception e) {
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al registrar el alta, "
+					+ "error: " + e.getMessage(), null);
+		}		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 	
 	public void baja(Producto prod){
 		FacesMessage msg = null;
-		prod.setEstado(false);
-		prod.setFechaBaja(new Date());
-		prod.setUsuario2(usuario);
-		if(productoDAO.update(prod) != 0){
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Producto!", null);
-		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al dar de Baja el Producto, "
-					+ "inténtelo nuevamente!", null);
-		}
+		try {
+			int enCons = getEnConsignacion(prod);
+			if (enCons <= 0) {
+				prod.setEstado(false);
+				prod.setFechaBaja(new Date());
+				prod.setUsuario2(usuario);				
+				if(productoDAO.update(prod) != 0){
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja registrada.", null);
+				}else{
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al registrar la baja, "
+							+ "inténtelo nuevamente.", null);
+				}
+			} else {
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible realizar la baja, "
+						+ "posee móviles en consignación.", null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al registrar la baja, "
+					+ "error: " + e.getMessage(), null);
+		}		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 	
@@ -552,7 +569,8 @@ public class BeanProducto implements Serializable {
 		rub.setId(1);
 		listaProductos = new ArrayList<Producto>();
 		filteredProductos = new ArrayList<Producto>();
-		listaProductos = productoDAO.getLista(true, rub);
+//		listaProductos = productoDAO.getLista(true, rub);
+		listaProductos = productoDAO.getLista(rub);
 		filteredProductos = listaProductos;
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		return retorno;

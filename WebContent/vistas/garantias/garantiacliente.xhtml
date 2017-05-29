@@ -78,6 +78,13 @@
 		    					<f:selectItems value="#{beanGarantia.listaClientes}" var="cli" itemLabel="#{cli.nombreNegocio}"
 		    					itemValue="#{cli.id}"/>
 		    				</p:selectOneMenu>
+		    				<p:outputLabel value="Técnico: " />
+		    				<p:selectOneMenu value="#{beanGarantia.idTecnico}" filter="true" filterMatchMode="contains"
+		    				style="width:250px;" >
+		    					<f:selectItem itemLabel="Seleccione técnico.." itemValue="0"/>
+		    					<f:selectItems value="#{beanGarantia.listaTecnicos}" var="tec" itemLabel="#{tec.apellidoNombre}"
+		    					itemValue="#{tec.id}"/>
+		    				</p:selectOneMenu>
 		    				<p:outputLabel value="Falla: " />
 		    				<p:inputTextarea value="#{beanGarantia.garantiasCliente.falla}" style="width:100%;" rows="3" />
 		    				<p:outputLabel value="Observaciones: " />
@@ -108,6 +115,9 @@
 		    				style="width:430px;" rows="1" cols="1"/>
 		    				<p:outputLabel value="Cliente: " />
 		    				<h:inputText value="#{beanGarantia.garantiasCliente.cliente.nombreNegocio}" disabled="true" />
+		    				<p:outputLabel value="Técnico: " />
+		    				<h:inputText value="#{beanGarantia.garantiasCliente.tecnico.apellidoNombre}" disabled="true" rendered="#{beanGarantia.garantiasCliente.tecnico != null}" />
+		    				<h:inputText value=" - " disabled="true" rendered="#{beanGarantia.garantiasCliente.tecnico == null}" />
 		    				<p:outputLabel value="Falla inicial: " />
 		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.falla}" style="width:100%;" rows="3" 
 		    				disabled="true"/>
