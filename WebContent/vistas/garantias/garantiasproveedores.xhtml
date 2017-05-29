@@ -222,8 +222,9 @@
 		    				<p:outputLabel value="Cerrada: " />
 		    				<h:inputText value="SI" rendered="#{beanGarantia.garantiasProveedor.finalizado}" disabled="true"/>
 		    				<h:inputText value="NO" rendered="#{!beanGarantia.garantiasProveedor.finalizado}" disabled="true"/>
-		    				<p:outputLabel value="Costo: " rendered="#{beanGarantia.garantiasProveedor.costo != 0}"/>
+		    				<p:outputLabel value="Costo: " />
 		    				<h:inputText value="#{beanGarantia.garantiasProveedor.costo}" disabled="true" rendered="#{beanGarantia.garantiasProveedor.costo != 0}"/>
+		    				<h:inputText value=" - " disabled="true" rendered="#{beanGarantia.garantiasProveedor.costo == 0}"/>
 		    				<p:outputLabel value="Resolución: " />
 		    				<h:inputTextarea value="#{beanGarantia.garantiasProveedor.resolucion}" style="width:100%;" rows="3" 
 		    				disabled="true"/>

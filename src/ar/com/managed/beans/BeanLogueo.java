@@ -25,6 +25,7 @@ import model.entity.ListaPrecio;
 import model.entity.Producto;
 import model.entity.Role;
 import model.entity.RolesVista;
+import model.entity.Rubro;
 import model.entity.UnidadMovil;
 import model.entity.Usuario;
 import model.entity.Venta;
@@ -1491,7 +1492,9 @@ public class BeanLogueo implements Serializable {
 	
 	public void procesoActualizaUltimoCosto() {
 		List<Producto> listaProducts = new ArrayList<Producto>();
-		listaProducts = productoDAO.getLista();
+		Rubro rub = new Rubro();
+		rub.setId(1);
+		listaProducts = productoDAO.getLista(rub);
 		for (Producto producto : listaProducts) {
 			float ultimoCosto = 0;
 			List<ComprasDetalle> listaComprasDetalles = compraDetalleDAO.getLista(producto);
@@ -1503,7 +1506,7 @@ public class BeanLogueo implements Serializable {
 			}
 			producto.setPrecioCosto(ultimoCosto);
 			int updateo = productoDAO.update(producto);
-			System.out.println("Producto " + producto.getNombre() + " Actualizó: " + updateo + " con ultimo costo: " + ultimoCosto);
+			System.out.println("Móvil: " + producto.getNombre() + " Actualizó: " + updateo + " con ultimo costo: " + ultimoCosto);
 		}
 	}
 

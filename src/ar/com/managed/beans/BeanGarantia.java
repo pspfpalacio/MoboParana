@@ -33,6 +33,7 @@ import dao.interfaces.DAOGarantiasProveedor;
 import dao.interfaces.DAOListaPrecio;
 import dao.interfaces.DAOProducto;
 import dao.interfaces.DAOProveedor;
+import dao.interfaces.DAOTecnico;
 import dao.interfaces.DAOUnidadMovil;
 import dao.interfaces.DAOVenta;
 import dao.interfaces.DAOVentaConsignacion;
@@ -59,6 +60,7 @@ import model.entity.ListaPrecioProducto;
 import model.entity.Producto;
 import model.entity.Proveedore;
 import model.entity.Rubro;
+import model.entity.Tecnico;
 import model.entity.UnidadMovil;
 import model.entity.Usuario;
 import model.entity.Venta;
@@ -143,6 +145,9 @@ public class BeanGarantia implements Serializable {
 	@ManagedProperty(value = "#{BeanCuotaVentaDAO}")
 	private DAOCuotaVenta cuotaVentaDAO;
 	
+	@ManagedProperty(value = "#{BeanTecnicoDAO}")
+	private DAOTecnico tecnicoDAO;
+	
 	private List<GarantiasCliente> listaGarantiasClientes;
 	private List<GarantiasCliente> filteredGarantiasClientes;
 	private List<GarantiasProveedore> listaGarantiasProveedores;
@@ -150,6 +155,7 @@ public class BeanGarantia implements Serializable {
 	private List<Producto> listaProductos;
 	private List<Cliente> listaClientes;
 	private List<Proveedore> listaProveedores;
+	private List<Tecnico> listaTecnicos;
 	private GarantiasCliente garantiasCliente;
 	private GarantiasProveedore garantiasProveedor;
 	private Usuario usuario;
@@ -157,6 +163,7 @@ public class BeanGarantia implements Serializable {
 	private Proveedore proveedor;
 	private UnidadMovil unidadMovil;
 	private Producto producto;
+	private Tecnico tecnico;
 	private Date fechaDesde;
 	private Date fechaHasta;
 	private String headerText;
@@ -165,6 +172,7 @@ public class BeanGarantia implements Serializable {
 	private int idCliente;
 	private int idProveedor;
 	private int idResolucion;
+	private int idTecnico;
 	private boolean abrir;
 	private boolean cerrar;
 	private boolean opcion1;
@@ -355,6 +363,14 @@ public class BeanGarantia implements Serializable {
 		this.cuotaVentaDAO = cuotaVentaDAO;
 	}
 
+	public DAOTecnico getTecnicoDAO() {
+		return tecnicoDAO;
+	}
+
+	public void setTecnicoDAO(DAOTecnico tecnicoDAO) {
+		this.tecnicoDAO = tecnicoDAO;
+	}
+
 	public List<GarantiasCliente> getListaGarantiasClientes() {
 		return listaGarantiasClientes;
 	}
@@ -415,6 +431,14 @@ public class BeanGarantia implements Serializable {
 		this.listaProveedores = listaProveedores;
 	}
 
+	public List<Tecnico> getListaTecnicos() {
+		return listaTecnicos;
+	}
+
+	public void setListaTecnicos(List<Tecnico> listaTecnicos) {
+		this.listaTecnicos = listaTecnicos;
+	}
+
 	public GarantiasCliente getGarantiasCliente() {
 		return garantiasCliente;
 	}
@@ -469,6 +493,14 @@ public class BeanGarantia implements Serializable {
 
 	public void setProducto(Producto producto) {
 		this.producto = producto;
+	}
+
+	public Tecnico getTecnico() {
+		return tecnico;
+	}
+
+	public void setTecnico(Tecnico tecnico) {
+		this.tecnico = tecnico;
 	}
 
 	public Date getFechaDesde() {
@@ -533,6 +565,14 @@ public class BeanGarantia implements Serializable {
 
 	public void setIdResolucion(int idResolucion) {
 		this.idResolucion = idResolucion;
+	}
+
+	public int getIdTecnico() {
+		return idTecnico;
+	}
+
+	public void setIdTecnico(int idTecnico) {
+		this.idTecnico = idTecnico;
 	}
 
 	public boolean isAbrir() {
@@ -609,7 +649,7 @@ public class BeanGarantia implements Serializable {
 
 	public String goGarantiasClientes(Usuario user){
 		listaGarantiasClientes = new ArrayList<GarantiasCliente>();
-		filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
+		filteredGarantiasClientes = new ArrayList<GarantiasCliente>();		
 		listaGarantiasClientes = garantiasClienteDAO.getLista();
 		filteredGarantiasClientes = listaGarantiasClientes;
 		listaClientes = new ArrayList<Cliente>();
@@ -656,6 +696,9 @@ public class BeanGarantia implements Serializable {
 		producto = new Producto();
 		unidadMovil = new UnidadMovil();
 		cliente = new Cliente();
+		listaTecnicos = new ArrayList<Tecnico>();		
+		listaTecnicos = tecnicoDAO.getLista(true);
+		idTecnico = 0;
 		return "garantiacliente";
 	}
 	
@@ -668,6 +711,22 @@ public class BeanGarantia implements Serializable {
 		producto = new Producto();
 		unidadMovil = new UnidadMovil();
 		return "garantiaproveedor";
+	}
+	
+	public String goEditarGarantiaCliente(GarantiasCliente gCliente) {
+		headerText = "Editar Ticket de Garantía";		
+		garantiasCliente = new GarantiasCliente();
+		producto = new Producto();
+		unidadMovil = new UnidadMovil();
+		cliente = new Cliente();
+		garantiasCliente = gCliente;
+		listaTecnicos = new ArrayList<Tecnico>();		
+		listaTecnicos = tecnicoDAO.getLista();
+		idTecnico = 0;
+		if (gCliente.getTecnico() != null) {
+			idTecnico = gCliente.getTecnico().getId();
+		}
+		return "editargarantiacliente";
 	}
 	
 	public String goCerrarGarantiaCliente(GarantiasCliente garantCli){
@@ -2470,12 +2529,48 @@ public class BeanGarantia implements Serializable {
 		}
 	}
 	
+	public void buscarCliente() {
+		listaGarantiasClientes = new ArrayList<GarantiasCliente>();
+		if (fechaDesde == null && fechaHasta == null && idCliente == 0 && idProducto == 0) {
+			listaGarantiasClientes = garantiasClienteDAO.getLista();
+		}
+		if (fechaDesde != null && fechaHasta != null && idCliente == 0 && idProducto == 0) {
+			listaGarantiasClientes = garantiasClienteDAO.getLista(fechaDesde, fechaHasta);
+		}
+		if (fechaDesde == null && fechaHasta == null && idCliente != 0 && idProducto != 0) {
+			Cliente cli = clienteDAO.get(idCliente);
+			Producto prod = productoDAO.get(idProducto);
+			listaGarantiasClientes = garantiasClienteDAO.getLista(cli, prod);
+		}
+		if (fechaDesde == null && fechaHasta == null && idCliente != 0 && idProducto == 0) {
+			Cliente cli = clienteDAO.get(idCliente);
+			listaGarantiasClientes = garantiasClienteDAO.getLista(cli);
+		}
+		if (fechaDesde == null && fechaHasta == null && idCliente == 0 && idProducto != 0) {
+			Producto prod = productoDAO.get(idProducto);
+			listaGarantiasClientes = garantiasClienteDAO.getLista(prod);
+		}
+		if (fechaDesde != null && fechaHasta != null && idCliente != 0 && idProducto == 0) {
+			Cliente cli = clienteDAO.get(idCliente);
+			listaGarantiasClientes = garantiasClienteDAO.getLista(fechaDesde, fechaHasta, cli);
+		}
+		if (fechaDesde != null && fechaHasta != null && idCliente == 0 && idProducto != 0) {
+			Producto prod = productoDAO.get(idProducto);
+			listaGarantiasClientes = garantiasClienteDAO.getLista(fechaDesde, fechaHasta, prod);
+		}
+		if (fechaDesde != null && fechaHasta != null && idCliente != 0 && idProducto != 0) {
+			Cliente cli = clienteDAO.get(idCliente);
+			Producto prod = productoDAO.get(idProducto);
+			listaGarantiasClientes = garantiasClienteDAO.getLista(fechaDesde, fechaHasta, cli, prod);
+		}
+	}
+	
 	public String guardarCliente() {
 		String retorno = "";	
 		FacesMessage msg = null;
 		try {
 			if (garantiasCliente.getFechaIngreso() != null && unidadMovil.getId() != 0 && idCliente != 0 
-					&& !garantiasCliente.getFalla().isEmpty() && garantiasCliente.getFalla() != null) {
+					&& !garantiasCliente.getFalla().isEmpty() && garantiasCliente.getFalla() != null && idTecnico != 0) {
 				boolean existeV = false;
 				boolean existeC = false;
 				boolean existeVC = false;
@@ -2515,6 +2610,7 @@ public class BeanGarantia implements Serializable {
 					}
 				}
 				cliente = clienteDAO.get(idCliente);
+				tecnico = tecnicoDAO.get(idTecnico);
 				producto = unidadMovil.getProducto(); 
 				if (existeV || existeC || existeVC) {
 					boolean paso = true;
@@ -2543,12 +2639,14 @@ public class BeanGarantia implements Serializable {
 							garantiasCliente.setFinalizado(false);
 							garantiasCliente.setImeiFalla(nroImei);
 							garantiasCliente.setProducto1(producto);
+							garantiasCliente.setTecnico(tecnico);
 							garantiasCliente.setTelefonoFalla(producto.getNombre());
 							garantiasCliente.setUsuario1(usuario);
 							int idGarantia = garantiasClienteDAO.insertar(garantiasCliente);
 							if (idGarantia != 0) {
 								idCliente = 0;
 								idProducto = 0;
+								idTecnico = 0;
 								listaGarantiasClientes = new ArrayList<GarantiasCliente>();
 								filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
 								listaGarantiasClientes = garantiasClienteDAO.getLista();
@@ -2579,6 +2677,51 @@ public class BeanGarantia implements Serializable {
 				}
 				if (garantiasCliente.getFalla().isEmpty() || garantiasCliente.getFalla() == null) {
 					mensaje = mensaje + "Falla, ";
+				}
+				if (idTecnico == 0) {
+					mensaje = mensaje + "Técnico.";
+				}
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Los siguientes parámetros no pueden estar vacíos. "
+						+ "Parámetros: " + mensaje, null);
+			}
+		} catch(Exception e) {
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al iniciar el Ticket de Garantía. "
+					+ "Error original: " + e.getMessage(), null);
+		}		
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		return retorno;
+	}
+	
+	public String editarCliente() {
+		String retorno = "";	
+		FacesMessage msg = null;
+		try {
+			if (!garantiasCliente.getFalla().isEmpty() && garantiasCliente.getFalla() != null && idTecnico != 0) {				
+				tecnico = tecnicoDAO.get(idTecnico);
+				garantiasCliente.setFechaMod(new Date());
+				garantiasCliente.setUsuario3(usuario);
+				garantiasCliente.setTecnico(tecnico);
+				int uptGarantia = garantiasClienteDAO.update(garantiasCliente);
+				if (uptGarantia != 0) {
+					idCliente = 0;
+					idProducto = 0;
+					idTecnico = 0;
+					listaGarantiasClientes = new ArrayList<GarantiasCliente>();
+					filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
+					listaGarantiasClientes = garantiasClienteDAO.getLista();
+					filteredGarantiasClientes = listaGarantiasClientes;
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Garantía registrada!", null);
+					retorno = "garantiasclientes";
+				} else {
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket de garantía.", null);
+				}				
+			} else {
+				String mensaje = "";				
+				if (garantiasCliente.getFalla().isEmpty() || garantiasCliente.getFalla() == null) {
+					mensaje = mensaje + "Falla, ";
+				}
+				if (idTecnico == 0) {
+					mensaje = mensaje + "Técnico.";
 				}
 				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Los siguientes parámetros no pueden estar vacíos. "
 						+ "Parámetros: " + mensaje, null);
@@ -4419,6 +4562,11 @@ public class BeanGarantia implements Serializable {
 			} else {
 				garantias.setTipo("NO");
 			}
+			if (garan.getTecnico() != null) {
+				garantias.setTecnico(garan.getTecnico().getApellidoNombre());
+			} else {
+				garantias.setTecnico(" - ");
+			}
 			listGarantia.add(garantias);
 		}
 		if(idCliente == 0){
@@ -4502,6 +4650,11 @@ public class BeanGarantia implements Serializable {
 			garantias.setPersona(garanCliente.getCliente().getApellidoNombre());
 			garantias.setProducto(garanCliente.getTelefonoFalla());
 			garantias.setResolucion(garanCliente.getResolucion());
+			if (garanCliente.getTecnico() != null) {
+				garantias.setTecnico(garanCliente.getTecnico().getApellidoNombre());
+			} else {
+				garantias.setTecnico(" - ");
+			}
 			garantias.setTipo("Ticket de Garantía Cerrado");
 		} else {
 			garantias.setAccion(" - ");
@@ -4514,6 +4667,11 @@ public class BeanGarantia implements Serializable {
 			garantias.setPersona(garanCliente.getCliente().getApellidoNombre());
 			garantias.setProducto(garanCliente.getTelefonoFalla());
 			garantias.setResolucion(" - ");
+			if (garanCliente.getTecnico() != null) {
+				garantias.setTecnico(garanCliente.getTecnico().getApellidoNombre());
+			} else {
+				garantias.setTecnico(" - ");
+			}
 			garantias.setTipo("Ticket de Garantía Abierto");
 		}
 		listGarantia.add(garantias);

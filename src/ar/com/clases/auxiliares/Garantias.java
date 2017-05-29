@@ -17,6 +17,7 @@ public class Garantias implements Serializable {
 	private String imeiFalla;
 	private String producto;
 	private String persona;
+	private String tecnico;
 	private String concepto;
 	private String fallaInicial;
 	private float costo;
@@ -64,6 +65,14 @@ public class Garantias implements Serializable {
 
 	public void setPersona(String persona) {
 		this.persona = persona;
+	}
+
+	public String getTecnico() {
+		return tecnico;
+	}
+
+	public void setTecnico(String tecnico) {
+		this.tecnico = tecnico;
 	}
 
 	public String getConcepto() {

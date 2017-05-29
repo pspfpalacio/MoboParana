@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Garantia</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario" onkeypress="return event.keyCode != 13">
+				<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
+					<p:growl id="messages" showDetail="false" />
+					<ui:include src="/includes/menubar.xhtml" />
+					<br/>
+					<br/>
+					<p:panelGrid style="width:100%;">
+		    			<p:panelGrid columns="2" style="width:100%;">
+		    				<f:facet name="header">
+		    					<h3><h:outputText value="#{beanGarantia.headerText}" /></h3>
+		    				</f:facet>
+		    				<p:outputLabel value="Fecha de Ingreso: " />
+		    				<p:calendar value="#{beanGarantia.garantiasCliente.fechaIngreso}" pattern="dd/MM/yyyy" 
+		    				mask="true" locale="tr" disabled="true"/>
+		    				<p:outputLabel value="Nro Imei de Unidad con falla: " />
+		    				<p:outputLabel value="#{beanGarantia.garantiasCliente.imeiFalla}" />
+		    				<p:outputLabel value="Producto: " />
+		    				<p:outputLabel value="#{beanGarantia.garantiasCliente.producto1.nombre}" />
+		    				<p:outputLabel value="Cliente: " />
+		    				<p:outputLabel value="#{beanGarantia.garantiasCliente.cliente.nombreNegocio}" />
+		    				<p:outputLabel value="Técnico: " />
+		    				<p:selectOneMenu value="#{beanGarantia.idTecnico}" filter="true" filterMatchMode="contains"
+		    				style="width:250px;" >
+		    					<f:selectItem itemLabel="Seleccione técnico.." itemValue="0"/>
+		    					<f:selectItems value="#{beanGarantia.listaTecnicos}" var="tec" itemLabel="#{tec.apellidoNombre}"
+		    					itemValue="#{tec.id}"/>
+		    				</p:selectOneMenu>
+		    				<p:outputLabel value="Falla: " />
+		    				<p:inputTextarea value="#{beanGarantia.garantiasCliente.falla}" style="width:100%;" rows="3" />
+		    				<p:outputLabel value="Observaciones: " />
+		    				<p:inputTextarea value="#{beanGarantia.garantiasCliente.observaciones}" style="width:100%;" rows="3" />
+		    			</p:panelGrid>
+	    				<p:panelGrid columns="2" style="width:100%;">
+		    				<f:facet name="header">
+		    					<p:commandButton icon="ui-icon-disk" value="Registrar" update="messages" action="#{beanGarantia.editarCliente()}"
+	    						onclick="return confirm('ESTA SEGURO QUE DESEA CONFIRMAR?')" />
+	    						<p:commandButton icon="ui-icon-disk" value="Cancelar" action="garantiasclientes"
+	    						onclick="return confirm('ESTA SEGURO QUE DESEA CANCELAR Y VOLVER?')"/>
+		    				</f:facet>
+		    			</p:panelGrid>
+	   				</p:panelGrid>	   				
+   				</p:panel>		
+	    	</h:form>
+	    </div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

@@ -73,14 +73,14 @@
 				</p:panelGrid>
 				<p:panelGrid columns="1" style="width:80%;">
 					<f:facet name="footer">	
-						<p:commandButton icon="ui-icon-search" value="Buscar" update="contenedorGarantias"/>
+						<p:commandButton icon="ui-icon-search" value="Buscar" update="contenedorGarantias" action="#{beanGarantia.buscarCliente()}"/>
 					</f:facet>
 				</p:panelGrid>
 				<br/>
 				<br/>
 				<p:dataTable id="contenedorGarantias" widgetVar="garantiaBusqueda" var="garantia"
 				value="#{beanGarantia.listaGarantiasClientes}" paginator="true" rows="30" resizableColumns="true"
-				filteredValue="#{beanGarantia.filteredGarantiasClientes}" emptyMessage="No existen Garantias" sortMode="multiple">
+				emptyMessage="No existen Garantias" sortMode="multiple">
 					<f:facet name="header">
 						<p:commandButton value="Abrir Ticket" action="#{beanGarantia.goNuevaGarantiaCliente()}"/>
 						<p:outputLabel value="Garantias" />
@@ -94,6 +94,15 @@
 							</h:commandLink>
 						</p:outputPanel>
 					</f:facet>
+					
+					<p:column style="text-align: center; width:40px;" id="modificar">
+						<f:facet name="header">
+							<h:outputText value="Mod." title="Modificar la Garantía" />
+						</f:facet>						
+						<p:commandLink title="Modificar la Garantía" action="#{beanGarantia.goEditarGarantiaCliente(garantia)}" disabled="#{garantia.finalizado}">							
+							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
+						</p:commandLink>
+					</p:column>
 										
 					<p:column style="text-align: center; width:45px;" id="act_desact">
 						<f:facet name="header">
@@ -130,6 +139,11 @@
 						<h:outputText value="#{garantia.cliente.nombreNegocio}" />
 					</p:column>
 					
+					<p:column headerText="Técnico" filterBy="#{garantia.cliente.nombreNegocio}"
+					filterStyle="display:none;">
+						<h:outputText value="#{garantia.tecnico.apellidoNombre}" />
+					</p:column>
+					
 					<p:column headerText="Producto c/falla" filterBy="#{garantia.producto1.nombre}"
 					filterStyle="display:none;" sortBy="#{garantia.producto1.nombre}">
 						<h:outputText value="#{garantia.producto1.nombre}" />
@@ -143,10 +157,6 @@
 					<p:column headerText="Cerrada" style="width:80px;">
 						<h:outputText rendered="#{garantia.finalizado}" value="SI" />
 						<h:outputText rendered="#{!garantia.finalizado}" value="NO" />
-					</p:column>					
-					
-					<p:column headerText="Resolución">
-						<h:outputText value="#{garantia.resolucion}" />
 					</p:column>
 					
 					<p:column headerText="Ver" style="width:45px;">
@@ -178,6 +188,9 @@
 		    				style="width:430px;" rows="1" cols="1"/>
 		    				<p:outputLabel value="Cliente: " />
 		    				<h:inputText value="#{beanGarantia.garantiasCliente.cliente.nombreNegocio}" disabled="true" />
+		    				<p:outputLabel value="Técnico: " />
+		    				<h:inputText value="#{beanGarantia.garantiasCliente.tecnico.apellidoNombre}" disabled="true" rendered="#{beanGarantia.garantiasCliente.tecnico != null}" />
+		    				<h:inputText value=" - " disabled="true" rendered="#{beanGarantia.garantiasCliente.tecnico == null}" />
 		    				<p:outputLabel value="Falla inicial: " />
 		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.falla}" style="width:100%;" rows="3" 
 		    				disabled="true"/>
@@ -209,6 +222,9 @@
 		    				style="width:430px;" rows="1" cols="1"/>
 		    				<p:outputLabel value="Cliente: " />
 		    				<h:inputText value="#{beanGarantia.garantiasCliente.cliente.nombreNegocio}" disabled="true" />
+		    				<p:outputLabel value="Técnico: " />
+		    				<h:inputText value="#{beanGarantia.garantiasCliente.tecnico.apellidoNombre}" disabled="true" rendered="#{beanGarantia.garantiasCliente.tecnico != null}" />
+		    				<h:inputText value=" - " disabled="true" rendered="#{beanGarantia.garantiasCliente.tecnico == null}" />
 		    				<p:outputLabel value="Falla inicial: " />
 		    				<h:inputTextarea value="#{beanGarantia.garantiasCliente.falla}" style="width:100%;" rows="3" 
 		    				disabled="true"/>

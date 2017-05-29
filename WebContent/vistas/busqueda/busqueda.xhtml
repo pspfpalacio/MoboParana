@@ -92,15 +92,17 @@
     				</f:facet>
     				<p:outputLabel value="Tipo: " />
     				<h:inputText value="#{beanBuscar.producto.rubro.nombre}" disabled="true" style="width:100%;"/>
-    				<p:outputLabel value="Marca y Modelo: " />
+    				<p:outputLabel value="Marca y modelo: " />
     				<h:inputText value="#{beanBuscar.producto.nombre}" disabled="true" style="width:100%;"/>
-    				<p:outputLabel value="Nro de Imei: " />
+    				<p:outputLabel value="Número de imei: " />
     				<h:inputText value="#{beanBuscar.nroImei}" disabled="true" style="width:100%;" />
     				<p:outputLabel value="Descripción: " />
     				<h:inputText value="#{beanBuscar.producto.descripcion}" disabled="true" style="width:100%;" />
-    				<p:outputLabel value="Stock: " />
-    				<h:inputText value="#{beanBuscar.producto.stock}" disabled="true" style="width:100%;" />
-    				<p:outputLabel value="#{beanBuscar.disponibleConsignacion}" rendered="#{beanBuscar.panelConsignacion}" />    				
+    				<p:outputLabel value="En stock: " />
+    				<h:inputText value="#{beanProducto.getEnStock(beanBuscar.producto)}" disabled="true" style="width:100%;" />
+    				<p:outputLabel value="En consignación: " />
+    				<h:inputText value="#{beanProducto.getEnConsignacion(beanBuscar.producto)}" disabled="true" style="width:100%;" />
+    				<p:outputLabel value="#{beanBuscar.disponibleConsignacion}" rendered="#{beanBuscar.panelConsignacion}" />
     			</p:panelGrid>
     			<p:panelGrid columns="2" rendered="#{beanBuscar.panelProducto}" style="width:100%;text-align:right;">
     				<p:commandButton value="Volver al stock" rendered="#{beanBuscar.bajaStock}" action="#{beanBuscar.volverStock()}"
