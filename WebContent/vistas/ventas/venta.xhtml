@@ -74,6 +74,7 @@
     				
     				<p:outputLabel value="Tipo: " />
     				<p:selectOneRadio id="tipoVenta" value="#{beanVenta.tipo}" disabled="#{beanVenta.modificarTipo}">
+    					<p:ajax event="change" update="panelFooter"/>
     					<f:selectItem itemLabel="c.c." itemValue="c.c."/>
     					<f:selectItem itemLabel="ctdo." itemValue="ctdo."/>
     				</p:selectOneRadio>   				

@@ -1614,31 +1614,25 @@ public class BeanReporte implements Serializable {
 		}
 		List<Cliente> listaClientes = clienteDAO.getLista(true);
 		for (Cliente cliente : listaClientes) {
-			System.out.println("Cliente " + cliente.getNombreNegocio());
-			System.out.println("Saldo en cliente " + cliente.getSaldo());
-			System.out.println("Saldo metodo " + getSaldoCliente(cliente));	
-			System.out.println("Total antes cc " + totalccCliente);
+//			System.out.println("Cliente " + cliente.getNombreNegocio());
+//			System.out.println("Saldo en cliente " + cliente.getSaldo());
+//			System.out.println("Saldo metodo " + getSaldoCliente(cliente));	
+//			System.out.println("Total antes cc " + totalccCliente);
 			totalccCliente = totalccCliente + getSaldoCliente(cliente);
-			System.out.println("Total cc " + totalccCliente);
-			System.out.println(" ");
+//			System.out.println("Total cc " + totalccCliente);
+//			System.out.println(" ");
 		}
 		Rubro rub = new Rubro();
 		rub.setId(1);
 		List<UnidadMovil> listaUnidadMovils = unidadMovilDAO.getListaEnStock(true, true, false, rub);
 		System.out.println("size " + listaUnidadMovils.size());
 		for (UnidadMovil unidadMovil : listaUnidadMovils) {
-			System.out.println("Movil " + unidadMovil.getProducto().getNombre());
-			System.out.println("Imei " + unidadMovil.getNroImei());
-			System.out.println("Precio Compra " + unidadMovil.getPrecioCompra());
-			System.out.println("Total hasta el momento " + totalStockProductos);
+//			System.out.println("Movil " + unidadMovil.getProducto().getNombre());
+//			System.out.println("Imei " + unidadMovil.getNroImei());
+//			System.out.println("Precio Compra " + unidadMovil.getPrecioCompra());
+//			System.out.println("Total hasta el momento " + totalStockProductos);
 			totalStockProductos = totalStockProductos + unidadMovil.getPrecioCompra();
 		}
-//		rub = new Rubro();
-//		rub.setId(3);
-//		List<UnidadMovil> listaUnidadMovils2 = unidadMovilDAO.getListaEnStock(true, true, false, rub);
-//		for (UnidadMovil unidadMovil : listaUnidadMovils2) {
-//			totalStockProductosUsados = totalStockProductosUsados + unidadMovil.getPrecioCompra();
-//		}
 		List<Stock> listaStock = stockDAO.getListaEnStock(true);
 		for (Stock stock : listaStock) {
 			float stockPrecio = stock.getPrecioCompra() * stock.getCantidad();
@@ -1788,7 +1782,7 @@ public class BeanReporte implements Serializable {
 				gananciaProductos = false;
 			}			
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrio un error al generar el reporte! "
 					+ "Intentelo nuevamente!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -3175,7 +3169,7 @@ public class BeanReporte implements Serializable {
 				parametros.put("estado", estado);				
 				reporte.generar(parametros, listaProductoUnidads, report, "inline");
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrio un error al generar el reporte! Error original: " + e.getMessage(), null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
@@ -3211,7 +3205,7 @@ public class BeanReporte implements Serializable {
 				parametros.put("estado", estado);				
 				reporte.exportXls(parametros, listaProductoUnidads, report, "inline");
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrio un error al generar el reporte! Error original: " + e.getMessage(), null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
