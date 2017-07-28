@@ -16057,6 +16057,12 @@
    <PROCESS-ITEM-OUTPUT ID="ventasCliente::#view#ventas#ventas.xhtml"
     NAME="output3" PATH="/view/ventas/ventas.xhtml"
     TARGET="rules:#view#ventas#ventas.xhtml" TITLE="ventasCliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="cuentascorrientes::#view#cuentascorrientes#cuentascorrientes.xhtml"
+    NAME="output4"
+    PATH="/view/cuentascorrientes/cuentascorrientes.xhtml"
+    TARGET="rules:#view#cuentascorrientes#cuentascorrientes.xhtml"
+    TITLE="cuentascorrientes" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#view#stock#stocks.xhtml"
@@ -16074,6 +16080,12 @@
    <PROCESS-ITEM-OUTPUT ID="ventasCliente::#view#ventas#ventas.xhtml"
     NAME="output3" PATH="/view/ventas/ventas.xhtml"
     TARGET="rules:#view#ventas#ventas.xhtml" TITLE="ventasCliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="cuentascorrientes::#view#cuentascorrientes#cuentascorrientes.xhtml"
+    NAME="output4"
+    PATH="/view/cuentascorrientes/cuentascorrientes.xhtml"
+    TARGET="rules:#view#cuentascorrientes#cuentascorrientes.xhtml"
+    TITLE="cuentascorrientes" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#view#ventas#venta.xhtml"
@@ -16094,6 +16106,12 @@
    <PROCESS-ITEM-OUTPUT ID="comprobante::#view#ventas#comprobante.xhtml"
     NAME="output4" PATH="/view/ventas/comprobante.xhtml"
     TARGET="rules:#view#ventas#comprobante.xhtml" TITLE="comprobante" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="cuentascorrientes::#view#cuentascorrientes#cuentascorrientes.xhtml"
+    NAME="output5"
+    PATH="/view/cuentascorrientes/cuentascorrientes.xhtml"
+    TARGET="rules:#view#cuentascorrientes#cuentascorrientes.xhtml"
+    TITLE="cuentascorrientes" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#view#ventas#ventas.xhtml"
@@ -16111,6 +16129,12 @@
    <PROCESS-ITEM-OUTPUT ID="ventasCliente::#view#ventas#ventas.xhtml"
     NAME="output3" PATH="/view/ventas/ventas.xhtml"
     TARGET="rules:#view#ventas#ventas.xhtml" TITLE="ventasCliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="cuentascorrientes::#view#cuentascorrientes#cuentascorrientes.xhtml"
+    NAME="output4"
+    PATH="/view/cuentascorrientes/cuentascorrientes.xhtml"
+    TARGET="rules:#view#cuentascorrientes#cuentascorrientes.xhtml"
+    TITLE="cuentascorrientes" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM
@@ -16611,6 +16635,12 @@
    <PROCESS-ITEM-OUTPUT ID="ventasCliente::#view#ventas#ventas.xhtml"
     NAME="output4" PATH="/view/ventas/ventas.xhtml"
     TARGET="rules:#view#ventas#ventas.xhtml" TITLE="ventasCliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="cuentascorrientes::#view#cuentascorrientes#cuentascorrientes.xhtml"
+    NAME="output5"
+    PATH="/view/cuentascorrientes/cuentascorrientes.xhtml"
+    TARGET="rules:#view#cuentascorrientes#cuentascorrientes.xhtml"
+    TITLE="cuentascorrientes" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#vistas#mensajes#mensajes.xhtml"
@@ -16839,6 +16869,26 @@
    <PROCESS-ITEM-OUTPUT ID="mensajes::#vistas#mensajes#mensajes.xhtml"
     NAME="output53" PATH="/vistas/mensajes/mensajes.xhtml"
     TARGET="rules:#vistas#mensajes#mensajes.xhtml" TITLE="mensajes" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#view#cuentascorrientes#cuentascorrientes.xhtml"
+  PATH="/view/cuentascorrientes/cuentascorrientes.xhtml"
+  SHAPE="1370,9490,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#view#cuentascorrientes#cuentascorrientes.xhtml:0"
+   NAME="item" PATH="/view/cuentascorrientes/cuentascorrientes.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="inicio::#inicio.xhtml" NAME="output"
+    PATH="/inicio.xhtml" TARGET="rules:#inicio.xhtml" TITLE="inicio" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="stocks::#view#stock#stocks.xhtml"
+    NAME="output1" PATH="/view/stock/stocks.xhtml"
+    TARGET="rules:#view#stock#stocks.xhtml" TITLE="stocks" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="ventaCliente::#view#ventas#venta.xhtml"
+    NAME="output2" PATH="/view/ventas/venta.xhtml"
+    TARGET="rules:#view#ventas#venta.xhtml" TITLE="ventaCliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="ventasCliente::#view#ventas#ventas.xhtml"
+    NAME="output3" PATH="/view/ventas/ventas.xhtml"
+    TARGET="rules:#view#ventas#ventas.xhtml" TITLE="ventasCliente" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT ID="tecnicos::#vistas#tecnicos#tecnicos.xhtml"
     NAME="output54" PATH="/vistas/tecnicos/tecnicos.xhtml"
     TARGET="rules:#vistas#tecnicos#tecnicos.xhtml" TITLE="tecnicos" model-entity="JSFProcessItemOutput"/>

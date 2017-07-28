@@ -733,9 +733,9 @@ public class BeanLogueo implements Serializable {
 		url.append(":");
 		url.append(port);
 		//Beta
-		url.append("/MoboParana/login.xhtml");
+//		url.append("/MoboParana/login.xhtml");
 		//Produccion
-//		url.append("/login.xhtml");
+		url.append("/login.xhtml");
 		String urlFinal = url.toString();
 		FacesContext contexto = FacesContext.getCurrentInstance();
 		try {

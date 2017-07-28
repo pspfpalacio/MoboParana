@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+	<f:view>
+	<h:head>
+		<link rel="shortcut icon" type="image/x-icon"
+			href="../../images/icono.ico" />
+		<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+		<script type="text/javascript">
+			 PrimeFaces.locales['tr'] = {
+					       closeText: 'Cerrar',
+					       prevText: 'Anterior',
+					       nextText: 'Siguiente',
+					       currentText: 'Hoy',
+					       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+					           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+					       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+					           'Jul','Ago','Sep','Oct','Nov','Dic'],
+					       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+					       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+					       weekHeader: 'Hf',
+					       firstDay: 1,
+					       isRTL: false,
+					       showMonthAfterYear: false,
+					       yearSuffix: '',
+					       month: 'Mes',
+					       week: 'Semana',
+					       day: 'Día',
+					       allDayText : 'Todos los días'
+    				};
+			</script>
+		<title>Cuenta Corriente</title>
+	</h:head>
+	<h:body>
+		<div class="wrapper">
+			<ui:include src="/includes/header.xhtml" />
+			<h:form id="formulario">
+			<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
+				<p:growl id="messages" showDetail="false" />
+				<ui:include src="/includes/menu.xhtml" />
+				<br/>
+				<br/>
+		    	<h1><h:outputText value="#{beanCuentaCliente.cliente.apellidoNombre}" /></h1>		    	
+				<p:panelGrid columns="4" style="width:100%; text-align:center;">
+					<p:outputLabel value="Fecha Desde: " />
+				    <p:calendar value="#{beanCuentaCliente.fechaDesde}" />
+				    
+				    <p:outputLabel value="Hasta: " />
+				    <p:calendar value="#{beanCuentaCliente.fechaHasta}" />
+				</p:panelGrid>
+    			<p:panelGrid columns="1" style="width:100%; text-align:center;">
+				    <f:facet name="header">
+				    	<p:commandButton icon="ui-icon-search" value="Buscar" action="#{beanCuentaCliente.buscar()}" 
+				    	update="panel" />
+				    </f:facet>
+				</p:panelGrid>		
+				<p:dataTable id="cuentaTable" widgetVar="cuentaBusqueda" var="cuenta"
+				value="#{beanCuentaCliente.listaCuentasCorrientes}" resizableColumns="true" 
+				scrollable="true" scrollHeight="500" scrollWidth="100%"  
+				emptyMessage="No existen Registros" sortMode="multiple" >					
+					<f:facet name="header">			
+						<p:outputLabel value="Movimientos de cuentas corrientes" />										
+						<p:outputPanel style="float:right;">
+							<p:inputText id="globalFilter" onblur="PF('cuentaBusqueda').filter()" 
+							placeholder="Buscar" style="height:17px; font-size:samller;"/>
+						</p:outputPanel>
+					</f:facet>					
+					
+					<p:column sortBy="#{cuenta.fecha}" filterBy="#{cuenta.fecha}"
+						filterMatchMode="contains" filterStyle="display:none;" style="width:70px;text-align:left;">
+						<f:facet name="header">
+							<h:outputText value="Fecha" title="Fecha"/>
+						</f:facet>
+						<h:outputText value="#{cuenta.fecha}" >
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Argentina/Buenos_Aires" locale="tr" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="#{cuenta.detalle}" filterBy="#{cuenta.detalle}"
+						filterMatchMode="contains" filterStyle="display:none;">
+						<f:facet name="header">
+							<h:outputText value="Detalle" title="Detalle" />
+						</f:facet>
+						<h:outputText value="#{cuenta.detalle}" />
+					</p:column>					
+					
+					<p:column sortBy="#{cuenta.debe}" filterBy="#{cuenta.debe}"
+						filterMatchMode="contains" filterStyle="display:none;" style="width:80px;">
+						<f:facet name="header">
+							<h:outputText value="Debe" title="Debe" />
+						</f:facet>
+						<h:outputText value="#{cuenta.debe}" >
+							<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="#{cuenta.haber}" filterBy="#{cuenta.haber}" 
+						filterMatchMode="contains" filterStyle="display:none;" style="width:80px;">
+						<f:facet name="header">
+							<h:outputText value="Entregas" title="Entregas" />
+						</f:facet>
+						<h:outputText value="#{cuenta.haber}" >
+							<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="#{cuenta.saldo}" filterBy="#{cuenta.saldo}"
+						filterMatchMode="contains" filterStyle="display:none;" style="width:90px;">
+						<f:facet name="header">
+							<h:outputText value="Saldo" title="Saldo" />
+						</f:facet>
+						<h:outputText value="#{cuenta.saldo}" >
+							<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
+						</h:outputText>
+					</p:column>			
+				</p:dataTable>					
+			</p:panel>	
+			</h:form>
+		</div>
+	</h:body>
+	</f:view>
+	</ui:composition>
+</html>

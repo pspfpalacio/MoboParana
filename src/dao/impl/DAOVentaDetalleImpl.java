@@ -54,11 +54,12 @@ public class DAOVentaDetalleImpl implements Serializable, DAOVentaDetalle {
 		try{
 			inicializar();
 			EntityTransaction tx = em.getTransaction();
-			Query locQuery = em.createQuery("UPDATE VentasDetalle v SET v.cantidad = :pCantidad, v.eliminado = :pEliminado, "
+			Query locQuery = em.createQuery("UPDATE VentasDetalle v SET v.cantidad = :pCantidad, v.eliminado = :pEliminado, v.listaPrecio = :pListaPrecio, "
 					+ "v.precioVenta = :pPrecioVenta, v.producto = :pProducto, v.subtotal = :pSubtotal, v.venta = :pVenta, v.accesorio = :pAccesorio "
 					+ "WHERE v.id = :pId");
 			locQuery.setParameter("pCantidad", ventasDetalle.getCantidad());
 			locQuery.setParameter("pEliminado", ventasDetalle.getEliminado());
+			locQuery.setParameter("pListaPrecio", ventasDetalle.getListaPrecio());
 			locQuery.setParameter("pPrecioVenta", ventasDetalle.getPrecioVenta());
 			locQuery.setParameter("pProducto", ventasDetalle.getProducto());
 			locQuery.setParameter("pSubtotal", ventasDetalle.getSubtotal());

@@ -98,6 +98,7 @@ public class BeanVenta implements Serializable {
 	private List<Cliente> listaClientes;
 	private List<VentasDetalle> listaVentasDetalles;
 	private List<Producto> listaProductos;
+	private List<ListaPrecio> listaPrecios;
 	private Venta venta;
 	private Usuario usuario;
 	private ListaPrecio listaPrecio;
@@ -120,6 +121,7 @@ public class BeanVenta implements Serializable {
 	private int stockDisponible;
 	private int cantidad;
 	private int cantidadTotal;
+	private int idListaPrecio;
 	private float precioVenta;
 	private float montoTotal;
 	private float montoAnterior;
@@ -268,6 +270,14 @@ public class BeanVenta implements Serializable {
 
 	public void setListaProductos(List<Producto> listaProductos) {
 		this.listaProductos = listaProductos;
+	}
+
+	public List<ListaPrecio> getListaPrecios() {
+		return listaPrecios;
+	}
+
+	public void setListaPrecios(List<ListaPrecio> listaPrecios) {
+		this.listaPrecios = listaPrecios;
 	}
 
 	public Venta getVenta() {
@@ -446,6 +456,14 @@ public class BeanVenta implements Serializable {
 		this.cantidadTotal = cantidadTotal;
 	}
 
+	public int getIdListaPrecio() {
+		return idListaPrecio;
+	}
+
+	public void setIdListaPrecio(int idListaPrecio) {
+		this.idListaPrecio = idListaPrecio;
+	}
+
 	public float getPrecioVenta() {
 		return precioVenta;
 	}
@@ -565,7 +583,9 @@ public class BeanVenta implements Serializable {
 		listaProductos = new ArrayList<Producto>();
 		listaClientes = new ArrayList<Cliente>();
 		listaVentasDetalles = new ArrayList<VentasDetalle>();
+		listaPrecios = new ArrayList<ListaPrecio>();
 		listaClientes = clienteDAO.getLista(true);
+		listaPrecios = listaPrecioDAO.getLista(true);
 		producto = new Producto();
 		cliente = new Cliente();
 		listaPrecio = new ListaPrecio();
@@ -576,6 +596,7 @@ public class BeanVenta implements Serializable {
 		cantidadTotal = 0;
 		idTipo = 0;
 		idProducto = 0;
+		idListaPrecio = 0;
 		tipo = "ctdo.";
 		nroImei = "";
 		headerText = "Nueva Venta";
@@ -610,6 +631,7 @@ public class BeanVenta implements Serializable {
 			idClienteAnterior = vent.getCliente().getId();
 			int idListaPre = vent.getCliente().getListaPrecio().getId();
 			listaPrecio = listaPrecioDAO.get(idListaPre);
+			idListaPrecio = vent.getCliente().getListaPrecio().getId();
 			cliente = clienteDAO.get(idCliente);
 			modificarTipo = false;
 		}
@@ -634,9 +656,11 @@ public class BeanVenta implements Serializable {
 		panelMovil = false;
 		panelAccesorio = false;
 		listaProductos = new ArrayList<Producto>();
+		listaPrecios = new ArrayList<ListaPrecio>();
+		listaPrecios = listaPrecioDAO.getLista(true);
 		cantidad = 0;
 		idTipo = 0;
-		idProducto = 0;
+		idProducto = 0;		
 		return "venta";
 	}
 	
@@ -647,7 +671,9 @@ public class BeanVenta implements Serializable {
 			cliente = new Cliente();
 			cliente = clienteDAO.get(idCliente);
 			listaPrecio = cliente.getListaPrecio();
+			idListaPrecio = cliente.getListaPrecio().getId();
 			modificarTipo = false;
+			tipo = "c.c.";
 		}else{
 			tipo = "ctdo.";
 		}
@@ -708,6 +734,20 @@ public class BeanVenta implements Serializable {
 					precioVenta = 0;
 				}				
 			}			
+		}
+	}
+	
+	public void onChangeListaPrecio() {
+		if (idListaPrecio != 0) {
+			listaPrecio = new ListaPrecio();
+			listaPrecio = listaPrecioDAO.get(idListaPrecio);
+			if (producto != null) {
+				if (producto.getId() != 0) {
+					ListaPrecioProducto precioProducto = new ListaPrecioProducto();
+					precioProducto = listaPrecioDAO.getItemProducto(listaPrecio, producto);
+					precioVenta = precioProducto.getPrecioVenta();
+				}
+			}
 		}
 	}
 	
@@ -822,26 +862,28 @@ public class BeanVenta implements Serializable {
 						noExiste = false;
 						if(panelMovil){
 							List<VentasDetalleUnidad> listaUnidades = ventasDetalle.getVentasDetalleUnidads();
-							List<VentasDetalleUnidad> listaAux = new ArrayList<VentasDetalleUnidad>();
-							for (VentasDetalleUnidad ventasDetalleUnidad : listaUnidades) {
-								ventasDetalleUnidad.setPrecioVenta(precioVenta);
-								listaAux.add(ventasDetalleUnidad);
-							}
+//							List<VentasDetalleUnidad> listaAux = new ArrayList<VentasDetalleUnidad>();
+//							for (VentasDetalleUnidad ventasDetalleUnidad : listaUnidades) {
+//								ventasDetalleUnidad.setPrecioVenta(precioVenta);
+//								listaAux.add(ventasDetalleUnidad);
+//							}
 							VentasDetalleUnidad unidad = new VentasDetalleUnidad();
 							unidad.setNroImei(unidadMovil.getNroImei());
 							unidad.setPrecioCompra(unidadMovil.getPrecioCompra());
 							unidad.setPrecioVenta(precioVenta);
 							unidad.setUnidadMovil(unidadMovil);
-							listaAux.add(unidad);
+							unidad.setListaPrecio(listaPrecio);
+							listaUnidades.add(unidad);
 							ventasDetalle.setAccesorio(false);
 							cantidadTotal = cantidadTotal - ventasDetalle.getCantidad();
 							montoTotal = montoTotal - ventasDetalle.getSubtotal();
 							ventasDetalle.setCantidad(ventasDetalle.getCantidad() + 1);
 							ventasDetalle.setPrecioVenta(precioVenta);
 							ventasDetalle.setProducto(producto);
-							ventasDetalle.setSubtotal(precioVenta * ventasDetalle.getCantidad());
-							ventasDetalle.setVentasDetalleUnidads(listaAux);
-							montoTotal = montoTotal + ventasDetalle.getSubtotal();
+							float subtotal = ventasDetalle.getSubtotal() + precioVenta;
+							ventasDetalle.setSubtotal(subtotal);
+							ventasDetalle.setVentasDetalleUnidads(listaUnidades);
+							montoTotal = montoTotal + subtotal;
 							cantidadTotal = cantidadTotal + ventasDetalle.getCantidad();
 						}
 						if(panelAccesorio){
@@ -851,6 +893,7 @@ public class BeanVenta implements Serializable {
 							ventasDetalle.setCantidad(ventasDetalle.getCantidad() + cantidad);
 							ventasDetalle.setPrecioVenta(precioVenta);
 							ventasDetalle.setProducto(producto);
+							ventasDetalle.setListaPrecio(listaPrecio);
 							ventasDetalle.setSubtotal(precioVenta * ventasDetalle.getCantidad());
 							montoTotal = montoTotal + ventasDetalle.getSubtotal();
 							cantidadTotal = cantidadTotal + ventasDetalle.getCantidad();
@@ -867,6 +910,7 @@ public class BeanVenta implements Serializable {
 						unidad.setPrecioCompra(unidadMovil.getPrecioCompra());
 						unidad.setPrecioVenta(precioVenta);
 						unidad.setUnidadMovil(unidadMovil);
+						unidad.setListaPrecio(listaPrecio);
 						listaUnidades.add(unidad);
 						detalle.setAccesorio(false);
 						detalle.setCantidad(1);
@@ -883,6 +927,7 @@ public class BeanVenta implements Serializable {
 						detalle.setCantidad(cantidad);
 						detalle.setPrecioVenta(precioVenta);
 						detalle.setProducto(producto);
+						detalle.setListaPrecio(listaPrecio);
 						detalle.setSubtotal((cantidad * precioVenta));
 						listAux.add(detalle);
 						montoTotal = montoTotal + detalle.getSubtotal();

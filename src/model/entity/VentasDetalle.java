@@ -49,6 +49,11 @@ public class VentasDetalle implements Serializable {
 	//bi-directional many-to-one association to StocksVentasDetalle
 	@OneToMany(mappedBy="ventasDetalle")
 	private List<StocksVentasDetalle> stocksVentasDetalles;
+	
+	//bi-directional many-to-one association to ListaPrecio
+	@ManyToOne
+	@JoinColumn(name="id_lista_precio")
+	private ListaPrecio listaPrecio;
 
 	public VentasDetalle() {
 	}
@@ -159,6 +164,14 @@ public class VentasDetalle implements Serializable {
 		stocksVentasDetalle.setVentasDetalle(null);
 
 		return stocksVentasDetalle;
+	}
+	
+	public ListaPrecio getListaPrecio() {
+		return this.listaPrecio;
+	}
+
+	public void setListaPrecio(ListaPrecio listaPrecio) {
+		this.listaPrecio = listaPrecio;
 	}
 	
 	public String getProductoString(){

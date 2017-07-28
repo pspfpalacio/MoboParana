@@ -29,6 +29,11 @@ public class VentasDetalleUnidad implements Serializable {
 
 	@Column(name="precio_venta")
 	private float precioVenta;
+	
+	//bi-directional many-to-one association to ListaPrecio
+	@ManyToOne
+	@JoinColumn(name="id_lista_precio")
+	private ListaPrecio listaPrecio;
 
 	//bi-directional many-to-one association to VentasDetalle
 	@ManyToOne
@@ -81,6 +86,14 @@ public class VentasDetalleUnidad implements Serializable {
 
 	public void setPrecioVenta(float precioVenta) {
 		this.precioVenta = precioVenta;
+	}
+	
+	public ListaPrecio getListaPrecio() {
+		return this.listaPrecio;
+	}
+
+	public void setListaPrecio(ListaPrecio listaPrecio) {
+		this.listaPrecio = listaPrecio;
 	}
 
 	public VentasDetalle getVentasDetalle() {

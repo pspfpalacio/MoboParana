@@ -2,6 +2,7 @@ package ar.com.managed.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -133,6 +134,7 @@ public class BeanBuscar implements Serializable {
 	private boolean panelListaPrecio;
 	private boolean opcionGarantia2;
 	private boolean opcionGarantia3;
+	private boolean bajaStock;
 
 	public DAOUnidadMovil getUnidadMovilDAO() {
 		return unidadMovilDAO;
@@ -553,6 +555,14 @@ public class BeanBuscar implements Serializable {
 		this.opcionGarantia3 = opcionGarantia3;
 	}
 
+	public boolean isBajaStock() {
+		return bajaStock;
+	}
+
+	public void setBajaStock(boolean bajaStock) {
+		this.bajaStock = bajaStock;
+	}
+
 	public String goBusqueda(Usuario user){
 		usuario = new Usuario();
 		compra = new Compra();
@@ -633,6 +643,7 @@ public class BeanBuscar implements Serializable {
 		panelGarantiaCliente = false;
 		panelGarantiaProveedor = false;
 		panelListaPrecio = false;
+		bajaStock = false;
 		try{
 			if(unidadMovil.getId() == 0 && idProducto == 0){
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de imei o seleccionar un producto!", null);
@@ -644,6 +655,11 @@ public class BeanBuscar implements Serializable {
 			}
 			if(unidadMovil.getId() != 0 && idProducto == 0){
 				nroImei = unidadMovil.getNroImei();
+				if (unidadMovil.getBajaStock()) {
+					bajaStock = true;
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El móvil ha sido dado de baja desde el stock, presione en 'Volver al stock' para habilitarlo nuevamente.", null);
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+				}
 	//			UnidadMovil unidad = unidadMovilDAO.get(nroImei);
 				if(unidadMovil.getId() != 0){
 					producto = unidadMovil.getProducto();
@@ -809,6 +825,36 @@ public class BeanBuscar implements Serializable {
 			}
 		} catch (Exception e) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei no tiene ningún producto asociado!", null);
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+	}
+	
+	public void volverStock() {
+		System.out.println("volverStock()");
+		try {
+			UnidadMovil unidad = unidadMovilDAO.getBajaStock(nroImei);
+			if (unidad.getId() != 0) {
+				unidad.setBajaStock(false);
+				unidad.setEstado(true);
+				unidad.setEnStock(true);
+				unidad.setFechaMod(new Date());
+				unidad.setUsuario3(usuario);
+				int updt = unidadMovilDAO.update(unidad);
+				if (updt != 0) {
+					bajaStock = false;
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró nuevamente en el stock con éxito.", null);
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+				} else {
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al volver al stock el móvil, error: No se pudo actualizar el estado del móvill.", null);
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+				}
+			} else {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al volver al stock el móvil, error: El número de imei no corresponde a un único móvil.", null);
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al volver al stock el móvil, error: " + e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}

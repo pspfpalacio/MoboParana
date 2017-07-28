@@ -19217,6 +19217,11 @@
    <to-view-id>/view/ventas/ventas.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>cuentascorrientes</from-outcome>
+   <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/view/stock/stocks.xhtml</from-view-id>
@@ -19238,6 +19243,11 @@
   <navigation-case>
    <from-outcome>ventasCliente</from-outcome>
    <to-view-id>/view/ventas/ventas.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>cuentascorrientes</from-outcome>
+   <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -19268,6 +19278,11 @@
    <to-view-id>/view/ventas/comprobante.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>cuentascorrientes</from-outcome>
+   <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/view/ventas/ventas.xhtml</from-view-id>
@@ -19289,6 +19304,11 @@
   <navigation-case>
    <from-outcome>ventasCliente</from-outcome>
    <to-view-id>/view/ventas/ventas.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>cuentascorrientes</from-outcome>
+   <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -19883,6 +19903,11 @@
   <navigation-case>
    <from-outcome>ventasCliente</from-outcome>
    <to-view-id>/view/ventas/ventas.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>cuentascorrientes</from-outcome>
+   <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -21010,6 +21035,34 @@
   <navigation-case>
    <from-outcome>editargarantiacliente</from-outcome>
    <to-view-id>/vistas/garantias/editargarantiacliente.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>inicio</from-outcome>
+   <to-view-id>/inicio.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>stocks</from-outcome>
+   <to-view-id>/view/stock/stocks.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>ventaCliente</from-outcome>
+   <to-view-id>/view/ventas/venta.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>ventasCliente</from-outcome>
+   <to-view-id>/view/ventas/ventas.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>cuentascorrientes</from-outcome>
+   <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
