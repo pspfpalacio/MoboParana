@@ -30,4 +30,13 @@
     <param-name>primefaces.THEME</param-name>
     <param-value>start</param-value>
   </context-param>
+  <servlet>
+	<servlet-name>Log4JServlet</servlet-name>
+	<servlet-class>promoda.managed.logger.Log4JServlet</servlet-class>
+	<init-param>
+		<param-name>log4jprop-location</param-name>
+		<param-value>WEB-INF/log4j.properties</param-value>
+	</init-param>
+	<load-on-startup>1</load-on-startup>
+  </servlet>
 </web-app>
