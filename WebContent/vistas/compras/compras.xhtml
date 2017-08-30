@@ -41,14 +41,13 @@
 	<h:body>
 		<div class="wrapper">
 			<ui:include src="/includes/header.xhtml" />
-			<h:form id="formulario">
+			<h:form id="formulario" onkeypress="return event.keyCode != 13">
 				<p:panel style="background:#D27C7A;min-height:900px;">
 				<p:growl id="messages" showDetail="false" />
 				<ui:include src="/includes/menubar.xhtml" />
 				<br/>
 				<br/>
-				<h5>(*)Para reflejar la búsqueda debe hacer doble click sobre el botón Buscar</h5>
-		    	<p:panelGrid columns="4" cellpadding="5" style="width:50%;">
+		    	<p:panelGrid columns="6" cellpadding="5" style="width:100%;">
 		    		<f:facet name="header">
 		    			<h:outputText value="Filtros" />
 		    		</f:facet>

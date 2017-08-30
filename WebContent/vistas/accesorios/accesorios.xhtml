@@ -17,7 +17,7 @@
 	<h:body>
 		<div class="wrapper">
 			<ui:include src="/includes/header.xhtml" />
-			<h:form id="formulario">
+			<h:form id="formulario" onkeypress="return event.keyCode != 13">
 			<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
 				<p:growl id="messages" showDetail="false" />
 				<ui:include src="/includes/menubar.xhtml" />
@@ -130,7 +130,6 @@
 							
 							<p:commandButton id="agregar" value="Agregar" update="cantidad, tablaStock, precioC, messages, :formulario:contenedorAccesorio" 
 							action="#{beanProducto.agregStock()}"/>
-							<p:defaultCommand target="agregar" />
 						</h:panelGrid>
 						<h:panelGrid columns="1">
 							<p:dataTable id="tablaStock" var="stock" value="#{beanProducto.listaStocks}" scrollRows="50" resizableColumns="true"

@@ -17,14 +17,14 @@
 	<h:body>
 		<div class="wrapper">
 			<ui:include src="/includes/header.xhtml" />
-			<h:form id="formulario">
+			<h:form id="formulario" onkeypress="return event.keyCode != 13">
 				<p:panel style="background:#D27C7A;min-height:900px;">
 				<p:growl id="messages" showDetail="false" />
 				<ui:include src="/includes/menubar.xhtml" />
 				<br/>
 				<h2 align="center">CLIENTES</h2>
 				<br/>
-		    	<p:panelGrid columns="5" cellpadding="5" style="width:80%;">
+		    	<p:panelGrid columns="5" cellpadding="5" style="width:100%;">
 		    		<f:facet name="header">
 		    			<h:outputText value="Filtros" />
 		    		</f:facet>

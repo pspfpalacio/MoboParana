@@ -36,6 +36,7 @@ import model.entity.VentasDetalle;
 import model.entity.VentasDetalleUnidad;
 import model.entity.Vista;
 
+import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
 
 import ar.com.clases.CostoPromedio;
@@ -69,6 +70,8 @@ public class BeanLogueo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final static Logger log = Logger.getLogger(BeanLogueo.class);
 	
 	@ManagedProperty(value = "#{BeanUsuarioDAO}")
 	private DAOUsuario usuarioDAO;
@@ -691,12 +694,15 @@ public class BeanLogueo implements Serializable {
 	}
 
 	public void login() {
+		log.info("Intento de login() - user: " + nombreLogin + " pass: " + passLogin);
 		RequestContext context = RequestContext.getCurrentInstance();
 		FacesMessage msg = null;
 		usuario = new Usuario();
 		Helper helper = new Helper();
 		String hash = helper.EncodePassword(passLogin);
+		log.info("Encode Pass: " + hash);
 		usuario = usuarioDAO.get(nombreLogin, hash);
+		log.info("User id: " + usuario.getId());
 		if (usuario.getId() != 0) {
 			logeado = true;
 			verificarAcceso(usuario);
@@ -717,13 +723,14 @@ public class BeanLogueo implements Serializable {
 			try {
 				FacesContext.getCurrentInstance().getExternalContext().redirect(paginaInicio);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				log.error("login() Error: " + e);
 			}
 		}
 	}
 
 	public void logout() {
+		log.info("Intento logout() - Usuario id: " + usuario.getId() + " username: " + usuario.getUsername());
 		String host = FacesContext.getCurrentInstance().getExternalContext()
 				.getRequestServerName();
 		int port = FacesContext.getCurrentInstance().getExternalContext()
@@ -746,10 +753,11 @@ public class BeanLogueo implements Serializable {
 			usuario = new Usuario();
 			logeado = false;
 			cambiarEstado(false);
+			log.info("redirect url: " + urlFinal);
 			contexto.getExternalContext().redirect(urlFinal);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error("logout() Error: " + e);
 		}
 	}
 	

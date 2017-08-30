@@ -32,7 +32,7 @@
   </context-param>
   <servlet>
 	<servlet-name>Log4JServlet</servlet-name>
-	<servlet-class>promoda.managed.logger.Log4JServlet</servlet-class>
+	<servlet-class>ar.com.mobo.servlets.Log4JServlet</servlet-class>
 	<init-param>
 		<param-name>log4jprop-location</param-name>
 		<param-value>WEB-INF/log4j.properties</param-value>

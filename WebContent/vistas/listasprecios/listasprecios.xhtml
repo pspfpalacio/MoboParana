@@ -17,7 +17,7 @@
 	<h:body>
 		<div class="wrapper">
 			<ui:include src="/includes/header.xhtml" />			
-			<h:form id="formulario">
+			<h:form id="formulario" onkeypress="return event.keyCode != 13">
 			<p:panel style="background:#D27C7A;min-height:900px;">
 				<p:growl id="messages" showDetail="false" />
 				<ui:include src="/includes/menubar.xhtml" />
