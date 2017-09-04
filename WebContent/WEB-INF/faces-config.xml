@@ -19222,6 +19222,11 @@
    <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>pendientesdepago</from-outcome>
+   <to-view-id>/view/pendientesdepago/pendientesdepago.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/view/stock/stocks.xhtml</from-view-id>
@@ -19248,6 +19253,11 @@
   <navigation-case>
    <from-outcome>cuentascorrientes</from-outcome>
    <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>pendientesdepago</from-outcome>
+   <to-view-id>/view/pendientesdepago/pendientesdepago.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -19283,6 +19293,11 @@
    <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>pendientesdepago</from-outcome>
+   <to-view-id>/view/pendientesdepago/pendientesdepago.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/view/ventas/ventas.xhtml</from-view-id>
@@ -19309,6 +19324,11 @@
   <navigation-case>
    <from-outcome>cuentascorrientes</from-outcome>
    <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>pendientesdepago</from-outcome>
+   <to-view-id>/view/pendientesdepago/pendientesdepago.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -19908,6 +19928,11 @@
   <navigation-case>
    <from-outcome>cuentascorrientes</from-outcome>
    <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>pendientesdepago</from-outcome>
+   <to-view-id>/view/pendientesdepago/pendientesdepago.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
@@ -21063,6 +21088,44 @@
   <navigation-case>
    <from-outcome>cuentascorrientes</from-outcome>
    <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>pendientesdepago</from-outcome>
+   <to-view-id>/view/pendientesdepago/pendientesdepago.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/view/pendientesdepago/pendientesdepago.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>cuentascorrientes</from-outcome>
+   <to-view-id>/view/cuentascorrientes/cuentascorrientes.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>comprobante</from-outcome>
+   <to-view-id>/view/ventas/comprobante.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>ventas</from-outcome>
+   <to-view-id>/view/ventas/ventas.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>stocks</from-outcome>
+   <to-view-id>/view/stock/stocks.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>inicio</from-outcome>
+   <to-view-id>/inicio.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>venta</from-outcome>
+   <to-view-id>/view/ventas/venta.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>

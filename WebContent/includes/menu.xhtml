@@ -13,6 +13,8 @@
 			<p:menuitem value="Generar Venta" icon="ui-icon-cart" action="#{beanVentaCliente.goVenta(beanLogueo.usuario)}" process="@this"/>
 			<p:menuitem value="Listado Ventas" icon="ui-icon-clipboard" action="#{beanVentaCliente.goVentas(beanLogueo.usuario)}" process="@this"/>
 			<p:menuitem value="Cuenta corriente" icon="ui-icon-clipboard" action="#{beanCuentaCliente.goCuentaCorriente(beanLogueo.usuario)}" process="@this"/>
+			<p:menuitem value="Equipos pendiente de pago" icon="ui-icon-clipboard" action="#{beanPendientePago.goPendientePago(beanLogueo.usuario)}" process="@this"/>
+
 
 			<f:facet name="options">
 				<p:outputLabel value="                                   " />
