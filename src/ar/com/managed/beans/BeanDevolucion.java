@@ -652,7 +652,7 @@ public class BeanDevolucion implements Serializable {
 						consignacionUnidad.setFechaVenta(fechaVentaConsig);
 						consignacionUnidad.setVendido(vendido);
 						consignacionUnidad.setPrecioCompra(unidad.getPrecioCompra());
-						consignacionUnidad.setPrecioVenta(precioV);
+						consignacionUnidad.setPrecioLista(precioV);
 						consignacionUnidad.setConsignacionsDetalle(consDetalle);
 						
 						consignacionDetalleDAO.update(consDetalle);
@@ -678,7 +678,7 @@ public class BeanDevolucion implements Serializable {
 						consignacionUnidad.setFechaVenta(fechaVentaConsig);
 						consignacionUnidad.setVendido(vendido);
 						consignacionUnidad.setPrecioCompra(unidad.getPrecioCompra());
-						consignacionUnidad.setPrecioVenta(precioV);
+						consignacionUnidad.setPrecioLista(precioV);
 						consignacionUnidad.setConsignacionsDetalle(consDetalle);
 						consignacionDetalleUnidadDAO.insertar(consignacionUnidad);
 					}
@@ -723,7 +723,7 @@ public class BeanDevolucion implements Serializable {
 					consignacionUnidad.setFechaVenta(fechaVentaConsig);
 					consignacionUnidad.setVendido(vendido);
 					consignacionUnidad.setPrecioCompra(unidad.getPrecioCompra());
-					consignacionUnidad.setPrecioVenta(precioV);
+					consignacionUnidad.setPrecioLista(precioV);
 					consignacionUnidad.setConsignacionsDetalle(consDetalle);
 					consignacionDetalleUnidadDAO.insertar(consignacionUnidad);
 					
@@ -1033,7 +1033,7 @@ public class BeanDevolucion implements Serializable {
 						//Baja de la Consignacion
 						if (enConsignacion) {
 //							precioVenta = consignacionUnidad.getPrecioVenta();
-							float precioUnidad = consignacionUnidad.getPrecioVenta();
+							float precioUnidad = consignacionUnidad.getPrecioLista();
 							//ConsignacionsDetalle consignacionDetalle = consignacionDetalleDAO.get(consignacionUnidad.getConsignacionsDetalle().getId());
 							//Consignacion consignacion = consignacionDAO.get(consignacionDetalle.getConsignacion().getId());
 							float precioVenta = consignacion.getMonto() - precioUnidad;

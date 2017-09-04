@@ -1308,7 +1308,7 @@ public class BeanGarantia implements Serializable {
 										consignacionUnidadN.setFechaVenta(consignacionUnidadF.getFechaVenta());
 										consignacionUnidadN.setNroImei(imeiFalla);
 										consignacionUnidadN.setPrecioCompra(unidadFalla.getPrecioCompra());
-										consignacionUnidadN.setPrecioVenta(consignacionDetalleN.getPrecioVenta());
+										consignacionUnidadN.setPrecioLista(consignacionDetalleN.getPrecioVenta());
 										consignacionUnidadN.setTipoVenta(consignacionUnidadF.getTipoVenta());
 										consignacionUnidadN.setUnidadMovil(unidadFalla);
 										consignacionUnidadN.setVendido(consignacionUnidadF.getVendido());
@@ -1403,7 +1403,7 @@ public class BeanGarantia implements Serializable {
 												consignacionUnidadN.setFechaVenta(consignacionUnidadF.getFechaVenta());
 												consignacionUnidadN.setNroImei(imeiFalla);
 												consignacionUnidadN.setPrecioCompra(unidadFalla.getPrecioCompra());
-												consignacionUnidadN.setPrecioVenta(precioProducto.getPrecioVenta());
+												consignacionUnidadN.setPrecioLista(precioProducto.getPrecioVenta());
 												consignacionUnidadN.setTipoVenta(consignacionUnidadF.getTipoVenta());
 												consignacionUnidadN.setUnidadMovil(unidadFalla);
 												consignacionUnidadN.setVendido(consignacionUnidadF.getVendido());
@@ -2028,7 +2028,7 @@ public class BeanGarantia implements Serializable {
 									consignacionUnidad.setFechaVenta(fechaVentaCon);
 									consignacionUnidad.setVendido(vendido);
 									consignacionUnidad.setPrecioCompra(unidadFalla.getPrecioCompra());
-									consignacionUnidad.setPrecioVenta(precioU);
+									consignacionUnidad.setPrecioLista(precioU);
 									consignacionUnidad.setConsignacionsDetalle(consDetalle);
 									
 									consignacionDetalleDAO.update(consDetalle);
@@ -2053,7 +2053,7 @@ public class BeanGarantia implements Serializable {
 									consignacionUnidad.setFechaVenta(fechaVentaCon);
 									consignacionUnidad.setVendido(vendido);
 									consignacionUnidad.setPrecioCompra(unidadFalla.getPrecioCompra());
-									consignacionUnidad.setPrecioVenta(precioU);
+									consignacionUnidad.setPrecioLista(precioU);
 									consignacionUnidad.setConsignacionsDetalle(consDetalle);
 									consignacionDetalleUnidadDAO.insertar(consignacionUnidad);
 								}
@@ -2098,7 +2098,7 @@ public class BeanGarantia implements Serializable {
 								consignacionUnidad.setFechaVenta(fechaVentaCon);
 								consignacionUnidad.setVendido(vendido);
 								consignacionUnidad.setPrecioCompra(unidadFalla.getPrecioCompra());
-								consignacionUnidad.setPrecioVenta(precioU);
+								consignacionUnidad.setPrecioLista(precioU);
 								consignacionUnidad.setConsignacionsDetalle(consDetalle);
 								consignacionDetalleUnidadDAO.insertar(consignacionUnidad);
 																
@@ -3382,7 +3382,7 @@ public class BeanGarantia implements Serializable {
 											consignacionUnidadN.setFechaVenta(consignacionUnidadF.getFechaVenta());
 											consignacionUnidadN.setNroImei(nroImei);
 											consignacionUnidadN.setPrecioCompra(unidadMovil.getPrecioCompra());
-											consignacionUnidadN.setPrecioVenta(precioProducto.getPrecioVenta());
+											consignacionUnidadN.setPrecioLista(precioProducto.getPrecioVenta());
 											consignacionUnidadN.setTipoVenta(consignacionUnidadF.getTipoVenta());
 											consignacionUnidadN.setUnidadMovil(unidadMovil);
 											consignacionUnidadN.setVendido(consignacionUnidadF.getVendido());
@@ -3472,7 +3472,7 @@ public class BeanGarantia implements Serializable {
 											consignacionUnidadN.setFechaVenta(consignacionUnidadF.getFechaVenta());
 											consignacionUnidadN.setNroImei(nroImei);
 											consignacionUnidadN.setPrecioCompra(unidadMovil.getPrecioCompra());
-											consignacionUnidadN.setPrecioVenta(precioProducto.getPrecioVenta());
+											consignacionUnidadN.setPrecioLista(precioProducto.getPrecioVenta());
 											consignacionUnidadN.setTipoVenta(consignacionUnidadF.getTipoVenta());
 											consignacionUnidadN.setUnidadMovil(unidadMovil);
 											consignacionUnidadN.setVendido(consignacionUnidadF.getVendido());
@@ -4097,7 +4097,7 @@ public class BeanGarantia implements Serializable {
 					ConsignacionsDetalleUnidad consignacionUnidad = consignacionDetalleUnidadDAO.get(nroImei);
 					if (consignacionUnidad.getId() != 0) {
 //						precioVenta = consignacionUnidad.getPrecioVenta();
-						float precioUnidad = consignacionUnidad.getPrecioVenta();
+						float precioUnidad = consignacionUnidad.getPrecioLista();
 						ConsignacionsDetalle consignacionDetalle = consignacionDetalleDAO.get(consignacionUnidad.getConsignacionsDetalle().getId());
 						Consignacion consignacion = consignacionDAO.get(consignacionDetalle.getConsignacion().getId());
 						float precioVenta = consignacion.getMonto() - precioUnidad;

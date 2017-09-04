@@ -342,7 +342,7 @@ public class BeanVentaConsignacion implements Serializable {
 				Producto prod = consignacionsDetalleUnidad.getProducto();
 				ListaPrecioProducto precioProducto = listaPrecioDAO.getItemProducto(lista, prod);
 				float precioV = precioProducto.getPrecioVenta();
-				consignacionsDetalleUnidad.setPrecioVenta(precioV);
+				consignacionsDetalleUnidad.setPrecioLista(precioV);
 				listaConsignacionsDetallesUnidad.add(consignacionsDetalleUnidad);
 			}
 		}
@@ -464,7 +464,7 @@ public class BeanVentaConsignacion implements Serializable {
 	public float getMontoEnVenta(List<ConsignacionsDetalleUnidad> listAux){
 		float total = 0;
 		for (ConsignacionsDetalleUnidad consignacionUnidad : listAux){
-			total = total + consignacionUnidad.getPrecioVenta();
+			total = total + consignacionUnidad.getPrecioLista();
 		}
 		return total;
 	}
@@ -976,7 +976,7 @@ public class BeanVentaConsignacion implements Serializable {
 			int idProducto = unidad.getProducto().getId();
 			Producto prod = productoDAO.get(idProducto);
 			float precioCompra = consigUnidad.getPrecioCompra();
-			float precioVenta = consigUnidad.getPrecioVenta();
+			float precioVenta = consigUnidad.getPrecioLista();
 			if (prod.getId() == producto.getId()) {
 				cantidad = cantidad + 1;
 				subtotal = subtotal + precioVenta;

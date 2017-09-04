@@ -43,8 +43,8 @@ public class ConsignacionsDetalleUnidad implements Serializable {
 	@Column(name="precio_compra")
 	private float precioCompra;
 
-	@Column(name="precio_venta")
-	private float precioVenta;
+	@Column(name="precio_lista")
+	private float precioLista;
 
 	@Column(name="tipo_venta")
 	private String tipoVenta;
@@ -142,12 +142,12 @@ public class ConsignacionsDetalleUnidad implements Serializable {
 		this.precioCompra = precioCompra;
 	}
 
-	public float getPrecioVenta() {
-		return this.precioVenta;
+	public float getPrecioLista() {
+		return this.precioLista;
 	}
 
-	public void setPrecioVenta(float precioVenta) {
-		this.precioVenta = precioVenta;
+	public void setPrecioLista(float precioLista) {
+		this.precioLista = precioLista;
 	}
 
 	public String getTipoVenta() {

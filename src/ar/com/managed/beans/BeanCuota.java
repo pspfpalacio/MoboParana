@@ -342,7 +342,7 @@ public class BeanCuota implements Serializable {
 					cuo.setUsuario1(usuario);
 					cuo.setInteres(interes);
 					cuo.setNroImei(imei);
-					float montoTotal = consignacionUnidad.getPrecioVenta();
+					float montoTotal = consignacionUnidad.getPrecioLista();
 					float montoPorcen = 0;
 					if (interes != 0) {
 						montoPorcen = (montoTotal * interes)/100;

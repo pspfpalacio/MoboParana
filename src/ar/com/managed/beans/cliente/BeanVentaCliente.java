@@ -15,6 +15,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import ar.com.clases.CuentaCorriente;
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Comprobante;
@@ -55,6 +57,8 @@ public class BeanVentaCliente implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final static Logger log = Logger.getLogger(BeanVentaCliente.class);
 	
 	@ManagedProperty(value = "#{BeanUsuarioDAO}")
 	private DAOUsuario usuarioDAO;
@@ -379,54 +383,60 @@ public class BeanVentaCliente implements Serializable {
 	}
 	
 	public void onBlurNroImei(){
+		log.info("onBlurNroImei() - nroImei: " + nroImei);
 		producto = new Producto();
 		agregar = true;
 		precioVenta = 0;
 		if(!nroImei.isEmpty() && nroImei != null){
 			unidadMovil = unidadMovilDAO.get(nroImei);
 			ConsignacionsDetalleUnidad consignacionUnidad = consignacionDetalleUnidadDAO.getUnidad(nroImei, consignacion, cliente);
+			log.info("ConsignacionUnidad id: " + consignacionUnidad.getId());
 			if (consignacionUnidad.getId() != 0) {
-				if (unidadMovil.getId() != 0) {
+				log.info("UnidadMovil id: " + unidadMovil.getId());
+				if (unidadMovil.getId() != 0) {					
 					if (!unidadMovil.getEnGarantiaCliente() && !unidadMovil.getEnGarantiaProveedor() && unidadMovil.getEnStock() && !unidadMovil.getEnVenta() && unidadMovil.getEnConsignacion() && unidadMovil.getEstado() && !unidadMovil.getEliminado()) {
 						producto = unidadMovil.getProducto();
 						ListaPrecio lista = new ListaPrecio();
-						lista = consignacionUnidad.getListaPrecio();						
+						lista = consignacionUnidad.getListaPrecio();
+						log.info("ListaPrecio id: " + lista.getId());
 						if(lista.getId() != 0){
 							ListaPrecioProducto precioProducto = new ListaPrecioProducto();
-							precioProducto = listaPrecioDAO.getItemProducto(lista, producto);
-							precioVenta = precioProducto.getPrecioVenta();							
+							precioProducto = listaPrecioDAO.getItemProducto(lista, producto);							
+							precioVenta = precioProducto.getPrecioVenta();					
+							log.info("PrecioProducto id: " + precioProducto.getId() + " - precioVenta: " + precioVenta);							
 							if (precioVenta > 0) {
 								float costoPromedio = producto.getCostoPromedio();
+								log.info("CostoPromedio: " + costoPromedio);
 								if (costoPromedio != 0) {
 									if (precioVenta < costoPromedio) {
-										System.out.println("Precio Venta: " + precioVenta);
-										System.out.println("Costo Promedio: " + costoPromedio); 
 										FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, contáctese con su proveedor!", null);
 										FacesContext.getCurrentInstance().addMessage(null, msg);
 									} else {
+										float precioLista = consignacionUnidad.getPrecioLista();
+										FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El precio que debe abonar por el móvil es PRECIO: $" + precioVenta 
+												+ ", el móvil se consignó al PRECIO: $" + precioLista + ".", null);
+										FacesContext.getCurrentInstance().addMessage(null, msg);
 										agregar = false;
 									}
 								} else {
+									float precioLista = consignacionUnidad.getPrecioLista();
+									FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El precio que debe abonar por el móvil es PRECIO: $" + precioVenta 
+											+ ", el móvil se consignó al PRECIO: $" + precioLista + ".", null);
+									FacesContext.getCurrentInstance().addMessage(null, msg);
 									agregar = false;
 								}
 							} else {
-								System.out.println("Precio Venta: " + precioVenta);
+								log.info("PrecioVenta: " + precioVenta);
 								FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, contáctese con su proveedor!", null);
 								FacesContext.getCurrentInstance().addMessage(null, msg);
 							}
-						} else {
-							System.out.println("Lista Precio Id: " + lista.getId());
+						} else {							
+							log.info("ListaPrecio id: " + lista.getId());
 							FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, contáctese con su proveedor!", null);
 							FacesContext.getCurrentInstance().addMessage(null, msg);
 						}						
 					} else {
-						System.out.println("En Garantia Cliente: " + unidadMovil.getEnGarantiaCliente());
-						System.out.println("En Garantia Proveedor: " + unidadMovil.getEnGarantiaProveedor());
-						System.out.println("En Stock: " + unidadMovil.getEnStock());
-						System.out.println("En Venta: " + unidadMovil.getEnVenta());
-						System.out.println("En Consignacion: " + unidadMovil.getEnConsignacion());
-						System.out.println("Estado: " + unidadMovil.getEstado());
-						System.out.println("Eliminado: " + unidadMovil.getEliminado());
+						log.info("enGarantiaCliente: " + unidadMovil.getEnGarantiaCliente() + " - enGarantiaProveedor: " + unidadMovil.getEnGarantiaProveedor() + " - enStock: " + unidadMovil.getEnStock() + " - enVenta: " + unidadMovil.getEnVenta() + " - enConsignacion: " + unidadMovil.getEnConsignacion() + " - estado: " + unidadMovil.getEstado() + " - eliminado: " + unidadMovil.getEliminado());						
 						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un problema grave, contáctese con su proveedor! El nro de Imei no corresponde a ningun producto en Stock!", null);
 						FacesContext.getCurrentInstance().addMessage(null, msg);
 					}
@@ -452,7 +462,7 @@ public class BeanVentaCliente implements Serializable {
 					ConsignacionsDetalleUnidad unidad = new ConsignacionsDetalleUnidad();
 					unidad.setNroImei(unidadMovil.getNroImei());
 					unidad.setPrecioCompra(unidadMovil.getPrecioCompra());
-					unidad.setPrecioVenta(precioVenta);
+					unidad.setPrecioLista(precioVenta);
 					unidad.setUnidadMovil(unidadMovil);
 					unidad.setFechaAlta(new Date());
 					listaUnidades.add(unidad);
@@ -475,7 +485,7 @@ public class BeanVentaCliente implements Serializable {
 				ConsignacionsDetalleUnidad unidad = new ConsignacionsDetalleUnidad();
 				unidad.setNroImei(unidadMovil.getNroImei());
 				unidad.setPrecioCompra(unidadMovil.getPrecioCompra());
-				unidad.setPrecioVenta(precioVenta);
+				unidad.setPrecioLista(precioVenta);
 				unidad.setUnidadMovil(unidadMovil);
 				unidad.setFechaAlta(new Date());
 				listaUnidades.add(unidad);
@@ -518,8 +528,8 @@ public class BeanVentaCliente implements Serializable {
 				listAux.add(unidadDetalle);
 			}
 		}
-		montoTotal = montoTotal - imei.getPrecioVenta();
-		float subtot = detalle.getSubtotal() -  imei.getPrecioVenta();
+		montoTotal = montoTotal - imei.getPrecioLista();
+		float subtot = detalle.getSubtotal() -  imei.getPrecioLista();
 		cantidadTotal = cantidadTotal - 1;
 		int cant = detalle.getCantidad() - 1;
 		detalle.setConsignacionsDetalleUnidads(listAux);
@@ -637,14 +647,14 @@ public class BeanVentaCliente implements Serializable {
 								ventaUnidad.setEliminado(false);
 								ventaUnidad.setNroImei(imei);
 								ventaUnidad.setPrecioCompra(unidad.getPrecioCompra());
-								ventaUnidad.setPrecioVenta(consignacionUnidad.getPrecioVenta());	
+								ventaUnidad.setPrecioVenta(consignacionUnidad.getPrecioLista());	
 								ventaUnidad.setVentasConsDetalle(ventaDetalle);
 								int idDetalleUnidad = ventaConsignacionDetalleUnidadDAO.insertar(ventaUnidad);
 								int updateUniCons = consignacionDetalleUnidadDAO.update(consUnidad);
 								int updateUnidad = unidadMovilDAO.update(unidad);
 								//SETEO UNIDAD DE COMPROBANTE
 								DetalleComprobanteUnidad unidadComprobante = new DetalleComprobanteUnidad();
-								unidadComprobante.setPrecioUnitario(formatoMonto.format(consignacionUnidad.getPrecioVenta()));
+								unidadComprobante.setPrecioUnitario(formatoMonto.format(consignacionUnidad.getPrecioLista()));
 								unidadComprobante.setNroImei(imei);
 								listaComprobanteDetalleUnidads.add(unidadComprobante);
 								if (idDetalleUnidad == 0 || updateUnidad == 0 || updateUniCons == 0) {

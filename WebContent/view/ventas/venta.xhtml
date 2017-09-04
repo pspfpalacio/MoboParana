@@ -60,13 +60,14 @@
 		    				
 		    			</p:panelGrid>
 		    			<p:separator />
-		   				<p:panelGrid columns="4" style="width:100%">
+		    			<p:messages id="info" showDetail="false" autoUpdate="true" closable="true" />
+		   				<p:panelGrid columns="4" style="width:100%">		   					
 		   					<p:outputLabel value="Nro Imei: " />
 		   					<p:inputText id="nroImei" value="#{beanVentaCliente.nroImei}">
-		   						<p:ajax event="blur" update="messages, precio, producto, producto1, add" listener="#{beanVentaCliente.onBlurNroImei()}"/>
+		   						<p:ajax event="blur" update="precio, producto, producto1, add, info" listener="#{beanVentaCliente.onBlurNroImei()}"/>
 		   					</p:inputText>		   					
 		   					
-		   					<p:outputLabel value="Precio de Venta: " />
+		   					<p:outputLabel value="Precio que debe abonar: " />
 		   					<p:outputLabel id="precio" value="#{beanVentaCliente.precioVenta}" >
 		   						<f:convertNumber pattern="$###,##0.00" maxFractionDigits="2"/>
 		   					</p:outputLabel>
@@ -123,7 +124,7 @@
 			   							</h:outputText>
 		   							</p:column>
 		   							<p:column headerText="Precio Unitario" style="width:130px;text-align:center;">
-		   								<h:outputText value="$ #{unidad.precioVenta}" >
+		   								<h:outputText value="$ #{unidad.precioLista}" >
 		   									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
 		   								</h:outputText>
 		   							</p:column>

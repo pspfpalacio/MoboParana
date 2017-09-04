@@ -753,7 +753,7 @@ public class BeanConsignacion implements Serializable {
 				float montDetalle = 0;
 				for (ConsignacionsDetalleUnidad detalleUnidad : listAux1) {
 					cantDetalle = cantDetalle + 1;
-					montDetalle = montDetalle + detalleUnidad.getPrecioVenta();					
+					montDetalle = montDetalle + detalleUnidad.getPrecioLista();					
 				}
 				consignacionsDetalle.setCantidad(cantDetalle);
 				consignacionsDetalle.setSubtotal(montDetalle);
@@ -869,7 +869,7 @@ public class BeanConsignacion implements Serializable {
 				float montDetalle = 0;
 				for (ConsignacionsDetalleUnidad detalleUnidad : listAux1) {
 					cantDetalle = cantDetalle + 1;
-					montDetalle = montDetalle + detalleUnidad.getPrecioVenta();					
+					montDetalle = montDetalle + detalleUnidad.getPrecioLista();					
 				}
 				consignacionsDetalle.setCantidad(cantDetalle);
 				consignacionsDetalle.setSubtotal(montDetalle);
@@ -964,7 +964,7 @@ public class BeanConsignacion implements Serializable {
 			float montDetalle = 0;
 			for (ConsignacionsDetalleUnidad detalleUnidad : listAux1) {
 				cantDetalle = cantDetalle + 1;
-				montDetalle = montDetalle + detalleUnidad.getPrecioVenta();					
+				montDetalle = montDetalle + detalleUnidad.getPrecioLista();					
 			}
 			consignacionsDetalle.setCantidad(cantDetalle);
 			consignacionsDetalle.setSubtotal(montDetalle);
@@ -1099,7 +1099,7 @@ public class BeanConsignacion implements Serializable {
 					ConsignacionsDetalleUnidad unidad = new ConsignacionsDetalleUnidad();
 					unidad.setNroImei(unidadMovil.getNroImei());
 					unidad.setPrecioCompra(unidadMovil.getPrecioCompra());
-					unidad.setPrecioVenta(precioVenta);
+					unidad.setPrecioLista(precioVenta);
 					unidad.setUnidadMovil(unidadMovil);
 					unidad.setFechaAlta(new Date());
 					unidad.setListaPrecio(listaPrecio);
@@ -1124,7 +1124,7 @@ public class BeanConsignacion implements Serializable {
 				ConsignacionsDetalleUnidad unidad = new ConsignacionsDetalleUnidad();
 				unidad.setNroImei(unidadMovil.getNroImei());
 				unidad.setPrecioCompra(unidadMovil.getPrecioCompra());
-				unidad.setPrecioVenta(precioVenta);
+				unidad.setPrecioLista(precioVenta);
 				unidad.setUnidadMovil(unidadMovil);
 				unidad.setFechaAlta(new Date());
 				unidad.setListaPrecio(listaPrecio);
@@ -1175,8 +1175,8 @@ public class BeanConsignacion implements Serializable {
 				listAux.add(unidadDetalle);
 			}
 		}
-		montoTotal = montoTotal - imei.getPrecioVenta();
-		float subtot = detalle.getSubtotal() -  imei.getPrecioVenta();
+		montoTotal = montoTotal - imei.getPrecioLista();
+		float subtot = detalle.getSubtotal() -  imei.getPrecioLista();
 		cantidadTotal = cantidadTotal - 1;
 		int cant = detalle.getCantidad() - 1;
 		detalle.setConsignacionsDetalleUnidads(listAux);
@@ -1386,7 +1386,7 @@ public class BeanConsignacion implements Serializable {
 								eConsigDetUnidad.setEConsignacionsDetalle(eConsigDetalle);
 								eConsigDetUnidad.setListaPrecio(consignacionUnidad.getListaPrecio());
 								eConsigDetUnidad.setNroImei(consignacionUnidad.getNroImei());
-								eConsigDetUnidad.setPrecioVenta(consignacionUnidad.getPrecioVenta());
+								eConsigDetUnidad.setPrecioVenta(consignacionUnidad.getPrecioLista());
 								eConsigDetUnidad.setProducto(consignacionUnidad.getProducto());
 								eConsignacionDetalleUnidadDAO.insertar(eConsigDetUnidad);
 								if(idDetalleUnidad == 0){
@@ -1503,7 +1503,7 @@ public class BeanConsignacion implements Serializable {
 								eConsigDetUnidad.setEConsignacionsDetalle(eConsigDetalle);
 								eConsigDetUnidad.setListaPrecio(consignacionUnidad.getListaPrecio());
 								eConsigDetUnidad.setNroImei(consignacionUnidad.getNroImei());
-								eConsigDetUnidad.setPrecioVenta(consignacionUnidad.getPrecioVenta());
+								eConsigDetUnidad.setPrecioVenta(consignacionUnidad.getPrecioLista());
 								eConsigDetUnidad.setProducto(consignacionUnidad.getProducto());
 								eConsignacionDetalleUnidadDAO.insertar(eConsigDetUnidad);
 								if(idDetalleUnidad == 0){
@@ -1590,7 +1590,7 @@ public class BeanConsignacion implements Serializable {
 							eConsigDetUnidad.setEConsignacionsDetalle(eConsigDetalle);
 							eConsigDetUnidad.setListaPrecio(consignacionUnidad.getListaPrecio());								
 							eConsigDetUnidad.setNroImei(consignacionUnidad.getNroImei());
-							eConsigDetUnidad.setPrecioVenta(consignacionUnidad.getPrecioVenta());
+							eConsigDetUnidad.setPrecioVenta(consignacionUnidad.getPrecioLista());
 							eConsigDetUnidad.setProducto(consignacionUnidad.getProducto());
 							eConsignacionDetalleUnidadDAO.insertar(eConsigDetUnidad);
 							listaEConsigUnidad.add(eConsigDetUnidad);

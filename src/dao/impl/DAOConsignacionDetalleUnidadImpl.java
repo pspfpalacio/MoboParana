@@ -56,14 +56,14 @@ public class DAOConsignacionDetalleUnidadImpl implements Serializable,
 			inicializar();
 			EntityTransaction tx = em.getTransaction();
 			Query locQuery = em.createQuery("UPDATE ConsignacionsDetalleUnidad c SET c.consignacionsDetalle = :pConsignacionDetalle, c.nroImei = :pNroImei, "
-					+ "c.precioCompra = :pPrecioCompra, c.precioVenta = :pPrecioVenta, c.tipoVenta = :pTipoVenta, c.unidadMovil = :pUnidadMovil, c.vendido = :pVendido, "
+					+ "c.precioCompra = :pPrecioCompra, c.precioLista = :pPrecioLista, c.tipoVenta = :pTipoVenta, c.unidadMovil = :pUnidadMovil, c.vendido = :pVendido, "
 					+ "c.fechaAlta = :pFechaAlta, c.fechaBaja = :pFechaBaja, c.fechaVenta = :pFechaVenta, c.listaPrecio = :pListaPrecio, c.enabled = :pEnabled, "
 					+ "c.producto = :pProducto "
 					+ "WHERE c.id = :pId");
 			locQuery.setParameter("pConsignacionDetalle", consignacionsDetalleUnidad.getConsignacionsDetalle());
 			locQuery.setParameter("pNroImei", consignacionsDetalleUnidad.getNroImei());
 			locQuery.setParameter("pPrecioCompra", consignacionsDetalleUnidad.getPrecioCompra());
-			locQuery.setParameter("pPrecioVenta", consignacionsDetalleUnidad.getPrecioVenta());
+			locQuery.setParameter("pPrecioLista", consignacionsDetalleUnidad.getPrecioLista());
 			locQuery.setParameter("pTipoVenta", consignacionsDetalleUnidad.getTipoVenta());
 			locQuery.setParameter("pUnidadMovil", consignacionsDetalleUnidad.getUnidadMovil());
 			locQuery.setParameter("pVendido", consignacionsDetalleUnidad.getVendido());
