@@ -25,6 +25,7 @@ import model.entity.Consignacion;
 import model.entity.ConsignacionsDetalleUnidad;
 import model.entity.CuentasCorrientesCliente;
 import model.entity.Cuota;
+import model.entity.EquipoPendientePago;
 import model.entity.ListaPrecio;
 import model.entity.ListaPrecioProducto;
 import model.entity.Producto;
@@ -38,6 +39,7 @@ import dao.interfaces.DAOConsignacion;
 import dao.interfaces.DAOConsignacionDetalle;
 import dao.interfaces.DAOConsignacionDetalleUnidad;
 import dao.interfaces.DAOCuota;
+import dao.interfaces.DAOEquipoPendientePago;
 import dao.interfaces.DAOListaPrecio;
 import dao.interfaces.DAOProducto;
 import dao.interfaces.DAOUnidadMovil;
@@ -86,6 +88,9 @@ public class BeanVentaConsignacion implements Serializable {
 	
 	@ManagedProperty(value = "#{BeanListaPrecioDAO}")
 	private DAOListaPrecio listaPrecioDAO;
+	
+	@ManagedProperty(value = "#{BeanEquipoPendientePagoDAO}")
+	private DAOEquipoPendientePago equipoPendientePagoDAO;
 	
 	private List<VentasCon> listaVentasCons;
 	private List<VentasCon> filteredVentasCons;
@@ -191,6 +196,14 @@ public class BeanVentaConsignacion implements Serializable {
 
 	public void setListaPrecioDAO(DAOListaPrecio listaPrecioDAO) {
 		this.listaPrecioDAO = listaPrecioDAO;
+	}
+
+	public DAOEquipoPendientePago getEquipoPendientePagoDAO() {
+		return equipoPendientePagoDAO;
+	}
+
+	public void setEquipoPendientePagoDAO(DAOEquipoPendientePago equipoPendientePagoDAO) {
+		this.equipoPendientePagoDAO = equipoPendientePagoDAO;
 	}
 
 	public List<VentasCon> getListaVentasCons() {
@@ -308,7 +321,7 @@ public class BeanVentaConsignacion implements Serializable {
 		usuario = user;
 		listaVentasCons = ventaConsignacionDAO.getLista(true, consig);
 		if (listaVentasCons.isEmpty()) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La consignación no posee ventas realizadas!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La consignaciï¿½n no posee ventas realizadas!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
 		} else {
@@ -394,7 +407,7 @@ public class BeanVentaConsignacion implements Serializable {
 			}
 			return retorno;
 		} catch (Exception e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error con la seleccion de productos! Inténtelo nuevamente!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un error con la seleccion de productos! Intï¿½ntelo nuevamente!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
 		}
@@ -444,7 +457,7 @@ public class BeanVentaConsignacion implements Serializable {
 			montoTotal = venCons.getMonto();
 			return "ventamodif";
 		} catch(Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al redireccionar a la página de modificación! Error original: " + e.getMessage(), null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un Error al redireccionar a la pï¿½gina de modificaciï¿½n! Error original: " + e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
 		}
@@ -600,18 +613,21 @@ public class BeanVentaConsignacion implements Serializable {
 				venCons.setFechaBaja(new Date());
 				venCons.setUsuario2(usuario);
 				int updateVent = ventaConsignacionDAO.update(venCons);
+				
+				//ACA VENDRIA LA BAJA LOGICA DE EQUIPO POR PAGAR
+				
 				if(updateVent != 0 && actualizo){
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Venta!", null);
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al dar de Baja la Venta, "
-							+ "Inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un Error al dar de Baja la Venta, "
+							+ "Intï¿½ntelo nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Venta posee Móviles en Garantía, realice la baja correspondiente e "
-						+ "inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Venta posee Mï¿½viles en Garantï¿½a, realice la baja correspondiente e "
+						+ "intï¿½ntelo nuevamente!", null);
 			}
 		} catch (Exception e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No pudo ser posible dar de baja la Venta, inténtelo nuevamente mas tarde!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No pudo ser posible dar de baja la Venta, intï¿½ntelo nuevamente mas tarde!", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
@@ -635,7 +651,7 @@ public class BeanVentaConsignacion implements Serializable {
 			
 			ccCliente.setCliente(client);
 			ccCliente.setDebe(montoTotal);
-			ccCliente.setDetalle("Venta Consignación nro: " + idVenta);				
+			ccCliente.setDetalle("Venta Consignaciï¿½n nro: " + idVenta);				
 			ccCliente.setFecha(fechaVen);
 			ccCliente.setIdMovimiento(idVenta);
 			ccCliente.setMonto(montoTotal);
@@ -673,7 +689,17 @@ public class BeanVentaConsignacion implements Serializable {
 							int idDetalleUnidad = ventaConsignacionDetalleUnidadDAO.insertar(ventasUnidad);
 							int updateUnidad = unidadMovilDAO.update(unidad);
 							int updateUniCons = consignacionDetalleUnidadDAO.update(unidadConsignacion);
-							if(idDetalleUnidad == 0 || updateUnidad == 0 || updateUniCons == 0){
+							
+							//INSERTO EN TABLA DE PENDIENTE DE PAGO
+							EquipoPendientePago ePendienteP = new EquipoPendientePago();
+							ePendienteP.setMonto(unidadConsignacion.getPrecioLista());
+							ePendienteP.setImei(imei);
+							ePendienteP.setCliente(client);
+							ePendienteP.setFechaAlta(new Date());
+							ePendienteP.setUsuario1(usuario);
+							int idEPendienteP = equipoPendientePagoDAO.insert(ePendienteP);
+							
+							if(idDetalleUnidad == 0 || updateUnidad == 0 || updateUniCons == 0 || idEPendienteP == 0){
 								insertoUnidad = false;
 								break;
 							}
@@ -691,15 +717,15 @@ public class BeanVentaConsignacion implements Serializable {
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta guardada!", null);
 					retorno = "consignaciones";
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Detalle de la Venta! "
-							+ "Inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurriï¿½ un error al guardar el Detalle de la Venta! "
+							+ "Intï¿½ntelo nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar la Venta! "
-						+ "Inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurriï¿½ un error al guardar la Venta! "
+						+ "Intï¿½ntelo nuevamente!", null);
 			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta no pueden estar vacíos!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta no pueden estar vacï¿½os!", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		return retorno;		
@@ -731,7 +757,7 @@ public class BeanVentaConsignacion implements Serializable {
 				//Inserto movimiento en cuenta corriente
 				ccCliente.setCliente(cli);
 				ccCliente.setDebe(montoTotal);
-				ccCliente.setDetalle("Venta Consignación nro: " + idVen);
+				ccCliente.setDetalle("Venta Consignaciï¿½n nro: " + idVen);
 				ccCliente.setFecha(fechaVen);
 				ccCliente.setIdMovimiento(idVen);
 				ccCliente.setMonto(montoTotal);
@@ -826,26 +852,26 @@ public class BeanVentaConsignacion implements Serializable {
 							msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta guardada!", null);
 							retorno = "ventas_consignacion";
 						}else{
-							msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Detalle de la Venta! "
-									+ "Inténtelo nuevamente!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurriï¿½ un error al guardar el Detalle de la Venta! "
+									+ "Intï¿½ntelo nuevamente!", null);
 						}
 					}else{
-						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al insertar la Unidad Móvil del Detalle de la Venta! "
-								+ "Inténtelo nuevamente!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurriï¿½ un error al insertar la Unidad Mï¿½vil del Detalle de la Venta! "
+								+ "Intï¿½ntelo nuevamente!", null);
 					}
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar la Venta! "
-							+ "Inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurriï¿½ un error al guardar la Venta! "
+							+ "Intï¿½ntelo nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta no pueden estar vacíos!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta no pueden estar vacï¿½os!", null);
 			}
 			listaVentasCons = new ArrayList<VentasCon>();
 			listaVentasCons = ventaConsignacionDAO.getLista(true, consignacion);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return retorno;
 		} catch(Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al guardar la venta! Error original: " + e.getMessage(), null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un error al guardar la venta! Error original: " + e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
 		}		

@@ -605,7 +605,9 @@ public class BeanVentaCliente implements Serializable {
 				ccCliente.setMonto(montoTotal);
 				ccCliente.setNombreTabla("VentasCon");
 				ccCliente.setUsuario(usuario);
-				cuenta.insertarCC(ccCliente);			
+				cuenta.insertarCC(ccCliente);	
+				
+				log.info("idVenta " + idVenta);
 				
 				if (idVenta != 0) {
 					boolean inserto = true;
@@ -687,6 +689,10 @@ public class BeanVentaCliente implements Serializable {
 								ePendienteP.setFechaAlta(new Date());
 								ePendienteP.setUsuario1(usuario);
 								int idEPendienteP = equipoPendientePagoDAO.insert(ePendienteP);
+								log.info("idDetalleUnidad " + idDetalleUnidad);
+								log.info("updateUnidad " + updateUnidad);
+								log.info("updateUniCons " + updateUniCons);
+								log.info("idEPendienteP " + idEPendienteP);
 								if (idDetalleUnidad == 0 || updateUnidad == 0 || updateUniCons == 0  || idEPendienteP == 0) {
 									insertoUnidad = false;
 									break;
