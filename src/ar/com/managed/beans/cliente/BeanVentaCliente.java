@@ -27,6 +27,7 @@ import model.entity.Consignacion;
 import model.entity.ConsignacionsDetalle;
 import model.entity.ConsignacionsDetalleUnidad;
 import model.entity.CuentasCorrientesCliente;
+import model.entity.EquipoPendientePago;
 import model.entity.ListaPrecio;
 import model.entity.ListaPrecioProducto;
 import model.entity.Mensaje;
@@ -40,6 +41,7 @@ import dao.interfaces.DAOCliente;
 import dao.interfaces.DAOConsignacion;
 import dao.interfaces.DAOConsignacionDetalle;
 import dao.interfaces.DAOConsignacionDetalleUnidad;
+import dao.interfaces.DAOEquipoPendientePago;
 import dao.interfaces.DAOListaPrecio;
 import dao.interfaces.DAOMensaje;
 import dao.interfaces.DAOProducto;
@@ -95,6 +97,9 @@ public class BeanVentaCliente implements Serializable {
 	
 	@ManagedProperty(value = "#{BeanProductoDAO}")
 	private DAOProducto productoDAO;
+
+	@ManagedProperty(value = "#{BeanEquipoPendientePagoDAO}")
+	private DAOEquipoPendientePago equipoPendientePagoDAO;
 	
 	private List<ConsignacionsDetalle> listaConsignacionsDetalles;
 	private List<VentasCon> listaVentasCons;
@@ -106,6 +111,7 @@ public class BeanVentaCliente implements Serializable {
 	private Producto producto;
 	private UnidadMovil unidadMovil;
 	private Comprobante comprobante;
+	private EquipoPendientePago equipoPendientePago;
 	private Date fecha;
 	private Date fechaInicio;
 	private Date fechaFin;
@@ -214,6 +220,14 @@ public class BeanVentaCliente implements Serializable {
 	public void setProductoDAO(DAOProducto productoDAO) {
 		this.productoDAO = productoDAO;
 	}
+	
+	public DAOEquipoPendientePago getEquipoPendientePagoDAO() {
+		return equipoPendientePagoDAO;
+	}
+
+	public void setEquipoPendientePagoDAO(DAOEquipoPendientePago equipoPendientePagoDAO) {
+		this.equipoPendientePagoDAO = equipoPendientePagoDAO;
+	}
 
 	public List<ConsignacionsDetalle> getListaConsignacionsDetalles() {
 		return listaConsignacionsDetalles;
@@ -295,6 +309,14 @@ public class BeanVentaCliente implements Serializable {
 
 	public void setComprobante(Comprobante comprobante) {
 		this.comprobante = comprobante;
+	}
+
+	public EquipoPendientePago getEquipoPendientePago() {
+		return equipoPendientePago;
+	}
+
+	public void setEquipoPendientePago(EquipoPendientePago equipoPendientePago) {
+		this.equipoPendientePago = equipoPendientePago;
 	}
 
 	public Date getFecha() {
@@ -409,43 +431,43 @@ public class BeanVentaCliente implements Serializable {
 								log.info("CostoPromedio: " + costoPromedio);
 								if (costoPromedio != 0) {
 									if (precioVenta < costoPromedio) {
-										FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, contáctese con su proveedor!", null);
+										FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, contï¿½ctese con su proveedor!", null);
 										FacesContext.getCurrentInstance().addMessage(null, msg);
 									} else {
 										float precioLista = consignacionUnidad.getPrecioLista();
-										FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El precio que debe abonar por el móvil es PRECIO: $" + precioVenta 
-												+ ", el móvil se consignó al PRECIO: $" + precioLista + ".", null);
+										FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El precio que debe abonar por el mï¿½vil es PRECIO: $" + precioVenta 
+												+ ", el mï¿½vil se consignï¿½ al PRECIO: $" + precioLista + ".", null);
 										FacesContext.getCurrentInstance().addMessage(null, msg);
 										agregar = false;
 									}
 								} else {
 									float precioLista = consignacionUnidad.getPrecioLista();
-									FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El precio que debe abonar por el móvil es PRECIO: $" + precioVenta 
-											+ ", el móvil se consignó al PRECIO: $" + precioLista + ".", null);
+									FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El precio que debe abonar por el mï¿½vil es PRECIO: $" + precioVenta 
+											+ ", el mï¿½vil se consignï¿½ al PRECIO: $" + precioLista + ".", null);
 									FacesContext.getCurrentInstance().addMessage(null, msg);
 									agregar = false;
 								}
 							} else {
 								log.info("PrecioVenta: " + precioVenta);
-								FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, contáctese con su proveedor!", null);
+								FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, contï¿½ctese con su proveedor!", null);
 								FacesContext.getCurrentInstance().addMessage(null, msg);
 							}
 						} else {							
 							log.info("ListaPrecio id: " + lista.getId());
-							FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, contáctese con su proveedor!", null);
+							FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, contï¿½ctese con su proveedor!", null);
 							FacesContext.getCurrentInstance().addMessage(null, msg);
 						}						
 					} else {
 						log.info("enGarantiaCliente: " + unidadMovil.getEnGarantiaCliente() + " - enGarantiaProveedor: " + unidadMovil.getEnGarantiaProveedor() + " - enStock: " + unidadMovil.getEnStock() + " - enVenta: " + unidadMovil.getEnVenta() + " - enConsignacion: " + unidadMovil.getEnConsignacion() + " - estado: " + unidadMovil.getEstado() + " - eliminado: " + unidadMovil.getEliminado());						
-						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un problema grave, contáctese con su proveedor! El nro de Imei no corresponde a ningun producto en Stock!", null);
+						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un problema grave, contï¿½ctese con su proveedor! El nro de Imei no corresponde a ningun producto en Stock!", null);
 						FacesContext.getCurrentInstance().addMessage(null, msg);
 					}
 				} else {
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un problema grave, contáctese con su proveedor! El nro de Imei no corresponde a ningun producto en Stock!", null);
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un problema grave, contï¿½ctese con su proveedor! El nro de Imei no corresponde a ningun producto en Stock!", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				}
 			} else {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de Imei válido! El nro de Imei no corresponde a ningun producto en Stock!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de Imei vï¿½lido! El nro de Imei no corresponde a ningun producto en Stock!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}			
 		}
@@ -577,7 +599,7 @@ public class BeanVentaCliente implements Serializable {
 				
 				ccCliente.setCliente(cliente);
 				ccCliente.setDebe(montoTotal);
-				ccCliente.setDetalle("Venta Consignación nro: " + idVenta);				
+				ccCliente.setDetalle("Venta ConsignaciÃ³n nro: " + idVenta);				
 				ccCliente.setFecha(fecha);
 				ccCliente.setIdMovimiento(idVenta);
 				ccCliente.setMonto(montoTotal);
@@ -597,8 +619,8 @@ public class BeanVentaCliente implements Serializable {
 					SimpleDateFormat formatoFechaHora = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 					DecimalFormat formatoMonto = new DecimalFormat("$###,##0.00");
 					Mensaje mensaje = new Mensaje();
-					String asunto = "Nueva venta de consignación realizada";
-					String detalle = "El usuario cliente " + usuario.getCliente().getApellidoNombre() + " realizó una venta con número " + Integer.toString(idVenta) + " por " + formatoMonto.format(montoTotal) + " en el día y horario " + formatoFechaHora.format(new Date()) + ". Para ver el detalle de la venta diríjase a Consignaciones - Ventas de Consignaciones.";
+					String asunto = "Nueva venta de consignaciÃ³n realizada";
+					String detalle = "El usuario cliente " + usuario.getCliente().getApellidoNombre() + " realizÃ³ una venta con nÃºmero " + Integer.toString(idVenta) + " por " + formatoMonto.format(montoTotal) + " en el dÃ­a y horario " + formatoFechaHora.format(new Date()) + ". Para ver el detalle de la venta dirÃ­jase a Consignaciones - Ventas de Consignaciones.";
 					mensaje.setAsunto(asunto);
 					mensaje.setCliente(cliente);
 					mensaje.setDetalle(detalle);
@@ -657,7 +679,15 @@ public class BeanVentaCliente implements Serializable {
 								unidadComprobante.setPrecioUnitario(formatoMonto.format(consignacionUnidad.getPrecioLista()));
 								unidadComprobante.setNroImei(imei);
 								listaComprobanteDetalleUnidads.add(unidadComprobante);
-								if (idDetalleUnidad == 0 || updateUnidad == 0 || updateUniCons == 0) {
+								//INSERTO EN TABLA DE PENDIENTE DE PAGO
+								EquipoPendientePago ePendienteP = new EquipoPendientePago();
+								ePendienteP.setMonto(consignacionUnidad.getPrecioLista());
+								ePendienteP.setImei(imei);
+								ePendienteP.setCliente(cliente);
+								ePendienteP.setFechaAlta(new Date());
+								ePendienteP.setUsuario1(usuario);
+								int idEPendienteP = equipoPendientePagoDAO.insert(ePendienteP);
+								if (idDetalleUnidad == 0 || updateUnidad == 0 || updateUniCons == 0  || idEPendienteP == 0) {
 									insertoUnidad = false;
 									break;
 								}
@@ -682,21 +712,21 @@ public class BeanVentaCliente implements Serializable {
 						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta registrada!", null);
 						retorno = "comprobante";
 					} else {
-						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al registrar el Detalle de la Venta! "
-								+ "Inténtelo nuevamente!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "OcurriÃ³ un error al registrar el Detalle de la Venta! "
+								+ "IntÃ©ntelo nuevamente!", null);
 					}					
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar la Venta! "
-							+ "Inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "OcurriÃ³ un error al guardar la Venta! "
+							+ "IntÃ©ntelo nuevamente!", null);
 				}
 			} else {
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta no pueden estar vacíos!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta no pueden estar vacÃ­os!", null);
 			}
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return retorno;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error grave al generar la venta! Contáctese con el administrador! Error: " + e.getMessage(), null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "OcurriÃ³ un error grave al generar la venta! ContÃ¡ctese con el administrador! Error: " + e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
 		}
@@ -789,7 +819,7 @@ public class BeanVentaCliente implements Serializable {
 			consignacion = consignacionDAO.get(cliente, true);
 			listaVentasCons = ventaConsignacionDAO.getLista(true, consignacion, user);			
 			if (listaVentasCons.isEmpty()) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La consignación no posee ventas realizadas!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La consignaciï¿½n no posee ventas realizadas!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				return "";
 			} else {
