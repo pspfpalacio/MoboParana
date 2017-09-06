@@ -736,6 +736,10 @@ public class BeanVentaConsignacion implements Serializable {
 			FacesMessage msg = null;
 			String retorno = "";
 			if(ventasCon.getFecha() != null && !listaVentasConsDetalles.isEmpty() && montoTotal != 0){
+				
+				List<String> imeiListNew = new ArrayList<String>();
+				List<String> imeiListOld = new ArrayList<String>();
+				
 				CuentaCorriente cuenta = new CuentaCorriente();
 				CuentasCorrientesCliente ccCliente = new CuentasCorrientesCliente();
 				//Elimino movimiento en cuenta corriente
@@ -784,6 +788,7 @@ public class BeanVentaConsignacion implements Serializable {
 						for(VentasConsDetalleUnidad ventaUnidad : listAux){						
 							String imeiUndadMvile = ventaUnidad.getNroImei();
 							UnidadMovil unidad = unidadMovilDAO.get(imeiUndadMvile);
+							imeiListOld.add(imeiUndadMvile);
 							ConsignacionsDetalleUnidad unidadConsignacion = consignacionDetalleUnidadDAO.get(imeiUndadMvile);
 							unidadConsignacion.setVendido(false);
 							unidadConsignacion.setTipoVenta(null);							
@@ -803,6 +808,7 @@ public class BeanVentaConsignacion implements Serializable {
 						}
 						ventaConsignacionDetalleDAO.delete(ventaDetalle);
 					}
+										
 					//Alta de nuevo detalle de venta
 					if(deleteDetalleUnidad){
 						boolean inserto = true;
@@ -823,6 +829,7 @@ public class BeanVentaConsignacion implements Serializable {
 								boolean insertoUnidad = true;
 								for(VentasConsDetalleUnidad ventasUnidad : listAux){
 									String imei = ventasUnidad.getNroImei();
+									imeiListNew.add(imei);
 									UnidadMovil unidad = unidadMovilDAO.get(imei);
 									ConsignacionsDetalleUnidad unidadConsignacion = consignacionDetalleUnidadDAO.get(imei);
 									unidadConsignacion.setVendido(true);
@@ -848,6 +855,12 @@ public class BeanVentaConsignacion implements Serializable {
 								break;
 							}
 						}
+						
+						imeiListOld.removeAll(imeiListNew);
+						for (String imei : imeiListOld) {
+							System.out.println(imei);
+						}
+						
 						if(inserto){
 							msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta guardada!", null);
 							retorno = "ventas_consignacion";
