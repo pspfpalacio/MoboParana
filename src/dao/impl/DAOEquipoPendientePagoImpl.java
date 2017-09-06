@@ -9,7 +9,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-import model.entity.Caja;
 import model.entity.Cliente;
 import model.entity.EquipoPendientePago;
 import dao.interfaces.DAOEquipoPendientePago;
@@ -34,16 +33,16 @@ public class DAOEquipoPendientePagoImpl  implements Serializable, DAOEquipoPendi
 		emf.close();
 	}
 	
-	public int insert(EquipoPendientePago epp) {
+	public int insert(EquipoPendientePago equipoPendientePago) {
 		inicializar();
 		EntityTransaction tx = em.getTransaction();
 		try{
 			tx.begin();
-			em.persist(epp);
+			em.persist(equipoPendientePago);
 			tx.commit();
-			return epp.getId();
+			return equipoPendientePago.getId();
 		}catch (Exception e){
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			tx.rollback();
 			return 0;
 		}

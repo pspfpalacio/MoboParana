@@ -50,5 +50,6 @@
 	<bean id="BeanEConsignacionDetalleUnidadDAO" class="dao.impl.DAOEConsignacionDetalleUnidadImpl" />
 	<bean id="BeanMensajeDAO" class="dao.impl.DAOMensajeImpl" />
 	<bean id="BeanTecnicoDAO" class="dao.impl.DAOTecnicoImpl" />
+	<bean id="BeanEquipoPendientePagoDAO" class="dao.impl.DAOEquipoPendientePagoImpl" />
 
 </beans>
