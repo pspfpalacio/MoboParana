@@ -688,6 +688,7 @@ public class BeanVentaCliente implements Serializable {
 								ePendienteP.setCliente(cliente);
 								ePendienteP.setFechaAlta(new Date());
 								ePendienteP.setUsuario1(usuario);
+								ePendienteP.setEnabled(true);
 								int idEPendienteP = equipoPendientePagoDAO.insert(ePendienteP);
 								log.info("idDetalleUnidad " + idDetalleUnidad);
 								log.info("updateUnidad " + updateUnidad);

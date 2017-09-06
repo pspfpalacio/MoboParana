@@ -15,11 +15,14 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import ar.com.clases.CuentaCorriente;
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Comprobante;
 import ar.com.clases.auxiliares.DetalleComprobante;
 import ar.com.clases.auxiliares.DetalleComprobanteUnidad;
+import ar.com.managed.beans.cliente.BeanVentaCliente;
 import model.entity.Cliente;
 import model.entity.Consignacion;
 import model.entity.ConsignacionsDetalleUnidad;
@@ -55,6 +58,8 @@ public class BeanVentaConsignacion implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final static Logger log = Logger.getLogger(BeanVentaConsignacion.class);
 	
 	@ManagedProperty(value = "#{BeanClienteDAO}")
 	private DAOCliente clienteDAO;
@@ -598,7 +603,13 @@ public class BeanVentaConsignacion implements Serializable {
 						unidad.setEnVenta(false);
 						int updateUnid = unidadMovilDAO.update(unidad);
 						int updateUniCons = consignacionDetalleUnidadDAO.update(unidadConsignacion);
-						if(updateUnid == 0 || updateUniCons == 0){
+						
+						//BAJA LOGICA DE EQUIPO PENDIENTE DE PAGO
+						EquipoPendientePago epp = equipoPendientePagoDAO.getPorImei(nroImei);
+						log.info("Equipo pendiente de pago, Imei : " + epp.getImei());
+						int eppBaja = equipoPendientePagoDAO.baja(epp);
+						
+						if(updateUnid == 0 || updateUniCons == 0 || eppBaja == 0){
 							actualizo = false;
 						}
 					}
@@ -614,7 +625,7 @@ public class BeanVentaConsignacion implements Serializable {
 				venCons.setUsuario2(usuario);
 				int updateVent = ventaConsignacionDAO.update(venCons);
 				
-				//ACA VENDRIA LA BAJA LOGICA DE EQUIPO POR PAGAR
+				
 				
 				if(updateVent != 0 && actualizo){
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Venta!", null);
@@ -697,6 +708,7 @@ public class BeanVentaConsignacion implements Serializable {
 							ePendienteP.setCliente(client);
 							ePendienteP.setFechaAlta(new Date());
 							ePendienteP.setUsuario1(usuario);
+							ePendienteP.setEnabled(true);
 							int idEPendienteP = equipoPendientePagoDAO.insert(ePendienteP);
 							
 							if(idDetalleUnidad == 0 || updateUnidad == 0 || updateUniCons == 0 || idEPendienteP == 0){
@@ -856,9 +868,23 @@ public class BeanVentaConsignacion implements Serializable {
 							}
 						}
 						
-						imeiListOld.removeAll(imeiListNew);
-						for (String imei : imeiListOld) {
-							System.out.println(imei);
+						//BAJA LOGICA DE EQUIPO PENDIENTE DE PAGO
+						for (String imeiOld : imeiListOld) {
+							boolean listFlag = true;
+							for(String imeiNew: imeiListNew) {
+								if(imeiOld.equals(imeiNew)) {
+									listFlag = false;
+								}
+							}
+							if(listFlag) {
+								EquipoPendientePago epp = equipoPendientePagoDAO.getPorImei(imeiOld);
+								log.info("Equipo pendiente de pago, Imei : " + epp.getImei());
+								int eppBaja = equipoPendientePagoDAO.baja(epp);
+								if(eppBaja == 0) {
+									inserto = false;
+								}
+							}
+							
 						}
 						
 						if(inserto){
