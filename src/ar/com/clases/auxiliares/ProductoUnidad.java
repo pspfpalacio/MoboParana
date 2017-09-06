@@ -1,6 +1,9 @@
 package ar.com.clases.auxiliares;
 
 import java.io.Serializable;
+import java.util.List;
+
+import model.entity.UnidadMovil;
 
 public class ProductoUnidad implements Serializable {
 
@@ -11,7 +14,9 @@ public class ProductoUnidad implements Serializable {
 	
 	private String marcaModelo;
 	private int stock;
-	private String nroImei;
+	private int consignacion;
+	private List<UnidadMovil> enStocks;
+	private List<UnidadMovil> enConsignacions;
 	
 	public String getMarcaModelo() {
 		return marcaModelo;
@@ -29,12 +34,28 @@ public class ProductoUnidad implements Serializable {
 		this.stock = stock;
 	}
 	
-	public String getNroImei() {
-		return nroImei;
+	public int getConsignacion() {
+		return consignacion;
 	}
-	
-	public void setNroImei(String nroImei) {
-		this.nroImei = nroImei;
+
+	public void setConsignacion(int consignacion) {
+		this.consignacion = consignacion;
+	}
+
+	public List<UnidadMovil> getEnStocks() {
+		return enStocks;
+	}
+
+	public void setEnStocks(List<UnidadMovil> enStocks) {
+		this.enStocks = enStocks;
+	}
+
+	public List<UnidadMovil> getEnConsignacions() {
+		return enConsignacions;
+	}
+
+	public void setEnConsignacions(List<UnidadMovil> enConsignacions) {
+		this.enConsignacions = enConsignacions;
 	}
 
 }

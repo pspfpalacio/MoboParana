@@ -17,6 +17,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.ProductoUnidad;
 import ar.com.clases.reportes.Ganancia;
@@ -70,6 +72,8 @@ public class BeanReporte implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final static Logger log = Logger.getLogger(BeanReporte.class);
 	
 	@ManagedProperty(value = "#{BeanVentaDAO}")
 	private DAOVenta ventaDAO;
@@ -758,7 +762,7 @@ public class BeanReporte implements Serializable {
 						VentasRanking ventasRanking = new VentasRanking();
 						cant = cant + 1;
 						monto = monto + ventasCon.getMonto();
-						ventasRanking.setClase("Venta de Consignación");
+						ventasRanking.setClase("Venta de Consignaciï¿½n");
 						ventasRanking.setId(ventasCon.getId());
 						ventasRanking.setFecha(ventasCon.getFecha());
 						ventasRanking.setTipo(ventasCon.getTipo());
@@ -984,7 +988,7 @@ public class BeanReporte implements Serializable {
 						monto = monto + ventasConsDetalle.getSubtotal();
 						cant = cant + ventasConsDetalle.getCantidad();
 						VentasCon ventCon = ventasConsDetalle.getVentasCon();
-						ventasRanking.setClase("Venta de Consignación");
+						ventasRanking.setClase("Venta de Consignaciï¿½n");
 						ventasRanking.setId(ventCon.getId());
 						ventasRanking.setFecha(ventCon.getFecha());
 						ventasRanking.setTipo(ventCon.getTipo());
@@ -1157,7 +1161,7 @@ public class BeanReporte implements Serializable {
 							
 						}
 						float fGanancia = ventasCon.getMonto() - costo;
-						ganancia.setClase("Venta de Consignación");
+						ganancia.setClase("Venta de Consignaciï¿½n");
 						ganancia.setId(ventasCon.getId());
 						ganancia.setFecha(ventasCon.getFecha());
 						ganancia.setCliente(ventasCon.getCliente().getNombreNegocio());
@@ -1229,7 +1233,7 @@ public class BeanReporte implements Serializable {
 						float fGanancia = ventasConDetalle.getSubtotal() - costo;
 						VentasCon ventasCon = ventasConDetalle.getVentasCon();
 						//ganancia.setVenta(venta);
-						ganancia.setClase("Venta de Consignación");
+						ganancia.setClase("Venta de Consignaciï¿½n");
 						ganancia.setId(ventasCon.getId());
 						ganancia.setFecha(ventasCon.getFecha());
 						ganancia.setCliente(ventasCon.getCliente().getNombreNegocio());
@@ -1348,7 +1352,7 @@ public class BeanReporte implements Serializable {
 					listaGananciaDetalle.add(gananciaDetalle);
 				}
 				float fGanancia = ventasCon.getMonto() - costo;
-				gananciaObj.setClase("Venta de Consignación");
+				gananciaObj.setClase("Venta de Consignaciï¿½n");
 				gananciaObj.setId(ventasCon.getId());
 				gananciaObj.setFecha(ventasCon.getFecha());
 				gananciaObj.setCliente(ventasCon.getCliente().getNombreNegocio());
@@ -1415,7 +1419,7 @@ public class BeanReporte implements Serializable {
 							listAux.add(ganancia);
 						}
 					} else {
-						encabezado = "ventas de consignación";
+						encabezado = "ventas de consignaciï¿½n";
 						List<VentasCon> listaVentasCon = ventaConsignacionDAO.getLista(true, fechaDesde, fechaHasta);
 						for (VentasCon ventCon : listaVentasCon) {
 							Ganancia ganancia = new Ganancia();
@@ -1428,7 +1432,7 @@ public class BeanReporte implements Serializable {
 								}							
 							}
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -1541,7 +1545,7 @@ public class BeanReporte implements Serializable {
 				listaGananciaDetalle.add(gananciaDetalle);
 			}
 			float fGanancia = ventasCon.getMonto() - costo;
-			gananciaObj.setClase("Venta de Consignación");
+			gananciaObj.setClase("Venta de Consignaciï¿½n");
 			gananciaObj.setId(ventasCon.getId());
 			gananciaObj.setFecha(ventasCon.getFecha());
 			gananciaObj.setCliente(ventasCon.getCliente().getNombreNegocio());
@@ -1720,7 +1724,7 @@ public class BeanReporte implements Serializable {
 			listaProveedores = proveedorDAO.getLista(true);
 			return "reporteDinamico";
 		} catch (Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al cargar el formulario! Error: " 
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un error al cargar el formulario! Error: " 
 		+ e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
@@ -2604,7 +2608,7 @@ public class BeanReporte implements Serializable {
 								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
 							}							
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -2633,7 +2637,7 @@ public class BeanReporte implements Serializable {
 								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
 							}							
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -2662,7 +2666,7 @@ public class BeanReporte implements Serializable {
 								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
 							}							
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -2704,7 +2708,7 @@ public class BeanReporte implements Serializable {
 								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
 							}							
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -2737,7 +2741,7 @@ public class BeanReporte implements Serializable {
 								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
 							}							
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -2770,7 +2774,7 @@ public class BeanReporte implements Serializable {
 								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
 							}							
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -2834,7 +2838,7 @@ public class BeanReporte implements Serializable {
 								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
 							}							
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -2863,7 +2867,7 @@ public class BeanReporte implements Serializable {
 								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
 							}							
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -2892,7 +2896,7 @@ public class BeanReporte implements Serializable {
 								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
 							}							
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -2934,7 +2938,7 @@ public class BeanReporte implements Serializable {
 								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
 							}							
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -2967,7 +2971,7 @@ public class BeanReporte implements Serializable {
 								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
 							}							
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -3000,7 +3004,7 @@ public class BeanReporte implements Serializable {
 								costo = costo + ventasConsDetalleUnidad.getPrecioCompra();
 							}							
 							float fGanancia = ventCon.getMonto() - costo;
-							ganancia.setClase("Venta de Consignación");
+							ganancia.setClase("Venta de Consignaciï¿½n");
 							ganancia.setId(ventCon.getId());
 							ganancia.setFecha(ventCon.getFecha());
 							ganancia.setCliente(ventCon.getCliente().getNombreNegocio());
@@ -3051,6 +3055,7 @@ public class BeanReporte implements Serializable {
 	}
 	
 	public void buscarStock() {		
+		log.info("buscarStock() - tipoProducto: " + idTipoProducto + " estado: " + idEstado);
 		if (idTipoProducto != 0) {
 			listaProductoUnidads = new ArrayList<ProductoUnidad>();
 			List<Producto> listProducts = new ArrayList<Producto>();
@@ -3073,16 +3078,17 @@ public class BeanReporte implements Serializable {
 			if (idTipoProducto == 1) {
 				for (Producto prod : listProducts) {									
 					List<UnidadMovil> listaUMovils = unidadMovilDAO.getListaEnStock(true, prod, false, true);
+					List<UnidadMovil> listaUConsig = unidadMovilDAO.getListaEnStock(false, prod, true, true);
 					int stock = listaUMovils.size();
-					String marcaModelo = prod.getNombre();				
-					for (UnidadMovil unidadM : listaUMovils) {
-						ProductoUnidad productoU = new ProductoUnidad();
-						String imei = unidadM.getNroImei();
-						productoU.setMarcaModelo(marcaModelo);
-						productoU.setStock(stock);
-						productoU.setNroImei(imei);
-						listaProductoUnidads.add(productoU);
-					}
+					int consig = listaUConsig.size();
+					String marcaModelo = prod.getNombre();
+					ProductoUnidad productoU = new ProductoUnidad();
+					productoU.setMarcaModelo(marcaModelo);
+					productoU.setStock(stock);
+					productoU.setConsignacion(consig);
+					productoU.setEnStocks(listaUMovils);
+					productoU.setEnConsignacions(listaUConsig);
+					listaProductoUnidads.add(productoU);					
 				}
 			}
 			if (idTipoProducto == 2) {
@@ -3093,47 +3099,13 @@ public class BeanReporte implements Serializable {
 					for (Stock sProd : listaStocks) {
 						stock = stock + sProd.getCantidad();
 					}
-//					int stock = listaStocks.size();
 					String marcaModelo = prod.getNombre();				
 					productoU.setMarcaModelo(marcaModelo);
 					productoU.setStock(stock);
 					listaProductoUnidads.add(productoU);
 				}
-			}			
-	//		if (idTipoProducto == 1) {//MOVILES
-	//			rub.setId(idTipoProducto);
-	//			switch (idEstado) {
-	//			case 0:
-	//				listProducts = productoDAO.getLista(rub);
-	//				break;
-	//			case 1:
-	//				listProducts = productoDAO.getLista(true, rub);
-	//				break;
-	//			case 2:
-	//				listProducts = productoDAO.getLista(false, rub);
-	//				break;
-	//			default:
-	//				listProducts = productoDAO.getLista(rub);
-	//				break;
-	//			}
-	//		}
-	//		if (idTipoProducto == 2) {//ACCESORIOS
-	//			rub.setId(idTipoProducto);
-	//			switch (idEstado) {
-	//			case 0:
-	//				listProducts = productoDAO.getLista(rub);
-	//				break;
-	//			case 1:
-	//				listProducts = productoDAO.getLista(true, rub);
-	//				break;
-	//			case 2:
-	//				listProducts = productoDAO.getLista(false, rub);
-	//				break;
-	//			default:
-	//				listProducts = productoDAO.getLista(rub);
-	//				break;
-	//			}
-//		}
+			}
+			log.info("Lista Producto size() " + listaProductoUnidads.size());
 		} else {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe seleccionar un tipo de producto!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
