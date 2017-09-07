@@ -105,24 +105,24 @@ public class DAOEquipoPendientePagoImpl  implements Serializable, DAOEquipoPendi
 	
 	public List<EquipoPendientePago> getListaPorCliente(Cliente cliente) {
 		inicializar();
-		Query locQuery = em.createQuery("SELECT e FROM EquipoPendientePago e WHERE e.cliente = :pCliente", EquipoPendientePago.class);
-		locQuery.setParameter("pCliente", cliente.getId());
+		Query locQuery = em.createQuery("SELECT e FROM EquipoPendientePago e WHERE e.cliente = :pCliente and e.enabled = 1", EquipoPendientePago.class);
+		locQuery.setParameter("pCliente", cliente);
 		List<EquipoPendientePago> lista = locQuery.getResultList();
 		return lista;
 	}
 	
 	public List<EquipoPendientePago> getListaNoPagosPorCliente(Cliente cliente) {
 		inicializar();
-		Query locQuery = em.createQuery("SELECT e FROM EquipoPendientePago e WHERE e.cliente = :pCliente and e.pago = 0", EquipoPendientePago.class);
-		locQuery.setParameter("pCliente", cliente.getId());
+		Query locQuery = em.createQuery("SELECT e FROM EquipoPendientePago e WHERE e.cliente = :pCliente and e.pagado = 0 and e.enabled = 1", EquipoPendientePago.class);
+		locQuery.setParameter("pCliente", cliente);
 		List<EquipoPendientePago> lista = locQuery.getResultList();
 		return lista;
 	}
 	
 	public List<EquipoPendientePago> getListaPagosPorCliente(Cliente cliente) {
 		inicializar();
-		Query locQuery = em.createQuery("SELECT e FROM EquipoPendientePago e WHERE e.cliente = :pCliente and e.pago = 1", EquipoPendientePago.class);
-		locQuery.setParameter("pCliente", cliente.getId());
+		Query locQuery = em.createQuery("SELECT e FROM EquipoPendientePago e WHERE e.cliente = :pCliente and e.pagado = 1 and e.enabled = 1", EquipoPendientePago.class);
+		locQuery.setParameter("pCliente", cliente);
 		List<EquipoPendientePago> lista = locQuery.getResultList();
 		return lista;
 	}
