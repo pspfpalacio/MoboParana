@@ -431,43 +431,43 @@ public class BeanVentaCliente implements Serializable {
 								log.info("CostoPromedio: " + costoPromedio);
 								if (costoPromedio != 0) {
 									if (precioVenta < costoPromedio) {
-										FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, cont�ctese con su proveedor!", null);
+										FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, contactese con su proveedor!", null);
 										FacesContext.getCurrentInstance().addMessage(null, msg);
 									} else {
 										float precioLista = consignacionUnidad.getPrecioLista();
-										FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El precio que debe abonar por el m�vil es PRECIO: $" + precioVenta 
-												+ ", el m�vil se consign� al PRECIO: $" + precioLista + ".", null);
+										FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El precio que debe abonar por el movil es PRECIO: $" + precioVenta 
+												+ ", el movil se consignó al PRECIO: $" + precioLista + ".", null);
 										FacesContext.getCurrentInstance().addMessage(null, msg);
 										agregar = false;
 									}
 								} else {
 									float precioLista = consignacionUnidad.getPrecioLista();
-									FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El precio que debe abonar por el m�vil es PRECIO: $" + precioVenta 
-											+ ", el m�vil se consign� al PRECIO: $" + precioLista + ".", null);
+									FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El precio que debe abonar por el movil es PRECIO: $" + precioVenta 
+											+ ", el movil se consigno al PRECIO: $" + precioLista + ".", null);
 									FacesContext.getCurrentInstance().addMessage(null, msg);
 									agregar = false;
 								}
 							} else {
 								log.info("PrecioVenta: " + precioVenta);
-								FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, cont�ctese con su proveedor!", null);
+								FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, contactese con su proveedor!", null);
 								FacesContext.getCurrentInstance().addMessage(null, msg);
 							}
 						} else {							
 							log.info("ListaPrecio id: " + lista.getId());
-							FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, cont�ctese con su proveedor!", null);
+							FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible vender el producto, contactese con su proveedor!", null);
 							FacesContext.getCurrentInstance().addMessage(null, msg);
 						}						
 					} else {
 						log.info("enGarantiaCliente: " + unidadMovil.getEnGarantiaCliente() + " - enGarantiaProveedor: " + unidadMovil.getEnGarantiaProveedor() + " - enStock: " + unidadMovil.getEnStock() + " - enVenta: " + unidadMovil.getEnVenta() + " - enConsignacion: " + unidadMovil.getEnConsignacion() + " - estado: " + unidadMovil.getEstado() + " - eliminado: " + unidadMovil.getEliminado());						
-						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurri� un problema grave, cont�ctese con su proveedor! El nro de Imei no corresponde a ningun producto en Stock!", null);
+						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrio un problema grave, contactese con su proveedor! El nro de Imei no corresponde a ningun producto en Stock!", null);
 						FacesContext.getCurrentInstance().addMessage(null, msg);
 					}
 				} else {
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurri� un problema grave, cont�ctese con su proveedor! El nro de Imei no corresponde a ningun producto en Stock!", null);
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrio un problema grave, contactese con su proveedor! El nro de Imei no corresponde a ningun producto en Stock!", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				}
 			} else {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de Imei v�lido! El nro de Imei no corresponde a ningun producto en Stock!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de Imei valido! El nro de Imei no corresponde a ningun producto en Stock!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}			
 		}
@@ -826,7 +826,7 @@ public class BeanVentaCliente implements Serializable {
 			consignacion = consignacionDAO.get(cliente, true);
 			listaVentasCons = ventaConsignacionDAO.getLista(true, consignacion, user);			
 			if (listaVentasCons.isEmpty()) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La consignaci�n no posee ventas realizadas!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La consignacion no posee ventas realizadas!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				return "";
 			} else {
