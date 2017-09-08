@@ -10,6 +10,8 @@ public interface DAOEquipoPendientePago {
 	
 	public int update(EquipoPendientePago equipoPendientePago);
 	
+	public int pagar(EquipoPendientePago equipoPendientePago);
+	
 	public int baja(EquipoPendientePago equipoPendientePago);
 	
 	public EquipoPendientePago getPorImei(String imei);

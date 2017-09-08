@@ -52,12 +52,33 @@ public class DAOEquipoPendientePagoImpl  implements Serializable, DAOEquipoPendi
 		inicializar();
 		EntityTransaction tx = em.getTransaction();
 		try {
-			String update = "UPDATE EquipoPendientePago e SET e.pagado = :pPagado, e.usuarioMod = :pUsuarioMod, e.fechaMod = :pFechaMod "
+			String update = "UPDATE EquipoPendientePago e SET e.pagado = :pPagado, e.usuario2 = :pUsuario2, e.fechaMod = :pFechaMod "
 					+ "WHERE e.id = :pId";
 			Query locQuery = em.createQuery(update);
 			locQuery.setParameter("pPagado", epp.getPagado());
 			locQuery.setParameter("pFechaMod", epp.getFechaMod());
-			locQuery.setParameter("pUsuarioMod", epp.getUsuario2());
+			locQuery.setParameter("pUsuario2", epp.getUsuario2());
+			locQuery.setParameter("pId", epp.getId());
+			tx.begin();
+			locQuery.executeUpdate();
+			tx.commit();
+			return epp.getId();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			tx.rollback();
+			return 0;
+		}
+	}
+	
+	public int pagar(EquipoPendientePago epp) {
+		inicializar();
+		EntityTransaction tx = em.getTransaction();
+		try {
+			String update = "UPDATE EquipoPendientePago e SET e.pagado = 1, e.usuario2 = :pUsuario2, e.fechaMod = :pFechaMod "
+					+ "WHERE e.id = :pId";
+			Query locQuery = em.createQuery(update);
+			locQuery.setParameter("pFechaMod", epp.getFechaMod());
+			locQuery.setParameter("pUsuario2", epp.getUsuario2());
 			locQuery.setParameter("pId", epp.getId());
 			tx.begin();
 			locQuery.executeUpdate();

@@ -41,7 +41,7 @@ public class BeanPendientePago implements Serializable {
 	private List<EquipoPendientePago> listaEpp;
 	private float montoTotal;
 	int filtro;
-	Cliente cliente = new Cliente();
+	private Cliente cliente;
 	
 	public DAOEquipoPendientePago getEquipoPendientePagoDAO() {
 		return equipoPendientePagoDAO;
@@ -102,6 +102,7 @@ public class BeanPendientePago implements Serializable {
 	}
 
 	public String goPendientePago(Usuario user) {
+		cliente = new Cliente();
 		cliente = user.getCliente();
 		montoTotal = 0;
 		filtro = 0;
