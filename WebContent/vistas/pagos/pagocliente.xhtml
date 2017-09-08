@@ -42,12 +42,12 @@
 		<div class="wrapper">
 			<ui:include src="/includes/header.xhtml" />
 			<h:form id="formulario">
-			<p:panel style="background:#D27C7A;min-height:900px;">
+			<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
 				<p:growl id="messages" showDetail="false" />
 				<ui:include src="/includes/menubar.xhtml" />
 				<br/>
 				<br/>
-    			<p:panelGrid columns="4" style="width:100%;">
+    			<p:panelGrid columns="6" style="width:100%;">
     				<f:facet name="header">
     					<h:outputText value="Pago de Cliente" />
     				</f:facet>
@@ -77,7 +77,7 @@
    						action="#{beanPago.goPagoCliente(beanPago.usuario)}"/>
    					</f:facet>	
    				</p:panelGrid>
-   				
+   				<p:separator/>
    				<p:dataTable id="eppTable" value="#{beanPago.listaEpp}" var="epp" emptyMessage="No existen equipos pendietes de pago" paginator="true" rows="10"
 				selection="#{beanPago.equiposSelectos}" rowKey="#{epp.id}">
    					<f:facet name="header">
@@ -115,8 +115,8 @@
    					</p:column>
    					
    					<f:facet name="footer" >
-   						<p:commandButton process="eppTable" value="Agregar" action="#{beanPago.agregarEquiposParaPagar()}" update="eppTable" />
-						<p:commandButton process="eppTable" value="Limpiar" action="#{beanPago.limpiarEquiposParaPagar()}" update="eppTable"/>
+   						<p:commandButton process="eppTable" value="Agregar" action="#{beanPago.agregarEquiposParaPagar()}" update=":formulario:panel" />
+						<p:commandButton process="eppTable" value="Limpiar" action="#{beanPago.limpiarEquiposParaPagar()}" update=":formulario:panel"/>
    					</f:facet>
    				</p:dataTable>
    			</p:panel>

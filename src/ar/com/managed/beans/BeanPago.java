@@ -284,6 +284,9 @@ public class BeanPago implements Serializable {
 				caja.setUsuario(usuario);
 				int idCaja = movimientoCaja.insertarCaja(caja);
 				int eppPagado = 0;
+				if(equiposParaPagar.size() == 0) {
+					eppPagado = 1;
+				}
 				log.info("Equipos Por Pagar: " + equiposParaPagar.size());
 				for(EquipoPendientePago epp : equiposParaPagar) {
 					epp.setFechaMod(new Date());
@@ -296,6 +299,9 @@ public class BeanPago implements Serializable {
 					idCliente = 0;
 					pagoCliente = new PagosCliente();
 					pagoCliente.setFecha(new Date());
+					listaEpp = new ArrayList<EquipoPendientePago>();
+					equiposSelectos = new ArrayList<EquipoPendientePago>();
+					equiposParaPagar = new ArrayList<EquipoPendientePago>();
 					retorno = "pagocliente";
 				}else{
 					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Pago, "
@@ -368,28 +374,35 @@ public class BeanPago implements Serializable {
 		return retorno;
 	}
 	
-	public String marcarpagado() {
+	public String marcarPagado() {
 		FacesMessage msg = null;
 		String retorno = "";
-		boolean eppPagado = true;
-		log.info("Equipos Por Pagar: " + equiposParaPagar.size());
-		for(EquipoPendientePago epp : equiposParaPagar) {
-			epp.setFechaMod(new Date());
-			epp.setUsuario2(usuario);
-			if(equipoPendientePagoDAO.pagar(epp) == 0) {
-				eppPagado = false;
+		if(equiposParaPagar.size() != 0) {
+			boolean eppPagado = true;
+			log.info("Equipos Por Pagar: " + equiposParaPagar.size());
+			for(EquipoPendientePago epp : equiposParaPagar) {
+				epp.setFechaMod(new Date());
+				epp.setUsuario2(usuario);
+				if(equipoPendientePagoDAO.pagar(epp) == 0) {
+					eppPagado = false;
+				}
 			}
-		}
-		if(eppPagado){
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Equipos marcados correctamente!", null);
-			idCliente = 0;
-			pagoCliente = new PagosCliente();
-			pagoCliente.setFecha(new Date());
-			retorno = "marcarpagado";
+			if(eppPagado){
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Equipos marcados correctamente!", null);
+				idCliente = 0;
+				pagoCliente = new PagosCliente();
+				listaEpp = new ArrayList<EquipoPendientePago>();
+				equiposSelectos = new ArrayList<EquipoPendientePago>();
+				equiposParaPagar = new ArrayList<EquipoPendientePago>();
+				retorno = "marcarpagados";
+			}else{
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al marcar equipos como pagados, "
+						+ "inténtelo nuevamente!", null);
+			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al marcar equipos como pagados, "
-					+ "inténtelo nuevamente!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se han seleccionado equipos", null);
 		}
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 		return retorno;
 	}
 	
