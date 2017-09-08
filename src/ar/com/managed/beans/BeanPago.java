@@ -365,7 +365,7 @@ public class BeanPago implements Serializable {
 				}
 			}else{
 				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Pago, "
-						+ "intóntelo nuevamente!", null);
+						+ "intentelo nuevamente!", null);
 			}			
 		}else{
 			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Proveedor y Monto no pueden estar vacíos!", null);
