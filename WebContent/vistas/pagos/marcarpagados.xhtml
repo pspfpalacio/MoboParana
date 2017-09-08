@@ -36,25 +36,21 @@
 					       allDayText : 'Todos los días'
     				};
 			</script>
-		<title>Pago de Cliente</title>
+		<title>Marcar equipos como pagados</title>
 	</h:head>
 	<h:body>
 		<div class="wrapper">
 			<ui:include src="/includes/header.xhtml" />
 			<h:form id="formulario">
-			<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
+			<p:panel style="background:#D27C7A;min-height:900px;">
 				<p:growl id="messages" showDetail="false" />
 				<ui:include src="/includes/menubar.xhtml" />
 				<br/>
 				<br/>
-    			<p:panelGrid columns="6" style="width:100%;">
+    			<p:panelGrid columns="1" style="width:100%;">
     				<f:facet name="header">
-    					<h:outputText value="Pago de Cliente" />
-    				</f:facet>
-    				
-    				<p:outputLabel value="Fecha: " />
-    				<p:calendar value="#{beanPago.pagoCliente.fecha}" pattern="dd/MM/yyyy" mask="true" locale="tr"/>
-    				
+    					<h:outputText value="Marcar equipos como pagado" />
+    				</f:facet>	
     				<p:outputLabel value="Clientes: " />
     				<p:selectOneMenu value="#{beanPago.idCliente}" filter="true" filterMatchMode="contains">
     				<p:ajax listener="#{beanPago.updatePendientePagoList()}" update="eppTable"></p:ajax>
@@ -62,22 +58,13 @@
     					<f:selectItems value="#{beanPago.listaClientes}" var="cliente" itemLabel="#{cliente.nombreNegocio}" 
     					itemValue="#{cliente.id}"/>
     				</p:selectOneMenu>
-    				
-    				<p:outputLabel value="Monto($): " />
-    				<p:inputText name="pagoCli" value="#{beanPago.pagoCliente.monto}" />
     			</p:panelGrid>
-    			<p:panelGrid columns="2" style="width:100%;">   
-    				<p:outputLabel value="Concepto: " />
-    				<p:inputTextarea value="#{beanPago.pagoCliente.concepto}" autoResize="false" style="width:100%;" rows="3" />
-    				 				
-   					<f:facet name="footer">
-   						<p:commandButton value="Confirmar" update="messages" action="#{beanPago.guardarPagoCliente()}" 
-   						onclick="return confirm('Esta seguro que desea confirmar el Pago?')"/>
-   						<p:commandButton value="Cancelar" oncomplete="return confirm('Esta seguro que desea cancelar el Pago?')"
-   						action="#{beanPago.goPagoCliente(beanPago.usuario)}"/>
-   					</f:facet>	
-   				</p:panelGrid>
-   				<p:separator/>
+    			<p:panelGrid columns="2" style="width:100%;">   			
+				<f:facet name="footer">
+					<p:commandButton value="Confirmar" update="messages" action="#{beanPago.marcarPagado()}"/>
+				</f:facet>	
+			</p:panelGrid>
+   				
    				<p:dataTable id="eppTable" value="#{beanPago.listaEpp}" var="epp" emptyMessage="No existen equipos pendietes de pago" paginator="true" rows="10"
 				selection="#{beanPago.equiposSelectos}" rowKey="#{epp.id}">
    					<f:facet name="header">
@@ -115,8 +102,8 @@
    					</p:column>
    					
    					<f:facet name="footer" >
-   						<p:commandButton process="eppTable" value="Agregar" action="#{beanPago.agregarEquiposParaPagar()}" update=":formulario:panel" />
-						<p:commandButton process="eppTable" value="Limpiar" action="#{beanPago.limpiarEquiposParaPagar()}" update=":formulario:panel"/>
+   						<p:commandButton process="eppTable" value="Agregar" action="#{beanPago.agregarEquiposParaPagar()}" update="eppTable" />
+						<p:commandButton process="eppTable" value="Limpiar" action="#{beanPago.limpiarEquiposParaPagar()}" update="eppTable"/>
    					</f:facet>
    				</p:dataTable>
    			</p:panel>

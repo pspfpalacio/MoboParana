@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:composition>
+		<f:view>
+			<h:head>
+				<link rel="shortcut icon" type="image/x-icon"
+					href="../../images/icono.ico" />
+				<link rel="stylesheet" href="/includes/estilo.css" type="text/css" />
+				<script type="text/javascript">
+					 PrimeFaces.locales['tr'] = {
+							       closeText: 'Cerrar',
+							       prevText: 'Anterior',
+							       nextText: 'Siguiente',
+							       currentText: 'Hoy',
+							       monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+							           'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+							       monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+							           'Jul','Ago','Sep','Oct','Nov','Dic'],
+							       dayNames: ['Domingos','Lunes','Martes','Miércoles','Jueves','Viernes','Sabado'],
+							       dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+							       dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+							       weekHeader: 'Hf',
+							       firstDay: 1,
+							       isRTL: false,
+							       showMonthAfterYear: false,
+							       yearSuffix: '',
+							       month: 'Mes',
+							       week: 'Semana',
+							       day: 'Día',
+							       allDayText : 'Todos los días'
+		    				};
+						function foco(elemento){
+							document.getElementById(elemento).focus();
+							};
+					</script>
+				<title>Equipos pendiente de pago</title>
+			</h:head>
+			<h:body>
+				<div class="wrapper">
+					<ui:include src="/includes/header.xhtml" />
+					<h:form id="formulario" onkeypress="return event.keyCode != 13">
+						<p:panel style="background:#D27C7A;min-height:900px;">
+							<p:growl id="messages" showDetail="false" />
+							<ui:include src="/includes/menu.xhtml" />																	
+							<p:dataTable id="eppTable" value="#{beanPendientePago.listaEpp}" var="epp" emptyMessage="No existen equipos pendietes de pago" paginator="true" rows="10"
+							widgetVar="eppBuscar" resizableColumns="true" sortMode="multiple">
+			   					<f:facet name="header">
+			   						<p:outputLabel value="Equipos pendientes de pago" style="width:20px;"/>	
+			   						<p:outputPanel style="float:right;">	
+				   						<p:selectOneMenu id="console" value="#{beanPendientePago.filtro}" style="width:125px">
+				   							<p:ajax listener="#{beanPendientePago.changeFiltro()}" update="eppTable"></p:ajax>
+								            <f:selectItem itemLabel="Todos" itemValue="1" />
+								            <f:selectItem itemLabel="Pagos" itemValue="2" />
+								            <f:selectItem itemLabel="No Pagos" itemValue="3" />
+								        </p:selectOneMenu>	
+							        </p:outputPanel>		
+			   					</f:facet>   	
+			   									
+			   					<p:column headerText="Imei" style="text-align:center;">
+			   						<h:outputText value="#{epp.imei}" />
+			   					</p:column>
+			   					
+			   					<p:column headerText="Nombre" style="text-align:center;">
+			   						<h:outputText value="#{beanPendientePago.getNombrePorImei(epp.imei)}"/>
+			   					</p:column>
+			   					
+			   					<p:column headerText="Precio" style="text-align:center;">
+			   						<h:outputText value="#{epp.monto}" >
+			   							<f:convertNumber pattern="$###,##0.00"/>
+		   							</h:outputText>
+			   					</p:column>
+			   					
+			   					<p:column headerText="Fecha Venta" style="text-align:center;">
+			   						<h:outputText value="#{epp.fechaAlta}" >
+			   							<f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+			   						</h:outputText>
+			   					</p:column>
+			   					
+			   					<p:column headerText="Pagado" style="text-align:center;">
+			   						<h:outputText value="#{beanPendientePago.getStringPagado(epp.pagado)}" />
+			   					</p:column>
+			   					
+			   					<p:column headerText="Usuario venta" style="text-align:center;">
+			   						<h:outputText value="#{epp.usuario1.apellidoNombre}" />
+			   					</p:column>
+			   					
+			   					<f:facet name="footer" >
+		   							<p:outputLabel value="Monto Total: " />
+		   							<h:outputText value="#{beanPendientePago.montoTotal}" >
+		   								<f:convertNumber pattern="$###,##0.00"/>
+		   							</h:outputText>
+			   					</f:facet>
+			   				</p:dataTable>
+		   				</p:panel>	
+			    		</h:form>
+			    </div>
+			</h:body>
+		</f:view>
+	</ui:composition>
+</html>

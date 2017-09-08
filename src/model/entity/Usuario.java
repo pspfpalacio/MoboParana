@@ -223,6 +223,18 @@ public class Usuario implements Serializable {
 	//bi-directional many-to-one association to Devolucione
 	@OneToMany(mappedBy="usuario3")
 	private List<Devolucione> devoluciones3;
+	
+	//bi-directional many-to-one association to EquipoPendientePago
+	@OneToMany(mappedBy="usuario1")
+	private List<EquipoPendientePago> equipoPendientePagos1;
+
+	//bi-directional many-to-one association to EquipoPendientePago
+	@OneToMany(mappedBy="usuario2")
+	private List<EquipoPendientePago> equipoPendientePagos2;
+
+	//bi-directional many-to-one association to EquipoPendientePago
+	@OneToMany(mappedBy="usuario3")
+	private List<EquipoPendientePago> equipoPendientePagos3;
 
 	//bi-directional many-to-one association to Rubro
 	@OneToMany(mappedBy="usuario1")
@@ -1889,6 +1901,72 @@ public class Usuario implements Serializable {
 		tecnicos3.setUsuario3(null);
 
 		return tecnicos3;
+	}
+	
+	public List<EquipoPendientePago> getEquipoPendientePagos1() {
+		return this.equipoPendientePagos1;
+	}
+
+	public void setEquipoPendientePagos1(List<EquipoPendientePago> equipoPendientePagos1) {
+		this.equipoPendientePagos1 = equipoPendientePagos1;
+	}
+
+	public EquipoPendientePago addEquipoPendientePagos1(EquipoPendientePago equipoPendientePagos1) {
+		getEquipoPendientePagos1().add(equipoPendientePagos1);
+		equipoPendientePagos1.setUsuario1(this);
+
+		return equipoPendientePagos1;
+	}
+
+	public EquipoPendientePago removeEquipoPendientePagos1(EquipoPendientePago equipoPendientePagos1) {
+		getEquipoPendientePagos1().remove(equipoPendientePagos1);
+		equipoPendientePagos1.setUsuario1(null);
+
+		return equipoPendientePagos1;
+	}
+
+	public List<EquipoPendientePago> getEquipoPendientePagos2() {
+		return this.equipoPendientePagos2;
+	}
+
+	public void setEquipoPendientePagos2(List<EquipoPendientePago> equipoPendientePagos2) {
+		this.equipoPendientePagos2 = equipoPendientePagos2;
+	}
+
+	public EquipoPendientePago addEquipoPendientePagos2(EquipoPendientePago equipoPendientePagos2) {
+		getEquipoPendientePagos2().add(equipoPendientePagos2);
+		equipoPendientePagos2.setUsuario2(this);
+
+		return equipoPendientePagos2;
+	}
+
+	public EquipoPendientePago removeEquipoPendientePagos2(EquipoPendientePago equipoPendientePagos2) {
+		getEquipoPendientePagos2().remove(equipoPendientePagos2);
+		equipoPendientePagos2.setUsuario2(null);
+
+		return equipoPendientePagos2;
+	}
+
+	public List<EquipoPendientePago> getEquipoPendientePagos3() {
+		return this.equipoPendientePagos3;
+	}
+
+	public void setEquipoPendientePagos3(List<EquipoPendientePago> equipoPendientePagos3) {
+		this.equipoPendientePagos3 = equipoPendientePagos3;
+	}
+
+	public EquipoPendientePago addEquipoPendientePagos3(EquipoPendientePago equipoPendientePagos3) {
+		getEquipoPendientePagos3().add(equipoPendientePagos3);
+		equipoPendientePagos3.setUsuario3(this);
+
+		return equipoPendientePagos3;
+	}
+
+	public EquipoPendientePago removeEquipoPendientePagos3(EquipoPendientePago equipoPendientePagos3) {
+		getEquipoPendientePagos3().remove(equipoPendientePagos3);
+		equipoPendientePagos3.setUsuario3(null);
+
+		return equipoPendientePagos3;
 	}
 
 }

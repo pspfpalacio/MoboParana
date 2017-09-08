@@ -15,21 +15,30 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
+
 import ar.com.clases.CuentaCorriente;
 import ar.com.clases.MovimientoCaja;
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Pagos;
+import ar.com.managed.beans.cliente.BeanVentaCliente;
 import model.entity.Caja;
 import model.entity.Cliente;
 import model.entity.CuentasCorrientesCliente;
 import model.entity.CuentasCorrientesProveedore;
+import model.entity.EquipoPendientePago;
 import model.entity.PagosCliente;
 import model.entity.PagosProveedore;
 import model.entity.Proveedore;
+import model.entity.UnidadMovil;
 import model.entity.Usuario;
 import dao.interfaces.DAOCliente;
+import dao.interfaces.DAOEquipoPendientePago;
 import dao.interfaces.DAOPago;
 import dao.interfaces.DAOProveedor;
+import dao.interfaces.DAOUnidadMovil;
 
 @ManagedBean
 @SessionScoped
@@ -40,6 +49,11 @@ public class BeanPago implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private final static Logger log = Logger.getLogger(BeanVentaCliente.class);
+	
+	@ManagedProperty(value = "#{BeanEquipoPendientePagoDAO}")
+	private DAOEquipoPendientePago equipoPendientePagoDAO;
+	
 	@ManagedProperty(value = "#{BeanPagoDAO}")
 	private DAOPago pagoDAO;
 	
@@ -49,13 +63,29 @@ public class BeanPago implements Serializable {
 	@ManagedProperty(value = "#{BeanProveedorDAO}")
 	private DAOProveedor proveedorDAO;
 	
+	@ManagedProperty(value = "#{BeanUnidadMovilDAO}")
+	private DAOUnidadMovil unidadMovilDAO;
+	
 	private List<Cliente> listaClientes;
 	private List<Proveedore> listaProveedores;
+	private List<EquipoPendientePago> listaEpp;
 	private PagosCliente pagoCliente;
 	private PagosProveedore pagoProveedore;
+	private List<EquipoPendientePago> equiposSelectos;
+	private List<EquipoPendientePago> equiposParaPagar;
+	private Cliente cliente;
 	private Usuario usuario;
 	private int idCliente;
 	private int idProveedor;
+	
+
+	public DAOEquipoPendientePago getEquipoPendientePagoDAO() {
+		return equipoPendientePagoDAO;
+	}
+
+	public void setEquipoPendientePagoDAO(DAOEquipoPendientePago equipoPendientePagoDAO) {
+		this.equipoPendientePagoDAO = equipoPendientePagoDAO;
+	}
 
 	public DAOPago getPagoDAO() {
 		return pagoDAO;
@@ -95,8 +125,24 @@ public class BeanPago implements Serializable {
 		return listaProveedores;
 	}
 
+	public DAOUnidadMovil getUnidadMovilDAO() {
+		return unidadMovilDAO;
+	}
+
+	public void setUnidadMovilDAO(DAOUnidadMovil unidadMovilDAO) {
+		this.unidadMovilDAO = unidadMovilDAO;
+	}
+
 	public void setListaProveedores(List<Proveedore> listaProveedores) {
 		this.listaProveedores = listaProveedores;
+	}
+	
+	public List<EquipoPendientePago> getListaEpp() {
+		return listaEpp;
+	}
+
+	public void setListaEpp(List<EquipoPendientePago> listaEpp) {
+		this.listaEpp = listaEpp;
 	}
 
 	public PagosCliente getPagoCliente() {
@@ -113,6 +159,30 @@ public class BeanPago implements Serializable {
 
 	public void setPagoProveedore(PagosProveedore pagoProveedore) {
 		this.pagoProveedore = pagoProveedore;
+	}
+
+	public List<EquipoPendientePago> getEquiposSelectos() {
+		return equiposSelectos;
+	}
+
+	public void setEquiposSelectos(List<EquipoPendientePago> equiposSelectos) {
+		this.equiposSelectos = equiposSelectos;
+	}
+
+	public List<EquipoPendientePago> getEquiposParaPagar() {
+		return equiposParaPagar;
+	}
+
+	public void setEquiposParaPagar(List<EquipoPendientePago> equiposParaPagar) {
+		this.equiposParaPagar = equiposParaPagar;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public Usuario getUsuario() {
@@ -138,8 +208,13 @@ public class BeanPago implements Serializable {
 	public void setIdProveedor(int idProveedor) {
 		this.idProveedor = idProveedor;
 	}
-	
+
 	public String goPagoCliente(Usuario user){
+		log.info("pagocliente.xhtml");
+		cliente = new Cliente();
+		listaEpp = new ArrayList<EquipoPendientePago>();
+		equiposSelectos = new ArrayList<EquipoPendientePago>();
+		equiposParaPagar = new ArrayList<EquipoPendientePago>();
 		idCliente = 0;
 		pagoCliente = new PagosCliente();
 		pagoCliente.setFecha(new Date());
@@ -148,7 +223,22 @@ public class BeanPago implements Serializable {
 		return "pagocliente";
 	}
 	
+	public String goMarcarPagados(Usuario user){
+		log.info("marcarpagados.xhtml");
+		cliente = new Cliente();
+		listaEpp = new ArrayList<EquipoPendientePago>();
+		equiposSelectos = new ArrayList<EquipoPendientePago>();
+		equiposParaPagar = new ArrayList<EquipoPendientePago>();
+		idCliente = 0;
+		pagoCliente = new PagosCliente();
+		pagoCliente.setFecha(new Date());
+		usuario = new Usuario();
+		usuario = user;
+		return "marcarpagados";
+	}
+	
 	public String goPagoProveedor(Usuario user){
+		log.info("pagoproveedor.xhtml");
 		idProveedor = 0;
 		pagoProveedore = new PagosProveedore();
 		pagoProveedore.setFecha(new Date());
@@ -162,11 +252,13 @@ public class BeanPago implements Serializable {
 		String retorno = "";
 		if(pagoCliente.getFecha() != null && idCliente != 0 && pagoCliente.getMonto() != 0){
 			Cliente cliente = clienteDAO.get(idCliente);
+			log.info("Cliente: " + cliente.getApellidoNombre());
 			pagoCliente.setCliente(cliente);
 			pagoCliente.setFechaAlta(new Date());
 			pagoCliente.setUsuario(usuario);
 			int idPago = pagoDAO.insertar(pagoCliente);
 			if(idPago != 0){
+				log.info("idPago: " + idPago);
 				MovimientoCaja movimientoCaja = new MovimientoCaja();
 				CuentaCorriente cuenta = new CuentaCorriente();
 				CuentasCorrientesCliente ccCliente = new CuentasCorrientesCliente();
@@ -191,22 +283,36 @@ public class BeanPago implements Serializable {
 				caja.setNombreTabla("PagosCliente");
 				caja.setUsuario(usuario);
 				int idCaja = movimientoCaja.insertarCaja(caja);
-				if(idCuentaCorriente != 0 && idCaja != 0){
+				int eppPagado = 0;
+				if(equiposParaPagar.size() == 0) {
+					eppPagado = 1;
+				}
+				log.info("Equipos Por Pagar: " + equiposParaPagar.size());
+				for(EquipoPendientePago epp : equiposParaPagar) {
+					epp.setFechaMod(new Date());
+					epp.setUsuario2(usuario);
+					eppPagado = equipoPendientePagoDAO.pagar(epp);
+				}
+				
+				if(idCuentaCorriente != 0 && idCaja != 0 && eppPagado != 0){
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago registrado!", null);
 					idCliente = 0;
 					pagoCliente = new PagosCliente();
 					pagoCliente.setFecha(new Date());
+					listaEpp = new ArrayList<EquipoPendientePago>();
+					equiposSelectos = new ArrayList<EquipoPendientePago>();
+					equiposParaPagar = new ArrayList<EquipoPendientePago>();
 					retorno = "pagocliente";
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "OcurriÛ un error al guardar el Pago, "
-							+ "intÈntelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurri√≥ un error al guardar el Pago, "
+							+ "int√©ntelo nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "OcurriÛ un error al guardar el Pago, "
-						+ "intÈntelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurri√≥ un error al guardar el Pago, "
+						+ "int√©ntelo nuevamente!", null);
 			}			
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Cliente y Monto no pueden estar vacÌos!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Cliente y Monto no pueden estar vac√≠os!", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		return retorno;
@@ -254,15 +360,47 @@ public class BeanPago implements Serializable {
 					pagoProveedore.setFecha(new Date());
 					retorno = "pagoproveedor";
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "OcurriÛ un error al guardar el Pago, "
-							+ "intÈntelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurri√≥ un error al guardar el Pago, "
+							+ "int√©ntelo nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "OcurriÛ un error al guardar el Pago, "
-						+ "intÈntelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurri√≥ un error al guardar el Pago, "
+						+ "intentelo nuevamente!", null);
 			}			
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Proveedor y Monto no pueden estar vacÌos!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Proveedor y Monto no pueden estar vac√≠os!", null);
+		}
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+		return retorno;
+	}
+	
+	public String marcarPagado() {
+		FacesMessage msg = null;
+		String retorno = "";
+		if(equiposParaPagar.size() != 0) {
+			boolean eppPagado = true;
+			log.info("Equipos Por Pagar: " + equiposParaPagar.size());
+			for(EquipoPendientePago epp : equiposParaPagar) {
+				epp.setFechaMod(new Date());
+				epp.setUsuario2(usuario);
+				if(equipoPendientePagoDAO.pagar(epp) == 0) {
+					eppPagado = false;
+				}
+			}
+			if(eppPagado){
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Equipos marcados correctamente!", null);
+				idCliente = 0;
+				pagoCliente = new PagosCliente();
+				listaEpp = new ArrayList<EquipoPendientePago>();
+				equiposSelectos = new ArrayList<EquipoPendientePago>();
+				equiposParaPagar = new ArrayList<EquipoPendientePago>();
+				retorno = "marcarpagados";
+			}else{
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurri√≥ un error al marcar equipos como pagados, "
+						+ "int√©ntelo nuevamente!", null);
+			}
+		}else{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se han seleccionado equipos", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		return retorno;
@@ -294,5 +432,70 @@ public class BeanPago implements Serializable {
 		}
 		reporte.generar(parametros, listPago, "pago", "attachment");
 	}
+	
+	public void updatePendientePagoList() {
+		cliente = new Cliente();
+		listaEpp = new ArrayList<EquipoPendientePago>();
+		equiposSelectos = new ArrayList<EquipoPendientePago>();
+		equiposParaPagar = new ArrayList<EquipoPendientePago>();
+		pagoCliente.setMonto(0);
+		cliente = clienteDAO.get(idCliente);
+		listaEpp = equipoPendientePagoDAO.getListaNoPagosPorCliente(cliente);
+	}
+	
+	public String getNombrePorImei(String imei) {
+		UnidadMovil unidadMovil = unidadMovilDAO.get(imei);
+		return unidadMovil.getProducto().getNombre();
+	}
+	
+	public String getStringPagado(Boolean pagado) {
+		if(pagado) {
+			return "Si";
+		} else {
+			return "No";
+		}
+	}
+	
+	public void agregarEquiposParaPagar() {
+		log.info("cantidad seleccionados: " + equiposSelectos.size());
+		for(EquipoPendientePago epp : equiposSelectos) {
+			equiposParaPagar.add(epp);
+		}
+		
+		List<EquipoPendientePago> auxiliar  = new ArrayList<EquipoPendientePago>();
+		for(EquipoPendientePago epp : listaEpp) {
+			boolean flag = true;
+			for(EquipoPendientePago eppSel : equiposSelectos) {
+				if(epp.equals(eppSel)) {
+					flag = false;
+				}
+			}
+			if(flag) {
+				auxiliar.add(epp);
+			} else {
+				pagoCliente.setMonto(pagoCliente.getMonto() + epp.getMonto());
+			}
+		}
+		log.info(pagoCliente.getMonto());
+		listaEpp = new ArrayList<EquipoPendientePago>();
+		listaEpp = auxiliar;
+	}
+	
+	public void limpiarEquiposParaPagar() {
+		listaEpp = new ArrayList<EquipoPendientePago>();
+		equiposSelectos = new ArrayList<EquipoPendientePago>();
+		equiposParaPagar = new ArrayList<EquipoPendientePago>();
+		cliente = clienteDAO.get(idCliente);
+		listaEpp = equipoPendientePagoDAO.getListaNoPagosPorCliente(cliente);
+		pagoCliente.setMonto(0);
+	}
+	
+	public void onRowSelect(SelectEvent event) {
+		log.info("SELECT:" + event.getObject());
+    }
+ 
+    public void onRowUnselect(UnselectEvent event) {
+    		log.info("UNSELECT:" + event.getObject());
+    }
 
 }

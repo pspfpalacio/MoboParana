@@ -89,6 +89,10 @@ public class Cliente implements Serializable {
 	@OneToMany(mappedBy="cliente")
 	private List<Consignacion> consignacions;
 	
+	//bi-directional many-to-one association to EquipoPendientePago
+	@OneToMany(mappedBy="cliente")
+	private List<EquipoPendientePago> equipoPendientePagos;
+	
 	//bi-directional many-to-one association to Usuario
 	@OneToMany(mappedBy="cliente")
 	private List<Usuario> usuarios;
@@ -328,6 +332,28 @@ public class Cliente implements Serializable {
 		consignacion.setCliente(null);
 
 		return consignacion;
+	}
+	
+	public List<EquipoPendientePago> getEquipoPendientePagos() {
+		return this.equipoPendientePagos;
+	}
+
+	public void setEquipoPendientePagos(List<EquipoPendientePago> equipoPendientePagos) {
+		this.equipoPendientePagos = equipoPendientePagos;
+	}
+
+	public EquipoPendientePago addEquipoPendientePago(EquipoPendientePago equipoPendientePago) {
+		getEquipoPendientePagos().add(equipoPendientePago);
+		equipoPendientePago.setCliente(this);
+
+		return equipoPendientePago;
+	}
+
+	public EquipoPendientePago removeEquipoPendientePago(EquipoPendientePago equipoPendientePago) {
+		getEquipoPendientePagos().remove(equipoPendientePago);
+		equipoPendientePago.setCliente(null);
+
+		return equipoPendientePago;
 	}
 	
 	public List<Usuario> getUsuarios() {

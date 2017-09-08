@@ -46,6 +46,7 @@
 		<class>model.entity.EConsignacionsDetalle</class>
 		<class>model.entity.EConsignacionsDetalleUnidad</class>
 		<class>model.entity.Tecnico</class>
+		<class>model.entity.EquipoPendientePago</class>
 		
 		<shared-cache-mode>NONE</shared-cache-mode>
 		
