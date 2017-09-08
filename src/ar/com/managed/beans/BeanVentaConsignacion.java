@@ -326,7 +326,7 @@ public class BeanVentaConsignacion implements Serializable {
 		usuario = user;
 		listaVentasCons = ventaConsignacionDAO.getLista(true, consig);
 		if (listaVentasCons.isEmpty()) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La consignaci�n no posee ventas realizadas!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La consignacion no posee ventas realizadas!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
 		} else {
@@ -412,7 +412,7 @@ public class BeanVentaConsignacion implements Serializable {
 			}
 			return retorno;
 		} catch (Exception e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurri� un error con la seleccion de productos! Int�ntelo nuevamente!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrio un error con la seleccion de productos! Intentelo nuevamente!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
 		}
@@ -462,7 +462,7 @@ public class BeanVentaConsignacion implements Serializable {
 			montoTotal = venCons.getMonto();
 			return "ventamodif";
 		} catch(Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurri� un Error al redireccionar a la p�gina de modificaci�n! Error original: " + e.getMessage(), null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrio un Error al redireccionar a la pagina de modificacion! Error original: " + e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
 		}
@@ -630,15 +630,15 @@ public class BeanVentaConsignacion implements Serializable {
 				if(updateVent != 0 && actualizo){
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Venta!", null);
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurri� un Error al dar de Baja la Venta, "
-							+ "Int�ntelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrio un Error al dar de Baja la Venta, "
+							+ "Intentelo nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Venta posee M�viles en Garant�a, realice la baja correspondiente e "
-						+ "int�ntelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Venta posee Moviles en Garantia, realice la baja correspondiente e "
+						+ "intentelo nuevamente!", null);
 			}
 		} catch (Exception e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No pudo ser posible dar de baja la Venta, int�ntelo nuevamente mas tarde!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No pudo ser posible dar de baja la Venta, intentelo nuevamente mas tarde!", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
@@ -729,15 +729,15 @@ public class BeanVentaConsignacion implements Serializable {
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta guardada!", null);
 					retorno = "consignaciones";
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurri� un error al guardar el Detalle de la Venta! "
-							+ "Int�ntelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrio un error al guardar el Detalle de la Venta! "
+							+ "Intentelo nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurri� un error al guardar la Venta! "
-						+ "Int�ntelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrio un error al guardar la Venta! "
+						+ "Intentelo nuevamente!", null);
 			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta no pueden estar vac�os!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta no pueden estar vacios!", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		return retorno;		
@@ -891,26 +891,26 @@ public class BeanVentaConsignacion implements Serializable {
 							msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta guardada!", null);
 							retorno = "ventas_consignacion";
 						}else{
-							msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurri� un error al guardar el Detalle de la Venta! "
-									+ "Int�ntelo nuevamente!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrio un error al guardar el Detalle de la Venta! "
+									+ "Intentelo nuevamente!", null);
 						}
 					}else{
-						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurri� un error al insertar la Unidad M�vil del Detalle de la Venta! "
-								+ "Int�ntelo nuevamente!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrio un error al insertar la Unidad Movil del Detalle de la Venta! "
+								+ "Intentelo nuevamente!", null);
 					}
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurri� un error al guardar la Venta! "
-							+ "Int�ntelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrio un error al guardar la Venta! "
+							+ "Intentelo nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta no pueden estar vac�os!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta no pueden estar vacios!", null);
 			}
 			listaVentasCons = new ArrayList<VentasCon>();
 			listaVentasCons = ventaConsignacionDAO.getLista(true, consignacion);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return retorno;
 		} catch(Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurri� un error al guardar la venta! Error original: " + e.getMessage(), null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrio un error al guardar la venta! Error original: " + e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
 		}		
