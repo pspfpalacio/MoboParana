@@ -52,7 +52,7 @@
 				    		<p:column>
 				    			<p:dataTable id="contenedorMensajes" widgetVar="mensajeBusqueda" var="mensaje"
 									value="#{beanMensaje.listaMensajes}" paginator="true" rows="30" resizableColumns="true"
-									emptyMessage="No existen Mensajes" sortMode="multiple" rowStyleClass="#{mensaje.visto eq 'true' ? 'blue' : null}">
+									emptyMessage="No existen Mensajes" sortMode="multiple" rowStyleClass="#{mensaje.visto eq 'true' ? 'gray' : 'white'}">
 									<f:facet name="header">
 										<p:outputLabel value="Mensajes" />
 										<p:spacer width="20" />
@@ -93,7 +93,8 @@
 							            </h:outputText>						            
 							        </h:panelGrid>
 							        <h:panelGrid columns="1" cellpadding="10" style="width:100%;">
-							        	<h:inputTextarea value="#{beanMensaje.mensaje.detalle}" rows="5" disabled="true" style="width:100%;"/>							        	
+							        	<h:inputTextarea value="#{beanMensaje.mensaje.detalle} O haga click en el link debajo." rows="5" disabled="true" style="width:100%;"/>
+							        	<h:commandLink action="#{beanMensaje.descargarComprobante()}" value="Descargar comprobante" />							        							        	
 							        </h:panelGrid>
 							 
 							        <f:facet name="options">
