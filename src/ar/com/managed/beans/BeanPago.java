@@ -8,6 +8,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.mail.*;
+import javax.mail.internet.*;
+import java.util.Properties;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -20,6 +23,7 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
 import ar.com.clases.CuentaCorriente;
+import ar.com.clases.Mail;
 import ar.com.clases.MovimientoCaja;
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Pagos;
@@ -496,6 +500,17 @@ public class BeanPago implements Serializable {
  
     public void onRowUnselect(UnselectEvent event) {
     		log.info("UNSELECT:" + event.getObject());
+    }
+    
+    public void enviarEmail() {
+    		
+    	Mail mail = new Mail();
+    	mail.setAsunto("prueba");
+    	mail.setCuerpo("cuerpo del mensaje");
+    	mail.setDestinatarios("efrancisco.pagola@gmail.com,palaciofrancoo@gmail.com");
+    	int send = mail.send();
+    	log.info("SEND " + send);
+    		
     }
 
 }
