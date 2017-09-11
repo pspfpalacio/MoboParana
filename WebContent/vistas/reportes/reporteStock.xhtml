@@ -101,34 +101,32 @@
 						<h:outputText value="#{stock.stock}" />
 					</p:column>
 					
-					<p:column headerText="Consignados" filterBy="#{stock.consignacion}" 
+					<p:column headerText="Consignado" filterBy="#{stock.consignacion}" 
 					filterStyle="display:none;" rendered="#{beanReporte.idTipoProducto == 1}">
 						<h:outputText value="#{stock.consignacion}" />
 					</p:column>		
 					
 					<p:rowExpansion>
-						<p:panel>
-							<p:dataTable var="unidad" value="#{stock.enStocks}"				
-								emptyMessage="No existen Unidades en Stock" rendered="#{stock.stock > 0}">
-								<f:facet name="header">
-									<p:outputLabel value="Imei en stock" />
-								</f:facet>
-								
-								<p:column headerText="Nro de imei">
-									<h:outputText value="#{unidad.nroImei}" />
-								</p:column>
-							</p:dataTable>
-							<p:dataTable var="unidad" value="#{stock.enStocks}"				
-								emptyMessage="No existen Unidades en Consignación" rendered="#{stock.consignacion > 0}">
-								<f:facet name="header">
-									<p:outputLabel value="Imei en consignación" />
-								</f:facet>
-								
-								<p:column headerText="Nro de imei">
-									<h:outputText value="#{unidad.nroImei}" />
-								</p:column>
-							</p:dataTable>
-						</p:panel>
+						<h:panelGrid columns="2">
+							<p:column>
+								<p:dataTable var="unidad" value="#{stock.enStocks}"				
+									emptyMessage="No existen Unidades en Stock" rendered="#{stock.stock > 0}">									
+									
+									<p:column headerText="Imei en stock" style="text-align: center;">
+										<h:outputText value="#{unidad.nroImei}" />
+									</p:column>
+								</p:dataTable>
+							</p:column>
+							<p:column>
+								<p:dataTable var="unidad" value="#{stock.enConsignacions}"				
+									emptyMessage="No existen Unidades en Consignación" rendered="#{stock.consignacion > 0}">									
+									
+									<p:column headerText="Imei en consignación" style="text-align: center;">
+										<h:outputText value="#{unidad.nroImei}" />
+									</p:column>
+								</p:dataTable>
+							</p:column>
+						</h:panelGrid>
 					</p:rowExpansion>			
 				</p:dataTable>
 			</p:panel> 

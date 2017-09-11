@@ -16,7 +16,7 @@ public class ProductoUnidad implements Serializable {
 	private int stock;
 	private int consignacion;
 	private List<UnidadMovil> enStocks;
-	private List<UnidadMovil> enConsignacions;
+	private List<UnidadMovil> enConsignacions;	
 	
 	public String getMarcaModelo() {
 		return marcaModelo;
