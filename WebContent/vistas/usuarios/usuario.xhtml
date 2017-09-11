@@ -47,7 +47,8 @@
     				</p:column>
     				
     				<p:outputLabel value="Rol: " />
-    				<p:selectOneMenu value="#{beanUsuario.idRole}" filter="true" filterMatchMode="contains">
+    				<p:selectOneMenu value="#{beanUsuario.idRole}" filter="true" filterMatchMode="contains"
+    					disabled="#{beanUsuario.usuarioAuditoria.role.id != 1}">
     					<p:ajax event="change" update="clientes" />
     					<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
     					<f:selectItems value="#{beanUsuario.listaRoles}" var="rol" itemLabel="#{rol.nombre}"
