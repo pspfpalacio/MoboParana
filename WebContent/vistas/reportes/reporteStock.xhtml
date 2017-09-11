@@ -94,16 +94,40 @@
 					<p:column headerText="Marca y Modelo" filterBy="#{stock.marcaModelo}" 
 					filterStyle="display:none;">
 						<h:outputText value="#{stock.marcaModelo}" />
+						<p:rowToggler rendered="#{beanReporte.idTipoProducto == 1}" />
 					</p:column>
 					
 					<p:column headerText="Stock">
 						<h:outputText value="#{stock.stock}" />
 					</p:column>
 					
-					<p:column headerText="Imei" filterBy="#{stock.nroImei}" 
+					<p:column headerText="Consignado" filterBy="#{stock.consignacion}" 
 					filterStyle="display:none;" rendered="#{beanReporte.idTipoProducto == 1}">
-						<h:outputText value="#{stock.nroImei}" />
-					</p:column>					
+						<h:outputText value="#{stock.consignacion}" />
+					</p:column>		
+					
+					<p:rowExpansion>
+						<h:panelGrid columns="2">
+							<p:column>
+								<p:dataTable var="unidad" value="#{stock.enStocks}"				
+									emptyMessage="No existen Unidades en Stock" rendered="#{stock.stock > 0}">									
+									
+									<p:column headerText="Imei en stock" style="text-align: center;">
+										<h:outputText value="#{unidad.nroImei}" />
+									</p:column>
+								</p:dataTable>
+							</p:column>
+							<p:column>
+								<p:dataTable var="unidad" value="#{stock.enConsignacions}"				
+									emptyMessage="No existen Unidades en Consignación" rendered="#{stock.consignacion > 0}">									
+									
+									<p:column headerText="Imei en consignación" style="text-align: center;">
+										<h:outputText value="#{unidad.nroImei}" />
+									</p:column>
+								</p:dataTable>
+							</p:column>
+						</h:panelGrid>
+					</p:rowExpansion>			
 				</p:dataTable>
 			</p:panel> 
 			</h:form>
