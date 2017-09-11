@@ -39,7 +39,7 @@
 						<f:facet name="header">
 							<h:outputText value="Mod." title="Modificar el Rol" />
 						</f:facet>						
-						<p:commandLink title="Modificar" action="#{beanRole.goRolEditar(rol)}" disabled="#{rol.id == 1 || rol.id == 3}">							
+						<p:commandLink title="Modificar" action="#{beanRole.goRolEditar(rol)}" disabled="#{rol.id == 1 || rol.id == 3 || beanRole.usuario.role.id != 1}">							
 							<h:graphicImage value="/images/edit.ico" width="20" id="edit" />
 						</p:commandLink>
 					</p:column>
