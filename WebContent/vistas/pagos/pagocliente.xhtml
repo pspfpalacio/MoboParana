@@ -47,7 +47,6 @@
 				<ui:include src="/includes/menubar.xhtml" />
 				<br/>
 				<br/>
-				<p:commandButton value="MAILPRUEBA" action="#{beanPago.enviarEmail()}"/>
     			<p:panelGrid columns="6" style="width:100%;">
     				<f:facet name="header">
     					<h:outputText value="Pago de Cliente" />
@@ -58,7 +57,7 @@
     				
     				<p:outputLabel value="Clientes: " />
     				<p:selectOneMenu value="#{beanPago.idCliente}" filter="true" filterMatchMode="contains">
-    				<p:ajax listener="#{beanPago.updatePendientePagoList()}" update="eppTable"></p:ajax>
+    				<p:ajax listener="#{beanPago.updatePendientePagoList()}" update="panel"></p:ajax>
     					<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
     					<f:selectItems value="#{beanPago.listaClientes}" var="cliente" itemLabel="#{cliente.nombreNegocio}" 
     					itemValue="#{cliente.id}"/>
@@ -72,8 +71,7 @@
     				<p:inputTextarea value="#{beanPago.pagoCliente.concepto}" autoResize="false" style="width:100%;" rows="3" />
     				 				
    					<f:facet name="footer">
-   						<p:commandButton value="Confirmar" update="messages" action="#{beanPago.guardarPagoCliente()}" 
-   						onclick="return confirm('Esta seguro que desea confirmar el Pago?')"/>
+   						<p:commandButton value="Confirmar" onclick="PF('dialog').show();"/>
    						<p:commandButton value="Cancelar" oncomplete="return confirm('Esta seguro que desea cancelar el Pago?')"
    						action="#{beanPago.goPagoCliente(beanPago.usuario)}"/>
    					</f:facet>	
@@ -120,6 +118,13 @@
 						<p:commandButton process="eppTable" value="Limpiar" action="#{beanPago.limpiarEquiposParaPagar()}" update=":formulario:panel"/>
    					</f:facet>
    				</p:dataTable>
+   				
+   				<p:dialog id="dialogo" header="Confirmación" widgetVar="dialog" minHeight="40" closable="true" closeOnEscape="true" >
+   					<p:outputLabel value="Mail cliente: " />
+    				<p:inputText value="#{beanPago.destinatarios}" />
+				    <p:commandButton value="Confirmar" update="messages" action="#{beanPago.guardarPagoCliente()}" oncomplete="PF('dialog').hide();"/>
+   					<p:commandButton value="Cancelar" onclick="PF('dialog').hide();"/>
+				</p:dialog>
    			</p:panel>
 	    	</h:form>
 	    </div>

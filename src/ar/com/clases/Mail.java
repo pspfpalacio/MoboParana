@@ -7,12 +7,15 @@ import java.util.Properties;
 
 import javax.faces.bean.ManagedProperty;
 import javax.mail.Address;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import org.apache.log4j.Logger;
 
@@ -132,9 +135,6 @@ public class Mail implements Serializable {
 		datosEmail = datosEmailDao.get();
 		log.info("Direccion de correo emisora: " + datosEmail.getCorreo());
 		
-		if(cliente != null) {
-			listDestinatarios.add(cliente.getEmail());
-		}
 		listDestinatarios.add(datosEmail.getCorreo());
 		
 		log.info("Cantidad destinatarios: " + listDestinatarios.size());
@@ -164,7 +164,11 @@ public class Mail implements Serializable {
 			mje.setFrom(new InternetAddress(datosEmail.getCorreo()));
 			mje.setSubject(asunto);
 			mje.addRecipients(Message.RecipientType.TO, destinos);
-			mje.setText(cuerpo);
+			BodyPart text = new MimeBodyPart() ; 
+			text.setContent(cuerpo,"text/html");
+			MimeMultipart multiPart = new MimeMultipart( ) ; 
+            multiPart.addBodyPart(text ) ; 
+            mje.setContent(multiPart);
 			Transport t = session.getTransport("smtp");
 			t.connect(datosEmail.getCorreo(),datosEmail.getPassword());
 			t.sendMessage(mje,mje.getAllRecipients());

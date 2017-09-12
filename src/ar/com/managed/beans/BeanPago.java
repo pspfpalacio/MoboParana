@@ -8,9 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.mail.*;
-import javax.mail.internet.*;
-import java.util.Properties;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -81,6 +78,7 @@ public class BeanPago implements Serializable {
 	private Usuario usuario;
 	private int idCliente;
 	private int idProveedor;
+	private String destinatarios;
 	
 
 	public DAOEquipoPendientePago getEquipoPendientePagoDAO() {
@@ -213,6 +211,14 @@ public class BeanPago implements Serializable {
 		this.idProveedor = idProveedor;
 	}
 
+	public String getDestinatarios() {
+		return destinatarios;
+	}
+
+	public void setDestinatarios(String destinatarios) {
+		this.destinatarios = destinatarios;
+	}
+
 	public String goPagoCliente(Usuario user){
 		log.info("pagocliente.xhtml");
 		cliente = new Cliente();
@@ -222,8 +228,10 @@ public class BeanPago implements Serializable {
 		idCliente = 0;
 		pagoCliente = new PagosCliente();
 		pagoCliente.setFecha(new Date());
+		pagoCliente.setConcepto("");
 		usuario = new Usuario();
 		usuario = user;
+		destinatarios = "";
 		return "pagocliente";
 	}
 	
@@ -288,8 +296,10 @@ public class BeanPago implements Serializable {
 				caja.setUsuario(usuario);
 				int idCaja = movimientoCaja.insertarCaja(caja);
 				int eppPagado = 0;
+				int tipoComprobante = 1;
 				if(equiposParaPagar.size() == 0) {
 					eppPagado = 1;
+					tipoComprobante = 0;
 				}
 				log.info("Equipos Por Pagar: " + equiposParaPagar.size());
 				for(EquipoPendientePago epp : equiposParaPagar) {
@@ -297,6 +307,17 @@ public class BeanPago implements Serializable {
 					epp.setUsuario2(usuario);
 					eppPagado = equipoPendientePagoDAO.pagar(epp);
 				}
+				
+				String cuerpoMail = generarComprobante(tipoComprobante);
+		    	log.info("Cuerpo de email: " + cuerpoMail);
+	
+		    	Mail mail = new Mail();
+		    	mail.setAsunto("CB Telefonía - Comprobante de pago");
+		    	mail.setCuerpo(cuerpoMail);
+		    	mail.setCliente(cliente);
+		    	mail.setDestinatarios(destinatarios);
+		    	int send = mail.send();
+		    	log.info("SEND " + send);
 				
 				if(idCuentaCorriente != 0 && idCaja != 0 && eppPagado != 0){
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago registrado!", null);
@@ -306,6 +327,8 @@ public class BeanPago implements Serializable {
 					listaEpp = new ArrayList<EquipoPendientePago>();
 					equiposSelectos = new ArrayList<EquipoPendientePago>();
 					equiposParaPagar = new ArrayList<EquipoPendientePago>();
+					pagoCliente.setConcepto("");
+					destinatarios = "";
 					retorno = "pagocliente";
 				}else{
 					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Pago, "
@@ -438,12 +461,16 @@ public class BeanPago implements Serializable {
 	}
 	
 	public void updatePendientePagoList() {
+		destinatarios = "";
 		cliente = new Cliente();
 		listaEpp = new ArrayList<EquipoPendientePago>();
 		equiposSelectos = new ArrayList<EquipoPendientePago>();
 		equiposParaPagar = new ArrayList<EquipoPendientePago>();
 		pagoCliente.setMonto(0);
 		cliente = clienteDAO.get(idCliente);
+		destinatarios = cliente.getEmail();
+		log.info("Cliente: " + cliente.getApellidoNombre());
+		log.info("Mail cliente: " + destinatarios);
 		listaEpp = equipoPendientePagoDAO.getListaNoPagosPorCliente(cliente);
 	}
 	
@@ -477,7 +504,9 @@ public class BeanPago implements Serializable {
 			if(flag) {
 				auxiliar.add(epp);
 			} else {
+				String concepto = pagoCliente.getConcepto() + " " + unidadMovilDAO.get(epp.getImei()).getProducto().getNombre() + " (" + epp.getImei() + ") - $" + Float.toString(epp.getMonto()) + " |";  
 				pagoCliente.setMonto(pagoCliente.getMonto() + epp.getMonto());
+				pagoCliente.setConcepto(concepto);
 			}
 		}
 		log.info(pagoCliente.getMonto());
@@ -492,6 +521,7 @@ public class BeanPago implements Serializable {
 		cliente = clienteDAO.get(idCliente);
 		listaEpp = equipoPendientePagoDAO.getListaNoPagosPorCliente(cliente);
 		pagoCliente.setMonto(0);
+		pagoCliente.setConcepto("");
 	}
 	
 	public void onRowSelect(SelectEvent event) {
@@ -502,15 +532,77 @@ public class BeanPago implements Serializable {
     		log.info("UNSELECT:" + event.getObject());
     }
     
-    public void enviarEmail() {
+    public String generarComprobante(int tipo) {
+    	SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
+    	
+    	String html = "";
+    	html += "<html>" + 
+    			"<head>" + 
+    			"<style>" + 
+    			"table {" + 
+    			"    font-family: arial, sans-serif;" + 
+    			"    border-collapse: collapse;" + 
+    			"    width: 100%;" + 
+    			"}" +  
+    			"td, th {" + 
+    			"    border: 1px solid #dddddd;" + 
+    			"    text-align: left;" + 
+    			"    padding: 8px;" + 
+    			"}" +  
+    			"tr:nth-child(even) {" + 
+    			"    background-color: #dddddd;" + 
+    			"}" + 
+    			".cabecera {" + 
+    			"  font-family: arial, sans-serif;" + 
+    			"    width: 100%;" + 
+    			"}"+ 
+    			"</style>" + 
+    			"</head>" + 
+    			"<body>" +  
+    			"<div class='cabecera'>" +
+    			"<h2>Comprobante de pago</h2>" +
+    			"<p>Fecha: "+ dateformat.format(pagoCliente.getFecha()) +" </p>" +
+    			"<p>Cliente: "+ cliente.getApellidoNombre() +" </p>" +
+    			"<p>Monto total: $"+ Float.toString(pagoCliente.getMonto()) +"</p>" +
+    			"<p>Concepto: "+ pagoCliente.getConcepto() +"</p>" +
+    			"</div>" +
+    			"<table>" + 
+    			"  <tr>" + 
+    			"    <th>DESCRIPCION</th>" + 
+    			"    <th>MONTO</th>" + 
+    			"  </tr>";
+    	
+    	
+    	if(tipo == 0) {
     		
-    	Mail mail = new Mail();
-    	mail.setAsunto("prueba");
-    	mail.setCuerpo("cuerpo del mensaje");
-    	mail.setDestinatarios("efrancisco.pagola@gmail.com,palaciofrancoo@gmail.com");
-    	int send = mail.send();
-    	log.info("SEND " + send);
+    		html += "<tr>"
+    				+ "<td> "
+    				+ pagoCliente.getConcepto()
+    				+ "</td> "
+    				+ "$" + Float.toString(pagoCliente.getMonto())
+    				+ "<td>"
+    				+ "</td>"
+    				+ "</tr>";
+    	}else {
     		
+			for(EquipoPendientePago epp : equiposParaPagar) {
+				String nombreEquipo = unidadMovilDAO.get(epp.getImei()).getProducto().getNombre();
+	    		html += "<tr>"
+	    				+ "<td> "
+	    				+ nombreEquipo + " - " + epp.getImei()
+	    				+ "</td> "
+	    				+ "$" + epp.getMonto()
+	    				+ "<td>"
+	    				+ "</td>"
+	    				+ "</tr>";
+			}
+    	}
+    	
+    	html += "</table>" + 
+    			"" + 
+    			"</body>" + 
+    			"</html>";
+    	return html;
     }
-
+    
 }
