@@ -20,6 +20,7 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
 import ar.com.clases.CuentaCorriente;
+import ar.com.clases.Mail;
 import ar.com.clases.MovimientoCaja;
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Pagos;
@@ -77,6 +78,8 @@ public class BeanPago implements Serializable {
 	private Usuario usuario;
 	private int idCliente;
 	private int idProveedor;
+	private String destinatarios;
+	private boolean envioEmail;
 	
 
 	public DAOEquipoPendientePago getEquipoPendientePagoDAO() {
@@ -209,6 +212,22 @@ public class BeanPago implements Serializable {
 		this.idProveedor = idProveedor;
 	}
 
+	public String getDestinatarios() {
+		return destinatarios;
+	}
+
+	public void setDestinatarios(String destinatarios) {
+		this.destinatarios = destinatarios;
+	}
+
+	public boolean isEnvioEmail() {
+		return envioEmail;
+	}
+
+	public void setEnvioEmail(boolean envioEmail) {
+		this.envioEmail = envioEmail;
+	}
+
 	public String goPagoCliente(Usuario user){
 		log.info("pagocliente.xhtml");
 		cliente = new Cliente();
@@ -218,8 +237,11 @@ public class BeanPago implements Serializable {
 		idCliente = 0;
 		pagoCliente = new PagosCliente();
 		pagoCliente.setFecha(new Date());
+		pagoCliente.setConcepto("");
 		usuario = new Usuario();
 		usuario = user;
+		destinatarios = "";
+		envioEmail = false;
 		return "pagocliente";
 	}
 	
@@ -247,7 +269,7 @@ public class BeanPago implements Serializable {
 		return "pagoproveedor";
 	}
 	
-	public String guardarPagoCliente(){
+	public void guardarPagoCliente(){
 		FacesMessage msg = null;
 		String retorno = "";
 		if(pagoCliente.getFecha() != null && idCliente != 0 && pagoCliente.getMonto() != 0){
@@ -275,6 +297,7 @@ public class BeanPago implements Serializable {
 				ccCliente.setMonto(montoP);
 				ccCliente.setUsuario(usuario);
 				int idCuentaCorriente = cuenta.insertarCC(ccCliente);
+				log.info("idCuentaCorriente "+ idCuentaCorriente);
 				Caja caja = new Caja();
 				caja.setConcepto("Pago recibido de: " + nombreNegocio + " - Concepto : " + conceptoP);
 				caja.setFecha(fechaP);
@@ -283,9 +306,12 @@ public class BeanPago implements Serializable {
 				caja.setNombreTabla("PagosCliente");
 				caja.setUsuario(usuario);
 				int idCaja = movimientoCaja.insertarCaja(caja);
+				log.info("idCaja "+ idCaja);
 				int eppPagado = 0;
+				int tipoComprobante = 1;
 				if(equiposParaPagar.size() == 0) {
 					eppPagado = 1;
+					tipoComprobante = 0;
 				}
 				log.info("Equipos Por Pagar: " + equiposParaPagar.size());
 				for(EquipoPendientePago epp : equiposParaPagar) {
@@ -293,15 +319,36 @@ public class BeanPago implements Serializable {
 					epp.setUsuario2(usuario);
 					eppPagado = equipoPendientePagoDAO.pagar(epp);
 				}
-				
+					
 				if(idCuentaCorriente != 0 && idCaja != 0 && eppPagado != 0){
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago registrado!", null);
+					int send = 1;
+					String sendMje = "";
+				    	if(envioEmail) {
+				    		String cuerpoMail = generarComprobante(tipoComprobante);
+					    	log.info("Cuerpo de email: " + cuerpoMail);
+				    		Mail mail = new Mail();
+					    	mail.setAsunto("CB Telefonía - Comprobante de pago");
+					    	mail.setCuerpo(cuerpoMail);
+					    	mail.setDestinatarios(destinatarios);
+					    	send = mail.send();
+					    	log.info("SEND " + send);
+					    	if(send == 1) {
+					    		sendMje = ", Comprobante enviado";
+					    	}else {
+					    		sendMje = ", Comprobante NO enviado";
+					    	}
+				    	}
+					
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago registrado" + sendMje, null);
 					idCliente = 0;
 					pagoCliente = new PagosCliente();
 					pagoCliente.setFecha(new Date());
 					listaEpp = new ArrayList<EquipoPendientePago>();
 					equiposSelectos = new ArrayList<EquipoPendientePago>();
 					equiposParaPagar = new ArrayList<EquipoPendientePago>();
+					pagoCliente.setConcepto("");
+					destinatarios = "";
+					envioEmail = false;
 					retorno = "pagocliente";
 				}else{
 					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Pago, "
@@ -315,7 +362,7 @@ public class BeanPago implements Serializable {
 			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Cliente y Monto no pueden estar vacíos!", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
-		return retorno;
+//		return retorno;
 	}
 	
 	public String guardarPagoProveedor(){
@@ -323,11 +370,13 @@ public class BeanPago implements Serializable {
 		String retorno = "";
 		if(pagoProveedore.getFecha() != null && idProveedor != 0 && pagoProveedore.getMonto() != 0){
 			Proveedore proveedore = proveedorDAO.get(idProveedor);
+			log.info("Proveedor: " + proveedore.getApellidoNombre());
 			pagoProveedore.setProveedore(proveedore);
 			pagoProveedore.setFechaAlta(new Date());
 			pagoProveedore.setUsuario(usuario);
 			int idPago = pagoDAO.insertar(pagoProveedore);
 			if(idPago != 0){
+				log.info("idPago: " + idPago);
 				MovimientoCaja movimientoCaja = new MovimientoCaja();
 				CuentaCorriente cuenta = new CuentaCorriente();
 				CuentasCorrientesProveedore ccProveedor = new CuentasCorrientesProveedore();
@@ -344,6 +393,7 @@ public class BeanPago implements Serializable {
 				ccProveedor.setMonto(montoP);
 				ccProveedor.setUsuario(usuario);
 				int idCuentaCorriente = cuenta.insertarCC(ccProveedor);
+				log.info("idCuentaCorriente" + idCuentaCorriente);
 				Caja caja = new Caja();
 				caja.setConcepto("Pago realizado a: " + nombreNegocio + " - Concepto : " + conceptoP);
 				caja.setFecha(fechaP);
@@ -353,6 +403,7 @@ public class BeanPago implements Serializable {
 				caja.setNombreTabla("PagosProveedore");
 				caja.setUsuario(usuario);
 				int idCaja = movimientoCaja.insertarCaja(caja);
+				log.info("idCaja" + idCaja);
 				if(idCuentaCorriente != 0 && idCaja != 0){
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago registrado!", null);
 					idProveedor = 0;
@@ -434,12 +485,16 @@ public class BeanPago implements Serializable {
 	}
 	
 	public void updatePendientePagoList() {
+		destinatarios = "";
 		cliente = new Cliente();
 		listaEpp = new ArrayList<EquipoPendientePago>();
 		equiposSelectos = new ArrayList<EquipoPendientePago>();
 		equiposParaPagar = new ArrayList<EquipoPendientePago>();
 		pagoCliente.setMonto(0);
 		cliente = clienteDAO.get(idCliente);
+		destinatarios = cliente.getEmail();
+		log.info("Cliente: " + cliente.getApellidoNombre());
+		log.info("Mail cliente: " + destinatarios);
 		listaEpp = equipoPendientePagoDAO.getListaNoPagosPorCliente(cliente);
 	}
 	
@@ -473,7 +528,9 @@ public class BeanPago implements Serializable {
 			if(flag) {
 				auxiliar.add(epp);
 			} else {
+				String concepto = pagoCliente.getConcepto() + " " + unidadMovilDAO.get(epp.getImei()).getProducto().getNombre() + " (" + epp.getImei() + ") - $" + Float.toString(epp.getMonto()) + " |";  
 				pagoCliente.setMonto(pagoCliente.getMonto() + epp.getMonto());
+				pagoCliente.setConcepto(concepto);
 			}
 		}
 		log.info(pagoCliente.getMonto());
@@ -488,6 +545,7 @@ public class BeanPago implements Serializable {
 		cliente = clienteDAO.get(idCliente);
 		listaEpp = equipoPendientePagoDAO.getListaNoPagosPorCliente(cliente);
 		pagoCliente.setMonto(0);
+		pagoCliente.setConcepto("");
 	}
 	
 	public void onRowSelect(SelectEvent event) {
@@ -497,5 +555,78 @@ public class BeanPago implements Serializable {
     public void onRowUnselect(UnselectEvent event) {
     		log.info("UNSELECT:" + event.getObject());
     }
-
+    
+    public String generarComprobante(int tipo) {
+    	SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
+    	
+    	String html = "";
+    	html += "<html>" + 
+    			"<head>" + 
+    			"<style>" + 
+    			"table {" + 
+    			"    font-family: arial, sans-serif;" + 
+    			"    border-collapse: collapse;" + 
+    			"    width: 100%;" + 
+    			"}" +  
+    			"td, th {" + 
+    			"    border: 1px solid #dddddd;" + 
+    			"    text-align: left;" + 
+    			"    padding: 8px;" + 
+    			"}" +  
+    			"tr:nth-child(even) {" + 
+    			"    background-color: #dddddd;" + 
+    			"}" + 
+    			".cabecera {" + 
+    			"  font-family: arial, sans-serif;" + 
+    			"    width: 100%;" + 
+    			"}"+ 
+    			"</style>" + 
+    			"</head>" + 
+    			"<body>" +  
+    			"<div class='cabecera'>" +
+    			"<h2>Comprobante de pago</h2>" +
+    			"<p>Fecha: "+ dateformat.format(pagoCliente.getFecha()) +" </p>" +
+    			"<p>Cliente: "+ cliente.getApellidoNombre() +" </p>" +
+    			"<p>Monto total: $"+ Float.toString(pagoCliente.getMonto()) +"</p>" +
+    			"<p>Concepto: "+ pagoCliente.getConcepto() +"</p>" +
+    			"</div>" +
+    			"<table>" + 
+    			"  <tr>" + 
+    			"    <th>DESCRIPCION</th>" + 
+    			"    <th>MONTO</th>" + 
+    			"  </tr>";
+    	
+    	
+    	if(tipo == 0) {
+    		
+    		html += "<tr>"
+    				+ "<td> "
+    				+ pagoCliente.getConcepto()
+    				+ "</td> "
+    				+ "$" + Float.toString(pagoCliente.getMonto())
+    				+ "<td>"
+    				+ "</td>"
+    				+ "</tr>";
+    	}else {
+    		
+			for(EquipoPendientePago epp : equiposParaPagar) {
+				String nombreEquipo = unidadMovilDAO.get(epp.getImei()).getProducto().getNombre();
+	    		html += "<tr>"
+	    				+ "<td> "
+	    				+ nombreEquipo + " - " + epp.getImei()
+	    				+ "</td> "
+	    				+ "$" + epp.getMonto()
+	    				+ "<td>"
+	    				+ "</td>"
+	    				+ "</tr>";
+			}
+    	}
+    	
+    	html += "</table>" + 
+    			"" + 
+    			"</body>" + 
+    			"</html>";
+    	return html;
+    }
+    
 }

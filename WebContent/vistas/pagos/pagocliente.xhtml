@@ -47,6 +47,7 @@
 				<ui:include src="/includes/menubar.xhtml" />
 				<br/>
 				<br/>
+				<h:outputText value='(*) Importante: En el listado de equipos a pagar se encuentran los vendidos a partir del 01/10/2017. Si no se seleccionan equipos no se marcaran como pagados, se deberá hacerlo desde el formulario "Marcar equipos como pagos"' />
     			<p:panelGrid columns="6" style="width:100%;">
     				<f:facet name="header">
     					<h:outputText value="Pago de Cliente" />
@@ -57,7 +58,7 @@
     				
     				<p:outputLabel value="Clientes: " />
     				<p:selectOneMenu value="#{beanPago.idCliente}" filter="true" filterMatchMode="contains">
-    				<p:ajax listener="#{beanPago.updatePendientePagoList()}" update="eppTable"></p:ajax>
+    				<p:ajax listener="#{beanPago.updatePendientePagoList()}" update="panel"></p:ajax>
     					<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
     					<f:selectItems value="#{beanPago.listaClientes}" var="cliente" itemLabel="#{cliente.nombreNegocio}" 
     					itemValue="#{cliente.id}"/>
@@ -71,8 +72,7 @@
     				<p:inputTextarea value="#{beanPago.pagoCliente.concepto}" autoResize="false" style="width:100%;" rows="3" />
     				 				
    					<f:facet name="footer">
-   						<p:commandButton value="Confirmar" update="messages" action="#{beanPago.guardarPagoCliente()}" 
-   						onclick="return confirm('Esta seguro que desea confirmar el Pago?')"/>
+   						<p:commandButton value="Confirmar" onclick="PF('dialog').show();"/>
    						<p:commandButton value="Cancelar" oncomplete="return confirm('Esta seguro que desea cancelar el Pago?')"
    						action="#{beanPago.goPagoCliente(beanPago.usuario)}"/>
    					</f:facet>	
@@ -119,6 +119,17 @@
 						<p:commandButton process="eppTable" value="Limpiar" action="#{beanPago.limpiarEquiposParaPagar()}" update=":formulario:panel"/>
    					</f:facet>
    				</p:dataTable>
+   				
+   				<p:dialog id="dialogo" header="Esta seguro que desea confirmar el pago" widgetVar="dialog" minHeight="150" minWidth="150" closable="true" closeOnEscape="true" >
+   					<p:panelGrid columns="2">
+						<h:outputText value="Enviar comprobante:" />
+						<p:selectBooleanCheckbox value="#{beanPago.envioEmail}" />
+						<h:outputText value="Correos para enviar comprobantes separados por coma:" />
+				    	<p:inputTextarea value="#{beanPago.destinatarios}"  rows="4" cols="40"/>
+				    	<p:commandButton value="Confirmar" update="panel" action="#{beanPago.guardarPagoCliente()}" oncomplete="PF('dialog').hide();"/>
+   						<p:commandButton value="Cancelar" onclick="PF('dialog').hide();"/>
+					</p:panelGrid>
+				</p:dialog>	
    			</p:panel>
 	    	</h:form>
 	    </div>
