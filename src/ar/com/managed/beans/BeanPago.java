@@ -79,6 +79,7 @@ public class BeanPago implements Serializable {
 	private int idCliente;
 	private int idProveedor;
 	private String destinatarios;
+	private boolean envioEmail;
 	
 
 	public DAOEquipoPendientePago getEquipoPendientePagoDAO() {
@@ -219,6 +220,14 @@ public class BeanPago implements Serializable {
 		this.destinatarios = destinatarios;
 	}
 
+	public boolean isEnvioEmail() {
+		return envioEmail;
+	}
+
+	public void setEnvioEmail(boolean envioEmail) {
+		this.envioEmail = envioEmail;
+	}
+
 	public String goPagoCliente(Usuario user){
 		log.info("pagocliente.xhtml");
 		cliente = new Cliente();
@@ -232,6 +241,7 @@ public class BeanPago implements Serializable {
 		usuario = new Usuario();
 		usuario = user;
 		destinatarios = "";
+		envioEmail = false;
 		return "pagocliente";
 	}
 	
@@ -307,20 +317,29 @@ public class BeanPago implements Serializable {
 					epp.setUsuario2(usuario);
 					eppPagado = equipoPendientePagoDAO.pagar(epp);
 				}
-				
-				String cuerpoMail = generarComprobante(tipoComprobante);
-		    	log.info("Cuerpo de email: " + cuerpoMail);
-	
-		    	Mail mail = new Mail();
-		    	mail.setAsunto("CB Telefonía - Comprobante de pago");
-		    	mail.setCuerpo(cuerpoMail);
-		    	mail.setCliente(cliente);
-		    	mail.setDestinatarios(destinatarios);
-		    	int send = mail.send();
-		    	log.info("SEND " + send);
-				
+					
 				if(idCuentaCorriente != 0 && idCaja != 0 && eppPagado != 0){
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago registrado!", null);
+					int send = 1;
+					String sendMje = "";
+				    	if(envioEmail) {
+				    		String cuerpoMail = generarComprobante(tipoComprobante);
+					    	log.info("Cuerpo de email: " + cuerpoMail);
+				    		Mail mail = new Mail();
+					    	mail.setAsunto("CB Telefonía - Comprobante de pago");
+					    	mail.setCuerpo(cuerpoMail);
+					    	mail.setDestinatarios(destinatarios);
+					    	send = mail.send();
+					    	log.info("SEND " + send);
+					    	if(send == 1) {
+					    		sendMje = ", Comprobante enviado";
+					    	}else {
+					    		sendMje = ", Comprobante NO enviado";
+					    	}
+				    	}
+					
+				    	String mensaje = "Pago registrado" + sendMje;
+					log.info(mensaje);
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, mensaje, null);
 					idCliente = 0;
 					pagoCliente = new PagosCliente();
 					pagoCliente.setFecha(new Date());
@@ -329,6 +348,7 @@ public class BeanPago implements Serializable {
 					equiposParaPagar = new ArrayList<EquipoPendientePago>();
 					pagoCliente.setConcepto("");
 					destinatarios = "";
+					envioEmail = false;
 					retorno = "pagocliente";
 				}else{
 					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Pago, "
