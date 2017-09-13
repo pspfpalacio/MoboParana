@@ -45,91 +45,24 @@
 			<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
 				<p:growl id="messages" showDetail="false" />
 				<ui:include src="/includes/menubar.xhtml" />
-				<br/>
-				<br/>
-				<h:outputText value='(*) Importante: En el listado de equipos a pagar se encuentran los vendidos a partir del 01/10/2017. Si no se seleccionan equipos no se marcaran como pagados, se deberá hacerlo desde el formulario "Marcar equipos como pagos"' />
-    			<p:panelGrid columns="6" style="width:100%;">
-    				<f:facet name="header">
-    					<h:outputText value="Pago de Cliente" />
-    				</f:facet>
-    				
-    				<p:outputLabel value="Fecha: " />
-    				<p:calendar value="#{beanPago.pagoCliente.fecha}" pattern="dd/MM/yyyy" mask="true" locale="tr"/>
-    				
-    				<p:outputLabel value="Clientes: " />
-    				<p:selectOneMenu value="#{beanPago.idCliente}" filter="true" filterMatchMode="contains">
-    				<p:ajax listener="#{beanPago.updatePendientePagoList()}" update="panel"></p:ajax>
-    					<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
-    					<f:selectItems value="#{beanPago.listaClientes}" var="cliente" itemLabel="#{cliente.nombreNegocio}" 
-    					itemValue="#{cliente.id}"/>
-    				</p:selectOneMenu>
-    				
-    				<p:outputLabel value="Monto($): " />
-    				<p:inputText name="pagoCli" value="#{beanPago.pagoCliente.monto}" />
-    			</p:panelGrid>
-    			<p:panelGrid columns="2" style="width:100%;">   
-    				<p:outputLabel value="Concepto: " />
-    				<p:inputTextarea value="#{beanPago.pagoCliente.concepto}" autoResize="false" style="width:100%;" rows="3" />
-    				 				
-   					<f:facet name="footer">
-   						<p:commandButton value="Confirmar" onclick="PF('dialog').show();"/>
-   						<p:commandButton value="Cancelar" oncomplete="return confirm('Esta seguro que desea cancelar el Pago?')"
-   						action="#{beanPago.goPagoCliente(beanPago.usuario)}"/>
-   					</f:facet>	
-   				</p:panelGrid>
-   				<p:separator/>
-   				<p:dataTable id="eppTable" value="#{beanPago.listaEpp}" var="epp" emptyMessage="No existen equipos pendietes de pago" paginator="true" rows="10"
-				selection="#{beanPago.equiposSelectos}" rowKey="#{epp.id}">
-   					<f:facet name="header">
-   						<p:outputLabel value="Equipos pendientes de pago" style="width:20px;"/>		
-   					</f:facet>   	
-   					
-   					<p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-   									
-   					<p:column headerText="Imei" style="text-align:center;">
-   						<h:outputText value="#{epp.imei}" />
-   					</p:column>
-   					
-   					<p:column headerText="Nombre" style="text-align:center;">
-   						<h:outputText value="#{beanPago.getNombrePorImei(epp.imei)}"/>
-   					</p:column>
-   					
-   					<p:column headerText="Precio" style="text-align:center;">
-   						<h:outputText value="#{epp.monto}" >
-   							<f:convertNumber pattern="$###,##0.00"/>
-  							</h:outputText>
-   					</p:column>
-   					
-   					<p:column headerText="Fecha Venta" style="text-align:center;">
-   						<h:outputText value="#{epp.fechaAlta}" >
-   							<f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
-   						</h:outputText>
-   					</p:column>
-   					
-   					<p:column headerText="Pagado" style="text-align:center;">
-   						<h:outputText value="#{beanPago.getStringPagado(epp.pagado)}" />
-   					</p:column>
-   					
-   					<p:column headerText="Usuario venta" style="text-align:center;">
-   						<h:outputText value="#{epp.usuario1.apellidoNombre}" />
-   					</p:column>
-   					
-   					<f:facet name="footer" >
-   						<p:commandButton process="eppTable" value="Agregar" action="#{beanPago.agregarEquiposParaPagar()}" update=":formulario:panel" />
-						<p:commandButton process="eppTable" value="Limpiar" action="#{beanPago.limpiarEquiposParaPagar()}" update=":formulario:panel"/>
-   					</f:facet>
-   				</p:dataTable>
-   				
-   				<p:dialog id="dialogo" header="Esta seguro que desea confirmar el pago" widgetVar="dialog" minHeight="150" minWidth="150" closable="true" closeOnEscape="true" >
-   					<p:panelGrid columns="2">
-						<h:outputText value="Enviar comprobante:" />
-						<p:selectBooleanCheckbox value="#{beanPago.envioEmail}" />
-						<h:outputText value="Correos para enviar comprobantes separados por coma:" />
-				    	<p:inputTextarea value="#{beanPago.destinatarios}"  rows="4" cols="40"/>
-				    	<p:commandButton value="Confirmar" update="panel" action="#{beanPago.guardarPagoCliente()}" oncomplete="PF('dialog').hide();"/>
-   						<p:commandButton value="Cancelar" onclick="PF('dialog').hide();"/>
-					</p:panelGrid>
-				</p:dialog>	
+				<h2 align="center">Pago de Clientes</h2>
+				<br/>				
+				<h:outputText value='(*) Importante: En el listado de equipos a pagar se encuentran los vendidos a partir del 01/10/2017. 
+				Si no se seleccionan equipos no se marcaran como pagados, se deberá hacerlo desde el formulario "Marcar equipos como pagos"' />
+				<p:tabView>
+					<p:tab title="Pago regular">
+						<ui:include src="/vistas/templates/pagoclientes/pagoRegular.xhtml" />
+					</p:tab>
+					<p:tab title="Pago de móviles">
+						<ui:include src="/vistas/templates/pagoclientes/pagoMoviles.xhtml" />
+					</p:tab>
+					<p:tab title="Listado de pagos">
+						
+					</p:tab>
+					<p:tab title="Marcar equipos como pagos">
+						
+					</p:tab>					
+				</p:tabView>				
    			</p:panel>
 	    	</h:form>
 	    </div>

@@ -24,7 +24,6 @@ import ar.com.clases.Mail;
 import ar.com.clases.MovimientoCaja;
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Pagos;
-import ar.com.managed.beans.cliente.BeanVentaCliente;
 import model.entity.Caja;
 import model.entity.Cliente;
 import model.entity.CuentasCorrientesCliente;
@@ -50,7 +49,7 @@ public class BeanPago implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private final static Logger log = Logger.getLogger(BeanVentaCliente.class);
+	private final static Logger log = Logger.getLogger(BeanPago.class);
 	
 	@ManagedProperty(value = "#{BeanEquipoPendientePagoDAO}")
 	private DAOEquipoPendientePago equipoPendientePagoDAO;
@@ -269,9 +268,15 @@ public class BeanPago implements Serializable {
 		return "pagoproveedor";
 	}
 	
+	public void onConfirmPago() {
+		if (idCliente != 0) {
+			cliente = clienteDAO.get(idCliente);
+			destinatarios = cliente.getEmail();			
+		}
+	}
+	
 	public void guardarPagoCliente(){
-		FacesMessage msg = null;
-		String retorno = "";
+		FacesMessage msg = null;		
 		if(pagoCliente.getFecha() != null && idCliente != 0 && pagoCliente.getMonto() != 0){
 			Cliente cliente = clienteDAO.get(idCliente);
 			log.info("Cliente: " + cliente.getApellidoNombre());
@@ -348,8 +353,7 @@ public class BeanPago implements Serializable {
 					equiposParaPagar = new ArrayList<EquipoPendientePago>();
 					pagoCliente.setConcepto("");
 					destinatarios = "";
-					envioEmail = false;
-					retorno = "pagocliente";
+					envioEmail = false;					
 				}else{
 					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Pago, "
 							+ "inténtelo nuevamente!", null);
