@@ -31,7 +31,6 @@ public class DAODatosEmailImpl implements Serializable, DAODatosEmail {
 	}
 	
 	public DatosEmail get() {
-		System.out.println("llega aca++++++++");
 		inicializar();
 		Query locQuery = em.createQuery("SELECT d FROM DatosEmail d WHERE d.id = :pId", DatosEmail.class);
 		locQuery.setParameter("pId", 1);

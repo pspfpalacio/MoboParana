@@ -269,7 +269,7 @@ public class BeanPago implements Serializable {
 		return "pagoproveedor";
 	}
 	
-	public String guardarPagoCliente(){
+	public void guardarPagoCliente(){
 		FacesMessage msg = null;
 		String retorno = "";
 		if(pagoCliente.getFecha() != null && idCliente != 0 && pagoCliente.getMonto() != 0){
@@ -297,6 +297,7 @@ public class BeanPago implements Serializable {
 				ccCliente.setMonto(montoP);
 				ccCliente.setUsuario(usuario);
 				int idCuentaCorriente = cuenta.insertarCC(ccCliente);
+				log.info("idCuentaCorriente "+ idCuentaCorriente);
 				Caja caja = new Caja();
 				caja.setConcepto("Pago recibido de: " + nombreNegocio + " - Concepto : " + conceptoP);
 				caja.setFecha(fechaP);
@@ -305,6 +306,7 @@ public class BeanPago implements Serializable {
 				caja.setNombreTabla("PagosCliente");
 				caja.setUsuario(usuario);
 				int idCaja = movimientoCaja.insertarCaja(caja);
+				log.info("idCaja "+ idCaja);
 				int eppPagado = 0;
 				int tipoComprobante = 1;
 				if(equiposParaPagar.size() == 0) {
@@ -337,9 +339,7 @@ public class BeanPago implements Serializable {
 					    	}
 				    	}
 					
-				    	String mensaje = "Pago registrado" + sendMje;
-					log.info(mensaje);
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, mensaje, null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago registrado" + sendMje, null);
 					idCliente = 0;
 					pagoCliente = new PagosCliente();
 					pagoCliente.setFecha(new Date());
@@ -362,7 +362,7 @@ public class BeanPago implements Serializable {
 			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Cliente y Monto no pueden estar vacíos!", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
-		return retorno;
+//		return retorno;
 	}
 	
 	public String guardarPagoProveedor(){
@@ -370,11 +370,13 @@ public class BeanPago implements Serializable {
 		String retorno = "";
 		if(pagoProveedore.getFecha() != null && idProveedor != 0 && pagoProveedore.getMonto() != 0){
 			Proveedore proveedore = proveedorDAO.get(idProveedor);
+			log.info("Proveedor: " + proveedore.getApellidoNombre());
 			pagoProveedore.setProveedore(proveedore);
 			pagoProveedore.setFechaAlta(new Date());
 			pagoProveedore.setUsuario(usuario);
 			int idPago = pagoDAO.insertar(pagoProveedore);
 			if(idPago != 0){
+				log.info("idPago: " + idPago);
 				MovimientoCaja movimientoCaja = new MovimientoCaja();
 				CuentaCorriente cuenta = new CuentaCorriente();
 				CuentasCorrientesProveedore ccProveedor = new CuentasCorrientesProveedore();
@@ -391,6 +393,7 @@ public class BeanPago implements Serializable {
 				ccProveedor.setMonto(montoP);
 				ccProveedor.setUsuario(usuario);
 				int idCuentaCorriente = cuenta.insertarCC(ccProveedor);
+				log.info("idCuentaCorriente" + idCuentaCorriente);
 				Caja caja = new Caja();
 				caja.setConcepto("Pago realizado a: " + nombreNegocio + " - Concepto : " + conceptoP);
 				caja.setFecha(fechaP);
@@ -400,6 +403,7 @@ public class BeanPago implements Serializable {
 				caja.setNombreTabla("PagosProveedore");
 				caja.setUsuario(usuario);
 				int idCaja = movimientoCaja.insertarCaja(caja);
+				log.info("idCaja" + idCaja);
 				if(idCuentaCorriente != 0 && idCaja != 0){
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago registrado!", null);
 					idProveedor = 0;

@@ -47,6 +47,7 @@
 				<ui:include src="/includes/menubar.xhtml" />
 				<br/>
 				<br/>
+				<h:outputText value='(*) Importante: En el listado de equipos a pagar se encuentran los vendidos a partir del 01/10/2017. Si no se seleccionan equipos no se marcaran como pagados, se deberá hacerlo desde el formulario "Marcar equipos como pagos"' />
     			<p:panelGrid columns="6" style="width:100%;">
     				<f:facet name="header">
     					<h:outputText value="Pago de Cliente" />
@@ -119,20 +120,16 @@
    					</f:facet>
    				</p:dataTable>
    				
-   				<p:dialog id="dialogo" header="Confirmación del pago" widgetVar="dialog" minHeight="150" minWidth="150" closable="true" closeOnEscape="true" >
+   				<p:dialog id="dialogo" header="Esta seguro que desea confirmar el pago" widgetVar="dialog" minHeight="150" minWidth="150" closable="true" closeOnEscape="true" >
    					<p:panelGrid columns="2">
-   						<h:outputText value="Enviar comprobantes por email:" />
-   						<p:selectBooleanCheckbox value="#{beanPago.envioEmail}" />
-						<h:outputText value="Corros para enviar comprobantes separados por coma:" />
-					    <p:inputTextarea value="#{beanPago.destinatarios}" />
-					    	<p:commandButton value="Confirmar" update="messages" action="#{beanPago.guardarPagoCliente()}" oncomplete="PF('dialog').hide();"/>
-	   					<p:commandButton value="Cancelar" onclick="PF('dialog').hide();"/>
+						<h:outputText value="Enviar comprobante:" />
+						<p:selectBooleanCheckbox value="#{beanPago.envioEmail}" />
+						<h:outputText value="Correos para enviar comprobantes separados por coma:" />
+				    	<p:inputTextarea value="#{beanPago.destinatarios}"  rows="4" cols="40"/>
+				    	<p:commandButton value="Confirmar" update="panel" action="#{beanPago.guardarPagoCliente()}" oncomplete="PF('dialog').hide();"/>
+   						<p:commandButton value="Cancelar" onclick="PF('dialog').hide();"/>
 					</p:panelGrid>
-				</p:dialog>
-				
-				
-				
-				
+				</p:dialog>	
    			</p:panel>
 	    	</h:form>
 	    </div>

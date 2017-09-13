@@ -47,7 +47,10 @@
 					<h:form id="formulario" onkeypress="return event.keyCode != 13">
 						<p:panel style="background:#D27C7A;min-height:900px;">
 							<p:growl id="messages" showDetail="false" />
-							<ui:include src="/includes/menu.xhtml" />																	
+							<ui:include src="/includes/menu.xhtml" />			
+							<br/>
+							<br/>
+							<h:outputText value="(*) Importante: En el listado de equipos a pagar se encuentran los vendidos a partir del 01/10/2017" />														
 							<p:dataTable id="eppTable" value="#{beanPendientePago.listaEpp}" var="epp" emptyMessage="No existen equipos pendietes de pago" paginator="true" rows="10"
 							widgetVar="eppBuscar" resizableColumns="true" sortMode="multiple">
 			   					<f:facet name="header">
