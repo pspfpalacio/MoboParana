@@ -17,8 +17,8 @@
 				<p:calendar value="#{beanPago.pagoCliente.fecha}" pattern="dd/MM/yyyy" mask="true" locale="tr"/>
 				
 				<p:outputLabel value="Clientes: " />
-				<p:selectOneMenu value="#{beanPago.idCliente}" filter="true" filterMatchMode="contains">
-					<p:ajax event="change" listener="#{beanPago.updatePendientePagoList()}" update="panelDialogo"/>
+				<p:selectOneMenu value="#{beanPago.idCliente}" filter="true" filterMatchMode="contains" style="width:350px;;">
+					
 					<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
 					<f:selectItems value="#{beanPago.listaClientes}" var="cliente" itemLabel="#{cliente.nombreNegocio}" 
 					itemValue="#{cliente.id}"/>
@@ -32,17 +32,19 @@
 				<p:inputTextarea value="#{beanPago.pagoCliente.concepto}" autoResize="false" style="width:100%;" rows="3" />
 				 				
 				<f:facet name="footer">
-					<p:commandButton value="Confirmar" oncomplete="PF('dialogoRegular').show();" actionListener="#{beanPago.onConfirmPago()}" update="panelDialogo" />			
+					<p:commandButton value="Confirmar" >
+						<p:ajax event="click" listener="#{beanPago.onConfirmPago()}" update="panelDialogo" oncomplete="PF('dialogoRegular').show();" />
+					</p:commandButton>			
 					<p:commandButton value="Cancelar" action="#{beanPago.goPagoCliente(beanPago.usuario)}"/>
 				</f:facet>	
 			</p:panelGrid>
-			<p:outputPanel id="panelDialogo">
+			<p:panel id="panelDialogo">
 			<p:dialog header="Esta seguro que desea confirmar el pago" widgetVar="dialogoRegular" minHeight="150" 
    				minWidth="100" closable="true" closeOnEscape="true" modal="true">
    					
    					<h:panelGrid columns="2">
    						<p:outputLabel value="Fecha: " />
-   						<p:outputLabel  value="#{beanPago.pagoCliente.fecha}" disabled="true">
+   						<p:outputLabel  value="#{beanPago.fechaPago}" disabled="true">
    							<f:convertDateTime pattern="dd/MM/yyyy" locale="tr"/>
    						</p:outputLabel>
 				
@@ -69,7 +71,7 @@
 					</h:panelGrid>
 					
 				</p:dialog>
-			</p:outputPanel>
+			</p:panel>
 		</div>
 	</ui:composition>
 </html>

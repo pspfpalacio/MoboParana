@@ -75,6 +75,7 @@ public class BeanPago implements Serializable {
 	private List<EquipoPendientePago> equiposParaPagar;
 	private Cliente cliente;
 	private Usuario usuario;
+	private Date fechaPago;
 	private int idCliente;
 	private int idProveedor;
 	private String destinatarios;
@@ -195,6 +196,14 @@ public class BeanPago implements Serializable {
 		this.usuario = usuario;
 	}
 
+	public Date getFechaPago() {
+		return fechaPago;
+	}
+
+	public void setFechaPago(Date fechaPago) {
+		this.fechaPago = fechaPago;
+	}
+
 	public int getIdCliente() {
 		return idCliente;
 	}
@@ -269,9 +278,11 @@ public class BeanPago implements Serializable {
 	}
 	
 	public void onConfirmPago() {
+		log.info("onConfirmPago() - idCliente: " + idCliente);
 		if (idCliente != 0) {
 			cliente = clienteDAO.get(idCliente);
-			destinatarios = cliente.getEmail();			
+			destinatarios = cliente.getEmail();
+			fechaPago = pagoCliente.getFecha();
 		}
 	}
 	
