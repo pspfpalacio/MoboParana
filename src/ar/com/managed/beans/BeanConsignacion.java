@@ -1342,7 +1342,8 @@ public class BeanConsignacion implements Serializable {
 			log.info("Monto: " + montoTotal + " Cliente: " + idCliente);
 			Cliente cli = clienteDAO.get(idCliente);			
 			Consignacion consig = consignacionDAO.get(cli, false);
-			if (consig.getId() == 0) {			
+			if (consig.getId() == 0) {
+				log.info("idConsignacion: " + consig.getId());
 				consignacion.setCliente(cli);
 				consignacion.setEstado(true);
 				consignacion.setFechaAlta(new Date());
@@ -1361,6 +1362,7 @@ public class BeanConsignacion implements Serializable {
 					eConsignacion.setUsuario(usuario);
 					int idECon = eConsignacionDAO.insertar(eConsignacion);
 					eConsignacion.setId(idECon);
+					log.info("idECon: " + idECon);
 					
 					boolean inserto = true;
 					consignacion.setId(idConsignacion);
@@ -1370,6 +1372,7 @@ public class BeanConsignacion implements Serializable {
 						consignacionDetalle.setConsignacionsDetalleUnidads(null);
 						consignacionDetalle.setConsignacion(consignacion);					
 						int idDetalle = consignacionDetalleDAO.insertar(consignacionDetalle);
+						log.info("idDetalle: " + idDetalle);
 						if(idDetalle != 0){
 							consignacionDetalle.setId(idDetalle);		
 							//Inserto Entrega Detalle
@@ -1381,6 +1384,7 @@ public class BeanConsignacion implements Serializable {
 							eConsigDetalle.setSubtotal(consignacionDetalle.getSubtotal());
 							int idEConDet = eConsignacionDetalleDAO.insertar(eConsigDetalle);
 							eConsigDetalle.setId(idEConDet);
+							log.info("idEConDet: " + idEConDet);
 							
 							boolean insertoUnidad = true;
 							for(ConsignacionsDetalleUnidad consignacionUnidad : listAux){
@@ -1398,6 +1402,7 @@ public class BeanConsignacion implements Serializable {
 								prod.setEnConsignacion(enConsig);
 								productoDAO.update(prod);
 								int idDetalleUnidad = consignacionDetalleUnidadDAO.insertar(consignacionUnidad);
+								log.info("idDetalleUnidad: " + idDetalleUnidad);
 								
 								//Inserto Entrega Unidad
 								EConsignacionsDetalleUnidad eConsigDetUnidad = new EConsignacionsDetalleUnidad();
@@ -1410,7 +1415,7 @@ public class BeanConsignacion implements Serializable {
 								if(idDetalleUnidad == 0){
 									insertoUnidad = false;
 									break;
-								}else {
+								}/*else {
 									HistorialMovil hm = new HistorialMovil();
 									hm.setFecha(new Date());
 									hm.setUsuario(usuario);
@@ -1419,7 +1424,7 @@ public class BeanConsignacion implements Serializable {
 									hm.setDescripcion("Consignacion: " + cliente.getApellidoNombre());
 									hm.setIdMovimiento(idConsignacion);
 									historialMovilDAO.insert(hm);
-								}
+								}*/
 								listaEConsigUnidad.add(eConsigDetUnidad);
 							}
 							eConsigDetalle.setEConsignacionsDetalleUnidads(listaEConsigUnidad);
@@ -1450,6 +1455,7 @@ public class BeanConsignacion implements Serializable {
 				float monto = consig.getMonto();
 				monto = monto + montoTotal;
 				int idConsig = consig.getId();
+				log.info("idConsig: " + idConsig);
 				consignacion.setId(idConsig);
 				consignacion.setCliente(cli);
 				consignacion.setEstado(true);
@@ -1457,6 +1463,7 @@ public class BeanConsignacion implements Serializable {
 				consignacion.setMonto(monto);
 				consignacion.setUsuario3(usuario);
 				int updateConsignacion = consignacionDAO.update(consignacion);
+				log.info("updateConsignacion: " + updateConsignacion);
 				if(updateConsignacion != 0){
 					//Inserto entrega
 					eConsignacion = new EConsignacion();
@@ -1467,6 +1474,7 @@ public class BeanConsignacion implements Serializable {
 					eConsignacion.setMonto(montoTotal);
 					eConsignacion.setUsuario(usuario);
 					int idECon = eConsignacionDAO.insertar(eConsignacion);
+					log.info("idECon: " + idECon);
 					eConsignacion.setId(idECon);
 					
 					boolean inserto = true;
@@ -1495,7 +1503,8 @@ public class BeanConsignacion implements Serializable {
 							idDetalle = consignacionDetalleDAO.update(consignacionDetalle);
 						} else {
 							idDetalle = consignacionDetalleDAO.insertar(consignacionDetalle);
-						}						
+						}
+						log.info("idDetalle: " + idDetalle);
 						if(idDetalle != 0){
 							consignacionDetalle.setId(idDetalle);		
 							//Inserto Entrega Detalle
@@ -1524,6 +1533,7 @@ public class BeanConsignacion implements Serializable {
 								prod.setEnConsignacion(enConsig);
 								productoDAO.update(prod);
 								int idDetalleUnidad = consignacionDetalleUnidadDAO.insertar(consignacionUnidad);
+								log.info("idDetalleUnidad: " + idDetalleUnidad);
 								
 								//Inserto Entrega Unidad
 								EConsignacionsDetalleUnidad eConsigDetUnidad = new EConsignacionsDetalleUnidad();
@@ -1536,7 +1546,7 @@ public class BeanConsignacion implements Serializable {
 								if(idDetalleUnidad == 0){
 									insertoUnidad = false;
 									break;
-								} else {
+								} /*else {
 									HistorialMovil hm = new HistorialMovil();
 									hm.setFecha(new Date());
 									hm.setUsuario(usuario);
@@ -1545,7 +1555,7 @@ public class BeanConsignacion implements Serializable {
 									hm.setDescripcion("Consignacion: " + cliente.getApellidoNombre());
 									hm.setIdMovimiento(consig.getId());
 									historialMovilDAO.insert(hm);
-								}
+								}*/
 								listaEConsigUnidad.add(eConsigDetUnidad);
 							}
 							eConsigDetalle.setEConsignacionsDetalleUnidads(listaEConsigUnidad);
@@ -1587,6 +1597,7 @@ public class BeanConsignacion implements Serializable {
 	public String agregar() {
 		try {
 			if (fechaAgrega != null && !listaConsignacionsDetalles.isEmpty() && montoTotal != 0 && cantidadTotal != 0) {
+				log.info("montoTotal: " + montoTotal);
 				float monto = consignacion.getMonto();
 				monto = monto + montoTotal;			
 				consignacion.setEstado(true);
@@ -1594,6 +1605,7 @@ public class BeanConsignacion implements Serializable {
 				consignacion.setMonto(monto);
 				consignacion.setUsuario3(usuario);
 				int updCons = consignacionDAO.update(consignacion);
+				log.info("updCons: " + updCons);
 				if (updCons != 0) {
 					//Inserto entrega
 					eConsignacion = new EConsignacion();
@@ -1604,6 +1616,7 @@ public class BeanConsignacion implements Serializable {
 					eConsignacion.setMonto(montoTotal);
 					eConsignacion.setUsuario(usuario);
 					int idECon = eConsignacionDAO.insertar(eConsignacion);
+					log.info("idECon: " + idECon);
 					eConsignacion.setId(idECon);
 					listaEConsignacionsDetalles = new ArrayList<EConsignacionsDetalle>();
 					boolean inserto = true;
@@ -1681,7 +1694,16 @@ public class BeanConsignacion implements Serializable {
 								if(idDetalleUnidad == 0){
 									insertoUnidad = false;
 									break;
-								}								
+								}else {
+									HistorialMovil hm = new HistorialMovil();
+									hm.setFecha(new Date());
+									hm.setUsuario(usuario);
+									hm.setImei(consignacionUnidad.getNroImei());
+									hm.setTipo("CONSIGNACION");
+									hm.setDescripcion("Consignacion: " + cliente.getApellidoNombre());
+									hm.setIdMovimiento(updCons);
+									historialMovilDAO.insert(hm);
+								}
 							}							
 							if(!insertoUnidad){
 								inserto = false;
