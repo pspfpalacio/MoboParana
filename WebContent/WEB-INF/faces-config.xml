@@ -12298,6 +12298,11 @@
    <redirect/>
   </navigation-case>
   <navigation-case>
+   <from-outcome>historial</from-outcome>
+   <to-view-id>/vistas/productos/historial.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
    <from-outcome>listasprecios</from-outcome>
    <to-view-id>/vistas/listasprecios/listasprecios.xhtml</to-view-id>
    <redirect/>
@@ -21787,6 +21792,14 @@
    <redirect/>
   </navigation-case>
  </navigation-rule>
+  <navigation-rule>
+  <from-view-id>/vistas/productos/historial.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>stock</from-outcome>
+   <to-view-id>/vistas/productos/stock.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  </navigation-rule>
  <!-- Spring -->
  <application>
   <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>

@@ -60,11 +60,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -291,11 +290,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -522,11 +520,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -753,11 +750,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -984,11 +980,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -1215,11 +1210,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -1446,11 +1440,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -1678,11 +1671,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -1915,11 +1907,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -2146,11 +2137,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -2377,11 +2367,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -2608,11 +2597,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -2839,11 +2827,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -3021,9 +3008,9 @@
     PATH="/vistas/pagos/marcarpagados.xhtml"
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT ID="cliente::#vistas#clientes#cliente.xhtml"
-    NAME="output2" PATH="/vistas/clientes/cliente.xhtml"
-    TARGET="rules:#vistas#clientes#cliente.xhtml" TITLE="cliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="clientes::#vistas#clientes#clientes.xhtml"
+    NAME="output2" PATH="/vistas/clientes/clientes.xhtml"
+    TARGET="rules:#vistas#clientes#clientes.xhtml" TITLE="clientes" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="proveedores::#vistas#proveedores#proveedores.xhtml"
     NAME="output3" PATH="/vistas/proveedores/proveedores.xhtml"
@@ -3303,11 +3290,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -3537,11 +3523,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -3771,11 +3756,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -4002,11 +3986,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -4236,11 +4219,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -4470,11 +4452,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -4701,11 +4682,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -4932,11 +4912,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -5163,11 +5142,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -5394,11 +5372,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -5634,11 +5611,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -5865,11 +5841,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -6096,11 +6071,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -6328,11 +6302,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -6625,11 +6598,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -6862,11 +6834,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -7093,11 +7064,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -7324,11 +7294,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -7555,11 +7524,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -7787,11 +7755,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -8023,11 +7990,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -8254,11 +8220,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -8485,11 +8450,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -8716,11 +8680,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -8948,11 +8911,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -9179,11 +9141,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -9410,11 +9371,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -9641,11 +9601,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -9872,11 +9831,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -10072,10 +10030,9 @@
     NAME="output6" PATH="/vistas/productos/producto.xhtml"
     TARGET="rules:#vistas#productos#producto.xhtml" TITLE="producto" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="listasprecios::#vistas#listasprecios#listasprecios.xhtml"
-    NAME="output7" PATH="/vistas/listasprecios/listasprecios.xhtml"
-    TARGET="rules:#vistas#listasprecios#listasprecios.xhtml"
-    TITLE="listasprecios" model-entity="JSFProcessItemOutput"/>
+    ID="historial::#vistas#productos#historial.xhtml" NAME="output7"
+    PATH="/vistas/productos/historial.xhtml"
+    TARGET="rules:#vistas#productos#historial.xhtml" TITLE="historial" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="listaprecio::#vistas#listasprecios#listaprecio.xhtml"
     NAME="output8" PATH="/vistas/listasprecios/listaprecio.xhtml"
@@ -10103,17 +10060,16 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
     ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
+    NAME="output16"
     PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
     TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
     TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT
-    ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
-    NAME="output16"
-    PATH="/vistas/creditodebito/creditodebitoproveedor.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitoproveedor.xhtml"
-    TITLE="creditodebitoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT ID="caja::#vistas#caja#caja.xhtml"
     NAME="output17" PATH="/vistas/caja/caja.xhtml"
     TARGET="rules:#vistas#caja#caja.xhtml" TITLE="caja" model-entity="JSFProcessItemOutput"/>
@@ -10334,11 +10290,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -10565,11 +10520,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -10796,11 +10750,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -11028,11 +10981,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -11259,11 +11211,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -11493,11 +11444,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -11735,11 +11685,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -11990,11 +11939,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -12240,11 +12188,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -12500,11 +12447,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -12765,11 +12711,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -12998,11 +12943,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -13230,11 +13174,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -13462,11 +13405,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -13727,11 +13669,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -13962,11 +13903,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -14206,11 +14146,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output16"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output16" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output17"
@@ -14446,11 +14385,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output16"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output16" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output17"
@@ -14687,11 +14625,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output16"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output16" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output17"
@@ -14926,11 +14863,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output16"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output16" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output17"
@@ -15166,11 +15102,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output16"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output16" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output17"
@@ -15411,11 +15346,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output16"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output16" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output17"
@@ -15642,11 +15576,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -15873,11 +15806,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -16228,11 +16160,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output16"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output16" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output17"
@@ -16468,11 +16399,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output16"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output16" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output17"
@@ -16730,11 +16660,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -16992,11 +16921,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -17226,11 +17154,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -17463,11 +17390,10 @@
     TARGET="rules:#vistas#pagos#marcarpagados.xhtml"
     TITLE="marcarpagados" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="creditodebitocliente::#vistas#creditodebito#creditodebitocliente.xhtml"
-    NAME="output15"
-    PATH="/vistas/creditodebito/creditodebitocliente.xhtml"
-    TARGET="rules:#vistas#creditodebito#creditodebitocliente.xhtml"
-    TITLE="creditodebitocliente" model-entity="JSFProcessItemOutput"/>
+    ID="pagoproveedor::#vistas#pagos#pagoproveedor.xhtml"
+    NAME="output15" PATH="/vistas/pagos/pagoproveedor.xhtml"
+    TARGET="rules:#vistas#pagos#pagoproveedor.xhtml"
+    TITLE="pagoproveedor" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
     ID="creditodebitoproveedor::#vistas#creditodebito#creditodebitoproveedor.xhtml"
     NAME="output16"
@@ -17896,6 +17822,15 @@
    <PROCESS-ITEM-OUTPUT ID="tecnicos::#vistas#tecnicos#tecnicos.xhtml"
     NAME="output54" PATH="/vistas/tecnicos/tecnicos.xhtml"
     TARGET="rules:#vistas#tecnicos#tecnicos.xhtml" TITLE="tecnicos" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#vistas#productos#historial.xhtml"
+  PATH="/vistas/productos/historial.xhtml" SHAPE="1184,30897,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#vistas#productos#historial.xhtml:0"
+   NAME="item" PATH="/vistas/productos/historial.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="stock::#vistas#productos#stock.xhtml"
+    NAME="output" PATH="/vistas/productos/stock.xhtml"
+    TARGET="rules:#vistas#productos#stock.xhtml" TITLE="stock" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
 </PROCESS>

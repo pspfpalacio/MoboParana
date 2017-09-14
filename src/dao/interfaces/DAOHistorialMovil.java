@@ -9,5 +9,7 @@ public interface DAOHistorialMovil {
 	public List<HistorialMovil> get();
 	
 	public List<HistorialMovil> getPorImei(String imei);
+	
+	public int insert(HistorialMovil hm);
 
 }

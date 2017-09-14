@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
@@ -44,6 +45,21 @@ public class DAOHistorialMovilImpl implements Serializable, DAOHistorialMovil {
 		locQuery.setParameter("pImei", imei);
 		List<HistorialMovil> lista = locQuery.getResultList();
 		return lista;
+	}
+	
+	public int insert(HistorialMovil hm) {
+		inicializar();
+		EntityTransaction tx = em.getTransaction();
+		try{
+			tx.begin();
+			em.persist(hm);
+			tx.commit();
+			return hm.getId();
+		}catch (Exception e){
+			e.printStackTrace();
+			tx.rollback();
+			return 0;
+		}
 	}
 	
 	

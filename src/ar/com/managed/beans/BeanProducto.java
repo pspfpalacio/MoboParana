@@ -14,6 +14,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Productos;
 import model.entity.Consignacion;
@@ -25,9 +27,11 @@ import model.entity.Stock;
 import model.entity.UnidadMovil;
 import model.entity.Usuario;
 import model.entity.VentasDetalleUnidad;
+import model.entity.HistorialMovil;
 import dao.interfaces.DAOCompraDetalleUnidad;
 import dao.interfaces.DAOConsignacionDetalle;
 import dao.interfaces.DAOConsignacionDetalleUnidad;
+import dao.interfaces.DAOHistorialMovil;
 import dao.interfaces.DAOProducto;
 import dao.interfaces.DAORubro;
 import dao.interfaces.DAOStock;
@@ -43,6 +47,8 @@ public class BeanProducto implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final static Logger log = Logger.getLogger(BeanProducto.class);
 	
 	@ManagedProperty(value = "#{BeanProductoDAO}")
 	private DAOProducto productoDAO;
@@ -70,6 +76,9 @@ public class BeanProducto implements Serializable {
 	
 	@ManagedProperty(value = "#{BeanStockDAO}")
 	private DAOStock stockDAO;
+	
+	@ManagedProperty(value = "#{BeanHistorialMovilDAO}")
+	private DAOHistorialMovil historialMovilDAO;
 	
 	private List<Producto> listaProductos;
 	private List<Producto> filteredProductos;
@@ -162,6 +171,14 @@ public class BeanProducto implements Serializable {
 
 	public void setStockDAO(DAOStock stockDAO) {
 		this.stockDAO = stockDAO;
+	}
+
+	public DAOHistorialMovil getHistorialMovilDAO() {
+		return historialMovilDAO;
+	}
+
+	public void setHistorialMovilDAO(DAOHistorialMovil historialMovilDAO) {
+		this.historialMovilDAO = historialMovilDAO;
 	}
 
 	public List<Producto> getListaProductos() {
@@ -356,7 +373,7 @@ public class BeanProducto implements Serializable {
 	
 	public String goProductoNuevo(){
 		producto = new Producto();
-		headerText = "Móvil Nuevo";
+		headerText = "MÃ³vil Nuevo";
 		return "producto";
 	}
 	
@@ -368,14 +385,14 @@ public class BeanProducto implements Serializable {
 	
 	public String goUsadoNuevo(){
 		producto = new Producto();
-		headerText = "Móvil Usado";
+		headerText = "MÃ³vil Usado";
 		return "usado";
 	}
 	
 	public String goProductoEditar(Producto prod){
 		producto = new Producto();
 		producto = prod;
-		headerText = "Modificar Móvil";
+		headerText = "Modificar MÃ³vil";
 		return "producto";
 	}
 	
@@ -389,7 +406,7 @@ public class BeanProducto implements Serializable {
 	public String goUsadoEditar(Producto prod){
 		producto = new Producto();
 		producto = prod;
-		headerText = "Modificar Móvil Usado";
+		headerText = "Modificar MÃ³vil Usado";
 		return "usado";
 	}
 	
@@ -476,11 +493,11 @@ public class BeanProducto implements Serializable {
 			if(productoDAO.update(prod) != 0){
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alta registrada.", null);
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al registrar el alta, "
-						+ "inténtelo nuevamente.", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el alta, "
+						+ "intente nuevamente.", null);
 			}
 		} catch (Exception e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al registrar el alta, "
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el alta, "
 					+ "error: " + e.getMessage(), null);
 		}		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -497,16 +514,16 @@ public class BeanProducto implements Serializable {
 				if(productoDAO.update(prod) != 0){
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja registrada.", null);
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al registrar la baja, "
-							+ "inténtelo nuevamente.", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja, "
+							+ "intente nuevamente.", null);
 				}
 			} else {
 				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible realizar la baja, "
-						+ "posee móviles en consignación.", null);
+						+ "posee equipos en consignaciÃ³n.", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al registrar la baja, "
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja, "
 					+ "error: " + e.getMessage(), null);
 		}		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -559,11 +576,11 @@ public class BeanProducto implements Serializable {
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto guardado!", null);
 				retorno = "productos";
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Producto, "
-						+ "inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar el Producto, "
+						+ "intente nuevamente!", null);
 			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Marca y modelo No pueden estar vacíos!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Marca y modelo son campos obligatorios!", null);
 		}
 		Rubro rub = new Rubro();
 		rub.setId(1);
@@ -600,11 +617,11 @@ public class BeanProducto implements Serializable {
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto guardado!", null);
 				retorno = "accesorios";
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Producto, "
-						+ "inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar el Producto, "
+						+ "intente nuevamente!", null);
 			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Marca y modelo No pueden estar vacíos!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Marca y modelo son campos obligatorios!", null);
 		}
 		Rubro rub = new Rubro();
 		rub.setId(2);
@@ -640,11 +657,11 @@ public class BeanProducto implements Serializable {
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto guardado!", null);
 				retorno = "usados";
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Producto, "
-						+ "inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar el Producto, "
+						+ "intente nuevamente!", null);
 			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Marca y modelo No pueden estar vacíos!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Marca y modelo son campos obligatorios!", null);
 		}
 		Rubro rub = new Rubro();
 		rub.setId(3);
@@ -668,6 +685,24 @@ public class BeanProducto implements Serializable {
 		listaUnidadMovils = new ArrayList<UnidadMovil>();
 		filteredUnidadMovils = new ArrayList<UnidadMovil>();
 		listaUnidadMovils = unidadMovilDAO.getListaEnStock(true, prod, false, true);
+		filteredUnidadMovils = listaUnidadMovils;
+		return "stock";
+	}
+	
+	public String verStockDesdeHistorial(String imei){
+		log.info("Imei: " + imei);
+		UnidadMovil unidad = unidadMovilDAO.get(imei);
+		precioCompra = 0;
+		nroImei = "";
+		unidadMovil = new UnidadMovil();
+		producto = new Producto();
+		producto = unidad.getProducto();
+		listaUnidadMovils = null;
+		filteredUnidadMovils = null;
+		listaUnidadMovilsDelete = new ArrayList<UnidadMovil>();
+		listaUnidadMovils = new ArrayList<UnidadMovil>();
+		filteredUnidadMovils = new ArrayList<UnidadMovil>();
+		listaUnidadMovils = unidadMovilDAO.getListaEnStock(true, producto, false, true);
 		filteredUnidadMovils = listaUnidadMovils;
 		return "stock";
 	}
@@ -710,6 +745,7 @@ public class BeanProducto implements Serializable {
 	public void agregarStock(){
 		unidadMovil = new UnidadMovil();
 		if(!nroImei.isEmpty() && precioCompra != 0){
+			log.info("Imei: " + nroImei + " precioCompra: " + precioCompra);
 			UnidadMovil unidad = new UnidadMovil();
 			unidad = unidadMovilDAO.get(nroImei);
 			if(unidad.getId() == 0){
@@ -732,6 +768,7 @@ public class BeanProducto implements Serializable {
 					filteredUnidadMovils = listaUnidadMovils;
 					nroImei = "";
 					descripcion = "";
+					
 				}else{
 					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei ya se encuentra en la lista!", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -741,7 +778,7 @@ public class BeanProducto implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
 		}else{
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei y/o el Precio de Compra no pueden estar vacíos!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei y/o el Precio de Compra no pueden estar vacï¿½os!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
@@ -780,7 +817,7 @@ public class BeanProducto implements Serializable {
 			cantidad = 0;
 			precioCompra = 0;
 		} else {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Precio de Compra no puede estar vacío!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Precio de Compra es obligatorio!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
@@ -809,12 +846,14 @@ public class BeanProducto implements Serializable {
 		FacesMessage msg = null;
 		String retorno = "";
 		boolean insert = true;
+		int insertHm = 0;
 		int cant = 0;
 		for (UnidadMovil unidadMovil : listaUnidadMovils) {
 			//Pregunta si existe la unidadMovil, si existe no se inserta y sino si
 			String nroImei = unidadMovil.getNroImei();
 			UnidadMovil unidad = unidadMovilDAO.get(nroImei);
 			if(unidad.getId() == 0){
+				log.info("Insert nuevo stock");
 				//Seteo valores predeterminados para stock nuevo
 				unidadMovil.setEnStock(true);
 				unidadMovil.setEstado(true);
@@ -827,15 +866,29 @@ public class BeanProducto implements Serializable {
 				//Seteo auditoria
 				unidadMovil.setFechaAlta(new Date());
 				unidadMovil.setUsuario1(usuario);
-				if(unidadMovilDAO.insertar(unidadMovil) == 0){
+				int insertUnidadMovil = unidadMovilDAO.insertar(unidadMovil);
+				if(insertUnidadMovil == 0){
 					insert = false;
+				}else {
+					log.info("Unidad movil guardada: " + insertUnidadMovil);
+					HistorialMovil hm = new HistorialMovil();
+					hm.setFecha(new Date());
+					hm.setUsuario(usuario);
+					hm.setImei(unidadMovil.getNroImei());
+					hm.setTipo("ALTA STOCK");
+					hm.setIdMovimiento(0);
+					insertHm = historialMovilDAO.insert(hm);
 				}
+				
 			}else{
+				insertHm = 1;
 				//Seteo auditoria para editar
 				unidadMovil.setFechaMod(new Date());
 				unidadMovil.setUsuario3(usuario);
 				if(unidadMovilDAO.update(unidadMovil) == 0){
 					insert = false;
+				}else {
+					log.info("Unidad movil actualizada: " + unidadMovil.getId());
 				}
 			}
 			cant++;
@@ -857,11 +910,12 @@ public class BeanProducto implements Serializable {
 		}
 		producto.setStock(cant);
 		int updateProd = productoDAO.update(producto);
-		if(insert && updateProd != 0){
+		if(insert && updateProd != 0 && insertHm != 0){
+			insertHm = 0;
 			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Stock modificado correctamente!", null);
 			retorno = "productos";
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al actualizar el Stock!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar el Stock!", null);
 		}
 		listaProductos = new ArrayList<Producto>();
 		filteredProductos = new ArrayList<Producto>();
@@ -915,10 +969,10 @@ public class BeanProducto implements Serializable {
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Stock modificado correctamente!", null);
 				retorno = "usados";
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al actualizar el Stock!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar el Stock!", null);
 			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al actualizar el Stock!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar el Stock!", null);
 		}
 		listaProductos = new ArrayList<Producto>();
 		filteredProductos = new ArrayList<Producto>();
@@ -1051,7 +1105,7 @@ public class BeanProducto implements Serializable {
 			filteredProductos = listaProductos;
 			return "sinstocks";
 		} catch(Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible redirigir hacia el formulario, Inténtelo nuevamente!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible redirigir hacia el formulario, Intente nuevamente!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
 		}
