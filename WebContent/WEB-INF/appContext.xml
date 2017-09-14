@@ -52,5 +52,6 @@
 	<bean id="BeanTecnicoDAO" class="dao.impl.DAOTecnicoImpl" />
 	<bean id="BeanEquipoPendientePagoDAO" class="dao.impl.DAOEquipoPendientePagoImpl" />
 	<bean id="BeanDatosEmailDAO" class="dao.impl.DAODatosEmailImpl" />
+	<bean id="BeanHistorialMovilDAO" class="dao.impl.DAOHistorialMovilImpl" />
 
 </beans>
