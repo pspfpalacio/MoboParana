@@ -7,71 +7,94 @@
       xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 	<ui:composition>
-		<div>
-			<p:panelGrid columns="6" style="width:100%;">
-				<f:facet name="header">
-					<h:outputText value="Pago Regular" />
-				</f:facet>
-				
-				<p:outputLabel value="Fecha: " />
-				<p:calendar value="#{beanPago.pagoCliente.fecha}" pattern="dd/MM/yyyy" mask="true" locale="tr"/>
-				
-				<p:outputLabel value="Clientes: " />
-				<p:selectOneMenu value="#{beanPago.idCliente}" filter="true" filterMatchMode="contains" style="width:350px;;">
-					
-					<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
-					<f:selectItems value="#{beanPago.listaClientes}" var="cliente" itemLabel="#{cliente.nombreNegocio}" 
-					itemValue="#{cliente.id}"/>
-				</p:selectOneMenu>
-				
-				<p:outputLabel value="Monto($): " />
-				<p:inputText name="pagoCli" value="#{beanPago.pagoCliente.monto}" />				
-			</p:panelGrid>
-			<p:panelGrid columns="2" style="width:100%;">   
-				<p:outputLabel value="Concepto: " />
-				<p:inputTextarea value="#{beanPago.pagoCliente.concepto}" autoResize="false" style="width:100%;" rows="3" />
-				 				
-				<f:facet name="footer">
-					<p:commandButton value="Confirmar" >
-						<p:ajax event="click" listener="#{beanPago.onConfirmPago()}" update="panelDialogo" oncomplete="PF('dialogoRegular').show();" />
-					</p:commandButton>			
-					<p:commandButton value="Cancelar" action="#{beanPago.goPagoCliente(beanPago.usuario)}"/>
-				</f:facet>	
-			</p:panelGrid>
-			<p:panel id="panelDialogo">
-			<p:dialog header="Esta seguro que desea confirmar el pago" widgetVar="dialogoRegular" minHeight="150" 
-   				minWidth="100" closable="true" closeOnEscape="true" modal="true">
-   					
-   					<h:panelGrid columns="2">
-   						<p:outputLabel value="Fecha: " />
-   						<p:outputLabel  value="#{beanPago.fechaPago}" disabled="true">
-   							<f:convertDateTime pattern="dd/MM/yyyy" locale="tr"/>
-   						</p:outputLabel>
-				
-						<p:outputLabel value="Cliente: " />
-						<p:outputLabel value="#{beanPago.cliente.nombreNegocio}" />				
-				
-						<p:outputLabel value="Monto: " />
-						<p:outputLabel value="#{beanPago.pagoCliente.monto}" >
-							<f:convertNumber pattern="$###,##0.00"/>
-						</p:outputLabel>
-						
-						<p:outputLabel value="Concepto: " />
-						<p:outputLabel value="#{beanPago.pagoCliente.concepto}" />
-													
-						<h:outputText value="Enviar comprobante:" />
-						<p:selectBooleanCheckbox value="#{beanPago.envioEmail}" />
-						
-						<h:outputText value="Correos para enviar comprobantes separados por coma:" />
-				    	<p:inputTextarea value="#{beanPago.destinatarios}" rows="3" cols="40"/>
-				    	
-				    	<p:commandButton value="Confirmar" update=":formulario:panel" action="#{beanPago.guardarPagoCliente()}" 
-				    	oncomplete="PF('dialogoRegular').hide();"/>
-   						<p:commandButton value="Cancelar" onclick="PF('dialogoRegular').hide();"/>
-					</h:panelGrid>
-					
-				</p:dialog>
-			</p:panel>
-		</div>
+		<h:form id="formRegular">
+			<h2 align="center">Pago Regular</h2>
+			<p:wizard flowListener="#{beanPago.onFlowProcess}">
+		        <p:tab id="principal" title="Principal">
+		            <p:panel header="Datos principales">
+		                <p:messages />
+		                <h:panelGrid columns="2" columnClasses="label, value">
+		                	<h:outputText value="Fecha: " />
+							<p:calendar value="#{beanPago.pagoCliente.fecha}" pattern="dd/MM/yyyy" mask="true" locale="tr"
+							required="true" label="Fecha"/>
+							
+							<h:outputText value="Cliente: " />
+							<p:selectOneMenu value="#{beanPago.idCliente}" filter="true" filterMatchMode="contains" style="width:350px;"
+							required="true" label="Cliente">																				
+								<f:selectItem itemLabel="Seleccione.." itemValue="0" noSelectionOption="true"/>
+								<f:selectItems value="#{beanPago.listaClientes}" var="cliente" itemLabel="#{cliente.nombreNegocio}" 
+								itemValue="#{cliente.id}"/>
+							</p:selectOneMenu>
+							
+							<h:outputText value="Monto($): " />
+							<p:inputText value="#{beanPago.pagoCliente.monto}" required="true" label="Monto" />
+							
+							<h:outputText value="Concepto: " />
+							<p:inputTextarea value="#{beanPago.pagoCliente.concepto}" autoResize="false" style="width:100%;" rows="3" />
+		                			 
+		                    <h:outputText value="Saltar al final: " />
+		                    <h:selectBooleanCheckbox value="#{beanPago.skip}" />
+		                </h:panelGrid>
+		            </p:panel>
+		        </p:tab>
+		 
+		        <p:tab id="email" title="Envío email">
+		            <p:panel header="Detalle email">
+		                <p:messages />
+		                <h:panelGrid columns="2" columnClasses="label, value">		                    
+							<h:outputText value="Enviar comprobante:" />
+							<p:selectBooleanCheckbox value="#{beanPago.envioEmail}" />					
+							
+							
+							<h:outputText value="Correos (separados por coma):" />
+					    	<p:inputTextarea value="#{beanPago.destinatarios}" rows="2" cols="40" />
+		                </h:panelGrid>
+		            </p:panel>
+		        </p:tab>
+		 
+		        <p:tab id="confirm" title="Confirmacion">
+		            <p:panel header="Confirmacion">
+		                <h:panelGrid id="confirmation" columns="2" columnClasses="grid,grid">
+		                    <h:panelGrid columns="2" columnClasses="label, value">
+		                        <h:outputText value="Fecha: " />
+		                        <h:outputText value="#{beanPago.pagoCliente.fecha}" styleClass="outputLabel">
+		                        	<f:convertDateTime pattern="dd/MM/yyyy" locale="tr"/>
+		                        </h:outputText>
+		 
+		                        <h:outputText value="Cliente: " />
+		                        <h:outputText value="#{beanPago.cliente.nombreNegocio}" styleClass="outputLabel"/>
+		 
+		                        <h:outputText value="Monto: " />
+		                        <h:outputText value="#{beanPago.pagoCliente.monto}" styleClass="outputLabel">
+		                        	<f:convertNumber pattern="$###,##0.00"/>
+		                        </h:outputText>
+		                    </h:panelGrid>
+		 
+		                    <h:panelGrid columns="2" columnClasses="label, value">
+		                        <h:outputText value="Concepto: " />
+		                        <h:outputText value="#{beanPago.pagoCliente.concepto}" styleClass="outputLabel"/>
+		 
+		                        <h:outputText value="Enviar email: " />
+		                        <h:outputText value="SI" rendered="#{beanPago.envioEmail}" styleClass="outputLabel"/>
+		                        <h:outputText value="NO" rendered="#{!beanPago.envioEmail}" styleClass="outputLabel"/>
+		 
+		                        <h:outputText value="Destinatarios: " />
+		                        <h:outputText value="#{beanPago.destinatarios}" styleClass="outputLabel"/>
+		                    </h:panelGrid>
+		                </h:panelGrid>
+		 
+		                <p:commandButton value="Confirmar" actionListener="#{beanPago.guardarPagoCliente()}" update="formulario" process="@this">
+							<p:confirm header="Confirmacion" message="Esta seguro que quiere confirmar el pago?" icon="ui-icon-alert" />
+						</p:commandButton>
+		            </p:panel>
+		        </p:tab>
+		    </p:wizard>
+		    			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		    </p:confirmDialog>		
+			
+		</h:form>
 	</ui:composition>
 </html>

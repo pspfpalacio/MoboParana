@@ -16,6 +16,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
+import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
@@ -80,7 +81,8 @@ public class BeanPago implements Serializable {
 	private int idProveedor;
 	private String destinatarios;
 	private boolean envioEmail;
-	
+	private boolean skip;	
+	private boolean first;
 
 	public DAOEquipoPendientePago getEquipoPendientePagoDAO() {
 		return equipoPendientePagoDAO;
@@ -236,6 +238,22 @@ public class BeanPago implements Serializable {
 		this.envioEmail = envioEmail;
 	}
 
+	public boolean isSkip() {
+		return skip;
+	}
+
+	public void setSkip(boolean skip) {
+		this.skip = skip;
+	}
+
+	public boolean isFirst() {
+		return first;
+	}
+
+	public void setFirst(boolean first) {
+		this.first = first;
+	}
+
 	public String goPagoCliente(Usuario user){
 		log.info("pagocliente.xhtml");
 		cliente = new Cliente();
@@ -244,7 +262,7 @@ public class BeanPago implements Serializable {
 		equiposParaPagar = new ArrayList<EquipoPendientePago>();
 		idCliente = 0;
 		pagoCliente = new PagosCliente();
-		pagoCliente.setFecha(new Date());
+		pagoCliente.setFecha(null);
 		pagoCliente.setConcepto("");
 		usuario = new Usuario();
 		usuario = user;
@@ -277,19 +295,63 @@ public class BeanPago implements Serializable {
 		return "pagoproveedor";
 	}
 	
-	public void onConfirmPago() {
-		log.info("onConfirmPago() - idCliente: " + idCliente);
-		if (idCliente != 0) {
+	public String onFlowProcess(FlowEvent event) {
+		log.info("onFlowProcess() - idCliente: " + idCliente + " - destinatarios: " + destinatarios + " - event newStep: " + event.getNewStep());				
+		if (idCliente != 0 && !event.getNewStep().equals("confirm")) {
+			destinatarios = "";
+			cliente = new Cliente();
 			cliente = clienteDAO.get(idCliente);
 			destinatarios = cliente.getEmail();
-			fechaPago = pagoCliente.getFecha();
+			log.info("Cliente: " + cliente.getApellidoNombre());
+			log.info("Mail cliente: " + destinatarios);
 		}
+		if(skip) {
+            skip = false;   //reset in case user goes back
+            return "confirm";
+        } else {
+        	return event.getNewStep();        	         
+        }
+	}
+	
+	public String onFlowProcessMoviles(FlowEvent event) {
+		log.info("onFlowProcess() - idCliente: " + idCliente + " - event newStep: " + event.getNewStep());
+		String newStep = event.getNewStep();
+		if (idCliente != 0 && event.getNewStep().equals("concepto") && event.getOldStep().equals("principal")) {
+			log.info("cantidad seleccionados: " + equiposSelectos.size());
+			cliente = clienteDAO.get(idCliente);
+			if (equiposSelectos.isEmpty()) {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar al menos un equipo!", null);
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				newStep = "principal";
+			} else {
+				pagoCliente.setMonto(0);
+				for (EquipoPendientePago epp : equiposSelectos) {
+					String concepto = pagoCliente.getConcepto() + " " + unidadMovilDAO.get(epp.getImei()).getProducto().getNombre() + " (" + epp.getImei() + ") - $" + Float.toString(epp.getMonto()) + " |";  
+					pagoCliente.setMonto(pagoCliente.getMonto() + epp.getMonto());
+					pagoCliente.setConcepto(concepto);
+				}
+			}
+		}
+		if (idCliente != 0 && event.getNewStep().equals("email") && event.getOldStep().equals("concepto")) {
+			destinatarios = "";
+			cliente = clienteDAO.get(idCliente);
+			destinatarios = cliente.getEmail();
+			log.info("Cliente: " + cliente.getApellidoNombre());
+			log.info("Mail cliente: " + destinatarios);
+		}		
+		if(skip) {
+            skip = false;   //reset in case user goes back
+            return "confirm";
+        } else {
+        	return newStep;        	         
+        }
 	}
 	
 	public void guardarPagoCliente(){
+		log.info("guardarPagoCliente() - fecha: " + pagoCliente.getFecha() + " - idCliente: " + idCliente + " - monto: " + pagoCliente.getMonto() + " - envioEmail: " + envioEmail + " - destinatarios: " + destinatarios + " - concepto: " + pagoCliente.getConcepto());
 		FacesMessage msg = null;		
 		if(pagoCliente.getFecha() != null && idCliente != 0 && pagoCliente.getMonto() != 0){
-			Cliente cliente = clienteDAO.get(idCliente);
+			cliente = clienteDAO.get(idCliente);
 			log.info("Cliente: " + cliente.getApellidoNombre());
 			pagoCliente.setCliente(cliente);
 			pagoCliente.setFechaAlta(new Date());
@@ -325,12 +387,12 @@ public class BeanPago implements Serializable {
 				log.info("idCaja "+ idCaja);
 				int eppPagado = 0;
 				int tipoComprobante = 1;
-				if(equiposParaPagar.size() == 0) {
+				if(equiposSelectos.size() == 0) {
 					eppPagado = 1;
 					tipoComprobante = 0;
 				}
-				log.info("Equipos Por Pagar: " + equiposParaPagar.size());
-				for(EquipoPendientePago epp : equiposParaPagar) {
+				log.info("Equipos Por Pagar: " + equiposSelectos.size());
+				for(EquipoPendientePago epp : equiposSelectos) {
 					epp.setFechaMod(new Date());
 					epp.setUsuario2(usuario);
 					eppPagado = equipoPendientePagoDAO.pagar(epp);
@@ -357,14 +419,15 @@ public class BeanPago implements Serializable {
 					
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago registrado" + sendMje, null);
 					idCliente = 0;
+					cliente = new Cliente();
 					pagoCliente = new PagosCliente();
-					pagoCliente.setFecha(new Date());
+					pagoCliente.setFecha(null);
 					listaEpp = new ArrayList<EquipoPendientePago>();
 					equiposSelectos = new ArrayList<EquipoPendientePago>();
-					equiposParaPagar = new ArrayList<EquipoPendientePago>();
 					pagoCliente.setConcepto("");
 					destinatarios = "";
-					envioEmail = false;					
+					envioEmail = false;		
+					first = true;
 				}else{
 					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Pago, "
 							+ "inténtelo nuevamente!", null);
@@ -499,18 +562,14 @@ public class BeanPago implements Serializable {
 		reporte.generar(parametros, listPago, "pago", "attachment");
 	}
 	
-	public void updatePendientePagoList() {
-		destinatarios = "";
-		cliente = new Cliente();
+	public void onChangeClientePagoMoviles() {
+		log.info("onChangeClientePagoMoviles() - idCliente: " + idCliente);
 		listaEpp = new ArrayList<EquipoPendientePago>();
-		equiposSelectos = new ArrayList<EquipoPendientePago>();
-		equiposParaPagar = new ArrayList<EquipoPendientePago>();
-		pagoCliente.setMonto(0);
-		cliente = clienteDAO.get(idCliente);
-		destinatarios = cliente.getEmail();
-		log.info("Cliente: " + cliente.getApellidoNombre());
-		log.info("Mail cliente: " + destinatarios);
-		listaEpp = equipoPendientePagoDAO.getListaNoPagosPorCliente(cliente);
+		if (idCliente != 0) {
+			Cliente cli = clienteDAO.get(idCliente);
+			listaEpp = equipoPendientePagoDAO.getListaNoPagosPorCliente(cli);
+			log.info("listaEpp size() " + listaEpp.size());
+		}
 	}
 	
 	public String getNombrePorImei(String imei) {
@@ -622,9 +681,9 @@ public class BeanPago implements Serializable {
     				+ "<td>"
     				+ "</td>"
     				+ "</tr>";
-    	}else {
+    	} else {
     		
-			for(EquipoPendientePago epp : equiposParaPagar) {
+			for(EquipoPendientePago epp : equiposSelectos) {
 				String nombreEquipo = unidadMovilDAO.get(epp.getImei()).getProducto().getNombre();
 	    		html += "<tr>"
 	    				+ "<td> "
