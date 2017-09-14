@@ -503,36 +503,32 @@ public class BeanPago implements Serializable {
 		return retorno;
 	}
 	
-	public String marcarPagado() {
+	public void marcarPagado() {
+		log.info("marcarPagado() - equiposSelectos.size(): " + equiposSelectos.size());
 		FacesMessage msg = null;
-		String retorno = "";
-		if(equiposParaPagar.size() != 0) {
-			boolean eppPagado = true;
-			log.info("Equipos Por Pagar: " + equiposParaPagar.size());
-			for(EquipoPendientePago epp : equiposParaPagar) {
+		if (equiposSelectos.size() > 0) {
+			boolean eppPagado = true;			
+			for (EquipoPendientePago epp : equiposSelectos) {
 				epp.setFechaMod(new Date());
 				epp.setUsuario2(usuario);
-				if(equipoPendientePagoDAO.pagar(epp) == 0) {
+				if (equipoPendientePagoDAO.pagar(epp) == 0) {
 					eppPagado = false;
 				}
 			}
-			if(eppPagado){
+			if (eppPagado) {
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Equipos marcados correctamente!", null);
 				idCliente = 0;
 				pagoCliente = new PagosCliente();
 				listaEpp = new ArrayList<EquipoPendientePago>();
 				equiposSelectos = new ArrayList<EquipoPendientePago>();
-				equiposParaPagar = new ArrayList<EquipoPendientePago>();
-				retorno = "marcarpagados";
-			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al marcar equipos como pagados, "
-						+ "inténtelo nuevamente!", null);
+			} else {
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrio un error al marcar equipos como pagos, "
+						+ "intentelo nuevamente!", null);
 			}
-		}else{
+		} else {
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se han seleccionado equipos", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
-		return retorno;
 	}
 	
 	public void generarReporte(int idPagoC, int idPagoP){
@@ -575,14 +571,6 @@ public class BeanPago implements Serializable {
 	public String getNombrePorImei(String imei) {
 		UnidadMovil unidadMovil = unidadMovilDAO.get(imei);
 		return unidadMovil.getProducto().getNombre();
-	}
-	
-	public String getStringPagado(Boolean pagado) {
-		if(pagado) {
-			return "Si";
-		} else {
-			return "No";
-		}
 	}
 	
 	public void agregarEquiposParaPagar() {
