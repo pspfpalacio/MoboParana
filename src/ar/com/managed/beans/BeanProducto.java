@@ -876,6 +876,7 @@ public class BeanProducto implements Serializable {
 					hm.setUsuario(usuario);
 					hm.setImei(unidadMovil.getNroImei());
 					hm.setTipo("ALTA STOCK");
+					hm.setDescripcion("Alta de stock del movil");
 					hm.setIdMovimiento(0);
 					insertHm = historialMovilDAO.insert(hm);
 				}

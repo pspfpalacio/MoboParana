@@ -19,6 +19,8 @@ public class HistorialMovil implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
+	private String descripcion;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha;
 
@@ -43,6 +45,14 @@ public class HistorialMovil implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getDescripcion() {
+		return this.descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public Date getFecha() {

@@ -16,6 +16,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Comprobante;
 import ar.com.clases.auxiliares.Cuotas;
@@ -30,6 +32,7 @@ import model.entity.ConsignacionsDetalleUnidad;
 import model.entity.EConsignacion;
 import model.entity.EConsignacionsDetalle;
 import model.entity.EConsignacionsDetalleUnidad;
+import model.entity.HistorialMovil;
 import model.entity.ListaPrecio;
 import model.entity.ListaPrecioProducto;
 import model.entity.Producto;
@@ -46,6 +49,7 @@ import dao.interfaces.DAOCuota;
 import dao.interfaces.DAOEConsignacion;
 import dao.interfaces.DAOEConsignacionDetalle;
 import dao.interfaces.DAOEConsignacionDetalleUnidad;
+import dao.interfaces.DAOHistorialMovil;
 import dao.interfaces.DAOListaPrecio;
 import dao.interfaces.DAOProducto;
 import dao.interfaces.DAOUnidadMovil;
@@ -61,6 +65,8 @@ public class BeanConsignacion implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final static Logger log = Logger.getLogger(BeanConsignacion.class);
 	
 	@ManagedProperty(value = "#{BeanConsignacionDAO}")
 	private DAOConsignacion consignacionDAO;
@@ -103,6 +109,9 @@ public class BeanConsignacion implements Serializable {
 	
 	@ManagedProperty(value = "#{BeanEConsignacionDetalleUnidadDAO}")
 	private DAOEConsignacionDetalleUnidad eConsignacionDetalleUnidadDAO;
+	
+	@ManagedProperty(value = "#{BeanHistorialMovilDAO}")
+	private DAOHistorialMovil historialMovilDAO;
 	
 	private List<Consignacion> listaConsignacions;
 	private List<Consignacion>filteredConsignacions;
@@ -263,6 +272,14 @@ public class BeanConsignacion implements Serializable {
 	public void seteConsignacionDetalleUnidadDAO(
 			DAOEConsignacionDetalleUnidad eConsignacionDetalleUnidadDAO) {
 		this.eConsignacionDetalleUnidadDAO = eConsignacionDetalleUnidadDAO;
+	}
+
+	public DAOHistorialMovil getHistorialMovilDAO() {
+		return historialMovilDAO;
+	}
+
+	public void setHistorialMovilDAO(DAOHistorialMovil historialMovilDAO) {
+		this.historialMovilDAO = historialMovilDAO;
 	}
 
 	public List<Consignacion> getListaConsignacions() {
@@ -658,7 +675,7 @@ public class BeanConsignacion implements Serializable {
 		idListaPrecio = 0;
 		nroImei = "";
 		nueva = true;
-		headerText = "Nueva Consignación";
+		headerText = "Nueva Consignacion";
 		nroConsignacion = 1;
 		List<Consignacion> listAux = consignacionDAO.getLista();
 		for (Consignacion consignacion : listAux) {
@@ -680,7 +697,7 @@ public class BeanConsignacion implements Serializable {
 			nroImei = "";
 			cantidadTotal = 0;
 			nueva = false;
-			headerText = "Modificar Consignación";
+			headerText = "Modificar Consignacion";
 			consignacion = consig;
 			nroConsignacion = consig.getId();
 			montoTotal = consig.getMonto();
@@ -717,7 +734,7 @@ public class BeanConsignacion implements Serializable {
 			cantidadTotal = 0;
 			nroImei = "";
 			fechaAgrega = null;
-			headerText = "Agregar a Consignación";
+			headerText = "Agregar a Consignacion";
 			listaPrecios = listaPrecioDAO.getLista(true);
 			consignacion = consig;
 			cliente = clienteDAO.get(consig.getCliente().getId());
@@ -727,7 +744,7 @@ public class BeanConsignacion implements Serializable {
 			FacesContext.getCurrentInstance().getExternalContext().redirect("agregarconsignacion.xhtml");
 //			return "agregarconsignacion";
 		} catch (Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al abrir el formulario! error: " 
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al abrir el formulario! error: " 
 					 + e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 //			return "";
@@ -743,7 +760,7 @@ public class BeanConsignacion implements Serializable {
 			nroImei = "";
 			cantidadTotal = 0;
 			montoTotal = 0;
-			headerText = "Quitar Móviles en Consignación";
+			headerText = "Quitar Moviles en Consignacion";
 			consignacion = consig;			
 			cliente = clienteDAO.get(consig.getCliente().getId());
 			List<ConsignacionsDetalle> listAux = consignacionDetalleDAO.getLista(consig);			
@@ -767,7 +784,7 @@ public class BeanConsignacion implements Serializable {
 			}
 			return "quitarconsignacion";			
 		} catch (Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al abrir el formulario! Error: "
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al abrir el formulario! Error: "
 					+ e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
@@ -786,7 +803,7 @@ public class BeanConsignacion implements Serializable {
 			cantidadTotal = 0;		
 			consignacion = consig;
 			cliente = clienteDAO.get(consig.getCliente().getId());
-			headerText = "Stock de Móviles Sin Vender de Consignación";	
+			headerText = "Stock de Moviles Sin Vender de Consignacion";	
 											
 			List<ConsignacionsDetalle> listAux = consignacionDetalleDAO.getLista(consignacion);
 			for (ConsignacionsDetalle consignacionsDetalle : listAux) {
@@ -845,7 +862,7 @@ public class BeanConsignacion implements Serializable {
 			return "stockconsignacion";		
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ocurrió un error! No se puede redirigir al formulario, error: " 
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error! No se puede redirigir al formulario, error: " 
 					+ e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
@@ -861,7 +878,7 @@ public class BeanConsignacion implements Serializable {
 			cantidadTotal = 0;		
 			consignacion = consig;
 			cliente = clienteDAO.get(consig.getCliente().getId());
-			headerText = "Histórico de Ventas de Consignación";	
+			headerText = "Historico de Ventas de Consignacion";	
 			List<ConsignacionsDetalle> listAux = consignacionDetalleDAO.getLista(consig);
 			for (ConsignacionsDetalle consignacionsDetalle : listAux) {
 				List<ConsignacionsDetalleUnidad> listAux1 = consignacionDetalleUnidadDAO.getLista(consignacionsDetalle, true);
@@ -882,7 +899,7 @@ public class BeanConsignacion implements Serializable {
 			}
 			return "historicoventasconsignacion";		
 		} catch (Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ocurrió un error! No se puede redirigir al formulario, error: " 
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error! No se puede redirigir al formulario, error: " 
 					+ e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
@@ -898,7 +915,7 @@ public class BeanConsignacion implements Serializable {
 			cantidadTotal = 0;		
 			consignacion = consig;
 			cliente = clienteDAO.get(consig.getCliente().getId());
-			headerText = "Histórico de Consignación";	
+			headerText = "Historico de Consignacion";	
 			List<ConsignacionsDetalle> listAux = consignacionDetalleDAO.getLista(consig);
 			for (ConsignacionsDetalle consignacionsDetalle : listAux) {
 				List<ConsignacionsDetalleUnidad> listAux1 = consignacionDetalleUnidadDAO.getLista(consignacionsDetalle);
@@ -909,7 +926,7 @@ public class BeanConsignacion implements Serializable {
 			}
 			return "historicoconsignacion";			
 		} catch (Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ocurrió un error! No se puede redirigir al formulario, error: " 
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error! No se puede redirigir al formulario, error: " 
 					+ e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
@@ -1057,7 +1074,7 @@ public class BeanConsignacion implements Serializable {
 							FacesContext.getCurrentInstance().addMessage(null, msg);
 						}
 					}else{
-						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei corresponde a un producto ya Agregado a Consignación!", null);
+						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei corresponde a un producto ya Agregado a Consignacion!", null);
 						FacesContext.getCurrentInstance().addMessage(null, msg);
 					}
 				}else{
@@ -1065,11 +1082,11 @@ public class BeanConsignacion implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				}
 			} else {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei corresponde a un producto en Garantía!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei corresponde a un producto en Garantia!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}			
 		}else{
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de Imei válido!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de Imei valido!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
@@ -1257,7 +1274,7 @@ public class BeanConsignacion implements Serializable {
 				enStock = false;
 			}
 			if (enStock) {
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede registrar la baja de Consignación, posee móviles en Stock! "
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede registrar la baja de Consignacion, posee moviles en Stock! "
 						+ "Realice la baja de los mismos primero!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			} else {
@@ -1266,11 +1283,11 @@ public class BeanConsignacion implements Serializable {
 				consig.setUsuario2(usuario);
 				int updtConsig = consignacionDAO.update(consig);
 				if (updtConsig != 0) {
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Consignación!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Consignacion!", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al dar de Baja la Consignación, "
-							+ "Inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al dar de Baja la Consignacion, "
+							+ "Intente nuevamente!", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				}
 			}			
@@ -1303,16 +1320,16 @@ public class BeanConsignacion implements Serializable {
 //				consig.setFechaBaja(new Date());
 //				consig.setUsuario2(usuario);
 //				if(consignacionDAO.update(consig) != 0){
-//					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Consignación!", null);
+//					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Consignaciï¿½n!", null);
 //				}else{
-//					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al dar de Baja la Consignación, "
-//							+ "Inténtelo nuevamente!", null);
+//					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un Error al dar de Baja la Consignaciï¿½n, "
+//							+ "Intï¿½ntelo nuevamente!", null);
 //				}
 //			}else{
 //				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede dar de baja la consignacion, posee unidades Vendidas!", null);
 //			}			
 		} catch (Exception e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al registrar la baja de consignación! error original: " 
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja de consignacion! error original: " 
 					+ e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}		
@@ -1322,9 +1339,10 @@ public class BeanConsignacion implements Serializable {
 		FacesMessage msg = null;
 		String retorno = "";
 		if(consignacion.getFecha() != null && idCliente != 0 && !listaConsignacionsDetalles.isEmpty() && montoTotal != 0){
+			log.info("Monto: " + montoTotal + " Cliente: " + idCliente);
 			Cliente cli = clienteDAO.get(idCliente);			
 			Consignacion consig = consignacionDAO.get(cli, false);
-			if (consig.getId() == 0) {				
+			if (consig.getId() == 0) {			
 				consignacion.setCliente(cli);
 				consignacion.setEstado(true);
 				consignacion.setFechaAlta(new Date());
@@ -1392,6 +1410,15 @@ public class BeanConsignacion implements Serializable {
 								if(idDetalleUnidad == 0){
 									insertoUnidad = false;
 									break;
+								}else {
+									HistorialMovil hm = new HistorialMovil();
+									hm.setFecha(new Date());
+									hm.setUsuario(usuario);
+									hm.setImei(eConsigDetUnidad.getNroImei());
+									hm.setTipo("CONSIGNACION");
+									hm.setDescripcion("Consignacion: " + cliente.getApellidoNombre());
+									hm.setIdMovimiento(idConsignacion);
+									historialMovilDAO.insert(hm);
 								}
 								listaEConsigUnidad.add(eConsigDetUnidad);
 							}
@@ -1407,17 +1434,17 @@ public class BeanConsignacion implements Serializable {
 						}
 					}
 					if(inserto){
-						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consignación guardada!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consignacion guardada!", null);
 						retorno = "consignacionentrega";
 						listaClientes = new ArrayList<Cliente>();
 						listaClientes = clienteDAO.getLista(true);
 					}else{
-						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Detalle de Consignación! "
-								+ "Inténtelo nuevamente!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar el Detalle de Consignacion! "
+								+ "Intente nuevamente!", null);
 					}
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar la Consignación! "
-							+ "Inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar la Consignacion! "
+							+ "Intente nuevamente!", null);
 				}				
 			} else {
 				float monto = consig.getMonto();
@@ -1509,6 +1536,15 @@ public class BeanConsignacion implements Serializable {
 								if(idDetalleUnidad == 0){
 									insertoUnidad = false;
 									break;
+								} else {
+									HistorialMovil hm = new HistorialMovil();
+									hm.setFecha(new Date());
+									hm.setUsuario(usuario);
+									hm.setImei(eConsigDetUnidad.getNroImei());
+									hm.setTipo("CONSIGNACION");
+									hm.setDescripcion("Consignacion: " + cliente.getApellidoNombre());
+									hm.setIdMovimiento(consig.getId());
+									historialMovilDAO.insert(hm);
 								}
 								listaEConsigUnidad.add(eConsigDetUnidad);
 							}
@@ -1524,21 +1560,21 @@ public class BeanConsignacion implements Serializable {
 						}
 					}
 					if(inserto){
-						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consignación guardada!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consignacion guardada!", null);
 						retorno = "consignacionentrega";
 						listaClientes = new ArrayList<Cliente>();
 						listaClientes = clienteDAO.getLista(true);
 					}else{
-						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Detalle de Consignación! "
-								+ "Inténtelo nuevamente!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar el Detalle de Consignacion! "
+								+ "Intente nuevamente!", null);
 					}
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar la Consignación! "
-							+ "Inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar la Consignacion! "
+							+ "Intente nuevamente!", null);
 				}
 			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Cliente, el Monto Total y el Detalle de Consignación no pueden estar vacíos!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Cliente, el Monto Total y el Detalle de Consignacion son obligatorios!", null);
 		}		
 		listaConsignacions = new ArrayList<Consignacion>();
 		filteredConsignacions = new ArrayList<Consignacion>();
@@ -1659,29 +1695,29 @@ public class BeanConsignacion implements Serializable {
 					if(inserto){
 						listaClientes = new ArrayList<Cliente>();
 						listaClientes = clienteDAO.getLista(true);
-						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consignación guardada!", null);
+						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consignacion guardada!", null);
 						FacesContext.getCurrentInstance().addMessage(null, msg);
 						return "consignacionentrega";
 						
 					}else{						
-						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Detalle de Consignación! "
-								+ "Inténtelo nuevamente!", null);
+						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar el Detalle de Consignacion! "
+								+ "Intente nuevamente!", null);
 						FacesContext.getCurrentInstance().addMessage(null, msg);
 						return "";
 					}
 				} else {
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al actualizar la consignación!", null);
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la consignacion!", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 					return "";
 				}				
 			} else {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe ingresar fecha, e items a agregar a la consignación!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe ingresar fecha, e items a agregar a la consignacion!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				return "";
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al registrar los nuevos items! Error: " 
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar los nuevos items! Error: " 
 					+ e.getMessage(), null);			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
@@ -1744,16 +1780,16 @@ public class BeanConsignacion implements Serializable {
 						}
 					}
 				}
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Se registraron los cambios en la Cosnignación!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Se registraron los cambios en la Cosnignacion!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				return "consignaciones";
 			} else {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al actualizar la consignación!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la consignacion!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				return "";
 			}						
 		} catch (Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al quitar items en consignación! error: "
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al quitar items en consignacion! error: "
 					+ e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
@@ -1876,20 +1912,20 @@ public class BeanConsignacion implements Serializable {
 //					}							
 //				}
 //				if(inserto){
-//					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consignación guardada!", null);
+//					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consignaciï¿½n guardada!", null);
 //					retorno = "consignaciones";
 //					listaClientes = new ArrayList<Cliente>();
 //					listaClientes = clienteDAO.getLista(true);
 //				}else{
-//					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Detalle de Consignación! "
-//							+ "Inténtelo nuevamente!", null);
+//					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurriï¿½ un error al guardar el Detalle de Consignaciï¿½n! "
+//							+ "Intï¿½ntelo nuevamente!", null);
 //				}
 //			}else{
-//				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar la Consignación! "
-//						+ "Inténtelo nuevamente!", null);
+//				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurriï¿½ un error al guardar la Consignaciï¿½n! "
+//						+ "Intï¿½ntelo nuevamente!", null);
 //			}
 //		}else{
-//			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Cliente, el Monto Total y el Detalle de la Consignación no pueden estar vacíos!", null);
+//			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Cliente, el Monto Total y el Detalle de la Consignaciï¿½n no pueden estar vacï¿½os!", null);
 //		}
 //		listaConsignacions = new ArrayList<Consignacion>();
 //		filteredConsignacions = new ArrayList<Consignacion>();
