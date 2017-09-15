@@ -1415,7 +1415,7 @@ public class BeanConsignacion implements Serializable {
 								if(idDetalleUnidad == 0){
 									insertoUnidad = false;
 									break;
-								}/*else {
+								}else {
 									HistorialMovil hm = new HistorialMovil();
 									hm.setFecha(new Date());
 									hm.setUsuario(usuario);
@@ -1424,7 +1424,7 @@ public class BeanConsignacion implements Serializable {
 									hm.setDescripcion("Consignacion: " + cliente.getApellidoNombre());
 									hm.setIdMovimiento(idConsignacion);
 									historialMovilDAO.insert(hm);
-								}*/
+								}
 								listaEConsigUnidad.add(eConsigDetUnidad);
 							}
 							eConsigDetalle.setEConsignacionsDetalleUnidads(listaEConsigUnidad);
@@ -1546,7 +1546,7 @@ public class BeanConsignacion implements Serializable {
 								if(idDetalleUnidad == 0){
 									insertoUnidad = false;
 									break;
-								} /*else {
+								} else {
 									HistorialMovil hm = new HistorialMovil();
 									hm.setFecha(new Date());
 									hm.setUsuario(usuario);
@@ -1555,7 +1555,7 @@ public class BeanConsignacion implements Serializable {
 									hm.setDescripcion("Consignacion: " + cliente.getApellidoNombre());
 									hm.setIdMovimiento(consig.getId());
 									historialMovilDAO.insert(hm);
-								}*/
+								}
 								listaEConsigUnidad.add(eConsigDetUnidad);
 							}
 							eConsigDetalle.setEConsignacionsDetalleUnidads(listaEConsigUnidad);
