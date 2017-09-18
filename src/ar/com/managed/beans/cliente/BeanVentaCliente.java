@@ -28,6 +28,7 @@ import model.entity.ConsignacionsDetalle;
 import model.entity.ConsignacionsDetalleUnidad;
 import model.entity.CuentasCorrientesCliente;
 import model.entity.EquipoPendientePago;
+import model.entity.HistorialMovil;
 import model.entity.ListaPrecio;
 import model.entity.ListaPrecioProducto;
 import model.entity.Mensaje;
@@ -42,6 +43,7 @@ import dao.interfaces.DAOConsignacion;
 import dao.interfaces.DAOConsignacionDetalle;
 import dao.interfaces.DAOConsignacionDetalleUnidad;
 import dao.interfaces.DAOEquipoPendientePago;
+import dao.interfaces.DAOHistorialMovil;
 import dao.interfaces.DAOListaPrecio;
 import dao.interfaces.DAOMensaje;
 import dao.interfaces.DAOProducto;
@@ -100,6 +102,9 @@ public class BeanVentaCliente implements Serializable {
 
 	@ManagedProperty(value = "#{BeanEquipoPendientePagoDAO}")
 	private DAOEquipoPendientePago equipoPendientePagoDAO;
+	
+	@ManagedProperty(value = "#{BeanHistorialMovilDAO}")
+	private DAOHistorialMovil historialMovilDAO;
 	
 	private List<ConsignacionsDetalle> listaConsignacionsDetalles;
 	private List<VentasCon> listaVentasCons;
@@ -227,6 +232,14 @@ public class BeanVentaCliente implements Serializable {
 
 	public void setEquipoPendientePagoDAO(DAOEquipoPendientePago equipoPendientePagoDAO) {
 		this.equipoPendientePagoDAO = equipoPendientePagoDAO;
+	}
+
+	public DAOHistorialMovil getHistorialMovilDAO() {
+		return historialMovilDAO;
+	}
+
+	public void setHistorialMovilDAO(DAOHistorialMovil historialMovilDAO) {
+		this.historialMovilDAO = historialMovilDAO;
 	}
 
 	public List<ConsignacionsDetalle> getListaConsignacionsDetalles() {
@@ -697,6 +710,15 @@ public class BeanVentaCliente implements Serializable {
 								if (idDetalleUnidad == 0 || updateUnidad == 0 || updateUniCons == 0  || idEPendienteP == 0) {
 									insertoUnidad = false;
 									break;
+								} else {
+									HistorialMovil hm = new HistorialMovil();
+									hm.setFecha(new Date());
+									hm.setUsuario(usuario);
+									hm.setImei(imei);
+									hm.setTipo("VENTA CLIENTE");
+									hm.setDescripcion("Venta de cliente: " + usuario.getApellidoNombre());
+									hm.setIdMovimiento(idVenta);
+									historialMovilDAO.insert(hm);
 								}
 							}
 							if (!insertoUnidad) {

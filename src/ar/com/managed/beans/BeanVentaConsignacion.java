@@ -29,6 +29,7 @@ import model.entity.ConsignacionsDetalleUnidad;
 import model.entity.CuentasCorrientesCliente;
 import model.entity.Cuota;
 import model.entity.EquipoPendientePago;
+import model.entity.HistorialMovil;
 import model.entity.ListaPrecio;
 import model.entity.ListaPrecioProducto;
 import model.entity.Producto;
@@ -43,6 +44,7 @@ import dao.interfaces.DAOConsignacionDetalle;
 import dao.interfaces.DAOConsignacionDetalleUnidad;
 import dao.interfaces.DAOCuota;
 import dao.interfaces.DAOEquipoPendientePago;
+import dao.interfaces.DAOHistorialMovil;
 import dao.interfaces.DAOListaPrecio;
 import dao.interfaces.DAOProducto;
 import dao.interfaces.DAOUnidadMovil;
@@ -96,6 +98,9 @@ public class BeanVentaConsignacion implements Serializable {
 	
 	@ManagedProperty(value = "#{BeanEquipoPendientePagoDAO}")
 	private DAOEquipoPendientePago equipoPendientePagoDAO;
+	
+	@ManagedProperty(value = "#{BeanHistorialMovilDAO}")
+	private DAOHistorialMovil historialMovilDAO;
 	
 	private List<VentasCon> listaVentasCons;
 	private List<VentasCon> filteredVentasCons;
@@ -209,6 +214,14 @@ public class BeanVentaConsignacion implements Serializable {
 
 	public void setEquipoPendientePagoDAO(DAOEquipoPendientePago equipoPendientePagoDAO) {
 		this.equipoPendientePagoDAO = equipoPendientePagoDAO;
+	}
+
+	public DAOHistorialMovil getHistorialMovilDAO() {
+		return historialMovilDAO;
+	}
+
+	public void setHistorialMovilDAO(DAOHistorialMovil historialMovilDAO) {
+		this.historialMovilDAO = historialMovilDAO;
 	}
 
 	public List<VentasCon> getListaVentasCons() {
@@ -610,6 +623,14 @@ public class BeanVentaConsignacion implements Serializable {
 						int eppBaja = equipoPendientePagoDAO.baja(epp);
 						
 						if(updateUnid == 0 || updateUniCons == 0 || eppBaja == 0){
+							HistorialMovil hm = new HistorialMovil();
+							hm.setFecha(new Date());
+							hm.setUsuario(usuario);
+							hm.setImei(nroImei);
+							hm.setTipo("BAJA VENTA");
+							hm.setDescripcion("Baja de venta: " + venCons.getId());
+							hm.setIdMovimiento(0);
+							historialMovilDAO.insert(hm);
 							actualizo = false;
 						}
 					}
@@ -662,7 +683,7 @@ public class BeanVentaConsignacion implements Serializable {
 			
 			ccCliente.setCliente(client);
 			ccCliente.setDebe(montoTotal);
-			ccCliente.setDetalle("Venta Consignaci�n nro: " + idVenta);				
+			ccCliente.setDetalle("Venta Consignacion nro: " + idVenta);				
 			ccCliente.setFecha(fechaVen);
 			ccCliente.setIdMovimiento(idVenta);
 			ccCliente.setMonto(montoTotal);
@@ -712,6 +733,14 @@ public class BeanVentaConsignacion implements Serializable {
 							int idEPendienteP = equipoPendientePagoDAO.insert(ePendienteP);
 							
 							if(idDetalleUnidad == 0 || updateUnidad == 0 || updateUniCons == 0 || idEPendienteP == 0){
+								HistorialMovil hm = new HistorialMovil();
+								hm.setFecha(new Date());
+								hm.setUsuario(usuario);
+								hm.setImei(imei);
+								hm.setTipo("VENTA CONSIGNACION ADMIN");
+								hm.setDescripcion("Venta consignacion");
+								hm.setIdMovimiento(idVenta);
+								historialMovilDAO.insert(hm);
 								insertoUnidad = false;
 								break;
 							}

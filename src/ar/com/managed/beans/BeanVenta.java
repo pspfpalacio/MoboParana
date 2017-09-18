@@ -24,6 +24,7 @@ import model.entity.Caja;
 import model.entity.Cliente;
 import model.entity.CuentasCorrientesCliente;
 import model.entity.CuotasVenta;
+import model.entity.HistorialMovil;
 import model.entity.ListaPrecio;
 import model.entity.ListaPrecioProducto;
 import model.entity.Producto;
@@ -39,6 +40,7 @@ import dao.interfaces.DAOCliente;
 import dao.interfaces.DAOConsignacionDetalleUnidad;
 import dao.interfaces.DAOCuentaCorriente;
 import dao.interfaces.DAOCuotaVenta;
+import dao.interfaces.DAOHistorialMovil;
 import dao.interfaces.DAOListaPrecio;
 import dao.interfaces.DAOProducto;
 import dao.interfaces.DAOStock;
@@ -92,6 +94,9 @@ public class BeanVenta implements Serializable {
 	
 	@ManagedProperty(value = "#{BeanCuotaVentaDAO}")
 	private DAOCuotaVenta cuotaVentaDAO;
+	
+	@ManagedProperty(value = "#{BeanHistorialMovilDAO}")
+	private DAOHistorialMovil historialMovilDAO;
 	
 	private List<Venta> listaVentas;
 	private List<Venta> filteredVentas;
@@ -230,6 +235,14 @@ public class BeanVenta implements Serializable {
 
 	public void setCuotaVentaDAO(DAOCuotaVenta cuotaVentaDAO) {
 		this.cuotaVentaDAO = cuotaVentaDAO;
+	}
+
+	public DAOHistorialMovil getHistorialMovilDAO() {
+		return historialMovilDAO;
+	}
+
+	public void setHistorialMovilDAO(DAOHistorialMovil historialMovilDAO) {
+		this.historialMovilDAO = historialMovilDAO;
 	}
 
 	public List<Venta> getListaVentas() {
@@ -822,7 +835,7 @@ public class BeanVenta implements Serializable {
 							}
 						}else{
 							productoConsignacion = true;
-							FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei corresponde a un producto asociado a una Consignación!", null);
+							FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei corresponde a un producto asociado a una Consignacion!", null);
 							FacesContext.getCurrentInstance().addMessage(null, msg);
 						}
 					}else{
@@ -837,12 +850,12 @@ public class BeanVenta implements Serializable {
 				}
 			} else {
 				ningunProducto = true;
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei corresponde a un producto en Garantía!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei corresponde a un producto en Garantia!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}			
 		}else{
 			imeiValido = false;
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de Imei válido!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de Imei valido!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
@@ -952,7 +965,7 @@ public class BeanVenta implements Serializable {
 		}else{
 			FacesMessage msg = null;
 			if(!imeiValido){
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de Imei válido!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de Imei valido!", null);
 			}
 			if(ningunProducto){
 				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe existir un producto!", null);
@@ -961,13 +974,13 @@ public class BeanVenta implements Serializable {
 				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei corresponde a un producto asociado a Venta!", null);
 			}
 			if(productoConsignacion){
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei corresponde a un producto asociado a una Consignación!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei corresponde a un producto asociado a una Consignacion!", null);
 			}
 			if(!stockProducto){
 				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No corresponde ningun producto en Stock!", null);
 			}
 			if(precioVenta == 0){
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El precio de venta no puede estar vacío!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El precio de venta es obligatorio!", null);
 			}
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -1140,23 +1153,23 @@ public class BeanVenta implements Serializable {
 				if(updateVent != 0 && actualizo){
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Venta!", null);
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al dar de Baja la Venta, "
-							+ "Inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al dar de Baja la Venta, "
+							+ "Intente nuevamente!", null);
 				}
 			}else{
 				String mensaje = "";
 				if (falla) {
-					mensaje = "La Venta posee Móviles en Garantía, realice la baja correspondiente e "
-						+ "inténtelo nuevamente!";
+					mensaje = "La Venta posee Moviles en Garantia, realice la baja correspondiente e "
+						+ "intente nuevamente!";
 				}
 				if (noCuota) {
-					mensaje = mensaje + " La venta posee Móviles en Cuotas, realice la baja de los mismos "
+					mensaje = mensaje + " La venta posee Moviles en Cuotas, realice la baja de los mismos "
 							+ "para realizar la baja de la Venta!";
 				}
 				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, mensaje, null);
 			}
 		} catch (Exception e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No pudo ser posible dar de baja la Venta, inténtelo nuevamente mas tarde!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No pudo ser posible dar de baja la Venta, intente nuevamente mas tarde!", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
@@ -1340,6 +1353,15 @@ public class BeanVenta implements Serializable {
 								if(idDetalleUnidad == 0 && updateUnidad == 0){
 									insertoUnidad = false;
 									break;
+								} else {
+									HistorialMovil hm = new HistorialMovil();
+									hm.setFecha(new Date());
+									hm.setUsuario(usuario);
+									hm.setImei(unidad.getNroImei());
+									hm.setTipo("VENTA");
+									hm.setDescripcion("Venta: " + usuario.getApellidoNombre());
+									hm.setIdMovimiento(idVenta);
+									historialMovilDAO.insert(hm);
 								}
 							}
 						}
@@ -1358,15 +1380,15 @@ public class BeanVenta implements Serializable {
 					listaClientes = new ArrayList<Cliente>();
 					listaClientes = clienteDAO.getLista(true);
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Detalle de la Venta! "
-							+ "Inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar el Detalle de la Venta! "
+							+ "Intente nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar la Venta! "
-						+ "Inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar la Venta! "
+						+ "Intente nuevamente!", null);
 			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta no pueden estar vacíos!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta son obligatorios!", null);
 		}		
 		listaVentas = new ArrayList<Venta>();
 		filteredVentas = new ArrayList<Venta>();
@@ -1553,19 +1575,19 @@ public class BeanVenta implements Serializable {
 						listaClientes = new ArrayList<Cliente>();
 						listaClientes = clienteDAO.getLista(true);
 					}else{
-						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Detalle de la Venta! "
-								+ "Inténtelo nuevamente!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar el Detalle de la Venta! "
+								+ "Intente nuevamente!", null);
 					}
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al insertar la Unidad Móvil del Detalle de la Venta! "
-							+ "Inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al insertar la Unidad Movil del Detalle de la Venta! "
+							+ "Intente nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar la Venta! "
-						+ "Inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar la Venta! "
+						+ "Intente nuevamente!", null);
 			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta no pueden estar vacíos!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta son obligatorios!", null);
 		}
 		listaVentas = new ArrayList<Venta>();
 		filteredVentas = new ArrayList<Venta>();
