@@ -10,64 +10,107 @@
 		<h:form id="formMarcarMoviles">
 			<p:messages />
 			<h2 align="center">Marcar equipos como pagos</h2>
-			
-			<p:panel>			
-				<h:panelGrid columns="1" style="width:100%;">
-					<p:column>
-		   				<p:outputLabel value="Clientes: " />
-		   				<p:selectOneMenu value="#{beanPago.idCliente}" filter="true" filterMatchMode="contains">
-		   				<p:ajax listener="#{beanPago.onChangeClientePagoMoviles()}" update="dataMoviles"></p:ajax>
-		   					<f:selectItem itemLabel="Seleccione.." itemValue="0"/>
-		   					<f:selectItems value="#{beanPago.listaClientes}" var="cliente" itemLabel="#{cliente.nombreNegocio}" 
-		   					itemValue="#{cliente.id}"/>
-		   				</p:selectOneMenu>
-	   				</p:column>
-	   				
-	   				<p:dataTable id="dataMoviles" value="#{beanPago.listaEpp}" var="epp" emptyMessage="No existen equipos pendietes de pago" paginator="true" rows="10"
-						selection="#{beanPago.equiposSelectos}" rowKey="#{epp.id}">
-						<f:facet name="header">
-							<p:outputLabel value="Equipos pendientes de pago" style="width:20px;"/>		
-						</f:facet>   	
+			<p:wizard flowListener="#{beanPago.onFlowProcessMarcarMoviles}">
+				<p:tab id="principal" title="Principal">
+					<p:panel header="Datos principales">
+						<p:messages />
+						<h:panelGrid columns="1" >
+							<p:column>
+				   				<p:outputLabel value="Clientes: " />
+				   				<p:selectOneMenu value="#{beanPago.idCliente}" filter="true" filterMatchMode="contains">
+				   				<p:ajax listener="#{beanPago.onChangeClientePagoMoviles()}" update="dataMoviles"></p:ajax>
+				   					<f:selectItem itemLabel="Seleccione.." itemValue="0" noSelectionOption="true"/>
+				   					<f:selectItems value="#{beanPago.listaClientes}" var="cliente" itemLabel="#{cliente.nombreNegocio}" 
+				   					itemValue="#{cliente.id}"/>
+				   				</p:selectOneMenu>
+			   				</p:column>
+			   				
+			   				<p:dataTable id="dataMoviles" value="#{beanPago.listaEpp}" var="epp" emptyMessage="No existen equipos pendietes de pago" paginator="true" rows="10"
+								selection="#{beanPago.equiposSelectos}" rowKey="#{epp.id}">
+								<f:facet name="header">
+									<p:outputLabel value="Equipos pendientes de pago" style="width:20px;"/>		
+								</f:facet>   	
+								
+								<p:column selectionMode="multiple" style="width:16px;text-align:center" />
+												
+								<p:column headerText="Imei" style="text-align:center;">
+									<h:outputText value="#{epp.imei}" />
+								</p:column>
+								
+								<p:column headerText="Nombre" style="text-align:center;">
+									<h:outputText value="#{beanPago.getNombrePorImei(epp.imei)}"/>
+								</p:column>
+								
+								<p:column headerText="Precio" style="text-align:center;">
+									<h:outputText value="#{epp.monto}" >
+										<f:convertNumber pattern="$###,##0.00"/>
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="Fecha Venta" style="text-align:center;">
+									<h:outputText value="#{epp.fechaAlta}" >
+										<f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="Usuario venta" style="text-align:center;">
+									<h:outputText value="#{epp.usuario1.username}" />
+								</p:column>
+				 			</p:dataTable>
+			   			</h:panelGrid>
+					</p:panel>
+				</p:tab>
+				<p:tab id="confirmation" title="Confirmar">
+					<p:panel header="Confirmacion">
+						<h:panelGrid columns="1" >
+							<p:column>
+								<h:outputText value="Cliente: " />
+			                    <h:outputText value="#{beanPago.cliente.nombreNegocio}" styleClass="outputLabel"/>
+		                    </p:column>
+		                    
+		                    <p:dataTable value="#{beanPago.equiposSelectos}" var="epp">
+								<f:facet name="header">
+									<p:outputLabel value="Equipos seleccionados" style="width:20px;"/>		
+								</f:facet>							
+												
+								<p:column headerText="Imei" style="text-align:center;">
+									<h:outputText value="#{epp.imei}" />
+								</p:column>
+								
+								<p:column headerText="Nombre" style="text-align:center;">
+									<h:outputText value="#{beanPago.getNombrePorImei(epp.imei)}"/>
+								</p:column>
+								
+								<p:column headerText="Precio" style="text-align:center;">
+									<h:outputText value="#{epp.monto}" >
+										<f:convertNumber pattern="$###,##0.00"/>
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="Fecha Venta" style="text-align:center;">
+									<h:outputText value="#{epp.fechaAlta}" >
+										<f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="Usuario venta" style="text-align:center;">
+									<h:outputText value="#{epp.usuario1.username}" />
+								</p:column>
+				 			</p:dataTable>
+						</h:panelGrid>
 						
-						<p:column selectionMode="multiple" style="width:16px;text-align:center" />
-										
-						<p:column headerText="Imei" style="text-align:center;">
-							<h:outputText value="#{epp.imei}" />
-						</p:column>
-						
-						<p:column headerText="Nombre" style="text-align:center;">
-							<h:outputText value="#{beanPago.getNombrePorImei(epp.imei)}"/>
-						</p:column>
-						
-						<p:column headerText="Precio" style="text-align:center;">
-							<h:outputText value="#{epp.monto}" >
-								<f:convertNumber pattern="$###,##0.00"/>
-							</h:outputText>
-						</p:column>
-						
-						<p:column headerText="Fecha Venta" style="text-align:center;">
-							<h:outputText value="#{epp.fechaAlta}" >
-								<f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
-							</h:outputText>
-						</p:column>
-						
-						<p:column headerText="Usuario venta" style="text-align:center;">
-							<h:outputText value="#{epp.usuario1.username}" />
-						</p:column>
-		 			</p:dataTable>
-		 			
-		 			<f:facet name="footer">					
-						<p:commandButton value="Confirmar" actionListener="#{beanPago.marcarPagado()}" update="formMarcarMoviles" process="@this">
+						<p:commandButton value="Confirmar" actionListener="#{beanPago.marcarPagado()}" update="formulario" process="@this">
 							<p:confirm header="Confirmacion" message="Esta seguro que quiere confirmar los moviles como pagos?" icon="ui-icon-alert" />
 						</p:commandButton>
-					</f:facet>	
-	   			</h:panelGrid>
-   			</p:panel>
+					</p:panel>
+				</p:tab>
+			</p:wizard>
 			
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 		        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
 		        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 		    </p:confirmDialog>	
+		    
 		</h:form>
 	</ui:composition>
 </html>

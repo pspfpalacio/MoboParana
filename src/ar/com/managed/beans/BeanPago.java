@@ -347,6 +347,21 @@ public class BeanPago implements Serializable {
         }
 	}
 	
+	public String onFlowProcessMarcarMoviles(FlowEvent event) {
+		log.info("onFlowProcessMarcarMoviles() - idCliente: " + idCliente + " - event newStep: " + event.getNewStep());
+		String newStep = event.getNewStep();
+		if (idCliente != 0 && event.getNewStep().equals("confirmation") && event.getOldStep().equals("principal")) {
+			log.info("cantidad seleccionados: " + equiposSelectos.size());
+			cliente = clienteDAO.get(idCliente);
+			if (equiposSelectos.isEmpty()) {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar al menos un equipo!", null);
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				newStep = "principal";
+			}
+		}
+        return newStep;        
+	}
+	
 	public void guardarPagoCliente(){
 		log.info("guardarPagoCliente() - fecha: " + pagoCliente.getFecha() + " - idCliente: " + idCliente + " - monto: " + pagoCliente.getMonto() + " - envioEmail: " + envioEmail + " - destinatarios: " + destinatarios + " - concepto: " + pagoCliente.getConcepto());
 		FacesMessage msg = null;		
