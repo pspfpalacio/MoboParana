@@ -54,10 +54,12 @@ public class DAOHistorialMovilImpl implements Serializable, DAOHistorialMovil {
 			tx.begin();
 			em.persist(hm);
 			tx.commit();
+			cerrarInstancia();
 			return hm.getId();
 		}catch (Exception e){
 			e.printStackTrace();
 			tx.rollback();
+			cerrarInstancia();
 			return 0;
 		}
 	}

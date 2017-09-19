@@ -91,6 +91,7 @@
     				<p:selectOneMenu id="lista" value="#{beanVenta.idListaPrecio}" filter="true" filterMatchMode="contains"
     				style="width:250px;">
     					<p:ajax event="change" listener="#{beanVenta.onChangeListaPrecio()}" update="precio"/>
+    					<f:selectItem itemLabel="Seleccione" itemValue="0"/>
     					<f:selectItems value="#{beanVenta.listaPrecios}" var="lista" itemLabel="#{lista.nombre}"
     					itemValue="#{lista.id}"/>
     				</p:selectOneMenu>

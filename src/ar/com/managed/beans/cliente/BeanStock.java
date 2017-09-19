@@ -196,7 +196,7 @@ public class BeanStock implements Serializable {
 		cantidadTotal = 0;
 		montoTotal = 0;
 		cliente = user.getCliente();
-		headerText = "Stock de Móviles en Consignación";
+		headerText = "Stock de Moviles en Consignacion";
 		try {			
 			consignacion = consignacionDAO.get(cliente, true);
 							
@@ -236,7 +236,7 @@ public class BeanStock implements Serializable {
 			}
 			return "stocks";		
 		} catch (Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ocurrió un error! No se puede redirigir al formulario, error: " 
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error! No se puede redirigir al formulario, error: " 
 					+ e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";

@@ -15,6 +15,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import ar.com.clases.CuentaCorriente;
 import ar.com.clases.MovimientoCaja;
 import ar.com.clases.Reporte;
@@ -58,6 +60,8 @@ public class BeanVenta implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final static Logger log = Logger.getLogger(BeanVenta.class);
 	
 	@ManagedProperty(value = "#{BeanVentaDAO}")
 	private DAOVenta ventaDAO;
@@ -1063,6 +1067,7 @@ public class BeanVenta implements Serializable {
 	}
 	
 	public void baja(Venta vent){
+		log.info("Baja de venta: " + venta.getId());
 		FacesMessage msg = null;
 		try {
 			boolean falla = false;
@@ -1138,6 +1143,16 @@ public class BeanVenta implements Serializable {
 							int updateUnid = unidadMovilDAO.update(unidad);
 							if(updateUnid == 0){
 								actualizo = false;
+							}else {
+								HistorialMovil hm = new HistorialMovil();
+								hm.setFecha(new Date());
+								hm.setUsuario(usuario);
+								hm.setImei(nroImei);
+								hm.setTipo("BAJA VENTA");
+								hm.setDescripcion("Baja de Venta: " + vent.getId());
+								hm.setIdMovimiento(vent.getId());
+								log.info("Tipo de movimiento (historial): " + hm.getTipo());
+								historialMovilDAO.insert(hm);
 							}
 						}
 						int deleteVentDet = ventaDetalleUnidadDAO.deletePorDetalle(ventasDetalle);
@@ -1242,7 +1257,8 @@ public class BeanVenta implements Serializable {
 	public String guardar(){
 		FacesMessage msg = null;
 		String retorno = "";
-		if(venta.getFecha() != null && !listaVentasDetalles.isEmpty() && montoTotal != 0){
+		if(venta.getFecha() != null && !listaVentasDetalles.isEmpty() && montoTotal != 0 && idListaPrecio != 0){
+			log.info("Venta - monto total: "+ montoTotal);
 			CuentaCorriente cuenta = new CuentaCorriente();
 			CuentasCorrientesCliente ccCliente = new CuentasCorrientesCliente();
 			if(idCliente == 0){
@@ -1295,6 +1311,7 @@ public class BeanVenta implements Serializable {
 			}
 			int idVenta = ventaDAO.insertar(venta);
 			if(idVenta != 0){
+				log.info("idVenta: " + idVenta);
 				boolean inserto = true;
 				venta.setId(idVenta);
 				for (VentasDetalle ventasDetalle : listaVentasDetalles) {
@@ -1308,6 +1325,7 @@ public class BeanVenta implements Serializable {
 					ventasDetalle.setVenta(venta);					
 					int idDetalle = ventaDetalleDAO.insertar(ventasDetalle);
 					if(idDetalle != 0){
+						log.info("idDetalle: " + idDetalle);
 						ventasDetalle.setId(idDetalle);						
 						boolean insertoUnidad = true;
 						if(ventasDetalle.getAccesorio()){
@@ -1345,11 +1363,15 @@ public class BeanVenta implements Serializable {
 							for(VentasDetalleUnidad ventasUnidad : listAux){
 								int idUnidad = ventasUnidad.getUnidadMovil().getId();
 								UnidadMovil unidad = unidadMovilDAO.get(idUnidad);
+								log.info("Imei Unidad Movil: " + unidad.getNroImei());
 								unidad.setEnStock(false);
 								unidad.setEnVenta(true);
 								ventasUnidad.setVentasDetalle(ventasDetalle);
+								log.info("Lista Precio: " + ventasUnidad.getListaPrecio().getId());
 								int idDetalleUnidad = ventaDetalleUnidadDAO.insertar(ventasUnidad);
+								log.info("idDetalleUnidad: " + idDetalleUnidad);
 								int updateUnidad = unidadMovilDAO.update(unidad);
+								log.info("Unidad Update: " + updateUnidad);
 								if(idDetalleUnidad == 0 && updateUnidad == 0){
 									insertoUnidad = false;
 									break;
@@ -1361,6 +1383,7 @@ public class BeanVenta implements Serializable {
 									hm.setTipo("VENTA");
 									hm.setDescripcion("Venta: " + usuario.getApellidoNombre());
 									hm.setIdMovimiento(idVenta);
+									log.info("Tipo de movimiento (historial): " + hm.getTipo());
 									historialMovilDAO.insert(hm);
 								}
 							}
@@ -1388,7 +1411,7 @@ public class BeanVenta implements Serializable {
 						+ "Intente nuevamente!", null);
 			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta son obligatorios!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Fecha, el Monto Total y el Detalle de la Venta y la lista de precios son obligatorios!", null);
 		}		
 		listaVentas = new ArrayList<Venta>();
 		filteredVentas = new ArrayList<Venta>();

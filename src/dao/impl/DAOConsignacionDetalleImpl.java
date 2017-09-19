@@ -155,9 +155,10 @@ public class DAOConsignacionDetalleImpl implements Serializable,
 	public List<ConsignacionsDetalle> getLista(Consignacion consignacion) {
 		inicializar();
 		Query locQuery = em.createQuery("SELECT c FROM ConsignacionsDetalle c WHERE c.consignacion = :pConsignacion "
-				+ "AND c.eliminado = :pEliminado", ConsignacionsDetalle.class);
+				+ "AND c.eliminado = :pEliminado AND c.vendido = :pVendido", ConsignacionsDetalle.class);
 		locQuery.setParameter("pConsignacion", consignacion);
 		locQuery.setParameter("pEliminado", false);
+		locQuery.setParameter("pVendido", false);
 		List<ConsignacionsDetalle> lista = locQuery.getResultList();
 		return lista;
 	}

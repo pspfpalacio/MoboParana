@@ -623,6 +623,8 @@ public class BeanVentaConsignacion implements Serializable {
 						int eppBaja = equipoPendientePagoDAO.baja(epp);
 						
 						if(updateUnid == 0 || updateUniCons == 0 || eppBaja == 0){
+							actualizo = false;
+						}else {
 							HistorialMovil hm = new HistorialMovil();
 							hm.setFecha(new Date());
 							hm.setUsuario(usuario);
@@ -631,7 +633,6 @@ public class BeanVentaConsignacion implements Serializable {
 							hm.setDescripcion("Baja de venta: " + venCons.getId());
 							hm.setIdMovimiento(0);
 							historialMovilDAO.insert(hm);
-							actualizo = false;
 						}
 					}
 					//ELIMINACION LOGICA DEL DETALLE DE LA VENTA
@@ -733,6 +734,9 @@ public class BeanVentaConsignacion implements Serializable {
 							int idEPendienteP = equipoPendientePagoDAO.insert(ePendienteP);
 							
 							if(idDetalleUnidad == 0 || updateUnidad == 0 || updateUniCons == 0 || idEPendienteP == 0){
+								insertoUnidad = false;
+								break;
+							} else {
 								HistorialMovil hm = new HistorialMovil();
 								hm.setFecha(new Date());
 								hm.setUsuario(usuario);
@@ -741,8 +745,6 @@ public class BeanVentaConsignacion implements Serializable {
 								hm.setDescripcion("Venta consignacion");
 								hm.setIdMovimiento(idVenta);
 								historialMovilDAO.insert(hm);
-								insertoUnidad = false;
-								break;
 							}
 						}
 						if(!insertoUnidad){
