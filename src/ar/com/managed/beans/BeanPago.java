@@ -70,6 +70,7 @@ public class BeanPago implements Serializable {
 	private List<Cliente> listaClientes;
 	private List<Proveedore> listaProveedores;
 	private List<EquipoPendientePago> listaEpp;
+	private List<PagosCliente> listadoPagosClientes;
 	private PagosCliente pagoCliente;
 	private PagosProveedore pagoProveedore;
 	private List<EquipoPendientePago> equiposSelectos;
@@ -148,6 +149,14 @@ public class BeanPago implements Serializable {
 
 	public void setListaEpp(List<EquipoPendientePago> listaEpp) {
 		this.listaEpp = listaEpp;
+	}
+
+	public List<PagosCliente> getListadoPagosClientes() {
+		return listadoPagosClientes;
+	}
+
+	public void setListadoPagosClientes(List<PagosCliente> listadoPagosClientes) {
+		this.listadoPagosClientes = listadoPagosClientes;
 	}
 
 	public PagosCliente getPagoCliente() {
@@ -260,6 +269,7 @@ public class BeanPago implements Serializable {
 		listaEpp = new ArrayList<EquipoPendientePago>();
 		equiposSelectos = new ArrayList<EquipoPendientePago>();
 		equiposParaPagar = new ArrayList<EquipoPendientePago>();
+		listadoPagosClientes = new ArrayList<PagosCliente>();
 		idCliente = 0;
 		pagoCliente = new PagosCliente();
 		pagoCliente.setFecha(null);
@@ -531,7 +541,7 @@ public class BeanPago implements Serializable {
 				}
 			}
 			if (eppPagado) {
-				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Equipos marcados correctamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Equipos marcados como pagos correctamente!", null);
 				idCliente = 0;
 				pagoCliente = new PagosCliente();
 				listaEpp = new ArrayList<EquipoPendientePago>();
