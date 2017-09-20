@@ -18,7 +18,7 @@
 		<div class="wrapper">
 			<ui:include src="/includes/header.xhtml" />
 			<h:form id="formulario">
-			<p:panel id="panelGeneral" style="background:#D27C7A;min-height:900px;">
+			<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
 				<p:growl id="messages" showDetail="false" />
 				<br/>
 				<br/>
@@ -29,8 +29,8 @@
 					<p:outputLabel value="Producto: " />
 					<p:outputLabel value="#{beanProducto.producto.nombre}" />
 				</p:panelGrid>
-					<p:dataTable id="tablaHistorial" var="hist" value="#{beanHistorial.historialMovilList}" scrollRows="50" resizableColumns="true"
-					editable="true"	scrollable="true" emptyMessage="No existen movimientos para este producto" style="width:100%;" >
+					<p:dataTable id="tablaHistorial" var="hist" value="#{beanHistorial.historialMovilList}" rows="5" paginator="true" 
+						emptyMessage="No existen movimientos para este producto" style="width:100%;">
 						
 				       	<p:column headerText="Tipo" style="text-align:center;">
 	   						<h:outputText value="#{hist.tipo}" />
@@ -50,11 +50,32 @@
 	   						<h:outputText value="#{hist.usuario.apellidoNombre}" />
 	   					</p:column>
 	   					
+	   					<p:column style="text-align: center; width:40px;" value="Ver" title="Ver">					
+							<p:commandButton title="Ver" action="#{beanProducto.mostrarPaneles(hist)}" icon="ui-icon-search" disabled="#{hist.idMovimiento == 0}" update="formulario:panel"/>							
+						</p:column>
+	   					
 	   					<f:facet name="footer" >
 							<p:commandButton value="Volver" action="#{beanProducto.verStockDesdeHistorial(beanHistorial.imei)}"/>
 	   					</f:facet>
 	   					
-					</p:dataTable>			
+					</p:dataTable>	
+					
+					<p:panelGrid columns="2" layout="grid" id="gridInfoCompra" rendered="#{beanProducto.gridInfoCompra}">            
+					    <h:outputText value="Monto: " /> 
+					    <h:outputText value="#{beanProducto.compra.monto}" /> 
+					    <h:outputText value="Tipo: " /> 
+					    <h:outputText value="#{beanProducto.compra.tipo}" /> 
+					    <h:outputText value="Monto: " /> 
+					    <h:outputText value="#{beanProducto.compra.proveedore.nombreNegocio}" /> 
+					</p:panelGrid>		
+					<p:panelGrid columns="2" layout="grid" id="gridInfoConsignacion" rendered="#{beanProducto.gridInfoConsignacion}">            
+					    <h:outputText value="Content" /> 
+					    <h:outputText value="Content" /> 
+					</p:panelGrid>	
+					<p:panelGrid columns="2" layout="grid" id="gridInfoVenta" rendered="#{beanProducto.gridInfoVenta}">            
+					    <h:outputText value="Content" /> 
+					    <h:outputText value="Content" /> 
+					</p:panelGrid>	
 			</p:panel>
 			</h:form>
 		</div>

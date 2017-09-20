@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Productos;
+import model.entity.Compra;
 import model.entity.Consignacion;
 import model.entity.ConsignacionsDetalle;
 import model.entity.ConsignacionsDetalleUnidad;
@@ -28,6 +29,7 @@ import model.entity.UnidadMovil;
 import model.entity.Usuario;
 import model.entity.VentasDetalleUnidad;
 import model.entity.HistorialMovil;
+import dao.interfaces.DAOCompra;
 import dao.interfaces.DAOCompraDetalleUnidad;
 import dao.interfaces.DAOConsignacionDetalle;
 import dao.interfaces.DAOConsignacionDetalleUnidad;
@@ -80,6 +82,9 @@ public class BeanProducto implements Serializable {
 	@ManagedProperty(value = "#{BeanHistorialMovilDAO}")
 	private DAOHistorialMovil historialMovilDAO;
 	
+	@ManagedProperty(value = "#{BeanCompraDAO}")
+	private DAOCompra compraDAO;
+	
 	private List<Producto> listaProductos;
 	private List<Producto> filteredProductos;
 	private List<UnidadMovil> listaUnidadMovils;
@@ -89,6 +94,7 @@ public class BeanProducto implements Serializable {
 	private List<Stock> listaStocks;
 	private Producto producto;
 	private Usuario usuario;
+	private Compra compra;
 	private UnidadMovil unidadMovil;
 	private String headerText;
 	private String nroImei;
@@ -97,6 +103,9 @@ public class BeanProducto implements Serializable {
 	private int idRubro;
 	private int cantidad;
 	private float precioCompra;
+	private boolean gridInfoCompra;
+	private boolean gridInfoConsignacion;
+	private boolean gridInfoVenta;
 
 	public DAOProducto getProductoDAO() {
 		return productoDAO;
@@ -181,6 +190,14 @@ public class BeanProducto implements Serializable {
 		this.historialMovilDAO = historialMovilDAO;
 	}
 
+	public DAOCompra getCompraDAO() {
+		return compraDAO;
+	}
+
+	public void setCompraDAO(DAOCompra compraDAO) {
+		this.compraDAO = compraDAO;
+	}
+
 	public List<Producto> getListaProductos() {
 		return listaProductos;
 	}
@@ -253,6 +270,14 @@ public class BeanProducto implements Serializable {
 		this.usuario = usuario;
 	}
 
+	public Compra getCompra() {
+		return compra;
+	}
+
+	public void setCompra(Compra compra) {
+		this.compra = compra;
+	}
+
 	public UnidadMovil getUnidadMovil() {
 		return unidadMovil;
 	}
@@ -315,6 +340,30 @@ public class BeanProducto implements Serializable {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public boolean isGridInfoCompra() {
+		return gridInfoCompra;
+	}
+
+	public void setGridInfoCompra(boolean gridInfoCompra) {
+		this.gridInfoCompra = gridInfoCompra;
+	}
+
+	public boolean isGridInfoConsignacion() {
+		return gridInfoConsignacion;
+	}
+
+	public void setGridInfoConsignacion(boolean gridInfoConsignacion) {
+		this.gridInfoConsignacion = gridInfoConsignacion;
+	}
+
+	public boolean isGridInfoVenta() {
+		return gridInfoVenta;
+	}
+
+	public void setGridInfoVenta(boolean gridInfoVenta) {
+		this.gridInfoVenta = gridInfoVenta;
 	}
 
 	public String goProductos(Usuario user){
@@ -1109,6 +1158,15 @@ public class BeanProducto implements Serializable {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible redirigir hacia el formulario, Intente nuevamente!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
+		}
+	}
+	
+	public void mostrarPaneles(HistorialMovil hm) {
+		log.info("Historial Movil: " + hm.getId());
+		if(hm.getTipo().equals("COMPRA")) {
+			compra = new Compra();
+			compra = compraDAO.get(hm.getIdMovimiento());
+			gridInfoCompra = true;
 		}
 	}
 }
