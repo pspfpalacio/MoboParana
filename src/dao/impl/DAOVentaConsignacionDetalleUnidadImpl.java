@@ -106,6 +106,19 @@ public class DAOVentaConsignacionDetalleUnidadImpl implements Serializable,
 		}
 		return ventasDetalleUnidad;
 	}
+	
+	public VentasConsDetalleUnidad getAll(String imei) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT v FROM VentasConsDetalleUnidad v WHERE v.nroImei = :pNroImei ", VentasConsDetalleUnidad.class);
+		locQuery.setParameter("pNroImei", imei);
+		VentasConsDetalleUnidad ventasDetalleUnidad = new VentasConsDetalleUnidad();
+		try{
+			ventasDetalleUnidad = (VentasConsDetalleUnidad) locQuery.getSingleResult();
+		}catch(Exception e){
+			ventasDetalleUnidad = new VentasConsDetalleUnidad();
+		}
+		return ventasDetalleUnidad;
+	}
 
 	public int deleteUnidad(VentasConsDetalleUnidad ventasConsDetalleUnidad) {
 		try{

@@ -116,6 +116,20 @@ public class DAOConsignacionDetalleUnidadImpl implements Serializable,
 		}
 		return consignacionsDetalleUnidad;
 	}
+	
+	public ConsignacionsDetalleUnidad getAll(String imei) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT c FROM ConsignacionsDetalleUnidad c WHERE c.nroImei = :pNroImei ", ConsignacionsDetalleUnidad.class);
+		locQuery.setParameter("pNroImei", imei);
+		ConsignacionsDetalleUnidad consignacionsDetalleUnidad = new ConsignacionsDetalleUnidad();
+		try{
+			consignacionsDetalleUnidad = (ConsignacionsDetalleUnidad) locQuery.getSingleResult();
+		}catch (Exception e){
+//			System.out.println(e.getMessage());
+			consignacionsDetalleUnidad = new ConsignacionsDetalleUnidad();
+		}
+		return consignacionsDetalleUnidad;
+	}
 
 	public int deleteUnidad(
 			ConsignacionsDetalleUnidad consignacionsDetalleUnidad) {

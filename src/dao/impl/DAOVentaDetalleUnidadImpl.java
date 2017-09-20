@@ -106,6 +106,20 @@ public class DAOVentaDetalleUnidadImpl implements Serializable,
 		}
 		return ventasDetalleUnidad;
 	}
+	
+	public VentasDetalleUnidad getAll(String imei) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT v FROM VentasDetalleUnidad v WHERE v.nroImei = :pNroImei ", VentasDetalleUnidad.class);
+		locQuery.setParameter("pNroImei", imei);
+		VentasDetalleUnidad ventasDetalleUnidad = new VentasDetalleUnidad();
+		try{
+			ventasDetalleUnidad = (VentasDetalleUnidad) locQuery.getSingleResult();
+		}catch(Exception e){
+//			System.out.println(e.getMessage());
+			ventasDetalleUnidad = new VentasDetalleUnidad();
+		}
+		return ventasDetalleUnidad;
+	}
 
 	public int deleteUnidad(VentasDetalleUnidad ventasDetalleUnidad) {
 		try{

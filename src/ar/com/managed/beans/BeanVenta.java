@@ -1150,7 +1150,7 @@ public class BeanVenta implements Serializable {
 								hm.setImei(nroImei);
 								hm.setTipo("BAJA VENTA");
 								hm.setDescripcion("Baja de Venta: " + vent.getId());
-								hm.setIdMovimiento(vent.getId());
+								hm.setIdMovimiento(0);
 								log.info("Tipo de movimiento (historial): " + hm.getTipo());
 								historialMovilDAO.insert(hm);
 							}

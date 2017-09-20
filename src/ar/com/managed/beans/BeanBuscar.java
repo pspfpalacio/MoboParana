@@ -11,6 +11,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import ar.com.clases.auxiliares.StockDisponible;
 import model.entity.Compra;
 import model.entity.ComprasDetalle;
@@ -21,6 +23,7 @@ import model.entity.ConsignacionsDetalleUnidad;
 import model.entity.Devolucione;
 import model.entity.GarantiasCliente;
 import model.entity.GarantiasProveedore;
+import model.entity.HistorialMovil;
 import model.entity.ListaPrecio;
 import model.entity.ListaPrecioProducto;
 import model.entity.Producto;
@@ -33,12 +36,14 @@ import model.entity.VentasConsDetalle;
 import model.entity.VentasConsDetalleUnidad;
 import model.entity.VentasDetalle;
 import model.entity.VentasDetalleUnidad;
+import dao.interfaces.DAOCompra;
 import dao.interfaces.DAOCompraDetalleUnidad;
 import dao.interfaces.DAOConsignacion;
 import dao.interfaces.DAOConsignacionDetalleUnidad;
 import dao.interfaces.DAODevolucion;
 import dao.interfaces.DAOGarantiasCliente;
 import dao.interfaces.DAOGarantiasProveedor;
+import dao.interfaces.DAOHistorialMovil;
 import dao.interfaces.DAOListaPrecio;
 import dao.interfaces.DAOProducto;
 import dao.interfaces.DAOUnidadMovil;
@@ -55,6 +60,8 @@ public class BeanBuscar implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final static Logger log = Logger.getLogger(BeanHistorial.class);
 	
 	@ManagedProperty(value = "#{BeanUnidadMovilDAO}")
 	private DAOUnidadMovil unidadMovilDAO;
@@ -95,11 +102,18 @@ public class BeanBuscar implements Serializable {
 	@ManagedProperty(value = "#{BeanListaPrecioDAO}")
 	private DAOListaPrecio listaPrecioDAO;
 	
+	@ManagedProperty(value = "#{BeanHistorialMovilDAO}")
+	private DAOHistorialMovil historialMovilDAO;
+	
+	@ManagedProperty(value = "#{BeanCompraDAO}")
+	private DAOCompra compraDAO;
+	
 	private List<Producto> listaProductos;
 	private List<StockDisponible> listaStocks;
 	private List<Consignacion> listaConsignacions;
 	private List<Venta> listaVentas;
 	private List<ListaPrecio> listaListaPrecios;
+	private List<HistorialMovil> historialMovilList;
 	private Usuario usuario;
 	private Compra compra;
 	private Venta venta;
@@ -135,7 +149,8 @@ public class BeanBuscar implements Serializable {
 	private boolean opcionGarantia2;
 	private boolean opcionGarantia3;
 	private boolean bajaStock;
-
+	
+	
 	public DAOUnidadMovil getUnidadMovilDAO() {
 		return unidadMovilDAO;
 	}
@@ -243,6 +258,22 @@ public class BeanBuscar implements Serializable {
 		this.listaPrecioDAO = listaPrecioDAO;
 	}
 
+	public DAOHistorialMovil getHistorialMovilDAO() {
+		return historialMovilDAO;
+	}
+
+	public void setHistorialMovilDAO(DAOHistorialMovil historialMovilDAO) {
+		this.historialMovilDAO = historialMovilDAO;
+	}
+
+	public DAOCompra getCompraDAO() {
+		return compraDAO;
+	}
+
+	public void setCompraDAO(DAOCompra compraDAO) {
+		this.compraDAO = compraDAO;
+	}
+
 	public List<Producto> getListaProductos() {
 		return listaProductos;
 	}
@@ -281,6 +312,14 @@ public class BeanBuscar implements Serializable {
 
 	public void setListaListaPrecios(List<ListaPrecio> listaListaPrecios) {
 		this.listaListaPrecios = listaListaPrecios;
+	}
+
+	public List<HistorialMovil> getHistorialMovilList() {
+		return historialMovilList;
+	}
+
+	public void setHistorialMovilList(List<HistorialMovil> historialMovilList) {
+		this.historialMovilList = historialMovilList;
 	}
 
 	public Usuario getUsuario() {
@@ -564,10 +603,12 @@ public class BeanBuscar implements Serializable {
 	}
 
 	public String goBusqueda(Usuario user){
+		log.info(" go busqueda.xhtml");
 		usuario = new Usuario();
 		compra = new Compra();
 		venta = new Venta();
 		consignacion = new Consignacion();
+		ventasCon = new VentasCon();
 		producto = new Producto();
 		devolucion = new Devolucione();
 		unidadMovil = new UnidadMovil();
@@ -596,6 +637,7 @@ public class BeanBuscar implements Serializable {
 		listaConsignacions = new ArrayList<Consignacion>();
 		listaVentas = new ArrayList<Venta>();
 		listaListaPrecios = new ArrayList<ListaPrecio>();
+		historialMovilList = new ArrayList<HistorialMovil>();
 		idProducto = 0;
 		idListaPrecio = 0;
 		Rubro rubro = new Rubro();
@@ -626,6 +668,7 @@ public class BeanBuscar implements Serializable {
 		garantiasCliente = new GarantiasCliente();
 		garantiasProveedor = new GarantiasProveedore();
 		listaProducto = new ListaPrecioProducto();
+		historialMovilList = new ArrayList<HistorialMovil>();
 		panelProducto = false;
 		panelCompra = false;
 		tableCompra = false;
@@ -650,60 +693,66 @@ public class BeanBuscar implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
 			if(unidadMovil.getId() != 0 && idProducto != 0){
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de imei o seleccionar un producto, no puede realizar una búsqueda por ambos!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe colocar un nro de imei o seleccionar un producto, no puede realizar una bï¿½squeda por ambos!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
 			if(unidadMovil.getId() != 0 && idProducto == 0){
 				nroImei = unidadMovil.getNroImei();
 				if (unidadMovil.getBajaStock()) {
 					bajaStock = true;
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El móvil ha sido dado de baja desde el stock, presione en 'Volver al stock' para habilitarlo nuevamente.", null);
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El movil ha sido dado de baja desde el stock, presione en 'Volver al stock' para habilitarlo nuevamente.", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				}
 	//			UnidadMovil unidad = unidadMovilDAO.get(nroImei);
 				if(unidadMovil.getId() != 0){
 					producto = unidadMovil.getProducto();
 					panelProducto = true;
-					ComprasDetalleUnidad compraUnidad = compraDetalleUnidadDAO.get(nroImei);
+					historialMovilList = historialMovilDAO.getPorImei(nroImei);
+//					ComprasDetalleUnidad compraUnidad = compraDetalleUnidadDAO.get(nroImei);
+					ComprasDetalleUnidad compraUnidad = compraDetalleUnidadDAO.getAll(nroImei);
 					if(compraUnidad.getId() != 0){
 						ComprasDetalle compraDetalle = compraUnidad.getComprasDetalle();
 						compra = compraDetalle.getCompra();
-						if(compra.getEstado()){
-							panelCompra = true;
-							tableCompra = true;
-						}
+						
+//						if(compra.getEstado()){
+//							panelCompra = true;
+//							tableCompra = true;
+//						}
 					}
-					VentasDetalleUnidad ventaUnidad = ventaDetalleUnidadDAO.get(nroImei);
+//					VentasDetalleUnidad ventaUnidad = ventaDetalleUnidadDAO.get(nroImei);
+					VentasDetalleUnidad ventaUnidad = ventaDetalleUnidadDAO.getAll(nroImei);
 					if(ventaUnidad.getId() != 0){
 						VentasDetalle ventaDetalle = ventaUnidad.getVentasDetalle();
 						venta = ventaDetalle.getVenta();
-						if(venta.getEstado()){
-							panelVenta = true;
-							tableVenta = true;
-						}
+//						if(venta.getEstado()){
+//							panelVenta = true;
+//							tableVenta = true;
+//						}
 					}
-					ConsignacionsDetalleUnidad consignacionUnidad = consignacionDetalleUnidadDAO.get(nroImei);
+//					ConsignacionsDetalleUnidad consignacionUnidad = consignacionDetalleUnidadDAO.get(nroImei);
+					ConsignacionsDetalleUnidad consignacionUnidad = consignacionDetalleUnidadDAO.getAll(nroImei);
 					if(consignacionUnidad.getId() != 0){
 						if(consignacionUnidad.getVendido()){
-							disponibleConsignacion = "Móvil Vendido";
+							disponibleConsignacion = "Movil Vendido";
 						}else{
-							disponibleConsignacion = "Móvil Disponible para Venta";
+							disponibleConsignacion = "Movil Disponible para Venta";
 						}
 						ConsignacionsDetalle consignacionDetalle = consignacionUnidad.getConsignacionsDetalle();
 						consignacion = consignacionDetalle.getConsignacion();
-						if(consignacion.getEstado()){
-							panelConsignacion = true;
-							tableConsignacion = true;
-						}
+//						if(consignacion.getEstado()){
+//							panelConsignacion = true;
+//							tableConsignacion = true;
+//						}
 					}
-					VentasConsDetalleUnidad ventaConsUnidad = ventaConsignacionDetalleUnidadDAO.get(nroImei);
+//					VentasConsDetalleUnidad ventaConsUnidad = ventaConsignacionDetalleUnidadDAO.get(nroImei);
+					VentasConsDetalleUnidad ventaConsUnidad = ventaConsignacionDetalleUnidadDAO.getAll(nroImei);
 					if(ventaConsUnidad.getId() != 0){
 						VentasConsDetalle ventaConsDetalle = ventaConsUnidad.getVentasConsDetalle();
 						ventasCon = ventaConsDetalle.getVentasCon();
-						if(ventasCon.getEstado()){
-							panelVentaCons = true;
-							tableVentaCons = true;
-						}
+//						if(ventasCon.getEstado()){
+//							panelVentaCons = true;
+//							tableVentaCons = true;
+//						}
 					}
 					List<GarantiasCliente> listaGarantiasClientes = garantiasClienteDAO.getLista(nroImei);
 					if (!listaGarantiasClientes.isEmpty()) {
@@ -736,7 +785,7 @@ public class BeanBuscar implements Serializable {
 							if (garantiasProveedor.getFinalizado()) {
 								opcionGarantia2 = false;
 								opcionGarantia3 = false;
-								if (garantiasProveedor.getConcepto().equals("Entrega por garantía")) {
+								if (garantiasProveedor.getConcepto().equals("Entrega por garantia")) {
 									if (garantiasProveedor.getResolucion().equals("Cambio de Equipo")) {
 										opcionGarantia2 = true;
 									}
@@ -748,7 +797,7 @@ public class BeanBuscar implements Serializable {
 						}
 					}
 				}else{
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei no tiene ningún producto asociado!", null);
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei no tiene ningun producto asociado!", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				}
 			}
@@ -824,7 +873,7 @@ public class BeanBuscar implements Serializable {
 				}
 			}
 		} catch (Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei no tiene ningún producto asociado!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de Imei no tiene ningun producto asociado!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
@@ -842,20 +891,49 @@ public class BeanBuscar implements Serializable {
 				int updt = unidadMovilDAO.update(unidad);
 				if (updt != 0) {
 					bajaStock = false;
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró nuevamente en el stock con éxito.", null);
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro nuevamente en el stock con exito.", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				} else {
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al volver al stock el móvil, error: No se pudo actualizar el estado del móvill.", null);
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al volver al stock el movil, error: No se pudo actualizar el estado del movill.", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				}
 			} else {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al volver al stock el móvil, error: El número de imei no corresponde a un único móvil.", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al volver al stock el movil, error: El numero de imei no corresponde a un unico movil.", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al volver al stock el móvil, error: " + e.getMessage(), null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al volver al stock el movil, error: " + e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+	}
+	
+	public void mostrarPaneles(HistorialMovil hm) {
+		log.info("Historial Movil: " + hm.getId());
+		panelCompra = false;
+		tableCompra = false;
+		panelVenta = false;
+		tableVenta = false;
+		panelVentaCons = false;
+		tableVentaCons = false;
+		panelConsignacion = false;
+		tableConsignacion = false;
+		
+		if(hm.getTipo().equals("COMPRA")) {
+			panelCompra = true;
+			tableCompra = true;
+		}
+		if(hm.getTipo().equals("VENTA")) {
+			panelVenta = true;
+			tableVenta = true;
+		}
+		if(hm.getTipo().equals("VENTA CONSIGNACION")) {
+			panelVentaCons = true;
+			tableVentaCons = true;
+		}
+		if(hm.getTipo().equals("CONSIGNACION")) {
+			panelConsignacion = true;
+			tableConsignacion = true;
 		}
 	}
 

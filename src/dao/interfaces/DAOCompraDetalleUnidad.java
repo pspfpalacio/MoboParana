@@ -15,6 +15,8 @@ public interface DAOCompraDetalleUnidad {
 	
 	public ComprasDetalleUnidad get(String nroImei);
 	
+	public ComprasDetalleUnidad getAll(String nroImei);
+	
 	public List<ComprasDetalleUnidad> getLista();
 	
 	public List<ComprasDetalleUnidad> getLista(ComprasDetalle comprasDetalle);

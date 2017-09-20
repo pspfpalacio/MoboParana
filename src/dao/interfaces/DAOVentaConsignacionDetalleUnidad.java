@@ -17,6 +17,8 @@ public int insertar(VentasConsDetalleUnidad ventasConsDetalleUnidad);
 	
 	public VentasConsDetalleUnidad get(String imei);
 	
+	public VentasConsDetalleUnidad getAll(String imei);
+	
 	public int deleteUnidad(VentasConsDetalleUnidad ventasConsDetalleUnidad);
 	
 	public int deletePorDetalle(VentasConsDetalle ventasConsDetalle);

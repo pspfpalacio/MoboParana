@@ -18,6 +18,8 @@ public interface DAOConsignacionDetalleUnidad {
 	
 	public ConsignacionsDetalleUnidad get(String imei);
 	
+	public ConsignacionsDetalleUnidad getAll(String imei);
+	
 	public int deleteUnidad(ConsignacionsDetalleUnidad consignacionsDetalleUnidad);
 	
 	public int deletePorDetalle(ConsignacionsDetalle consignacionsDetalle);

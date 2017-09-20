@@ -741,7 +741,7 @@ public class BeanVentaConsignacion implements Serializable {
 								hm.setFecha(new Date());
 								hm.setUsuario(usuario);
 								hm.setImei(imei);
-								hm.setTipo("VENTA CONSIGNACION ADMIN");
+								hm.setTipo("VENTA CONSIGNACION");
 								hm.setDescripcion("Venta consignacion");
 								hm.setIdMovimiento(idVenta);
 								historialMovilDAO.insert(hm);

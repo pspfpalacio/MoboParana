@@ -16,6 +16,8 @@ public interface DAOVentaDetalleUnidad {
 	
 	public VentasDetalleUnidad get(String imei);
 	
+	public VentasDetalleUnidad getAll(String imei);
+	
 	public int deleteUnidad(VentasDetalleUnidad ventasDetalleUnidad);
 	
 	public int deletePorDetalle(VentasDetalle ventasDetalle);

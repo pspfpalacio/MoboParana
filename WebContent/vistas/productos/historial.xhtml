@@ -27,7 +27,7 @@
 						<h:outputText value="Historial de movimientos de #{beanHistorial.imei}" />
 					</f:facet>
 					<p:outputLabel value="Producto: " />
-					<p:outputLabel value="#{beanProducto.producto.nombre}" />
+					<p:outputLabel value="#{beanHistorial.producto.nombre}" />
 				</p:panelGrid>
 					<p:dataTable id="tablaHistorial" var="hist" value="#{beanHistorial.historialMovilList}" rows="5" paginator="true" 
 						emptyMessage="No existen movimientos para este producto" style="width:100%;">
@@ -51,7 +51,7 @@
 	   					</p:column>
 	   					
 	   					<p:column style="text-align: center; width:40px;" value="Ver" title="Ver">					
-							<p:commandButton title="Ver" action="#{beanProducto.mostrarPaneles(hist)}" icon="ui-icon-search" disabled="#{hist.idMovimiento == 0}" update="formulario:panel"/>							
+							<p:commandButton title="Ver" action="#{beanHistorial.mostrarPaneles(hist)}" icon="ui-icon-search" disabled="#{hist.idMovimiento == 0}" update="formulario:panel"/>							
 						</p:column>
 	   					
 	   					<f:facet name="footer" >
@@ -60,22 +60,76 @@
 	   					
 					</p:dataTable>	
 					
-					<p:panelGrid columns="2" layout="grid" id="gridInfoCompra" rendered="#{beanProducto.gridInfoCompra}">            
+					<p:panelGrid columns="2" layout="grid" id="gridInfoCompra" rendered="#{beanHistorial.gridInfoCompra}"> 
+						<f:facet name="header" >
+							<h:outputText value="COMPRA - Numero: #{beanHistorial.compra.id}" /> 
+	   					</f:facet>
+					    <h:outputText value="Fecha: " /> 
+					    <h:outputText value="#{beanHistorial.compra.fecha}" >
+   							<f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+   						</h:outputText>
 					    <h:outputText value="Monto: " /> 
-					    <h:outputText value="#{beanProducto.compra.monto}" /> 
+					    <h:outputText value="$ #{beanHistorial.compra.monto}" /> 
 					    <h:outputText value="Tipo: " /> 
-					    <h:outputText value="#{beanProducto.compra.tipo}" /> 
-					    <h:outputText value="Monto: " /> 
-					    <h:outputText value="#{beanProducto.compra.proveedore.nombreNegocio}" /> 
+					    <h:outputText value="#{beanHistorial.compra.tipo}" /> 
+					    <h:outputText value="Proveedor: " /> 
+					    <h:outputText value="#{beanHistorial.compra.proveedore.nombreNegocio}" /> 
+					    <h:outputText value="Usuario: " /> 
+					    <h:outputText value="#{beanHistorial.compra.usuario1.apellidoNombre}" /> 
 					</p:panelGrid>		
-					<p:panelGrid columns="2" layout="grid" id="gridInfoConsignacion" rendered="#{beanProducto.gridInfoConsignacion}">            
-					    <h:outputText value="Content" /> 
-					    <h:outputText value="Content" /> 
+					
+					<p:panelGrid columns="2" layout="grid" id="gridInfoVenta" rendered="#{beanHistorial.gridInfoVenta}"> 
+						<f:facet name="header" >
+							<h:outputText value="VENTA - Numero: #{beanHistorial.venta.id}" /> 
+	   					</f:facet>
+					    <h:outputText value="Fecha: " /> 
+					    <h:outputText value="#{beanHistorial.venta.fecha}" >
+   							<f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+   						</h:outputText>
+   						<h:outputText value="Monto: " /> 
+					    <h:outputText value="$ #{beanHistorial.venta.monto}" /> 
+   						<h:outputText value="Tipo: " /> 
+					    <h:outputText value="#{beanHistorial.venta.tipo}" /> 
+					    <h:outputText value="Usuario: " /> 
+					    <h:outputText value="#{beanHistorial.venta.usuario1.apellidoNombre}" /> 
 					</p:panelGrid>	
-					<p:panelGrid columns="2" layout="grid" id="gridInfoVenta" rendered="#{beanProducto.gridInfoVenta}">            
-					    <h:outputText value="Content" /> 
-					    <h:outputText value="Content" /> 
+					
+					<p:panelGrid columns="2" layout="grid" id="gridInfoVentaConsignacion" rendered="#{beanHistorial.gridInfoVentaConsignacion}">
+						<f:facet name="header" >
+							<h:outputText value="VENTA CONSIGNACION - Numero: #{beanHistorial.vConsignacion.id}" /> 
+	   					</f:facet>            
+	   					<h:outputText value="#{beanHistorial.vConsignacion.fecha}" >
+   							<f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+   						</h:outputText>
+					    <h:outputText value="Monto: " /> 
+					    <h:outputText value="$ #{beanHistorial.vConsignacion.monto}" /> 
+   						<h:outputText value="Tipo: " /> 
+					    <h:outputText value="#{beanHistorial.vConsignacion.tipo}" /> 
+					    <h:outputText value="Numero consignacion: " /> 
+					    <h:outputText value="#{beanHistorial.vConsignacion.consignacion.id}" /> 
+					    <h:outputText value="Cliente: " /> 
+					    <h:outputText value="#{beanHistorial.vConsignacion.cliente.apellidoNombre}" /> 
+					    <h:outputText value="Usuario que realizo la venta: " /> 
+					    <h:outputText value="#{beanHistorial.vConsignacion.usuario1.apellidoNombre}" /> 
 					</p:panelGrid>	
+					
+					<p:panelGrid columns="2" layout="grid" id="gridInfoConsignacion" rendered="#{beanHistorial.gridInfoConsignacion}"> 
+						<f:facet name="header" >
+							<h:outputText value="CONSIGNACION - Numero: #{beanHistorial.consignacion.id}" /> 
+	   					</f:facet>         
+	   					<h:outputText value="#{beanHistorial.consignacion.fecha}" >
+   							<f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+   						</h:outputText>  
+					    <h:outputText value="Monto: " /> 
+					    <h:outputText value="$ #{beanHistorial.consignacion.monto}" /> 
+					    <h:outputText value="Cliente: " /> 
+					    <h:outputText value="$ #{beanHistorial.consignacion.cliente.apellidoNombre}" /> 
+					    <h:outputText value="Usuario creación: " /> 
+					    <h:outputText value="$ #{beanHistorial.consignacion.usuario1.apellidoNombre}" /> 
+					    <h:outputText value="Usuario modificación: " /> 
+					    <h:outputText value="$ #{beanHistorial.consignacion.usuario2.apellidoNombre}" /> 
+					</p:panelGrid>	
+					
 			</p:panel>
 			</h:form>
 		</div>

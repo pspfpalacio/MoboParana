@@ -99,9 +99,6 @@
 							<p:commandButton icon="ui-icon-close" update=":formulario:panelGeneral, tablaImei" action="#{beanProducto.quitarStock(unidad)}" 
 							disabled="#{unidad.enGarantiaProveedor}" onclick="return confirm('ESTA SEGURO QUE DESEA QUITAR ESTE MOVIL DEL STOCK?')"/>
 						</p:column>
-						<p:column headerText="Ver historial" style="text-align:center;width:100px;">
-				           <p:commandButton icon="ui-icon-search" action="#{beanHistorial.verHistorial(unidad.nroImei)}"/>
-				       </p:column>
 						<p:column style="width:32px">
 				           <p:rowEditor rendered="#{!unidad.enCompra}"/>
 				       </p:column>

@@ -107,7 +107,41 @@
     			<p:panelGrid columns="2" rendered="#{beanBuscar.panelProducto}" style="width:100%;text-align:right;">
     				<p:commandButton value="Volver al stock" rendered="#{beanBuscar.bajaStock}" action="#{beanBuscar.volverStock()}"
     				onclick="return confirm('ESTA SEGURO QUE DESEA VOLVER EL MÓVIL AL STOCK?')" />
-    			</p:panelGrid>    			
+    			</p:panelGrid>  
+    			
+    			<p:separator/>
+    			<p:dataTable id="tablaHistorial" var="hist" value="#{beanBuscar.historialMovilList}" rows="5" paginator="true" 
+					emptyMessage="No existen movimientos para este producto" style="width:100%;">
+					
+					<f:facet name="header">
+    					<h:outputText value="Hisotrial de Movimientos" />
+    				</f:facet>
+						
+			       	<p:column headerText="Tipo" style="text-align:center;">
+   						<h:outputText value="#{hist.tipo}" />
+   					</p:column>
+   					
+   					<p:column headerText="Descripcion" style="text-align:center;">
+   						<h:outputText value="#{hist.descripcion}" />
+   					</p:column>
+   					
+   					<p:column headerText="Fecha" style="text-align:center;">
+   						<h:outputText value="#{hist.fecha}" >
+   							<f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+   						</h:outputText>
+   					</p:column>
+   					
+   					<p:column headerText="Usuario" style="text-align:center;">
+   						<h:outputText value="#{hist.usuario.apellidoNombre}" />
+   					</p:column>
+   					
+   					<p:column style="text-align: center; width:40px;" value="Ver" title="Ver">					
+						<p:commandButton title="Ver" action="#{beanBuscar.mostrarPaneles(hist)}" icon="ui-icon-search" disabled="#{hist.idMovimiento == 0}" update="formulario:panelGral"/>							
+					</p:column>
+   					
+				</p:dataTable>	
+    			
+    			  			
     			<p:separator rendered="#{beanBuscar.panelListaPrecio}"/>
     			<p:panelGrid id="panellistaprecio" columns="4" rendered="#{beanBuscar.panelListaPrecio}" style="width:100%;">
     				<f:facet name="header">
@@ -712,6 +746,7 @@
 		    		disabled="true"/>
     			</p:panelGrid>
     			<p:separator />
+					    			
     			</p:panel>
 	    	</h:form>
 	    </div>

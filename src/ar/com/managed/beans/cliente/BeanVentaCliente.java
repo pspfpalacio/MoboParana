@@ -715,7 +715,7 @@ public class BeanVentaCliente implements Serializable {
 									hm.setFecha(new Date());
 									hm.setUsuario(usuario);
 									hm.setImei(imei);
-									hm.setTipo("VENTA CLIENTE");
+									hm.setTipo("VENTA CONSIGNACION");
 									hm.setDescripcion("Venta de cliente: " + usuario.getApellidoNombre());
 									hm.setIdMovimiento(idVenta);
 									historialMovilDAO.insert(hm);

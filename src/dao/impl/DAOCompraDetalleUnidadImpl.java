@@ -101,6 +101,20 @@ public class DAOCompraDetalleUnidadImpl implements Serializable,
 		}
 		return comprasDetalleUnidad;
 	}
+	
+	public ComprasDetalleUnidad getAll(String nroImei) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT c FROM ComprasDetalleUnidad c WHERE c.nroImei = :pNroImei ", ComprasDetalleUnidad.class);
+		locQuery.setParameter("pNroImei", nroImei);
+		ComprasDetalleUnidad comprasDetalleUnidad = new ComprasDetalleUnidad();
+		try{
+			comprasDetalleUnidad = (ComprasDetalleUnidad) locQuery.getSingleResult();
+		} catch(Exception e){
+//			System.out.println(e.getMessage());
+			comprasDetalleUnidad = new ComprasDetalleUnidad();
+		}
+		return comprasDetalleUnidad;
+	}
 
 	public List<ComprasDetalleUnidad> getLista() {
 		inicializar();
