@@ -546,6 +546,28 @@
     					</h:outputText>
     				</f:facet>
     			</p:dataTable>
+    			<!-- <p:separator rendered="#{beanBuscar.panelDevolucion}" />
+    			<p:panelGrid id="paneldevolucion" columns="4" style="width:100%;" rendered="#{beanBuscar.panelDevolucion}">
+    				<f:facet name="header">
+    					<h:outputText value="Devolucion" />
+    				</f:facet>
+    				<p:outputLabel value="Número:" />
+    				<h:inputText value="#{beanBuscar.devolucion.id}" disabled="true" />
+    				
+    				<p:outputLabel value="Fecha: " />
+    				<h:inputText value="#{beanBuscar.devolucion.fecha}" disabled="true">
+    					<f:convertDateTime pattern="dd/MM/yyyy"/>
+    				</h:inputText>  
+    				
+    				<p:outputLabel value="Nomnre de movimiento:" />
+    				<h:inputText value="#{beanBuscar.devolucion.nombreMovimiento}" disabled="true" />  				
+    				
+    				<p:outputLabel value="Telefono: " />
+    				<h:inputText value="#{beanBuscar.devolucion.telefono}" disabled="true" />
+    				
+    				<p:outputLabel value="Precio Unidad:" />
+    				<h:inputText value="$ #{beanBuscar.devolucion.precioUnidad}" disabled="true" />
+    			</p:panelGrid> -->
     			<p:separator rendered="#{beanBuscar.panelVenta}" />
    				<p:panelGrid id="panelventa" columns="4" style="width:100%" rendered="#{beanBuscar.panelVenta}">
    					<f:facet name="header">

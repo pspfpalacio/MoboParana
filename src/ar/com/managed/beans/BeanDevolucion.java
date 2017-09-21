@@ -14,6 +14,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import ar.com.clases.CuentaCorriente;
 import ar.com.clases.MovimientoCaja;
 import ar.com.clases.Reporte;
@@ -27,6 +29,7 @@ import model.entity.CuentasCorrientesCliente;
 import model.entity.Cuota;
 import model.entity.CuotasVenta;
 import model.entity.Devolucione;
+import model.entity.HistorialMovil;
 import model.entity.Producto;
 import model.entity.Rubro;
 import model.entity.UnidadMovil;
@@ -45,6 +48,7 @@ import dao.interfaces.DAOCuentaCorriente;
 import dao.interfaces.DAOCuota;
 import dao.interfaces.DAOCuotaVenta;
 import dao.interfaces.DAODevolucion;
+import dao.interfaces.DAOHistorialMovil;
 import dao.interfaces.DAOProducto;
 import dao.interfaces.DAOUnidadMovil;
 import dao.interfaces.DAOVenta;
@@ -62,6 +66,8 @@ public class BeanDevolucion implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final static Logger log = Logger.getLogger(BeanDevolucion.class);
 	
 	@ManagedProperty(value = "#{BeanDevolucionDAO}")
 	private DAODevolucion devolucionDAO;
@@ -110,6 +116,9 @@ public class BeanDevolucion implements Serializable {
 	
 	@ManagedProperty(value = "#{BeanCuotaVentaDAO}")
 	private DAOCuotaVenta cuotaVentaDAO;
+	
+	@ManagedProperty(value = "#{BeanHistorialMovilDAO}")
+	private DAOHistorialMovil historialMovilDAO;
 	
 	private List<Devolucione> listaDevoluciones;
 	private List<Devolucione> filteredDevoluciones;
@@ -253,6 +262,14 @@ public class BeanDevolucion implements Serializable {
 
 	public void setCuotaVentaDAO(DAOCuotaVenta cuotaVentaDAO) {
 		this.cuotaVentaDAO = cuotaVentaDAO;
+	}
+
+	public DAOHistorialMovil getHistorialMovilDAO() {
+		return historialMovilDAO;
+	}
+
+	public void setHistorialMovilDAO(DAOHistorialMovil historialMovilDAO) {
+		this.historialMovilDAO = historialMovilDAO;
 	}
 
 	public List<Devolucione> getListaDevoluciones() {
@@ -438,6 +455,7 @@ public class BeanDevolucion implements Serializable {
 	}
 	
 	public void baja(Devolucione dev){
+		log.info("baja()");
 		FacesMessage msg = null;
 		try {
 			int idProd = dev.getProducto().getId();
@@ -454,13 +472,15 @@ public class BeanDevolucion implements Serializable {
 			
 			Producto prod = productoDAO.get(idProd);
 			Cliente cli = clienteDAO.get(idCli);			
-			UnidadMovil unidad = unidadMovilDAO.get(imei);			
+			UnidadMovil unidad = unidadMovilDAO.get(imei);
+			log.info("unidad movil: " + unidad.getId());
 			
 			if (nombreTabla.equals("Venta")) {
 				Venta venta = ventaDAO.get(idMov);
 				if (venta.getEstado()) {
 					VentasDetalle ventDetalle = ventaDetalleDAO.get(venta, prod);
 					if (ventDetalle.getId() != 0) {
+						log.info("ventDetalle.getId(): " + ventDetalle.getId());
 						int cant = ventDetalle.getCantidad() + 1;
 						float subtotal = ventDetalle.getSubtotal() + precioV;
 						
@@ -478,6 +498,7 @@ public class BeanDevolucion implements Serializable {
 						ventaDetalleDAO.update(ventDetalle);
 						ventaDetalleUnidadDAO.insertar(ventaUnidad);
 					} else {
+						log.info("ventadetalle id = 0");
 						int cant = 1;
 						float subtotal = precioV;
 						ventDetalle = new VentasDetalle();
@@ -512,7 +533,9 @@ public class BeanDevolucion implements Serializable {
 						ccCliente.setNombreTabla("Venta");
 						cuenta.deleteCuentaCorriente(ccCliente);
 					}
+					log.info("venta.getTipo(): " + venta.getTipo());
 					if(venta.getTipo().equals("ctdo.")){
+						log.info("");
 						cuentaCorrienteDAO.deletePorMovimientoCliente(idMov, "Venta", cli);
 								
 						MovimientoCaja movCaja = new MovimientoCaja();
@@ -528,6 +551,7 @@ public class BeanDevolucion implements Serializable {
 						
 					ventaDAO.update(venta);
 					//Insercion de CC
+					log.info("Insercion de CC");
 					ccCliente = new CuentasCorrientesCliente();	
 					ccCliente.setCliente(cli);
 					ccCliente.setDebe(total);
@@ -539,6 +563,7 @@ public class BeanDevolucion implements Serializable {
 					ccCliente.setUsuario(usuario);
 					cuenta.insertarCC(ccCliente);
 					//Si es una venta de contado, inserto el pago en CC y en Caja
+					log.info("Si es una venta de contado, inserto el pago en CC y en Caja");
 					if (venta.getTipo().equals("ctdo.")) {
 						ccCliente = new CuentasCorrientesCliente();								
 						ccCliente.setCliente(cli);
@@ -599,6 +624,7 @@ public class BeanDevolucion implements Serializable {
 					productoDAO.update(prod);
 					
 					//Insercion de CC
+					log.info("Insercion de CC");
 					ccCliente.setCliente(cli);
 					ccCliente.setDebe(precioV);
 					ccCliente.setDetalle("Venta nro: " + idMov);				
@@ -609,6 +635,7 @@ public class BeanDevolucion implements Serializable {
 					ccCliente.setUsuario(usuario);
 					cuenta.insertarCC(ccCliente);
 					//Si es una venta de contado, inserto el pago en CC y en Caja
+					log.info("Si es una venta de contado, inserto el pago en CC y en Caja");
 					if (venta.getTipo().equals("ctdo.")) {
 						ccCliente = new CuentasCorrientesCliente();								
 						ccCliente.setCliente(cli);
@@ -638,6 +665,7 @@ public class BeanDevolucion implements Serializable {
 				Consignacion consignacion = consignacionDAO.get(idMov);
 				if (consignacion.getEstado()) {
 					ConsignacionsDetalle consDetalle = consignacionDetalleDAO.get(consignacion, prod);
+					log.info("consDetalle.getId(): " + consDetalle.getId());
 					if (consDetalle.getId() != 0) {
 						int cant = consDetalle.getCantidad() + 1;
 						float subtotal = consDetalle.getSubtotal() + precioV;
@@ -693,6 +721,7 @@ public class BeanDevolucion implements Serializable {
 					enStock = enStock - 1;
 					prod.setStock(enStock);
 					prod.setEnConsignacion(enConsignacion);
+					log.info("update producto");
 					productoDAO.update(prod);
 					
 					consignacionDAO.update(consignacion);
@@ -702,6 +731,7 @@ public class BeanDevolucion implements Serializable {
 					consignacion.setFechaMod(new Date());
 					consignacion.setMonto(precioV);
 					consignacion.setUsuario3(usuario);
+					log.info("uodate consignacion");
 					consignacionDAO.update(consignacion);
 					
 					int cant = 1;
@@ -798,10 +828,11 @@ public class BeanDevolucion implements Serializable {
 					ventaConsignacionDAO.update(ventCon);
 					
 					//Insercion de CC
+					log.info("Insercion de CC");
 					ccCliente = new CuentasCorrientesCliente();	
 					ccCliente.setCliente(cli);
 					ccCliente.setDebe(total);
-					ccCliente.setDetalle("Venta Consignación nro: " + idMov);				
+					ccCliente.setDetalle("Venta Consignacion nro: " + idMov);				
 					ccCliente.setFecha(ventCon.getFecha());
 					ccCliente.setIdMovimiento(idMov);
 					ccCliente.setMonto(total);
@@ -815,6 +846,7 @@ public class BeanDevolucion implements Serializable {
 					ventCon.setMonto(precioV);
 					ventCon.setUsuario3(usuario);
 					ventaConsignacionDAO.update(ventCon);
+					log.info("ventaConsignacionDAO.update(ventCon) ok");
 					
 					int cant = 1;
 					float subtotal = precioV;
@@ -826,6 +858,7 @@ public class BeanDevolucion implements Serializable {
 					ventDetalle.setSubtotal(subtotal);
 					ventDetalle.setVentasCon(ventCon);
 					int idDetalle = ventaConsignacionDetalleDAO.insertar(ventDetalle);
+					log.info("idDetalle: " + idDetalle);
 					ventDetalle.setId(idDetalle);
 					
 					VentasConsDetalleUnidad ventaUnidad = new VentasConsDetalleUnidad();
@@ -835,6 +868,7 @@ public class BeanDevolucion implements Serializable {
 					ventaUnidad.setPrecioVenta(precioV);
 					ventaUnidad.setVentasConsDetalle(ventDetalle);
 					ventaConsignacionDetalleUnidadDAO.insertar(ventaUnidad);
+					log.info("ventaConsignacionDetalleUnidadDAO.insertar(ventaUnidad) ok");
 					
 					CuentaCorriente cuenta = new CuentaCorriente();
 					CuentasCorrientesCliente ccCliente = new CuentasCorrientesCliente();
@@ -845,9 +879,10 @@ public class BeanDevolucion implements Serializable {
 					productoDAO.update(prod);
 					
 					//Insercion de CC
+					log.info("Insercion de CC");
 					ccCliente.setCliente(cli);
 					ccCliente.setDebe(precioV);
-					ccCliente.setDetalle("Venta Consignación nro: " + idMov);				
+					ccCliente.setDetalle("Venta Consignacion nro: " + idMov);				
 					ccCliente.setFecha(ventCon.getFecha());
 					ccCliente.setIdMovimiento(idMov);
 					ccCliente.setMonto(precioV);
@@ -871,12 +906,22 @@ public class BeanDevolucion implements Serializable {
 				
 				int updDevolucion = devolucionDAO.update(dev);					
 				if (updDevolucion != 0) {
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja de la Devolución!", null);
+					HistorialMovil hm = new HistorialMovil();
+					hm.setFecha(new Date());
+					hm.setUsuario(usuario);
+					hm.setImei(unidad.getNroImei());
+					hm.setTipo("BAJA DEVOLUCION");
+					hm.setDescripcion("Baja devolucion: " + cli.getApellidoNombre());
+					hm.setIdMovimiento(0);
+					log.info("Tipo de movimiento (historial): " + hm.getTipo());
+					historialMovilDAO.insert(hm);
+					
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja exitosa!", null);
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja de la Devolución!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja!", null);
 				}
 			} else {
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Unidad Móvil!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Unidad Movil!", null);
 			}
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		} catch (Exception e) {
@@ -886,6 +931,7 @@ public class BeanDevolucion implements Serializable {
 	}
 	
 	public String guardar(){
+		log.info("guardar()");
 		try {
 			nroImei = "";
 			String retorno = "";
@@ -896,12 +942,12 @@ public class BeanDevolucion implements Serializable {
 					Cuota cuota = cuotaDAO.get(nroImei);
 					CuotasVenta cuotaVenta = cuotaVentaDAO.get(nroImei);					
 					if (cuota.getId() != 0) {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Móvil seleccionado posee Cuotas! Realice la baja de las mismas primero!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Movil seleccionado posee Cuotas! Realice la baja de las mismas primero!", null);
 						FacesContext.getCurrentInstance().addMessage(null, msg);
 						return "";
 					}
 					if (cuotaVenta.getId() != 0) {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Móvil seleccionado posee Cuotas! Realice la baja de las mismas primero!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Movil seleccionado posee Cuotas! Realice la baja de las mismas primero!", null);
 						FacesContext.getCurrentInstance().addMessage(null, msg);
 						return "";
 					}
@@ -912,7 +958,8 @@ public class BeanDevolucion implements Serializable {
 					VentasConsDetalleUnidad ventaConsUnidad = ventaConsignacionDetalleUnidadDAO.get(nroImei);
 					VentasConsDetalle ventaConDetalle = new VentasConsDetalle();
 					VentasCon ventaCon = new VentasCon();
-					if (ventaConsUnidad.getId() != 0) {				
+					if (ventaConsUnidad.getId() != 0) {	
+						log.info("ventaConsUnidad.getId(): " + ventaConsUnidad.getId());
 						ventaConDetalle = ventaConsignacionDetalleDAO.get(ventaConsUnidad.getVentasConsDetalle().getId());
 						ventaCon = ventaConsignacionDAO.get(ventaConDetalle.getVentasCon().getId());
 						if (ventaCon.getCliente().getId() == idCliente) {
@@ -923,7 +970,8 @@ public class BeanDevolucion implements Serializable {
 					ConsignacionsDetalleUnidad consignacionUnidad = consignacionDetalleUnidadDAO.get(nroImei);
 					ConsignacionsDetalle consignacionDetalle = new ConsignacionsDetalle();
 					Consignacion consignacion = new Consignacion();
-					if (consignacionUnidad.getId() != 0) {						
+					if (consignacionUnidad.getId() != 0) {	
+		                log.info("consignacionUnidad.getId(): " + consignacionUnidad.getId());
 						consignacionDetalle = consignacionDetalleDAO.get(consignacionUnidad.getConsignacionsDetalle().getId());
 						consignacion = consignacionDAO.get(consignacionDetalle.getConsignacion().getId());
 						if (consignacion.getCliente().getId() == idCliente) {
@@ -935,6 +983,7 @@ public class BeanDevolucion implements Serializable {
 					VentasDetalle ventaDetalle = new VentasDetalle();
 					Venta venta = new Venta();
 					if (ventaUnidad.getId() != 0) {
+						log.info("ventaUnidad.getId(): " + ventaUnidad.getId());
 						ventaDetalle = ventaDetalleDAO.get(ventaUnidad.getVentasDetalle().getId());
 						venta = ventaDAO.get(ventaDetalle.getVenta().getId());
 						if (venta.getCliente().getId() == idCliente) {
@@ -955,6 +1004,7 @@ public class BeanDevolucion implements Serializable {
 						Cliente cli = clienteDAO.get(idCliente);
 						String telefono = prod.getNombre();
 						//Baja de la Venta de Consignacion
+						log.info("Baja de la Venta de Consignacion");
 						if (enVentaCons) {
 							float precioUnidad = ventaConsUnidad.getPrecioVenta();
 							//VentasConsDetalle ventaConsDetalle = ventaConsignacionDetalleDAO.get(ventaConsUnidad.getVentasConsDetalle().getId());
@@ -966,6 +1016,7 @@ public class BeanDevolucion implements Serializable {
 							idVentaCon = ventaCon.getId();
 							vendido = true;
 							//Baja de venta, para realizar el alta si la venta tiene mas de un item
+							log.info("Baja de venta, para realizar el alta si la venta tiene mas de un item");
 							CuentaCorriente cuenta = new CuentaCorriente();
 							CuentasCorrientesCliente ccCliente = new CuentasCorrientesCliente();
 							ccCliente.setIdMovimiento(ventaCon.getId());
@@ -975,6 +1026,7 @@ public class BeanDevolucion implements Serializable {
 								actualizo = false;
 							}
 							//Actualizo producto le sumo uno a en_consignacion
+							log.info("Actualizo producto le sumo uno a en_consignacion");
 							int enConsig = prod.getEnConsignacion();
 							enConsig = enConsig + 1;
 							prod.setEnConsignacion(enConsig);
@@ -983,6 +1035,7 @@ public class BeanDevolucion implements Serializable {
 								actualizo = false;
 							}
 							//Actualizo Unidad de venta de consignacion
+							log.info("Actualizo Unidad de venta de consignacion");
 							ventaConsUnidad.setEliminado(true);
 							int updUnidad = ventaConsignacionDetalleUnidadDAO.update(ventaConsUnidad);
 							if (updUnidad == 0) {
@@ -1018,10 +1071,11 @@ public class BeanDevolucion implements Serializable {
 									actualizo = false;
 								}
 								//Insercion de CC
+								log.info("Insercion de CC");
 								ccCliente = new CuentasCorrientesCliente();							
 								ccCliente.setCliente(cli);
 								ccCliente.setDebe(precioVenta);
-								ccCliente.setDetalle("Venta Consignación nro: " + idVentaCon);				
+								ccCliente.setDetalle("Venta Consignacion nro: " + idVentaCon);				
 								ccCliente.setFecha(ventaCon.getFecha());
 								ccCliente.setIdMovimiento(idVentaCon);
 								ccCliente.setMonto(precioVenta);
@@ -1031,6 +1085,7 @@ public class BeanDevolucion implements Serializable {
 							}
 						}
 						//Baja de la Consignacion
+						log.info("Baja de la Consignacion");
 						if (enConsignacion) {
 //							precioVenta = consignacionUnidad.getPrecioVenta();
 							float precioUnidad = consignacionUnidad.getPrecioLista();
@@ -1041,12 +1096,14 @@ public class BeanDevolucion implements Serializable {
 							int cantidadDetalle = consignacionDetalle.getCantidad() - 1;						
 							int idConsignacion = consignacion.getId();
 							//Obtengo parametros que se guardan en Devolucione
+							log.info("Obtengo parametros que se guardan en Devolucione");
 							idMovimiento = idConsignacion;
 							nombreMov = "Consignacion";
 							precioU = precioUnidad;	
 							fechaAltaConsig = consignacionUnidad.getFechaAlta();
 							fechaVentaConsig = consignacionUnidad.getFechaVenta();
 							//Actualizo producto, en este caso le sumo uno al stock y le resto uno a consignacion
+							log.info("Actualizo producto, en este caso le sumo uno al stock y le resto uno a consignacion");
 							int stock = prod.getStock() + 1;
 							int enConsig = prod.getEnConsignacion() - 1;
 							prod.setStock(stock);
@@ -1056,6 +1113,7 @@ public class BeanDevolucion implements Serializable {
 								actualizo = false;
 							}
 							//Actualizo Unidad en consignacion
+							log.info("Actualizo Unidad en consignacion");
 							consignacionUnidad.setEliminado(true);
 							consignacionUnidad.setEnabled(false);
 							consignacionUnidad.setFechaBaja(new Date());
@@ -1096,6 +1154,7 @@ public class BeanDevolucion implements Serializable {
 						}
 						//Baja de la Venta
 						if (enVenta) {
+							log.info("Baja de la Venta");
 							float precioUnidad = ventaUnidad.getPrecioVenta();
 							//VentasDetalle ventaDetalle = ventaDetalleDAO.get(ventaUnidad.getVentasDetalle().getId());
 							//Venta venta = ventaDAO.get(ventaDetalle.getVenta().getId());
@@ -1108,6 +1167,7 @@ public class BeanDevolucion implements Serializable {
 							nombreMov = "Venta";
 							precioU = precioUnidad;
 							//Baja de venta, para realizar el alta si la venta tiene mas de un item
+							log.info("Baja de venta, para realizar el alta si la venta tiene mas de un item");
 							CuentaCorriente cuenta = new CuentaCorriente();
 							CuentasCorrientesCliente ccCliente = new CuentasCorrientesCliente();	
 							if(venta.getTipo().equals("c.c.")){
@@ -1131,6 +1191,7 @@ public class BeanDevolucion implements Serializable {
 								}
 							}
 							//Actualizo stock de producto
+							log.info("Actualizo stock de producto");
 							int stock = prod.getStock() + 1;
 							prod.setStock(stock);
 							int updateProd = productoDAO.update(prod);
@@ -1138,6 +1199,7 @@ public class BeanDevolucion implements Serializable {
 								actualizo = false;
 							}
 							//Actualizo unidad de venta
+							log.info("Actualizo unidad de venta");
 							ventaUnidad.setEliminado(true);							
 							int updUnidad = ventaDetalleUnidadDAO.update(ventaUnidad);
 							if (updUnidad == 0) {
@@ -1174,6 +1236,7 @@ public class BeanDevolucion implements Serializable {
 									actualizo = false;
 								}
 								//Insercion de CC
+								log.info("Insercion de CC");
 								ccCliente = new CuentasCorrientesCliente();	
 								ccCliente.setCliente(cli);
 								ccCliente.setDebe(precioVenta);
@@ -1185,7 +1248,9 @@ public class BeanDevolucion implements Serializable {
 								ccCliente.setUsuario(usuario);
 								cuenta.insertarCC(ccCliente);
 								//Si es una venta de contado, inserto el pago en CC y en Caja
+								log.info("Si es una venta de contado, inserto el pago en CC y en Caja");
 								if (venta.getTipo().equals("ctdo.")) {
+									log.info("tipo venta: " + venta.getTipo());
 									ccCliente = new CuentasCorrientesCliente();								
 									ccCliente.setCliente(cli);
 									ccCliente.setDetalle("Pago de contado - Venta nro: " + idVenta);
@@ -1219,6 +1284,7 @@ public class BeanDevolucion implements Serializable {
 							unidadMovil.setUsuario3(usuario);
 							int updtUnidad = unidadMovilDAO.update(unidadMovil);
 							if (updtUnidad != 0) {
+								log.info("updtUnidad :" + updtUnidad);
 								devolucione.setFechaAltaConsignacion(fechaAltaConsig);
 								devolucione.setFechaVentaConsignacion(fechaVentaConsig);
 								devolucione.setIdConVenta(idVentaCon);
@@ -1235,39 +1301,52 @@ public class BeanDevolucion implements Serializable {
 								devolucione.setVendido(vendido);
 								int idDevolucion = devolucionDAO.insertar(devolucione);
 								if (idDevolucion != 0) {
+									
+									log.info("idDevolucion: " + idDevolucion);
+									
+									HistorialMovil hm = new HistorialMovil();
+									hm.setFecha(new Date());
+									hm.setUsuario(usuario);
+									hm.setImei(unidadMovil.getNroImei());
+									hm.setTipo("DEVOLUCION");
+									hm.setDescripcion("Devolucion: " + cli.getApellidoNombre());
+									hm.setIdMovimiento(idDevolucion);
+									log.info("Tipo de movimiento (historial): " + hm.getTipo());
+									historialMovilDAO.insert(hm);
+									
 									idCliente = 0;
 									idProducto = 0;
 									listaDevoluciones = new ArrayList<Devolucione>();
 									filteredDevoluciones = new ArrayList<Devolucione>();
 									listaDevoluciones = devolucionDAO.getLista(true);
 									filteredDevoluciones = listaDevoluciones;
-									msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Devolución registrada!", null);
+									msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Devolucion registrada!", null);
 									retorno = "devoluciones";
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la Devolución!", null);
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la Devolucion!", null);
 								}
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la Unidad Móvil!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la Unidad Movil!", null);
 							}
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al reversar el movimiento correspondiente a la Unidad Móvil! "
-									+ "Contáctese con su proveedor de servicio!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al reversar el movimiento correspondiente a la Unidad Movil! "
+									+ "Contactese con su proveedor de servicio!", null);
 						}
 					} else {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se pudo registrar la Devolución, el Cliente no coincide con el movimiento "
-						+ "relacionado al Móvil!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se pudo registrar la Devolucion, el Cliente no coincide con el movimiento "
+						+ "relacionado al Movil!", null);
 					}
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede registrar la Devolución, el Móvil se encuentra en Garantía!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede registrar la Devolucion, el Movil se encuentra en Garantia!", null);
 				}
 			} else {
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se pudo registrar la Devolución, la fecha, el cliente "
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se pudo registrar la Devolucion, la fecha, el cliente "
 						+ "y el nro de imei son obligatorios!", null);				
 			}			
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return retorno;
 		} catch (Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al guardar la Devolución!" 
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrio un error al guardar la Devolucion!" 
 			+ " Error original: " + e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";

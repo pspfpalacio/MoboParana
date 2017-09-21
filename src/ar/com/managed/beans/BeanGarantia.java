@@ -14,6 +14,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import ar.com.clases.CuentaCorriente;
 import ar.com.clases.MovimientoCaja;
 import ar.com.clases.Reporte;
@@ -30,6 +32,7 @@ import dao.interfaces.DAOCuota;
 import dao.interfaces.DAOCuotaVenta;
 import dao.interfaces.DAOGarantiasCliente;
 import dao.interfaces.DAOGarantiasProveedor;
+import dao.interfaces.DAOHistorialMovil;
 import dao.interfaces.DAOListaPrecio;
 import dao.interfaces.DAOProducto;
 import dao.interfaces.DAOProveedor;
@@ -55,6 +58,7 @@ import model.entity.Cuota;
 import model.entity.CuotasVenta;
 import model.entity.GarantiasCliente;
 import model.entity.GarantiasProveedore;
+import model.entity.HistorialMovil;
 import model.entity.ListaPrecio;
 import model.entity.ListaPrecioProducto;
 import model.entity.Producto;
@@ -78,6 +82,8 @@ public class BeanGarantia implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final static Logger log = Logger.getLogger(BeanGarantia.class);
 	
 	@ManagedProperty(value = "#{BeanGarantiasClienteDAO}")
 	private DAOGarantiasCliente garantiasClienteDAO;
@@ -147,6 +153,9 @@ public class BeanGarantia implements Serializable {
 	
 	@ManagedProperty(value = "#{BeanTecnicoDAO}")
 	private DAOTecnico tecnicoDAO;
+	
+	@ManagedProperty(value = "#{BeanHistorialMovilDAO}")
+	private DAOHistorialMovil historialMovilDAO;
 	
 	private List<GarantiasCliente> listaGarantiasClientes;
 	private List<GarantiasCliente> filteredGarantiasClientes;
@@ -369,6 +378,14 @@ public class BeanGarantia implements Serializable {
 
 	public void setTecnicoDAO(DAOTecnico tecnicoDAO) {
 		this.tecnicoDAO = tecnicoDAO;
+	}
+	
+	public DAOHistorialMovil getHistorialMovilDAO() {
+		return historialMovilDAO;
+	}
+
+	public void setHistorialMovilDAO(DAOHistorialMovil historialMovilDAO) {
+		this.historialMovilDAO = historialMovilDAO;
 	}
 
 	public List<GarantiasCliente> getListaGarantiasClientes() {
@@ -689,7 +706,7 @@ public class BeanGarantia implements Serializable {
 	}
 	
 	public String goNuevaGarantiaCliente(){
-		headerText = "Nuevo Ticket de Garantía";
+		headerText = "Nuevo Ticket de Garantia";
 		abrir = true;
 		cerrar = false;
 		garantiasCliente = new GarantiasCliente();
@@ -703,7 +720,7 @@ public class BeanGarantia implements Serializable {
 	}
 	
 	public String goNuevaGarantiaProveedor(){
-		headerText = "Nuevo Ticket de Garantía";
+		headerText = "Nuevo Ticket de Garantia";
 		abrir = true;
 		cerrar = false;
 		concepto = false;
@@ -714,7 +731,7 @@ public class BeanGarantia implements Serializable {
 	}
 	
 	public String goEditarGarantiaCliente(GarantiasCliente gCliente) {
-		headerText = "Editar Ticket de Garantía";		
+		headerText = "Editar Ticket de Garantia";		
 		garantiasCliente = new GarantiasCliente();
 		producto = new Producto();
 		unidadMovil = new UnidadMovil();
@@ -730,7 +747,7 @@ public class BeanGarantia implements Serializable {
 	}
 	
 	public String goCerrarGarantiaCliente(GarantiasCliente garantCli){
-		headerText = "Cerrar Ticket de Garantía";
+		headerText = "Cerrar Ticket de Garantia";
 		garantiasCliente = new GarantiasCliente();
 		producto = new Producto();
 		cliente = new Cliente();
@@ -748,7 +765,7 @@ public class BeanGarantia implements Serializable {
 	}
 	
 	public String goCerrarGarantiaProveedor(GarantiasProveedore garantProv){
-		headerText = "Cerrar Ticket de Garantía";
+		headerText = "Cerrar Ticket de Garantia";
 		garantiasProveedor = new GarantiasProveedore();
 		producto = new Producto();
 		unidadMovil = new UnidadMovil();
@@ -763,7 +780,7 @@ public class BeanGarantia implements Serializable {
 		idResolucion = 0;
 		garantiasProveedor = garantProv;
 		garantiasProveedor.setFallaDefinitiva(garantProv.getFalla());
-		if (garantProv.getConcepto().equals("Entrega por reparación")) {
+		if (garantProv.getConcepto().equals("Entrega por reparacion")) {
 			porReparacion = true;
 		} else {
 			porGarantia = true;
@@ -808,9 +825,9 @@ public class BeanGarantia implements Serializable {
 					garanCliente.setUsuario2(usuario);
 					int updGarantia = garantiasClienteDAO.update(garanCliente);
 					if (updGarantia != 0) {
-						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 					} else {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 					}
 				}
 				
@@ -897,15 +914,15 @@ public class BeanGarantia implements Serializable {
 										
 										int updGarantia = garantiasClienteDAO.update(garanCliente);
 										if (updGarantia != 0) {
-											msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+											msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 										}
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 									}								
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Venta correspondiente!", null);
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Venta correspondiente!", null);
 								}
 							} else {
 								Cuota cuota = cuotaDAO.get(imeiReintegro);
@@ -1057,12 +1074,12 @@ public class BeanGarantia implements Serializable {
 												filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
 												listaGarantiasClientes = garantiasClienteDAO.getLista();
 												filteredGarantiasClientes = listaGarantiasClientes;
-												msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+												msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 											} else {
-												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 											}
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 										}								
 									} else {
 										ListaPrecioProducto precioProducto = new ListaPrecioProducto();
@@ -1203,24 +1220,24 @@ public class BeanGarantia implements Serializable {
 														filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
 														listaGarantiasClientes = garantiasClienteDAO.getLista();
 														filteredGarantiasClientes = listaGarantiasClientes;
-														msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+														msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 													} else {
-														msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+														msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 													}
 												} else {
-													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 												}
 											} else {
-												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el cliente no posee Precio "
+												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantia, el cliente no posee Precio "
 														+ "para ese Producto en la Lista de Precio", null);
 											}									
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el cliente no posee "
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantia, el cliente no posee "
 													+ "Lista de Precio", null);
 										}									
 									}
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar la baja de garantía, el Móvil de Reintegro esta registrado en Cuotas, "
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar la baja de garantia, el Movil de Reintegro esta registrado en Cuotas, "
 											+ "realice las bajas de las mismas primero!", null);
 								}								
 							}
@@ -1267,15 +1284,15 @@ public class BeanGarantia implements Serializable {
 										
 										int updGarantia = garantiasClienteDAO.update(garanCliente);
 										if (updGarantia != 0) {
-											msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+											msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 										}
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 									}								
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Consignación correspondiente!", null);
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Consignacion correspondiente!", null);
 								}
 							} else {
 								Cuota cuota = cuotaDAO.get(imeiReintegro);
@@ -1372,12 +1389,12 @@ public class BeanGarantia implements Serializable {
 												filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
 												listaGarantiasClientes = garantiasClienteDAO.getLista();
 												filteredGarantiasClientes = listaGarantiasClientes;
-												msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+												msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 											} else {
-												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 											}
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 										}
 									} else {
 										ListaPrecioProducto precioProducto = new ListaPrecioProducto();
@@ -1464,24 +1481,24 @@ public class BeanGarantia implements Serializable {
 														filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
 														listaGarantiasClientes = garantiasClienteDAO.getLista();
 														filteredGarantiasClientes = listaGarantiasClientes;
-														msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+														msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 													} else {
-														msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+														msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 													}
 												} else {
-													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 												}
 											} else {
-												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el cliente no posee Precio "
+												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantia, el cliente no posee Precio "
 														+ "para ese Producto en la Lista de Precio", null);
 											}									
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el cliente no posee "
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantia, el cliente no posee "
 													+ "Lista de Precio", null);
 										}
 									}
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar la baja de garantía, el Móvil de Reintegro esta registrado en Cuotas, "
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar la baja de garantia, el Movil de Reintegro esta registrado en Cuotas, "
 											+ "realice las bajas de las mismas primero!", null);
 								}																
 							}
@@ -1519,15 +1536,15 @@ public class BeanGarantia implements Serializable {
 										
 										int updGarantia = garantiasClienteDAO.update(garanCliente);
 										if (updGarantia != 0) {
-											msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+											msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 										}
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 									}
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Venta de Consignación correspondiente!", null);
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Venta de Consignacion correspondiente!", null);
 								}
 							} else {
 								Cuota cuota = cuotaDAO.get(imeiReintegro);
@@ -1595,7 +1612,7 @@ public class BeanGarantia implements Serializable {
 										ccCliente = new CuentasCorrientesCliente();							
 										ccCliente.setCliente(cli);
 										ccCliente.setDebe(montoActual);
-										ccCliente.setDetalle("Venta Consignación nro: " + idVenta);				
+										ccCliente.setDetalle("Venta Consignacion nro: " + idVenta);				
 										ccCliente.setFecha(ventasCon.getFecha());
 										ccCliente.setIdMovimiento(idVenta);
 										ccCliente.setMonto(montoActual);
@@ -1647,12 +1664,12 @@ public class BeanGarantia implements Serializable {
 												filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
 												listaGarantiasClientes = garantiasClienteDAO.getLista();
 												filteredGarantiasClientes = listaGarantiasClientes;
-												msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+												msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 											} else {
-												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 											}
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 										}
 									} else {
 										ListaPrecioProducto precioProducto = new ListaPrecioProducto();
@@ -1709,7 +1726,7 @@ public class BeanGarantia implements Serializable {
 												ccCliente = new CuentasCorrientesCliente();							
 												ccCliente.setCliente(cli);
 												ccCliente.setDebe(montoActual);
-												ccCliente.setDetalle("Venta Consignación nro: " + idVenta);				
+												ccCliente.setDetalle("Venta Consignacion nro: " + idVenta);				
 												ccCliente.setFecha(ventasCon.getFecha());
 												ccCliente.setIdMovimiento(idVenta);
 												ccCliente.setMonto(montoActual);
@@ -1761,36 +1778,36 @@ public class BeanGarantia implements Serializable {
 														filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
 														listaGarantiasClientes = garantiasClienteDAO.getLista();
 														filteredGarantiasClientes = listaGarantiasClientes;
-														msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+														msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 													} else {
-														msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+														msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 													}
 												} else {
-													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 												}
 												
 											} else {
-												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el cliente no posee Precio "
+												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantia, el cliente no posee Precio "
 														+ "para ese Producto en la Lista de Precio", null);
 											}									
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el cliente no posee "
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantia, el cliente no posee "
 													+ "Lista de Precio", null);
 										}
 									}
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar la baja de garantía, el Móvil de Reintegro esta registrado en Cuotas, "
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar la baja de garantia, el Movil de Reintegro esta registrado en Cuotas, "
 											+ "realice las bajas de las mismas primero!", null);
 								}															
 							}
 						}
 					} else {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede registrar la baja del ticket, el nro imei que esta en falla, ha sido asignado a un movimiento (Venta o Consignación)!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede registrar la baja del ticket, el nro imei que esta en falla, ha sido asignado a un movimiento (Venta o Consignacion)!", null);
 					}
 				}
 				
 				if (garanCliente.getResolucion().equals(resolucion3)) {
-					String accion = "Ninguna Acción";
+					String accion = "Ninguna Accion";
 					
 					if (garanCliente.getAccionRealizar().equals(accion)) {
 						String imeiFalla = garanCliente.getImeiFalla();
@@ -1809,12 +1826,12 @@ public class BeanGarantia implements Serializable {
 							
 							int updGarantia = garantiasClienteDAO.update(garanCliente);					
 							if (updGarantia != 0) {
-								msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 							}
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Unidad Móvil!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Unidad Movil!", null);
 						}
 						
 					} else {
@@ -2178,7 +2195,7 @@ public class BeanGarantia implements Serializable {
 								ccCliente = new CuentasCorrientesCliente();	
 								ccCliente.setCliente(cli);
 								ccCliente.setDebe(total);
-								ccCliente.setDetalle("Venta Consignación nro: " + idVentaCon);				
+								ccCliente.setDetalle("Venta Consignacion nro: " + idVentaCon);				
 								ccCliente.setFecha(ventCon.getFecha());
 								ccCliente.setIdMovimiento(idVentaCon);
 								ccCliente.setMonto(total);
@@ -2224,7 +2241,7 @@ public class BeanGarantia implements Serializable {
 								//Insercion de CC
 								ccCliente.setCliente(cli);
 								ccCliente.setDebe(precioU);
-								ccCliente.setDetalle("Venta Consignación nro: " + idVentaCon);				
+								ccCliente.setDetalle("Venta Consignacion nro: " + idVentaCon);				
 								ccCliente.setFecha(ventCon.getFecha());
 								ccCliente.setIdMovimiento(idVentaCon);
 								ccCliente.setMonto(precioU);
@@ -2250,17 +2267,17 @@ public class BeanGarantia implements Serializable {
 							
 							int updGarantia = garantiasClienteDAO.update(garanCliente);					
 							if (updGarantia != 0) {
-								msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "OError al registrar la baja del Ticket!", null);
 							}
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Unidad Móvil!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Unidad Movil!", null);
 						}
 					}
 				}
 			} catch (Exception e) {
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al iniciar el Ticket de Garantía. "
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al iniciar el Ticket de Garantia. "
 						+ "Error original: " + e.getMessage(), null);
 			}
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -2277,15 +2294,15 @@ public class BeanGarantia implements Serializable {
 					garanCliente.setUsuario2(usuario);
 					int updtGarantia = garantiasClienteDAO.update(garanCliente);
 					if (updtGarantia != 0) {
-						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 					} else {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al dar de baja el Ticket de Garantía! Inténtelo nuevamente!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al dar de baja el Ticket de Garantia! Intente nuevamente!", null);
 					}
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al dar de baja el Ticket de Garantía! Inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al dar de baja el Ticket de Garantia! Intente nuevamente!", null);
 				}
 			} catch(Exception e) {
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al iniciar el Ticket de Garantía. "
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al iniciar el Ticket de Garantia. "
 						+ "Error original: " + e.getMessage(), null);
 			}	
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -2295,7 +2312,7 @@ public class BeanGarantia implements Serializable {
 	public void bajaProveedor(GarantiasProveedore garanProveedor) {
 		if (garanProveedor.getFinalizado()) {
 			FacesMessage msg = null;
-			if (garanProveedor.getConcepto().equals("Entrega por reparación")) {
+			if (garanProveedor.getConcepto().equals("Entrega por reparacion")) {
 				String imei = garanProveedor.getImeiFalla();
 				int idGarantia = garanProveedor.getId();
 				
@@ -2316,7 +2333,7 @@ public class BeanGarantia implements Serializable {
 				if (updGarantia != 0 && updtMovil != 0) {
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Ticket registrada!", null);
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 				}								
 			} else {
 				String resolucion1 = "Mismo Equipo";
@@ -2330,7 +2347,7 @@ public class BeanGarantia implements Serializable {
 					if (updtGarantia != 0) {
 						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Ticket registrada!", null);
 					} else {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 					}
 				}
 				if (garanProveedor.getResolucion().equals(resolucion2)) {
@@ -2385,14 +2402,14 @@ public class BeanGarantia implements Serializable {
 								if (updGarantia != 0) {
 									msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Ticket registrado!", null);
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la baja del Ticket!", null);
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la baja del Ticket!", null);
 								}
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al actualizar el/los movimientos "
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar el/los movimientos "
 										+ "asociados a la Unidad Movil", null);
 							}	
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al actualizar la Unidad Móvil asociada!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Unidad Movil asociada!", null);
 						}
 					} else {
 						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de imei ya se encuentra registrado al producto " 
@@ -2400,7 +2417,7 @@ public class BeanGarantia implements Serializable {
 					}
 				}
 				if (garanProveedor.getResolucion().equals(resolucion3)) {
-					String accion = "Ninguna Acción";
+					String accion = "Ninguna Accion";
 					if (garanProveedor.equals(accion)) {
 						String imeiFalla = garanProveedor.getImeiFalla();
 						UnidadMovil unidad = unidadMovilDAO.get(imeiFalla);
@@ -2416,10 +2433,10 @@ public class BeanGarantia implements Serializable {
 							if (updGarantia != 0) {
 								msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Ticket registrado!", null);
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la Baja del Ticket!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la Baja del Ticket!", null);
 							}
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al actualizar el Móvil!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar el Movil!", null);
 						}
 					} else {
 						String imeiFalla = garanProveedor.getImeiFalla();
@@ -2453,17 +2470,17 @@ public class BeanGarantia implements Serializable {
 									if (updtCuenta != 0) {
 										msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Ticket registrado!", null);
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la Baja del Movimiento en Cuenta Corriente!", null);
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la Baja del Movimiento en Cuenta Corriente!", null);
 									}
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la Baja del Ticket!", null);
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la Baja del Ticket!", null);
 								}
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la Unidad Móvil!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la Unidad Movil!", null);
 							}
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el movimiento correspondiente a la Unidad Móvil! "
-									+ "Contáctese con su proveedor de servicio!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el movimiento correspondiente a la Unidad Movil! "
+									+ "Caontacte a su proveedor de servicio!", null);
 						}
 					}					
 				}
@@ -2482,15 +2499,15 @@ public class BeanGarantia implements Serializable {
 					garanProveedor.setUsuario2(usuario);
 					int updtGarantia = garantiasProveedorDAO.update(garanProveedor);
 					if (updtGarantia != 0) {
-						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró la baja del Ticket de Garantía!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registro la baja del Ticket de Garantia!", null);
 					} else {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al dar de baja el Ticket de Garantía! Inténtelo nuevamente!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al dar de baja el Ticket de Garantia! Intente nuevamente!", null);
 					}
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al dar de baja el Ticket de Garantía! Inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al dar de baja el Ticket de Garantia! Intente nuevamente!", null);
 				}
 			} catch (Exception e) {
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al iniciar el Ticket de Garantía. "
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al iniciar el Ticket de Garantia. "
 						+ "Error original: " + e.getMessage(), null);
 			}
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -2517,7 +2534,7 @@ public class BeanGarantia implements Serializable {
 		garantiasProveedor = garanProveedor;
 		opcion2 = false;
 		opcion3 = false;
-		if (garanProveedor.getConcepto().equals("Entrega por garantía")) {
+		if (garanProveedor.getConcepto().equals("Entrega por garantia")) {
 			if (garanProveedor.getFinalizado()) {
 				if (garanProveedor.getResolucion().equals("Cambio de Equipo")) {
 					opcion2 = true;
@@ -2621,12 +2638,12 @@ public class BeanGarantia implements Serializable {
 					}
 					if (existeC && !mismoCliente) {
 						paso = false;
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Cliente no corresponde a la Consignación "
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Cliente no corresponde a la Consignacion "
 								+ "asociada a ese Nro de Imei", null);
 					}
 					if (existeVC && !mismoCliente) {
 						paso = false;
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Cliente no corresponde a la Venta de Consignación "
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Cliente no corresponde a la Venta de Consignacion "
 								+ "asociada a ese Nro de Imei", null);
 					}
 					if (paso) {
@@ -2651,13 +2668,13 @@ public class BeanGarantia implements Serializable {
 								filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
 								listaGarantiasClientes = garantiasClienteDAO.getLista();
 								filteredGarantiasClientes = listaGarantiasClientes;
-								msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Garantía registrada!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Garantia registrada!", null);
 								retorno = "garantiasclientes";
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket de garantía.", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket de garantia.", null);
 							}
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Unidad Móvil.", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Unidad Movil.", null);
 						}						
 					}
 				} else {
@@ -2670,7 +2687,7 @@ public class BeanGarantia implements Serializable {
 					mensaje = mensaje + "Fecha de Ingreso, ";
 				}
 				if (unidadMovil.getId() == 0) {
-					mensaje = mensaje + "Unidad Móvil, ";
+					mensaje = mensaje + "Unidad Movil, ";
 				}
 				if (idCliente == 0) {
 					mensaje = mensaje + "Cliente, ";
@@ -2679,13 +2696,13 @@ public class BeanGarantia implements Serializable {
 					mensaje = mensaje + "Falla, ";
 				}
 				if (idTecnico == 0) {
-					mensaje = mensaje + "Técnico.";
+					mensaje = mensaje + "Tecnico.";
 				}
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Los siguientes parámetros no pueden estar vacíos. "
-						+ "Parámetros: " + mensaje, null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Los siguientes datos son obligatorios. "
+						+ "Datos: " + mensaje, null);
 			}
 		} catch(Exception e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al iniciar el Ticket de Garantía. "
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al iniciar el Ticket de Garantia. "
 					+ "Error original: " + e.getMessage(), null);
 		}		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -2710,10 +2727,10 @@ public class BeanGarantia implements Serializable {
 					filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
 					listaGarantiasClientes = garantiasClienteDAO.getLista();
 					filteredGarantiasClientes = listaGarantiasClientes;
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Garantía registrada!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Garantia registrada!", null);
 					retorno = "garantiasclientes";
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket de garantía.", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket de garantia.", null);
 				}				
 			} else {
 				String mensaje = "";				
@@ -2721,13 +2738,13 @@ public class BeanGarantia implements Serializable {
 					mensaje = mensaje + "Falla, ";
 				}
 				if (idTecnico == 0) {
-					mensaje = mensaje + "Técnico.";
+					mensaje = mensaje + "Tecnico.";
 				}
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Los siguientes parámetros no pueden estar vacíos. "
-						+ "Parámetros: " + mensaje, null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Los siguientes datos son obligatorios. "
+						+ "Datos: " + mensaje, null);
 			}
 		} catch(Exception e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al iniciar el Ticket de Garantía. "
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al iniciar el Ticket de Garantia. "
 					+ "Error original: " + e.getMessage(), null);
 		}		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -2744,8 +2761,9 @@ public class BeanGarantia implements Serializable {
 				boolean mismoProveedor = false;
 				String concep;
 				String nroImei = unidadMovil.getNroImei();
+				log.info("concepto: " + concepto);
 				if (concepto) {
-					concep = "Entrega por garantía";					
+					concep = "Entrega por garantia";					
 					Compra compra = new Compra();
 					ComprasDetalleUnidad compraUnidad = compraDetalleUnidadDAO.get(nroImei);
 					if (compraUnidad.getId() != 0) {
@@ -2758,7 +2776,7 @@ public class BeanGarantia implements Serializable {
 						}
 					}
 				} else {
-					concep = "Entrega por reparación";
+					concep = "Entrega por reparacion";
 					existeC = true;
 					mismoProveedor = true;
 				}
@@ -2775,6 +2793,7 @@ public class BeanGarantia implements Serializable {
 						unidadMovil.setEnGarantiaProveedor(true);
 						int updtMovil = unidadMovilDAO.update(unidadMovil);
 						if (updtMovil != 0) {
+							log.info("updtMovil: " + updtMovil);
 							garantiasProveedor.setConcepto(concep);
 							garantiasProveedor.setEstado(true);
 							garantiasProveedor.setFechaAlta(new Date());
@@ -2786,19 +2805,30 @@ public class BeanGarantia implements Serializable {
 							garantiasProveedor.setUsuario1(usuario);
 							int idGarantia = garantiasProveedorDAO.insertar(garantiasProveedor);
 							if (idGarantia != 0) {
+								log.info("idGarantia: " + idGarantia);
+								HistorialMovil hm = new HistorialMovil();
+								hm.setFecha(new Date());
+								hm.setUsuario(usuario);
+								hm.setImei(nroImei);
+								hm.setTipo("GARANTIA PROVEEDOR");
+								hm.setDescripcion("Apertura tiket garantia: " + idGarantia);
+								hm.setIdMovimiento(idGarantia);
+								log.info("Tipo de movimiento (historial): " + hm.getTipo());
+								historialMovilDAO.insert(hm);
+								
 								idProveedor = 0;
 								idProducto = 0;
 								listaGarantiasProveedores = new ArrayList<GarantiasProveedore>();
 								filteredGarantiasProveedores = new ArrayList<GarantiasProveedore>();
 								listaGarantiasProveedores = garantiasProveedorDAO.getLista();
 								filteredGarantiasProveedores = listaGarantiasProveedores;
-								msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Garantía registrada!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Garantia registrada!", null);
 								retorno = "garantiasproveedores";
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket de garantía.", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket de garantia.", null);
 							}
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Unidad Móvil.", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Unidad Movil.", null);
 						}						
 					}
 				} else {
@@ -2811,7 +2841,7 @@ public class BeanGarantia implements Serializable {
 					mensaje = mensaje + "Fecha de Ingreso, ";
 				}
 				if (unidadMovil.getId() == 0) {
-					mensaje = mensaje + "Unidad Móvil, ";
+					mensaje = mensaje + "Unidad Movil, ";
 				}
 				if (idProveedor == 0) {
 					mensaje = mensaje + "Proveedor, ";
@@ -2819,11 +2849,11 @@ public class BeanGarantia implements Serializable {
 				if (garantiasProveedor.getFalla().isEmpty() || garantiasProveedor.getFalla() == null) {
 					mensaje = mensaje + "Falla, ";
 				}
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Los siguientes parámetros no pueden estar vacíos. "
-						+ "Parámetros: " + mensaje, null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Los siguientes datos son obligatorios. "
+						+ "Datos: " + mensaje, null);
 			}
 		} catch(Exception e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al iniciar el Ticket de Garantía. "
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al iniciar el Ticket de Garantia. "
 					+ "Error original: " + e.getMessage(), null);
 		}		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -2855,6 +2885,17 @@ public class BeanGarantia implements Serializable {
 					garantiasCliente.setUsuario3(usuario);
 					int updGarantia = garantiasClienteDAO.update(garantiasCliente);
 					if (updGarantia != 0) {
+						log.info("updGarantia: " + updGarantia);
+						HistorialMovil hm = new HistorialMovil();
+						hm.setFecha(new Date());
+						hm.setUsuario(usuario);
+						hm.setImei(unidad.getNroImei());
+						hm.setTipo("GARANTIA CLIENTE");
+						hm.setDescripcion("Apertura tiket garantia: " + updGarantia);
+						hm.setIdMovimiento(updGarantia);
+						log.info("Tipo de movimiento (historial): " + hm.getTipo());
+						historialMovilDAO.insert(hm);
+						
 						listaGarantiasClientes = new ArrayList<GarantiasCliente>();
 						filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
 						listaGarantiasClientes = garantiasClienteDAO.getLista();
@@ -2862,10 +2903,10 @@ public class BeanGarantia implements Serializable {
 						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 						retorno = "garantiasclientes";
 					} else {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 					}
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Unidad Móvil!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Unidad Movil!", null);
 				}				
 			}
 			//Cambio de un equipo por otro
@@ -2953,6 +2994,28 @@ public class BeanGarantia implements Serializable {
 									garantiasCliente.setUsuario3(usuario);
 									int updGarantia = garantiasClienteDAO.update(garantiasCliente);
 									if (updGarantia != 0) {
+										
+										/*log.info("updGarantia: " + updGarantia);
+										HistorialMovil hm = new HistorialMovil();
+										hm.setFecha(new Date());
+										hm.setUsuario(usuario);
+										hm.setImei(unidadMovil.getNroImei());
+										hm.setTipo("GARANTIA CLIENTE");
+										hm.setDescripcion("Cierre tiket garantia: " + updGarantia);
+										hm.setIdMovimiento(updGarantia);
+										log.info("Tipo de movimiento (historial): " + hm.getTipo());
+										historialMovilDAO.insert(hm);
+										
+										hm = new HistorialMovil();
+										hm.setFecha(new Date());
+										hm.setUsuario(usuario);
+										hm.setImei(unidadFalla.getNroImei());
+										hm.setTipo("GARANTIA CLIENTE");
+										hm.setDescripcion("Cierre tiket garantia: " + updGarantia);
+										hm.setIdMovimiento(updGarantia);
+										log.info("Tipo de movimiento (historial): " + hm.getTipo());
+										historialMovilDAO.insert(hm);*/
+										
 										listaGarantiasClientes = new ArrayList<GarantiasCliente>();
 										filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
 										listaGarantiasClientes = garantiasClienteDAO.getLista();
@@ -2960,13 +3023,13 @@ public class BeanGarantia implements Serializable {
 										msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 										retorno = "garantiasclientes";
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 									}
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 								}								
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Venta correspondiente!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Venta correspondiente!", null);
 							}
 						} else {
 							Cuota cuota = cuotaDAO.get(imeiFalla);							
@@ -3113,6 +3176,28 @@ public class BeanGarantia implements Serializable {
 										garantiasCliente.setUsuario3(usuario);
 										int updGarantia = garantiasClienteDAO.update(garantiasCliente);
 										if (updGarantia != 0) {
+											
+											/*log.info("updGarantia: " + updGarantia);
+											HistorialMovil hm = new HistorialMovil();
+											hm.setFecha(new Date());
+											hm.setUsuario(usuario);
+											hm.setImei(unidadMovil.getNroImei());
+											hm.setTipo("GARANTIA CLIENTE");
+											hm.setDescripcion("Cierre tiket garantia: " + updGarantia);
+											hm.setIdMovimiento(updGarantia);
+											log.info("Tipo de movimiento (historial): " + hm.getTipo());
+											historialMovilDAO.insert(hm);
+											
+											hm = new HistorialMovil();
+											hm.setFecha(new Date());
+											hm.setUsuario(usuario);
+											hm.setImei(unidadFalla.getNroImei());
+											hm.setTipo("GARANTIA CLIENTE");
+											hm.setDescripcion("Cierre tiket garantia: " + updGarantia);
+											hm.setIdMovimiento(updGarantia);
+											log.info("Tipo de movimiento (historial): " + hm.getTipo());
+											historialMovilDAO.insert(hm);*/
+											
 											listaGarantiasClientes = new ArrayList<GarantiasCliente>();
 											filteredGarantiasClientes = new ArrayList<GarantiasCliente>();
 											listaGarantiasClientes = garantiasClienteDAO.getLista();
@@ -3120,10 +3205,10 @@ public class BeanGarantia implements Serializable {
 											msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 											retorno = "garantiasclientes";
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 										}
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 									}								
 								} else {
 									ListaPrecioProducto precioProducto = new ListaPrecioProducto();
@@ -3264,22 +3349,22 @@ public class BeanGarantia implements Serializable {
 													msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 													retorno = "garantiasclientes";
 												} else {
-													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 												}
 											} else {
-												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 											}
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el cliente no posee Precio "
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento, el cliente no posee Precio "
 													+ "para ese Producto en la Lista de Precio", null);
 										}									
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el cliente no posee "
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento, el cliente no posee "
 												+ "Lista de Precio", null);
 									}
 								}
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el Móvil con Falla esta registrado en Cuotas, "
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento, el Movil con Falla esta registrado en Cuotas, "
 										+ "realice las bajas de las mismas primero!", null);
 							}													
 						}
@@ -3336,13 +3421,13 @@ public class BeanGarantia implements Serializable {
 										msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 										retorno = "garantiasclientes";
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 									}
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 								}								
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Consignación correspondiente!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Consignacion correspondiente!", null);
 							}
 						} else {
 							Cuota cuota = cuotaDAO.get(imeiFalla);							
@@ -3448,10 +3533,10 @@ public class BeanGarantia implements Serializable {
 													msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 													retorno = "garantiasclientes";
 												} else {
-													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 												}
 											} else {
-												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 											}									
 										} else {
 											consignacionDetalleN.setCantidad(1);
@@ -3535,22 +3620,22 @@ public class BeanGarantia implements Serializable {
 													msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 													retorno = "garantiasclientes";
 												} else {
-													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 												}
 											} else {
-												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 											}
 										}
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el cliente no posee Precio "
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento, el cliente no posee Precio "
 												+ "para ese producto en la Lista de Precio", null);
 									}
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el cliente no posee "
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento, el cliente no posee "
 											+ "Lista de Precio", null);
 								}
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el Móvil con Falla esta registrado en Cuotas, "
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento, el Movil con Falla esta registrado en Cuotas, "
 										+ "realice las bajas de las mismas primero!", null);
 							}							
 						}
@@ -3596,13 +3681,13 @@ public class BeanGarantia implements Serializable {
 										msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 										retorno = "garantiasclientes";
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 									}
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 								}
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Venta de Consignación correspondiente!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Venta de Consignacion correspondiente!", null);
 							}
 						} else {
 							Cuota cuota = cuotaDAO.get(imeiFalla);							
@@ -3672,7 +3757,7 @@ public class BeanGarantia implements Serializable {
 									ccCliente = new CuentasCorrientesCliente();							
 									ccCliente.setCliente(cli);
 									ccCliente.setDebe(montoActual);
-									ccCliente.setDetalle("Venta Consignación nro: " + idVenta);				
+									ccCliente.setDetalle("Venta Consignacion nro: " + idVenta);				
 									ccCliente.setFecha(ventasCon.getFecha());
 									ccCliente.setIdMovimiento(idVenta);
 									ccCliente.setMonto(montoActual);
@@ -3726,10 +3811,10 @@ public class BeanGarantia implements Serializable {
 											msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 											retorno = "garantiasclientes";
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 										}
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 									}
 									
 								} else {
@@ -3787,7 +3872,7 @@ public class BeanGarantia implements Serializable {
 											ccCliente = new CuentasCorrientesCliente();							
 											ccCliente.setCliente(cli);
 											ccCliente.setDebe(montoActual);
-											ccCliente.setDetalle("Venta Consignación nro: " + idVenta);				
+											ccCliente.setDetalle("Venta Consignacion nro: " + idVenta);				
 											ccCliente.setFecha(ventasCon.getFecha());
 											ccCliente.setIdMovimiento(idVenta);
 											ccCliente.setMonto(montoActual);
@@ -3841,28 +3926,28 @@ public class BeanGarantia implements Serializable {
 													msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 													retorno = "garantiasclientes";
 												} else {
-													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+													msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 												}
 											} else {
-												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar las Unidades Móviles!", null);
+												msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar las Unidades Moviles!", null);
 											}
 										} else {
-											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el cliente no posee Precio "
+											msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento, el cliente no posee Precio "
 													+ "para ese Producto en la Lista de Precio", null);
 										}									
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el cliente no posee "
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento, el cliente no posee "
 												+ "Lista de Precio", null);
 									}
 								}
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento de garantía, el Móvil con Falla esta registrado en Cuotas, "
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede realizar el movimiento, el Movil con Falla esta registrado en Cuotas, "
 										+ "realice las bajas de las mismas primero!", null);
 							}							
 						}
 					}
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede cerrar el ticket, el nro imei ingresado para cambio corresponde a un movimiento(Venta o Consignación)", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede cerrar el ticket, el nro imei ingresado para cambio corresponde a un movimiento(Venta o Consignacion)", null);
 				}
 			}
 			//No posee arreglo, devolucion del dinero o devolucion sin accion
@@ -3883,7 +3968,7 @@ public class BeanGarantia implements Serializable {
 					unidMovil.setUsuario3(usuario);
 					int updtMovil = unidadMovilDAO.update(unidMovil);
 					if (updtMovil != 0) {
-						garantiasCliente.setAccionRealizar("Ninguna Acción");
+						garantiasCliente.setAccionRealizar("Ninguna Accion");
 						garantiasCliente.setFechaMod(new Date());
 						garantiasCliente.setFinalizado(true);
 						garantiasCliente.setImeiReintegro(nroImei);
@@ -3900,10 +3985,10 @@ public class BeanGarantia implements Serializable {
 							msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 							retorno = "garantiasclientes";
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 						}
 					} else {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Unidad Móvil!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Unidad Movil!", null);
 					}					
 				} else {
 					boolean actualizo = true;
@@ -4085,7 +4170,7 @@ public class BeanGarantia implements Serializable {
 							ccCliente = new CuentasCorrientesCliente();							
 							ccCliente.setCliente(cli);
 							ccCliente.setDebe(precioVenta);
-							ccCliente.setDetalle("Venta Consignación nro: " + idVentaCon);				
+							ccCliente.setDetalle("Venta Consignacion nro: " + idVentaCon);				
 							ccCliente.setFecha(ventaCon.getFecha());
 							ccCliente.setIdMovimiento(idVentaCon);
 							ccCliente.setMonto(precioVenta);
@@ -4196,21 +4281,21 @@ public class BeanGarantia implements Serializable {
 								msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 								retorno = "garantiasclientes";
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 							}
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la Unidad Móvil!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la Unidad Movil!", null);
 						}
 					} else {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al reversar el movimiento correspondiente a la Unidad Móvil! "
-								+ "Contáctese con su proveedor de servicio!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al reversar el movimiento correspondiente a la Unidad Movil! "
+								+ "Contactese con su proveedor de servicio!", null);
 					}
 				}
 			}
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return retorno;
 		} catch(Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al cerrar el Ticket de Garantía. "
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al cerrar el Ticket de Garantia. "
 					+ "Error original: " + e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
@@ -4230,7 +4315,7 @@ public class BeanGarantia implements Serializable {
 				unidad.setFechaMod(new Date());
 				unidad.setUsuario3(usuario);
 				unidad.setConFalla(true);
-				String resol = "Sin Reparación";
+				String resol = "Sin Reparacion";
 				if (idResolucion == 0) {
 					unidad.setConFalla(false);
 					resol = "Reparado";
@@ -4251,7 +4336,7 @@ public class BeanGarantia implements Serializable {
 						CuentasCorrientesProveedore ccProveedor = new CuentasCorrientesProveedore();
 						ccProveedor.setProveedore(garantiasProveedor.getProveedore());
 						ccProveedor.setDebe(garantiasProveedor.getCosto());
-						ccProveedor.setDetalle("Garantia de Móvil: " + telefono);				
+						ccProveedor.setDetalle("Garantia de Movil: " + telefono);				
 						ccProveedor.setFecha(garantiasProveedor.getFechaIngreso());
 						ccProveedor.setIdMovimiento(updGarantia);
 						ccProveedor.setMonto(garantiasProveedor.getCosto());
@@ -4260,6 +4345,18 @@ public class BeanGarantia implements Serializable {
 						cuenta.insertarCC(ccProveedor);
 					}
 					if (updGarantia != 0) {
+						
+						log.info("idGarantia: " + updGarantia);
+						HistorialMovil hm = new HistorialMovil();
+						hm.setFecha(new Date());
+						hm.setUsuario(usuario);
+						hm.setImei(unidad.getNroImei());
+						hm.setTipo("GARANTIA PROVEEDOR");
+						hm.setDescripcion("Cierre tiket garantia: " + updGarantia);
+						hm.setIdMovimiento(updGarantia);
+						log.info("Tipo de movimiento (historial): " + hm.getTipo());
+						historialMovilDAO.insert(hm);
+						
 						listaGarantiasProveedores = new ArrayList<GarantiasProveedore>();
 						filteredGarantiasProveedores = new ArrayList<GarantiasProveedore>();
 						listaGarantiasProveedores = garantiasProveedorDAO.getLista();
@@ -4267,10 +4364,10 @@ public class BeanGarantia implements Serializable {
 						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 						retorno = "garantiasproveedores";
 					} else {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 					}
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Unidad Móvil!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Unidad Movil!", null);
 				}	
 			}
 			if (porGarantia) {
@@ -4301,10 +4398,10 @@ public class BeanGarantia implements Serializable {
 							msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 							retorno = "garantiasproveedores";
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 						}
 					} else {
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al actualizar la Unidad Móvil!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Unidad Movil!", null);
 					}				
 				}
 				if (opcion2) {
@@ -4383,14 +4480,14 @@ public class BeanGarantia implements Serializable {
 										msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 										retorno = "garantiasproveedores";
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 									}
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al actualizar el/los movimientos "
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar el/los movimientos "
 											+ "asociados a la Unidad Movil", null);
 								}						
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al actualizar la Unidad Móvil!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar la Unidad Movil!", null);
 							}					
 						} else {
 							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El nro de imei ya se encuentra registrado al producto " 
@@ -4416,7 +4513,7 @@ public class BeanGarantia implements Serializable {
 						unidad.setUsuario3(usuario);
 						int updtUnidad = unidadMovilDAO.update(unidad);
 						if (updtUnidad != 0) {
-							garantiasProveedor.setAccionRealizar("Ninguna Acción");
+							garantiasProveedor.setAccionRealizar("Ninguna Accion");
 							garantiasProveedor.setFechaMod(new Date());
 							garantiasProveedor.setFinalizado(true);
 							garantiasProveedor.setImeiReintegro(imeiFalla);
@@ -4433,10 +4530,10 @@ public class BeanGarantia implements Serializable {
 								msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 								retorno = "garantiasproveedores";
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 							}
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al actualizar el Móvil!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al actualizar el Movil!", null);
 						}
 					} else {
 //						ConsignacionsDetalleUnidad consignacionUnidad = consignacionDetalleUnidadDAO.get(imeiFalla);
@@ -4486,7 +4583,7 @@ public class BeanGarantia implements Serializable {
 									CuentasCorrientesProveedore ccProveedor = new CuentasCorrientesProveedore();
 									ccProveedor.setProveedore(prov);
 									ccProveedor.setHaber(precioUnidad);
-									ccProveedor.setDetalle("Garantia de Móvil: " + telefono);				
+									ccProveedor.setDetalle("Garantia de Movil: " + telefono);				
 									ccProveedor.setFecha(garantiasProveedor.getFechaIngreso());
 									ccProveedor.setIdMovimiento(updGarantia);
 									ccProveedor.setMonto(precioUnidad);
@@ -4501,25 +4598,25 @@ public class BeanGarantia implements Serializable {
 										msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ticket registrado!", null);
 										retorno = "garantiasproveedores";
 									} else {
-										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Movimiento en Cuenta Corriente!", null);
+										msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Movimiento en Cuenta Corriente!", null);
 									}
 								} else {
-									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar el Ticket!", null);
+									msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar el Ticket!", null);
 								}
 							} else {
-								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al registrar la Unidad Móvil!", null);
+								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al registrar la Unidad Movil!", null);
 							}
 						} else {
-							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al reversar el movimiento correspondiente a la Unidad Móvil! "
-									+ "Contáctese con su proveedor de servicio!", null);
+							msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al reversar el movimiento correspondiente a la Unidad Movil! "
+									+ "Contactese con su proveedor de servicio!", null);
 						}
 //						} else {
 //							if (consignacionUnidad.getId() != 0) {
-//								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El movimiento no puede realizarse, el Móvil esta asociado a una Consignación! "
+//								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El movimiento no puede realizarse, el Movil esta asociado a una Consignacion! "
 //										+ "Realice la baja correspondiente!", null);
 //							}
 //							if (ventaUnidad.getId() != 0) {
-//								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El movimiento no puede realizarse, el Móvil esta asociado a una Venta! "
+//								msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El movimiento no puede realizarse, el Movil esta asociado a una Venta! "
 //										+ "Realice la baja correspondiente!", null);
 //							}
 //						}						
@@ -4529,7 +4626,7 @@ public class BeanGarantia implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return retorno;
 		} catch(Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al cerrar el Ticket de Garantía. "
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al cerrar el Ticket de Garantia. "
 					+ "Error original: " + e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
@@ -4655,7 +4752,7 @@ public class BeanGarantia implements Serializable {
 			} else {
 				garantias.setTecnico(" - ");
 			}
-			garantias.setTipo("Ticket de Garantía Cerrado");
+			garantias.setTipo("Ticket de Garantia Cerrado");
 		} else {
 			garantias.setAccion(" - ");
 			garantias.setFallaFinal(" - ");
@@ -4672,7 +4769,7 @@ public class BeanGarantia implements Serializable {
 			} else {
 				garantias.setTecnico(" - ");
 			}
-			garantias.setTipo("Ticket de Garantía Abierto");
+			garantias.setTipo("Ticket de Garantia Abierto");
 		}
 		listGarantia.add(garantias);
 		reporte.generar(parametros, listGarantia, "garantiaCliente", "attachment");
@@ -4697,7 +4794,7 @@ public class BeanGarantia implements Serializable {
 			garantias.setPersona(garanProveedor.getProveedore().getApellidoNombre());
 			garantias.setProducto(garanProveedor.getTelefonoFalla());
 			garantias.setResolucion(garanProveedor.getResolucion());
-			garantias.setTipo("Ticket de Garantía Cerrado");
+			garantias.setTipo("Ticket de Garantia Cerrado");
 		} else {
 			garantias.setAccion(" - ");
 			garantias.setConcepto(garanProveedor.getConcepto());
@@ -4711,7 +4808,7 @@ public class BeanGarantia implements Serializable {
 			garantias.setPersona(garanProveedor.getProveedore().getApellidoNombre());
 			garantias.setProducto(garanProveedor.getTelefonoFalla());
 			garantias.setResolucion(" - ");
-			garantias.setTipo("Ticket de Garantía Abierto");
+			garantias.setTipo("Ticket de Garantia Abierto");
 		}
 		listGarantia.add(garantias);
 		reporte.generar(parametros, listGarantia, "garantiaProveedor", "attachment");

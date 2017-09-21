@@ -61,7 +61,7 @@ public class BeanBuscar implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private final static Logger log = Logger.getLogger(BeanHistorial.class);
+	private final static Logger log = Logger.getLogger(BeanBuscar.class);
 	
 	@ManagedProperty(value = "#{BeanUnidadMovilDAO}")
 	private DAOUnidadMovil unidadMovilDAO;
@@ -761,7 +761,7 @@ public class BeanBuscar implements Serializable {
 							garantiasCliente = gCliente;
 						}
 						if (garantiasCliente.getId() != 0) {
-							panelGarantiaCliente = true;
+							//panelGarantiaCliente = true;
 							if (garantiasCliente.getFinalizado()) {
 								opcionGarantia2 = false;
 								opcionGarantia3 = false;
@@ -781,7 +781,7 @@ public class BeanBuscar implements Serializable {
 							garantiasProveedor = garantiasProveedore;
 						}
 						if (garantiasProveedor.getId() != 0) {
-							panelGarantiaProveedor = true;
+							//panelGarantiaProveedor = true;
 							if (garantiasProveedor.getFinalizado()) {
 								opcionGarantia2 = false;
 								opcionGarantia3 = false;
@@ -918,6 +918,10 @@ public class BeanBuscar implements Serializable {
 		tableVentaCons = false;
 		panelConsignacion = false;
 		tableConsignacion = false;
+		panelDevolucion = false;
+		panelGarantiaCliente = false;
+		panelGarantiaProveedor = false;
+		devolucion = new Devolucione();
 		
 		if(hm.getTipo().equals("COMPRA")) {
 			panelCompra = true;
@@ -934,6 +938,19 @@ public class BeanBuscar implements Serializable {
 		if(hm.getTipo().equals("CONSIGNACION")) {
 			panelConsignacion = true;
 			tableConsignacion = true;
+		}
+		if(hm.getTipo().equals("DEVOLUCION")) {
+			panelDevolucion = true;
+			int idDevolucion = hm.getIdMovimiento();
+			devolucion = devolucionDAO.get(idDevolucion);
+		}
+		
+		if(hm.getTipo().equals("GARANTIA CLIENTE")) {
+			panelGarantiaCliente = true;
+		}
+		
+		if(hm.getTipo().equals("GARANTIA PROVEEDOR")) {
+			panelGarantiaProveedor = true;
 		}
 	}
 
