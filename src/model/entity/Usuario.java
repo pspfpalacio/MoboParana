@@ -120,8 +120,12 @@ public class Usuario implements Serializable {
 	private List<ListaPrecio> listaPrecios3;
 
 	//bi-directional many-to-one association to PagosCliente
-	@OneToMany(mappedBy="usuario")
-	private List<PagosCliente> pagosClientes;
+	@OneToMany(mappedBy="usuario1")
+	private List<PagosCliente> pagosClientes1;
+
+	//bi-directional many-to-one association to PagosCliente
+	@OneToMany(mappedBy="usuario2")
+	private List<PagosCliente> pagosClientes2;
 
 	//bi-directional many-to-one association to PagosProveedore
 	@OneToMany(mappedBy="usuario")
@@ -829,26 +833,48 @@ public class Usuario implements Serializable {
 		return listaPrecios3;
 	}
 
-	public List<PagosCliente> getPagosClientes() {
-		return this.pagosClientes;
+	public List<PagosCliente> getPagosClientes1() {
+		return this.pagosClientes1;
 	}
 
-	public void setPagosClientes(List<PagosCliente> pagosClientes) {
-		this.pagosClientes = pagosClientes;
+	public void setPagosClientes1(List<PagosCliente> pagosClientes1) {
+		this.pagosClientes1 = pagosClientes1;
 	}
 
-	public PagosCliente addPagosCliente(PagosCliente pagosCliente) {
-		getPagosClientes().add(pagosCliente);
-		pagosCliente.setUsuario(this);
+	public PagosCliente addPagosClientes1(PagosCliente pagosClientes1) {
+		getPagosClientes1().add(pagosClientes1);
+		pagosClientes1.setUsuario1(this);
 
-		return pagosCliente;
+		return pagosClientes1;
 	}
 
-	public PagosCliente removePagosCliente(PagosCliente pagosCliente) {
-		getPagosClientes().remove(pagosCliente);
-		pagosCliente.setUsuario(null);
+	public PagosCliente removePagosClientes1(PagosCliente pagosClientes1) {
+		getPagosClientes1().remove(pagosClientes1);
+		pagosClientes1.setUsuario1(null);
 
-		return pagosCliente;
+		return pagosClientes1;
+	}
+
+	public List<PagosCliente> getPagosClientes2() {
+		return this.pagosClientes2;
+	}
+
+	public void setPagosClientes2(List<PagosCliente> pagosClientes2) {
+		this.pagosClientes2 = pagosClientes2;
+	}
+
+	public PagosCliente addPagosClientes2(PagosCliente pagosClientes2) {
+		getPagosClientes2().add(pagosClientes2);
+		pagosClientes2.setUsuario2(this);
+
+		return pagosClientes2;
+	}
+
+	public PagosCliente removePagosClientes2(PagosCliente pagosClientes2) {
+		getPagosClientes2().remove(pagosClientes2);
+		pagosClientes2.setUsuario2(null);
+
+		return pagosClientes2;
 	}
 
 	public List<PagosProveedore> getPagosProveedores() {

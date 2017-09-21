@@ -8,12 +8,11 @@
 
 	<ui:composition>
 		<h:form id="formMarcarMoviles">
-			<p:messages />
+			<p:messages closable="true" />
 			<h2 align="center">Marcar equipos como pagos</h2>
 			<p:wizard flowListener="#{beanPago.onFlowProcessMarcarMoviles}">
 				<p:tab id="principal" title="Principal">
-					<p:panel header="Datos principales">
-						<p:messages />
+					<p:panel header="Datos principales">						
 						<h:panelGrid columns="1" >
 							<p:column>
 				   				<p:outputLabel value="Clientes: " />

@@ -87,7 +87,7 @@
 	   					</p:column>
 	   					<p:column headerText="Quitar" style="width:100px;text-align:center;">
 	   						<p:commandButton icon="ui-icon-close" action="#{beanVentaConsignacion.quitarProductoVenta(detalle)}"  
-	   						update="detalleTable" />
+	   						update="detalleTable" disabled="#{beanVentaConsignacion.restrictBajaDetalle(detalle)}" />
 	   					</p:column>
 	   					<p:rowExpansion>
 	   						<p:dataTable value="#{detalle.ventasConsDetalleUnidads}" var="unidad"  
@@ -96,7 +96,7 @@
 	   								<h:outputText value="Móviles" />
 	   							</f:facet>
 	   							<p:column headerText="Quitar" style="width:45px;text-align:center;">
-		   							<p:commandLink style="float:left;margin-right:10px" styleClass="ui-icon ui-icon-close" disabled="#{beanVentaConsignacion.conFallaUnidad(unidad)}"
+		   							<p:commandLink style="float:left;margin-right:10px" styleClass="ui-icon ui-icon-close" disabled="#{beanVentaConsignacion.restrictBajaUnidad(unidad)}"
 						        	action="#{beanVentaConsignacion.quitarUnidadDetalleVenta(detalle, unidad)}" update=":formulario:detalleTable" />
 					        	</p:column>
 					        	<p:column headerText="Nro Imei">

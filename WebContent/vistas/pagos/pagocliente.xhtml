@@ -46,10 +46,7 @@
 				<p:growl id="messages" showDetail="false" />
 				<ui:include src="/includes/menubar.xhtml" />
 				<h2 align="center">Pago de Clientes</h2>
-				<br/>				
-				<h:outputText value='(*) Importante: En el listado de equipos a pagar se encuentran los vendidos a partir del 01/10/2017. 
-				Si no se seleccionan equipos no se marcaran como pagados, se deberá hacerlo desde el formulario "Marcar equipos como pagos"' />
-				<p:tabView>
+				<p:tabView onTabChange="#{beanPago.onChangeTab()}" onTabShow="#{beanPago.onChangeTab()}">
 					<p:tab title="Pago regular">
 						<ui:include src="/vistas/templates/pagoclientes/pagoRegular.xhtml" />
 					</p:tab>
@@ -57,7 +54,7 @@
 						<ui:include src="/vistas/templates/pagoclientes/pagoMoviles.xhtml" />
 					</p:tab>
 					<p:tab title="Listado de pagos">
-						
+						<ui:include src="/vistas/templates/pagoclientes/listadoPagosClientes.xhtml" />
 					</p:tab>
 					<p:tab title="Marcar equipos como pagos">
 						<ui:include src="/vistas/templates/pagoclientes/marcarMovilesPagos.xhtml" />

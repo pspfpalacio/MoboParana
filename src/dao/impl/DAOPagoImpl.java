@@ -55,14 +55,18 @@ public class DAOPagoImpl implements Serializable, DAOPago {
 			inicializar();
 			EntityTransaction tx = em.getTransaction();
 			Query locQuery = em.createQuery("UPDATE PagosCliente p SET p.cliente = :pCliente, p.concepto = :pConcepto, "
-					+ "p.fecha = :pFecha, p.fechaAlta = :pFechaAlta, p.monto = :pMonto, p.usuario = :pUsuario "
+					+ "p.fecha = :pFecha, p.fechaAlta = :pFechaAlta, p.monto = :pMonto, p.usuario1 = :pUsuarioAlta, "
+					+ "p.usuario2 = :pUsuarioBaja, p.fechaBaja = :pFechaBaja, p.enabled = :pEnabled "
 					+ "WHERE p.id = :pId");
 			locQuery.setParameter("pCliente", pagosCliente.getCliente());
 			locQuery.setParameter("pConcepto", pagosCliente.getConcepto());
 			locQuery.setParameter("pFecha", pagosCliente.getFecha());
 			locQuery.setParameter("pFechaAlta", pagosCliente.getFechaAlta());
 			locQuery.setParameter("pMonto", pagosCliente.getMonto());
-			locQuery.setParameter("pUsuario", pagosCliente.getUsuario());
+			locQuery.setParameter("pUsuarioAlta", pagosCliente.getUsuario1());
+			locQuery.setParameter("pUsuarioBaja", pagosCliente.getUsuario2());
+			locQuery.setParameter("pFechaBaja", pagosCliente.getFechaBaja());
+			locQuery.setParameter("pEnabled", pagosCliente.getEnabled());
 			locQuery.setParameter("pId", pagosCliente.getId());
 			tx.begin();
 			locQuery.executeUpdate();
@@ -102,6 +106,16 @@ public class DAOPagoImpl implements Serializable, DAOPago {
 		List<PagosCliente> lista = locQuery.getResultList();
 		return lista;
 	}
+	
+	public List<PagosCliente> getListaPagosCliente(Cliente cliente, boolean enabled) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT p FROM PagosCliente p WHERE p.cliente = :pCliente "
+				+ "AND p.enabled = :pEnabled ORDER BY p.fecha DESC", PagosCliente.class);
+		locQuery.setParameter("pCliente", cliente);
+		locQuery.setParameter("pEnabled", enabled);
+		List<PagosCliente> lista = locQuery.getResultList();
+		return lista;
+	}
 
 	public List<PagosCliente> getListaPagosCliente(Date fechaInicio,
 			Date fechaFin) {
@@ -121,6 +135,20 @@ public class DAOPagoImpl implements Serializable, DAOPago {
 		locQuery.setParameter("pCliente", cliente);
 		locQuery.setParameter("pInicio", fechaInicio);
 		locQuery.setParameter("pFin", fechaFin);
+		List<PagosCliente> lista = locQuery.getResultList();
+		return lista;
+	}
+	
+	public List<PagosCliente> getListaPagosCliente(Cliente cliente,
+			Date fechaInicio, Date fechaFin, boolean enabled) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT p FROM PagosCliente p WHERE p.cliente = :pCliente "
+				+ "AND p.enabled = :pEnabled AND p.fecha BETWEEN :pInicio AND :pFin "
+				+ "ORDER BY p.fecha DESC", PagosCliente.class);
+		locQuery.setParameter("pCliente", cliente);
+		locQuery.setParameter("pInicio", fechaInicio);
+		locQuery.setParameter("pFin", fechaFin);
+		locQuery.setParameter("pEnabled", enabled);
 		List<PagosCliente> lista = locQuery.getResultList();
 		return lista;
 	}

@@ -22,7 +22,6 @@ import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Comprobante;
 import ar.com.clases.auxiliares.DetalleComprobante;
 import ar.com.clases.auxiliares.DetalleComprobanteUnidad;
-import ar.com.managed.beans.cliente.BeanVentaCliente;
 import model.entity.Cliente;
 import model.entity.Consignacion;
 import model.entity.ConsignacionsDetalleUnidad;
@@ -543,28 +542,44 @@ public class BeanVentaConsignacion implements Serializable {
 	}
 	
 	public void baja(VentasCon venCons) {
+		log.info("baja() - VentasCon id: " + venCons.getId());
 		FacesMessage msg = null;
 		try {
-			boolean noAutorizo = false;
+			boolean enCuota = false;
+			boolean enPago = false;
+			boolean enGarantia = false;
 			Consignacion cons = venCons.getConsignacion();
 			List<Cuota> listaCuotas = cuotaDAO.getLista(true, cons);
 			List<VentasConsDetalle> listVentDet = ventaConsignacionDetalleDAO.getLista(venCons);
 			List<VentasConsDetalleUnidad> listVentDetUnid = ventaConsignacionDetalleUnidadDAO.getLista(venCons);
+			log.info("listaCuotas size() " + listaCuotas.size());
+			log.info("listVentDet size() " + listVentDet.size());
+			log.info("listVentDetUnid size() " + listVentDetUnid.size());
 			//CONTROL QUE LA UNIDAD MOVIL NO POSEA CUOTAS
 			for (VentasConsDetalleUnidad ventasConsDetalleUnidad : listVentDetUnid) {
 				String nroImei = ventasConsDetalleUnidad.getNroImei();
+				log.info("nroImei: " + nroImei);
+				//CONTROL SI LAS UNIDADES MOVILES VENDIDAS POSEEN PAGOS
+				EquipoPendientePago epp = equipoPendientePagoDAO.get(nroImei, true, true);
+				log.info("EquipoPendientePago id: " + epp.getId());
+				if (epp.getId() != 0) {
+					enPago = true;
+				}				
 				for (Cuota cuota : listaCuotas) {
 					String imeiCuota = cuota.getNroImei();
+					log.info("imeiCuota: " + imeiCuota);
 					if (nroImei.equals(imeiCuota)) {
-						noAutorizo = true;
+						enCuota = true;
 					}
 				}
 			}
 			//CONTROL DE FALLA DEL DETALLE
 			for (VentasConsDetalle ventasDetalle : listVentDet) {
-				noAutorizo = conFalla(ventasDetalle);
-			}
-			if(!noAutorizo){//SINO TIENE FALLA
+				if (conFalla(ventasDetalle)) {
+					enGarantia = true;
+				}				
+			}			
+			if(!enCuota && !enPago && !enGarantia){//SINO POSEE CUOTAS PAGOS O GARANTIAS
 				boolean actualizo = true;
 				int idVen = venCons.getId();
 				//CANCELACION DE MOVIMIENTO EN C.C.
@@ -607,7 +622,7 @@ public class BeanVentaConsignacion implements Serializable {
 						//BAJA LOGICA DE EQUIPO PENDIENTE DE PAGO
 						EquipoPendientePago epp = equipoPendientePagoDAO.getPorImei(nroImei);
 						log.info("Equipo pendiente de pago, Imei : " + epp.getImei());
-						int eppBaja = equipoPendientePagoDAO.baja(epp);
+						int eppBaja = equipoPendientePagoDAO.baja(epp);					
 						
 						if(updateUnid == 0 || updateUniCons == 0 || eppBaja == 0){
 							actualizo = false;
@@ -634,8 +649,18 @@ public class BeanVentaConsignacion implements Serializable {
 							+ "Intentelo nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La Venta posee Moviles en Garantia, realice la baja correspondiente e "
-						+ "intentelo nuevamente!", null);
+				String mensj = "La Venta posee Moviles relacionados a ";
+				if (enPago) {
+					mensj = mensj + " Pagos, ";
+				}
+				if (enCuota) {
+					mensj = mensj + " Cuotas, ";
+				}
+				if (enGarantia) {
+					mensj = mensj + " Garantias, ";
+				}
+				mensj = mensj + " realice la baja correspondiente e intentelo nuevamente!";
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, mensj, null);
 			}
 		} catch (Exception e) {
 			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No pudo ser posible dar de baja la Venta, intentelo nuevamente mas tarde!", null);
@@ -1091,6 +1116,41 @@ public class BeanVentaConsignacion implements Serializable {
 			falla = true;
 		}
 		return falla;
+	}
+	
+	public boolean restrictBajaDetalle(VentasConsDetalle ventaDetalle){
+		boolean noBaja = false;
+		List<VentasConsDetalleUnidad> listAux = ventaConsignacionDetalleUnidadDAO.getLista(ventaDetalle);
+		for (VentasConsDetalleUnidad ventasDetalleUnidad : listAux) {			
+			UnidadMovil unidad = unidadMovilDAO.get(ventasDetalleUnidad.getNroImei());
+			EquipoPendientePago epp = equipoPendientePagoDAO.get(ventasDetalleUnidad.getNroImei(), true, true);
+			if (epp.getId() != 0) {
+				noBaja = true;
+			}
+			if(unidad.getConFalla()){
+				noBaja = true;
+			}
+			if(unidad.getEnGarantiaCliente()){
+				noBaja = true;
+			}
+		}
+		return noBaja;
+	}
+	
+	public boolean restrictBajaUnidad(VentasConsDetalleUnidad ventaUnidad) {
+		boolean noBaja = false;
+		UnidadMovil unidad = unidadMovilDAO.get(ventaUnidad.getNroImei());
+		if(unidad.getConFalla()){
+			noBaja = true;
+		}
+		if(unidad.getEnGarantiaCliente()){
+			noBaja = true;
+		}
+		EquipoPendientePago epp = equipoPendientePagoDAO.get(ventaUnidad.getNroImei(), true, true);
+		if (epp.getId() != 0) {
+			noBaja = true;
+		}
+		return noBaja;
 	}
 
 }

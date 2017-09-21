@@ -2,6 +2,7 @@ package model.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import java.util.Date;
 
 
@@ -43,6 +44,11 @@ public class EquipoPendientePago implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="id_cliente")
 	private Cliente cliente;
+	
+	//bi-directional many-to-one association to PagosCliente
+	@ManyToOne
+	@JoinColumn(name="id_pago_cliente")
+	private PagosCliente pagosCliente;
 
 	//bi-directional many-to-one association to Usuario
 	@ManyToOne
@@ -132,6 +138,14 @@ public class EquipoPendientePago implements Serializable {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+	
+	public PagosCliente getPagosCliente() {
+		return this.pagosCliente;
+	}
+
+	public void setPagosCliente(PagosCliente pagosCliente) {
+		this.pagosCliente = pagosCliente;
 	}
 
 	public Usuario getUsuario1() {

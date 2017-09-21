@@ -8,11 +8,11 @@
 
 	<ui:composition>
 		<h:form id="formRegular">
+			<p:messages closable="true" />
 			<h2 align="center">Pago Regular</h2>
 			<p:wizard flowListener="#{beanPago.onFlowProcess}">
 		        <p:tab id="principal" title="Principal">
-		            <p:panel header="Datos principales">
-		                <p:messages />
+		            <p:panel header="Datos principales">		                
 		                <h:panelGrid columns="2" columnClasses="label, value">
 		                	<h:outputText value="Fecha: " />
 							<p:calendar value="#{beanPago.pagoCliente.fecha}" pattern="dd/MM/yyyy" mask="true" locale="tr"
@@ -40,7 +40,6 @@
 		 
 		        <p:tab id="email" title="Envío email">
 		            <p:panel header="Detalle email">
-		                <p:messages />
 		                <h:panelGrid columns="2" columnClasses="label, value">		                    
 							<h:outputText value="Enviar comprobante:" />
 							<p:selectBooleanCheckbox value="#{beanPago.envioEmail}" />					

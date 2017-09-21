@@ -8,11 +8,13 @@
 
 	<ui:composition>
 		<h:form id="formMoviles">
+			<p:messages closable="true" />
 			<h2 align="center">Pago de Móviles</h2>
+			<h:outputText value='(*) Importante: En el listado de equipos a pagar se encuentran los vendidos a partir del 01/10/2017. 
+				Si no se seleccionan equipos no se marcaran como pagados, se deberá hacerlo desde el formulario "Marcar equipos como pagos"' />
 			<p:wizard flowListener="#{beanPago.onFlowProcessMoviles}">
 		        <p:tab id="principal" title="Principal">
-		            <p:panel header="Datos principales">
-		                <p:messages />
+		            <p:panel header="Datos principales">		                
 		                <h:panelGrid columns="2" columnClasses="label, value">
 		                	<h:outputText value="Fecha: " />
 							<p:calendar value="#{beanPago.pagoCliente.fecha}" pattern="dd/MM/yyyy" mask="true" locale="tr"
@@ -69,8 +71,7 @@
 		        </p:tab>
 		        
 		        <p:tab id="concepto" title="Concepto">
-		            <p:panel header="Detalle concepto">
-		                <p:messages />
+		            <p:panel header="Detalle concepto">		                
 		                <h:panelGrid columns="2" columnClasses="label, value">		                    
 							<h:outputText value="Monto: " />
 							<h:inputText value="#{beanPago.pagoCliente.monto}" required="true" label="Monto" disabled="true">
@@ -89,7 +90,6 @@
 		 
 		        <p:tab id="email" title="Envío email">
 		            <p:panel header="Detalle email">
-		                <p:messages />
 		                <h:panelGrid columns="2" columnClasses="label, value">		                    
 							<h:outputText value="Enviar comprobante:" />
 							<p:selectBooleanCheckbox value="#{beanPago.envioEmail}" />					

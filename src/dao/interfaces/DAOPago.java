@@ -20,9 +20,13 @@ public interface DAOPago {
 	
 	public List<PagosCliente> getListaPagosCliente(Cliente cliente);
 	
+	public List<PagosCliente> getListaPagosCliente(Cliente cliente, boolean enabled);
+	
 	public List<PagosCliente> getListaPagosCliente(Date fechaInicio, Date fechaFin);
 	
 	public List<PagosCliente> getListaPagosCliente(Cliente cliente, Date fechaInicio, Date fechaFin);
+	
+	public List<PagosCliente> getListaPagosCliente(Cliente cliente, Date fechaInicio, Date fechaFin, boolean enabled);
 	
 	public int insertar(PagosProveedore pagosProveedore);
 	

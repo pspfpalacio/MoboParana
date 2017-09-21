@@ -78,6 +78,8 @@ public class BeanPago implements Serializable {
 	private Cliente cliente;
 	private Usuario usuario;
 	private Date fechaPago;
+	private Date fechaDesde;
+	private Date fechaHasta;
 	private int idCliente;
 	private int idProveedor;
 	private String destinatarios;
@@ -151,7 +153,7 @@ public class BeanPago implements Serializable {
 		this.listaEpp = listaEpp;
 	}
 
-	public List<PagosCliente> getListadoPagosClientes() {
+	public List<PagosCliente> getListadoPagosClientes() {		
 		return listadoPagosClientes;
 	}
 
@@ -215,6 +217,22 @@ public class BeanPago implements Serializable {
 		this.fechaPago = fechaPago;
 	}
 
+	public Date getFechaDesde() {
+		return fechaDesde;
+	}
+
+	public void setFechaDesde(Date fechaDesde) {
+		this.fechaDesde = fechaDesde;
+	}
+
+	public Date getFechaHasta() {
+		return fechaHasta;
+	}
+
+	public void setFechaHasta(Date fechaHasta) {
+		this.fechaHasta = fechaHasta;
+	}
+
 	public int getIdCliente() {
 		return idCliente;
 	}
@@ -275,6 +293,8 @@ public class BeanPago implements Serializable {
 		pagoCliente.setFecha(null);
 		pagoCliente.setConcepto("");
 		usuario = new Usuario();
+		fechaDesde = null;
+		fechaHasta = null;
 		usuario = user;
 		destinatarios = "";
 		envioEmail = false;
@@ -372,6 +392,80 @@ public class BeanPago implements Serializable {
         return newStep;        
 	}
 	
+	public void buscarPagosClientes() {
+		log.info("buscarPagosClientes() - idCliente: " + idCliente + " - fechaDesde: " + fechaDesde + " - fechaHasta: " + fechaHasta);
+		if (idCliente != 0 && fechaDesde != null && fechaHasta != null) {
+			Cliente cli = clienteDAO.get(idCliente);
+			listadoPagosClientes = new ArrayList<PagosCliente>();
+			listadoPagosClientes = pagoDAO.getListaPagosCliente(cli, fechaDesde, fechaHasta, true);
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+					"Cliente, Fecha desde y hasta son necesarios!", null));
+		}
+	}
+	
+	public void bajaPagosClientes(PagosCliente pago) {
+		log.info("bajaPagosClientes() - pago id: " + pago.getId());
+		try {
+			CuentaCorriente cuenta = new CuentaCorriente();
+			CuentasCorrientesCliente ccCliente = new CuentasCorrientesCliente();
+			ccCliente.setIdMovimiento(pago.getId());
+			ccCliente.setNombreTabla("PagosCliente");
+			
+			MovimientoCaja movCaja = new MovimientoCaja();
+			Caja mov = new Caja();
+			mov.setIdMovimiento(pago.getId());
+			mov.setNombreTabla("PagosCliente");		 
+			
+			int deleteCC = cuenta.deleteCuentaCorriente(ccCliente);
+			int deleteMC = movCaja.deleteCaja(mov);
+			log.info("deleteCC: " + deleteCC + " - deleteMC: " + deleteMC);
+			Cliente cli = pago.getCliente();
+			if (deleteCC != 0 && deleteMC != 0) {
+				List<EquipoPendientePago> listaEquiposPagos = equipoPendientePagoDAO.getLista(pago.getCliente(), pago, true, true);
+				boolean flagEpp = true;
+				for (EquipoPendientePago equipoPago : listaEquiposPagos) {
+					equipoPago.setFechaMod(new Date());
+					equipoPago.setPagado(false);
+					equipoPago.setPagosCliente(null);
+					int updateEpp = equipoPendientePagoDAO.update(equipoPago); 
+					log.info("equipoPago id: " + equipoPago.getId() + " - updateEpp: " + updateEpp);
+					if (updateEpp == 0) {
+						flagEpp = false;
+					}
+				}
+				if (flagEpp) {
+					pago.setEnabled(false);
+					pago.setFechaBaja(new Date());
+					pago.setUsuario2(usuario);
+					int updatePago = pagoDAO.update(pago);
+					log.info("pago id: " + pago.getId() + " - updatePago: " + updatePago);
+					if (updatePago != 0) {						
+						listadoPagosClientes = new ArrayList<PagosCliente>();
+						listadoPagosClientes = pagoDAO.getListaPagosCliente(cli, true);
+						FacesContext.getCurrentInstance().addMessage(null, 
+								new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de pago registrada!", null));
+					} else {
+						FacesContext.getCurrentInstance().addMessage(null, 
+								new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error grave al dar de baja el pago!", null));
+					}
+				} else {
+					FacesContext.getCurrentInstance().addMessage(null, 
+							new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error grave al dar de baja los equipos "
+									+ "relacionados al pago!", null));
+				}
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, 
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error grave al dar de baja los movimientos "
+								+ "relacionados al pago!", null));
+			}
+		} catch (Exception e) {
+			log.error("Error en bajaPagosClientes() - Error: " + e);
+			FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error grave al dar de baja el pago!", null));
+		}
+	}
+	
 	public void guardarPagoCliente(){
 		log.info("guardarPagoCliente() - fecha: " + pagoCliente.getFecha() + " - idCliente: " + idCliente + " - monto: " + pagoCliente.getMonto() + " - envioEmail: " + envioEmail + " - destinatarios: " + destinatarios + " - concepto: " + pagoCliente.getConcepto());
 		FacesMessage msg = null;		
@@ -380,10 +474,12 @@ public class BeanPago implements Serializable {
 			log.info("Cliente: " + cliente.getApellidoNombre());
 			pagoCliente.setCliente(cliente);
 			pagoCliente.setFechaAlta(new Date());
-			pagoCliente.setUsuario(usuario);
+			pagoCliente.setUsuario1(usuario);
+			pagoCliente.setEnabled(true);
 			int idPago = pagoDAO.insertar(pagoCliente);
 			if(idPago != 0){
 				log.info("idPago: " + idPago);
+				pagoCliente.setId(idPago);
 				MovimientoCaja movimientoCaja = new MovimientoCaja();
 				CuentaCorriente cuenta = new CuentaCorriente();
 				CuentasCorrientesCliente ccCliente = new CuentasCorrientesCliente();
@@ -409,21 +505,24 @@ public class BeanPago implements Serializable {
 				caja.setNombreTabla("PagosCliente");
 				caja.setUsuario(usuario);
 				int idCaja = movimientoCaja.insertarCaja(caja);
-				log.info("idCaja "+ idCaja);
-				int eppPagado = 0;
+				log.info("idCaja "+ idCaja);				
 				int tipoComprobante = 1;
-				if(equiposSelectos.size() == 0) {
-					eppPagado = 1;
+				if(equiposSelectos.size() == 0) {					
 					tipoComprobante = 0;
 				}
 				log.info("Equipos Por Pagar: " + equiposSelectos.size());
+				boolean flagEpp = true;
 				for(EquipoPendientePago epp : equiposSelectos) {
+					epp.setPagado(true);
+					epp.setPagosCliente(pagoCliente);
 					epp.setFechaMod(new Date());
 					epp.setUsuario2(usuario);
-					eppPagado = equipoPendientePagoDAO.pagar(epp);
+					if (equipoPendientePagoDAO.update(epp) == 0) {
+						flagEpp = false;
+					}					
 				}
 					
-				if(idCuentaCorriente != 0 && idCaja != 0 && eppPagado != 0){
+				if(idCuentaCorriente != 0 && idCaja != 0 && flagEpp){
 					int send = 1;
 					String sendMje = "";
 				    	if(envioEmail) {
@@ -591,6 +690,22 @@ public class BeanPago implements Serializable {
 			listaEpp = equipoPendientePagoDAO.getListaNoPagosPorCliente(cli);
 			log.info("listaEpp size() " + listaEpp.size());
 		}
+	}
+	
+	public void onChangeClienteListadoMoviles() {
+		log.info("onChangeClienteListadoMoviles() - idCliente: " + idCliente);
+		listadoPagosClientes = new ArrayList<PagosCliente>();
+		if (idCliente != 0) {
+			Cliente cli = clienteDAO.get(idCliente);
+			listadoPagosClientes = pagoDAO.getListaPagosCliente(cli, true);
+			log.info("listadoPagosClientes size() " + listadoPagosClientes.size());
+		}
+	}
+	
+	public void onChangeTab() {
+		log.info("onChangeTab()");
+		idCliente = 0;
+		listadoPagosClientes = new ArrayList<PagosCliente>();
 	}
 	
 	public String getNombrePorImei(String imei) {

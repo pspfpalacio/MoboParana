@@ -8,7 +8,7 @@
 
 	<ui:composition>
 		<h:form id="formListadoPagos">
-			<p:messages />
+			<p:messages autoUpdate="true" closable="true" />
 			<h2 align="center">Listado de pagos</h2>
 			
 			<p:panel>
@@ -16,47 +16,71 @@
 					<p:column>
 		   				<p:outputLabel value="Clientes: " />
 		   				<p:selectOneMenu value="#{beanPago.idCliente}" filter="true" filterMatchMode="contains">
-		   				<p:ajax listener="#{beanPago.onChangeClientePagoMoviles()}" update="dataMoviles"></p:ajax>
+		   					<p:ajax listener="#{beanPago.onChangeClienteListadoMoviles()}" update="dataPagos"></p:ajax>
 		   					<f:selectItem itemLabel="Seleccione.." itemValue="0" noSelectionOption="true"/>
 		   					<f:selectItems value="#{beanPago.listaClientes}" var="cliente" itemLabel="#{cliente.nombreNegocio}" 
 		   					itemValue="#{cliente.id}"/>
 		   				</p:selectOneMenu>
 	   				</p:column>
+	   				<p:column>
+	   					<p:outputLabel value="Fecha desde: " />
+	   					<p:calendar value="#{beanPago.fechaDesde}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+	   					<p:outputLabel value="hasta: " />
+	   					<p:calendar value="#{beanPago.fechaHasta}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
+	   					<p:commandButton icon="ui-icon-refresh" value="Actualizar" action="#{beanPago.buscarPagosClientes()}" update="dataPagos" />
+	   				</p:column>
 	   				
-					<p:dataTable id="dataMoviles" value="#{beanPago.listaEpp}" var="epp" emptyMessage="No existen equipos pendietes de pago" 
-		   				paginator="true" rows="10" selection="#{beanPago.equiposSelectos}" rowKey="#{epp.id}">
+					<p:dataTable id="dataPagos" value="#{beanPago.listadoPagosClientes}" var="pago" emptyMessage="No existen registros de pagos" 
+		   				paginator="true" rows="10" resizableColumns="true" >
 						<f:facet name="header">
-							<p:outputLabel value="Equipos pendientes de pago" style="width:20px;"/>		
-						</f:facet>   	
+							<p:outputLabel value="Pagos registrados" style="width:20px;"/>		
+						</f:facet>
 						
-						<p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+						<p:column headerText="Baja" style="text-align: center; width:70px;" id="act_desact">									
+							<p:row rendered="#{pago.enabled}">																
+								<p:commandLink title="Baja" actionListener="#{beanPago.bajaPagosClientes(pago)}" update="dataPagos" process="@this">
+								 	<h:graphicImage value="/images/activo.ico" width="20"
+										id="estadoDesactivar" title="Desactivar la Compra" /> 
+									<p:confirm header="Confirmacion" message="Esta seguro que quiere dar de baja el pago?" icon="ui-icon-alert" />
+								</p:commandLink>
+							</p:row>						
+							<p:row rendered="#{!pago.enabled}">
+								<h:graphicImage value="/images/desactivo.ico" width="20"
+									id="estadoActivar" title="Pago deshabilitada" />
+							</p:row>
+						</p:column>
 										
-						<p:column headerText="Imei" style="text-align:center;">
-							<h:outputText value="#{epp.imei}" />
+						<p:column headerText="Fecha" style="text-align:center;">
+							<h:outputText value="#{pago.fecha}" >
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="tr"/>
+							</h:outputText>
 						</p:column>
 						
-						<p:column headerText="Nombre" style="text-align:center;">
-							<h:outputText value="#{beanPago.getNombrePorImei(epp.imei)}"/>
+						<p:column headerText="Cliente" style="text-align:center;">
+							<h:outputText value="#{pago.cliente.nombreNegocio}"/>
 						</p:column>
 						
-						<p:column headerText="Precio" style="text-align:center;">
-							<h:outputText value="#{epp.monto}" >
+						<p:column headerText="Concepto" style="text-align:center;">
+							<h:outputText value="#{pago.concepto}" />
+						</p:column>
+						
+						<p:column headerText="Monto" style="text-align:center;">
+							<h:outputText value="#{pago.monto}" >
 								<f:convertNumber pattern="$###,##0.00"/>
 							</h:outputText>
 						</p:column>
 						
-						<p:column headerText="Fecha Venta" style="text-align:center;">
-							<h:outputText value="#{epp.fechaAlta}" >
-								<f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
-							</h:outputText>
-						</p:column>
-						
-						<p:column headerText="Usuario venta" style="text-align:center;">
-							<h:outputText value="#{epp.usuario1.username}" />
+						<p:column headerText="Usuario" style="text-align:center;">
+							<h:outputText value="#{pago.usuario1.username}" />
 						</p:column>					
 					</p:dataTable>
                 </h:panelGrid>
 			</p:panel>
+			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		    </p:confirmDialog>	
 		</h:form>
 	</ui:composition>
 </html>

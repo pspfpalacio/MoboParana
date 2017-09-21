@@ -2,7 +2,9 @@ package model.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -20,6 +22,8 @@ public class PagosCliente implements Serializable {
 	private int id;
 
 	private String concepto;
+	
+	private boolean enabled;
 
 	@Temporal(TemporalType.DATE)
 	private Date fecha;
@@ -27,8 +31,16 @@ public class PagosCliente implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="fecha_alta")
 	private Date fechaAlta;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="fecha_baja")
+	private Date fechaBaja;
 
 	private float monto;
+	
+	//bi-directional many-to-one association to EquipoPendientePago
+	@OneToMany(mappedBy="pagosCliente")
+	private List<EquipoPendientePago> equipoPendientePagos;
 
 	//bi-directional many-to-one association to Cliente
 	@ManyToOne
@@ -38,7 +50,12 @@ public class PagosCliente implements Serializable {
 	//bi-directional many-to-one association to Usuario
 	@ManyToOne
 	@JoinColumn(name="id_usuario_alta")
-	private Usuario usuario;
+	private Usuario usuario1;
+
+	//bi-directional many-to-one association to Usuario
+	@ManyToOne
+	@JoinColumn(name="id_usuario_baja")
+	private Usuario usuario2;
 
 	public PagosCliente() {
 	}
@@ -58,6 +75,14 @@ public class PagosCliente implements Serializable {
 	public void setConcepto(String concepto) {
 		this.concepto = concepto;
 	}
+	
+	public boolean getEnabled() {
+		return this.enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
 	public Date getFecha() {
 		return this.fecha;
@@ -74,6 +99,14 @@ public class PagosCliente implements Serializable {
 	public void setFechaAlta(Date fechaAlta) {
 		this.fechaAlta = fechaAlta;
 	}
+	
+	public Date getFechaBaja() {
+		return this.fechaBaja;
+	}
+
+	public void setFechaBaja(Date fechaBaja) {
+		this.fechaBaja = fechaBaja;
+	}
 
 	public float getMonto() {
 		return this.monto;
@@ -81,6 +114,28 @@ public class PagosCliente implements Serializable {
 
 	public void setMonto(float monto) {
 		this.monto = monto;
+	}
+	
+	public List<EquipoPendientePago> getEquipoPendientePagos() {
+		return this.equipoPendientePagos;
+	}
+
+	public void setEquipoPendientePagos(List<EquipoPendientePago> equipoPendientePagos) {
+		this.equipoPendientePagos = equipoPendientePagos;
+	}
+
+	public EquipoPendientePago addEquipoPendientePago(EquipoPendientePago equipoPendientePago) {
+		getEquipoPendientePagos().add(equipoPendientePago);
+		equipoPendientePago.setPagosCliente(this);
+
+		return equipoPendientePago;
+	}
+
+	public EquipoPendientePago removeEquipoPendientePago(EquipoPendientePago equipoPendientePago) {
+		getEquipoPendientePagos().remove(equipoPendientePago);
+		equipoPendientePago.setPagosCliente(null);
+
+		return equipoPendientePago;
 	}
 
 	public Cliente getCliente() {
@@ -91,12 +146,20 @@ public class PagosCliente implements Serializable {
 		this.cliente = cliente;
 	}
 
-	public Usuario getUsuario() {
-		return this.usuario;
+	public Usuario getUsuario1() {
+		return this.usuario1;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setUsuario1(Usuario usuario1) {
+		this.usuario1 = usuario1;
+	}
+
+	public Usuario getUsuario2() {
+		return this.usuario2;
+	}
+
+	public void setUsuario2(Usuario usuario2) {
+		this.usuario2 = usuario2;
 	}
 
 }
