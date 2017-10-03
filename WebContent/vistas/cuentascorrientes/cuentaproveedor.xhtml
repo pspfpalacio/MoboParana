@@ -73,7 +73,12 @@
 								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
 							</h:commandLink>
 						</p:outputPanel> 
-					</f:facet>					
+					</f:facet>		
+					
+					<p:column style="width:20px;">
+						<p:commandLink style="width:20px;" styleClass="ui-icon ui-icon-close" 
+				        	update=":formulario:panelCompleto" />
+					</p:column>				
 					
 					<p:column sortBy="#{cuenta.fecha}" filterBy="#{cuenta.fecha}"
 						filterMatchMode="contains" filterStyle="display:none;" style="width:80px;">

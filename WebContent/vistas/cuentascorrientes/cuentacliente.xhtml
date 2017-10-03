@@ -42,7 +42,7 @@
 		<div class="wrapper">
 			<ui:include src="/includes/header.xhtml" />
 			<h:form id="formulario">
-			<p:panel style="background:#D27C7A;min-height:900px;">
+			<p:panel id="panelCompleto" style="background:#D27C7A;min-height:900px;">
 				<p:growl id="messages" showDetail="false" />
 				<ui:include src="/includes/menubar.xhtml" />
 				<br/>
@@ -86,7 +86,12 @@
 								<p:graphicImage value="../../images/pdf-icon.png" width="20" style="margin-right: 20px; float: left;" />
 							</h:commandLink>
 						</p:outputPanel> 
-					</f:facet>					
+					</f:facet>
+					
+					<p:column style="width:20px;">
+						<p:commandLink rendered="#{cuenta.nombreTabla.equals('PagosCliente') || cuenta.nombreTabla == null}" title="Eliminar movimiento" style="width:20px;" styleClass="ui-icon ui-icon-close" 
+				        	update=":formulario:panelCompleto" />
+					</p:column>					
 					
 					<p:column sortBy="#{cuenta.fecha}" filterBy="#{cuenta.fecha}"
 						filterMatchMode="contains" filterStyle="display:none;" style="width:80px;">
