@@ -292,6 +292,73 @@ public class CuentaCorriente implements Serializable {
 		}
 	}
 	
+	public int deleteCuentaCorrientePorId(CuentasCorrientesCliente ccCliente){
+		try{
+			float debe = ccCliente.getDebe();
+			float haber = ccCliente.getHaber();
+			Date fechaCC = ccCliente.getFecha();
+			int idCli = ccCliente.getCliente().getId();
+			Cliente cliente = clienteDAO.get(idCli);
+			List<CuentasCorrientesCliente> listAux = cuentaCorrienteDAO.getListaOrdenadaPorFechaCliente(fechaCC, cliente);
+			List<CuentasCorrientesCliente> listAux2 = new ArrayList<CuentasCorrientesCliente>();
+			CuentasCorrientesCliente ultimaCuenta = new CuentasCorrientesCliente();
+			float saldoCliente = 0;
+			boolean pasoCuentaAnterior = false;
+			for (CuentasCorrientesCliente cuenta2 : listAux) {
+				if(cuenta2.getId() != ccCliente.getId()){
+					saldoCliente = cuenta2.getSaldo();
+					if(pasoCuentaAnterior){
+						listAux2.add(cuenta2);
+					}else{
+						ultimaCuenta = cuenta2;
+					}
+				}else{
+					pasoCuentaAnterior = true;
+				}
+			}
+			boolean update = true;
+			if (listAux2.isEmpty()) {
+				if (ultimaCuenta.getId() != 0) {
+					saldoCliente = ultimaCuenta.getSaldo();
+				} else {
+					if (debe != 0) {
+						saldoCliente = cliente.getSaldo() - debe;
+					}
+					if (haber != 0) {
+						saldoCliente = cliente.getSaldo() + haber;
+					}
+				}
+				
+			} else {
+				for(CuentasCorrientesCliente cuenta2 : listAux2){
+					float sldo = cuenta2.getSaldo();
+					if(debe != 0){					
+						sldo = sldo - ccCliente.getDebe();
+					}
+					if(haber != 0){
+						sldo = sldo + ccCliente.getHaber();
+					}
+					cuenta2.setSaldo(sldo);
+					saldoCliente = sldo;
+					if(cuentaCorrienteDAO.update(cuenta2) == 0){
+						update = false;
+					}
+				}
+			}
+			int delete = cuentaCorrienteDAO.deleteMovimientoCliente(ccCliente.getId());
+			cliente.setSaldo(saldoCliente);
+			if(update && delete != 0){
+				clienteDAO.update(cliente);
+				return 1;
+			}else{
+				return 0;
+			}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			return 0;
+		}
+	}
+	
 	public int deleteCuentaCorriente(CuentasCorrientesProveedore cuenta){
 		try{
 			int idMovimiento = cuenta.getIdMovimiento();

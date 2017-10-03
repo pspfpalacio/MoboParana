@@ -15,8 +15,13 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
+import ar.com.clases.CuentaCorriente;
+import ar.com.clases.MovimientoCaja;
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Cuentas;
+import model.entity.Caja;
 import model.entity.Cliente;
 import model.entity.Compra;
 import model.entity.Consignacion;
@@ -26,6 +31,7 @@ import model.entity.CuotasDetalle;
 import model.entity.CuotasVentasDetalle;
 import model.entity.Devolucione;
 import model.entity.EntregaConsignacion;
+import model.entity.EquipoPendientePago;
 import model.entity.GarantiasCliente;
 import model.entity.GarantiasProveedore;
 import model.entity.PagosCliente;
@@ -42,6 +48,7 @@ import dao.interfaces.DAOCuotaDetalle;
 import dao.interfaces.DAOCuotaVentaDetalle;
 import dao.interfaces.DAODevolucion;
 import dao.interfaces.DAOEntregaConsignacion;
+import dao.interfaces.DAOEquipoPendientePago;
 import dao.interfaces.DAOGarantiasCliente;
 import dao.interfaces.DAOGarantiasProveedor;
 import dao.interfaces.DAOPago;
@@ -57,6 +64,8 @@ public class BeanCuentaCorriente implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final static Logger log = Logger.getLogger(BeanCuentaCorriente.class);
 	
 	@ManagedProperty(value = "#{BeanCuentaCorrienteDAO}")
 	private DAOCuentaCorriente cuentaCorrienteDAO;
@@ -96,6 +105,9 @@ public class BeanCuentaCorriente implements Serializable {
 	
 	@ManagedProperty(value = "#{BeanGarantiasProveedorDAO}")
 	private DAOGarantiasProveedor garantiasProveedorDAO;
+	
+	@ManagedProperty(value = "#{BeanEquipoPendientePagoDAO}")
+	private DAOEquipoPendientePago equipoPendientePagoDAO;
 	
 	private List<CuentasCorrientesCliente> listaCuentasCorrientesClientes;
 	private List<CuentasCorrientesCliente> filteredCuentasCorrientesClientes;
@@ -239,6 +251,14 @@ public class BeanCuentaCorriente implements Serializable {
 
 	public void setGarantiasProveedorDAO(DAOGarantiasProveedor garantiasProveedorDAO) {
 		this.garantiasProveedorDAO = garantiasProveedorDAO;
+	}
+
+	public DAOEquipoPendientePago getEquipoPendientePagoDAO() {
+		return equipoPendientePagoDAO;
+	}
+
+	public void setEquipoPendientePagoDAO(DAOEquipoPendientePago equipoPendientePagoDAO) {
+		this.equipoPendientePagoDAO = equipoPendientePagoDAO;
 	}
 
 	public List<CuentasCorrientesCliente> getListaCuentasCorrientesClientes() {
@@ -681,7 +701,7 @@ public class BeanCuentaCorriente implements Serializable {
 			} else {
 				List<VentasCon> listAuxVentaCon = ventaConsignacionDAO.getLista(producto, cliente);
 				if (listAuxVentaCon.isEmpty()) {
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No existen ventas de consignación realizadas al Cliente " +
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No existen ventas de consignaciï¿½n realizadas al Cliente " +
 							cliente.getNombreNegocio() + ", para ese producto!", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				} else {
@@ -729,7 +749,7 @@ public class BeanCuentaCorriente implements Serializable {
 			} else {
 				List<VentasCon> listAuxVentaCon = ventaConsignacionDAO.getLista(producto, cliente);
 				if (listAuxVentaCon.isEmpty()) {
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No existen ventas de consignación realizadas al Cliente " +
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No existen ventas de consignaciï¿½n realizadas al Cliente " +
 							cliente.getNombreNegocio() + ", para ese producto!", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				} else {
@@ -801,7 +821,7 @@ public class BeanCuentaCorriente implements Serializable {
 				ventasCon = ventaConsignacionDAO.get(ccCliente.getIdMovimiento());
 			}
 		}else{
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No Existe ningún movimiento asociado!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No Existe ningï¿½n movimiento asociado!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
@@ -818,8 +838,81 @@ public class BeanCuentaCorriente implements Serializable {
 				compra = compraDAO.get(ccProveedor.getIdMovimiento());
 			}
 		}else{
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No Existe ningún movimiento asociado!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No Existe ningï¿½n movimiento asociado!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+	}
+	
+	public void eliminarMovimientoCliente(CuentasCorrientesCliente ccCliente) {
+		log.info("bajaMovimientoCliente() - ccCliente id: " + ccCliente.getId());
+		try {
+			CuentaCorriente cuenta = new CuentaCorriente();
+			int deleteCC = cuenta.deleteCuentaCorrientePorId(ccCliente);
+			
+			if (deleteCC != 0) {
+				if (ccCliente.getIdMovimiento() != 0) {
+					
+					PagosCliente pagosC = pagoDAO.getPagoCliente(ccCliente.getIdMovimiento());
+					MovimientoCaja movCaja = new MovimientoCaja();
+					
+					Caja mov = new Caja();				
+					mov.setIdMovimiento(pagosC.getId());
+					mov.setNombreTabla("PagosCliente");
+					int deleteMC = movCaja.deleteCaja(mov);
+					log.info("deleteCC: " + deleteCC + " - deleteMC: " + deleteMC);
+									
+					if (deleteCC != 0 && deleteMC != 0) {
+						List<EquipoPendientePago> listaEquiposPagos = equipoPendientePagoDAO.getLista(pagosC.getCliente(), pagosC, true, true);
+						boolean flagEpp = true;
+						for (EquipoPendientePago equipoPago : listaEquiposPagos) {
+							equipoPago.setFechaMod(new Date());
+							equipoPago.setPagado(false);
+							equipoPago.setPagosCliente(null);
+							int updateEpp = equipoPendientePagoDAO.update(equipoPago); 
+							log.info("equipoPago id: " + equipoPago.getId() + " - updateEpp: " + updateEpp);
+							if (updateEpp == 0) {
+								flagEpp = false;
+							}
+						}
+						if (flagEpp) {
+							pagosC.setEnabled(false);
+							pagosC.setFechaBaja(new Date());
+							pagosC.setUsuario2(usuario);
+							int updatePago = pagoDAO.update(pagosC);
+							log.info("pago id: " + pagosC.getId() + " - updatePago: " + updatePago);
+							if (updatePago != 0) {
+								listaCuentasCorrientesClientes = new ArrayList<CuentasCorrientesCliente>();
+								listaCuentasCorrientesClientes = cuentaCorrienteDAO.getLista(cliente);
+								FacesContext.getCurrentInstance().addMessage(null, 
+										new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de movimiento registrada!", null));
+							} else {
+								FacesContext.getCurrentInstance().addMessage(null, 
+										new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error grave al dar de baja el pago!", null));
+							}
+						} else {
+							FacesContext.getCurrentInstance().addMessage(null, 
+									new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error grave al dar de baja los equipos "
+											+ "relacionados al pago!", null));
+						}
+					} else {
+						FacesContext.getCurrentInstance().addMessage(null, 
+								new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error grave al dar de baja los movimientos "
+										+ "relacionados al registro!", null));
+					}
+				} else {
+					listaCuentasCorrientesClientes = new ArrayList<CuentasCorrientesCliente>();
+					listaCuentasCorrientesClientes = cuentaCorrienteDAO.getLista(cliente);
+					FacesContext.getCurrentInstance().addMessage(null, 
+							new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de movimiento registrada!", null));
+				}
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, 
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de baja el movimiento!", null));
+			}			
+		} catch (Exception e) {
+			log.error("Error en bajaPagosClientes() - Error: " + e);
+			FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error grave al dar de baja el movimiento!", null));
 		}
 	}
 	
