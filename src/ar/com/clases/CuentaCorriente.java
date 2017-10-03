@@ -430,6 +430,72 @@ public class CuentaCorriente implements Serializable {
 		}
 	}
 	
+	public int deleteCuentaCorrientePorId(CuentasCorrientesProveedore ccProveedor){
+		try{
+			float debe = ccProveedor.getDebe();
+			float haber = ccProveedor.getHaber();
+			Date fechaCC = ccProveedor.getFecha();
+			int idProv = ccProveedor.getProveedore().getId();
+			Proveedore proveedor = proveedorDAO.get(idProv);
+			List<CuentasCorrientesProveedore> listAux = cuentaCorrienteDAO.getListaOrdenadaPorFechaProveedor(fechaCC, proveedor);
+			List<CuentasCorrientesProveedore> listAux2 = new ArrayList<CuentasCorrientesProveedore>();
+			CuentasCorrientesProveedore ultimaCuenta = new CuentasCorrientesProveedore();
+			float saldoProveedor = 0;
+			boolean pasoCuentaAnterior = false;
+			for (CuentasCorrientesProveedore cuenta2 : listAux) {
+				if(cuenta2.getId() != ccProveedor.getId()){
+					if(pasoCuentaAnterior){
+						saldoProveedor = cuenta2.getSaldo();
+						listAux2.add(cuenta2);
+					}else{
+						ultimaCuenta = cuenta2;
+					}
+				}else{
+					pasoCuentaAnterior = true;
+				}
+			}
+			boolean update = true;
+			if (listAux2.isEmpty()) {
+				if (ultimaCuenta.getId() != 0) {
+					saldoProveedor = ultimaCuenta.getSaldo();
+				} else {
+					if (debe != 0) {
+						saldoProveedor = proveedor.getSaldo() - debe;
+					}
+					if (haber != 0) {
+						saldoProveedor = proveedor.getSaldo() + haber;
+					}
+				}
+			} else {
+				for(CuentasCorrientesProveedore cuenta2 : listAux2){
+					float sldo = cuenta2.getSaldo();
+					if(debe != 0){					
+						sldo = sldo - ccProveedor.getDebe();
+					}
+					if(haber != 0){
+						sldo = sldo + ccProveedor.getHaber();
+					}
+					cuenta2.setSaldo(sldo);
+					saldoProveedor = sldo;
+					if(cuentaCorrienteDAO.update(cuenta2) == 0){
+						update = false;
+					}
+				}
+			}
+			int delete = cuentaCorrienteDAO.deleteMovimientoProveedor(ccProveedor.getId());
+			proveedor.setSaldo(saldoProveedor);
+			if(update && delete != 0){
+				proveedorDAO.update(proveedor);
+				return 1;
+			}else{
+				return 0;
+			}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			return 0;
+		}
+	}
+	
 	public int procesoActualizaSaldoParticular(int idCliente) {
 		int retorno = 1;
 		Cliente cliente = clienteDAO.get(idCliente); 

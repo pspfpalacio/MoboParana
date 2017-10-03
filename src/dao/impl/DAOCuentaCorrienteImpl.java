@@ -377,6 +377,25 @@ public class DAOCuentaCorrienteImpl implements Serializable, DAOCuentaCorriente 
 		}
 	}
 	
+	public int deleteMovimientoProveedor(int idCuentaProveedor) {
+		inicializar();
+		EntityTransaction tx = em.getTransaction();
+		try {
+			Query locQuery = em.createQuery("DELETE FROM CuentasCorrientesProveedore c "
+					+ "WHERE c.id = :pId");
+			locQuery.setParameter("pId", idCuentaProveedor);			
+			tx.begin();
+			locQuery.executeUpdate();
+			tx.commit();
+			//cerrarInstancia();
+			return 1;
+		} catch (Exception e) {
+			tx.rollback();
+			//cerrarInstancia();
+			return 0;
+		}
+	}
+	
 	
 	public List<CuentasCorrientesProveedore> getListaProveedorOrdenadaPorFecha(
 			Proveedore proveedore) {

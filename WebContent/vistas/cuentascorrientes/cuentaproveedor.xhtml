@@ -76,9 +76,11 @@
 					</f:facet>		
 					
 					<p:column style="width:20px;">
-						<p:commandLink style="width:20px;" styleClass="ui-icon ui-icon-close" 
-				        	update=":formulario:panelCompleto" />
-					</p:column>				
+						<p:commandLink rendered="#{cuenta.nombreTabla == null}" title="Eliminar movimiento" style="width:20px;" styleClass="ui-icon ui-icon-close" 
+				        	actionListener="#{beanCuentaCorriente.eliminarMovimientoProveedor(cuenta)}" update=":formulario" process="@this">
+				        	<p:confirm header="Confirmacion" message="Esta seguro que desea realizar la baja del movimiento?" icon="ui-icon-alert" />
+				        </p:commandLink>
+					</p:column>		
 					
 					<p:column sortBy="#{cuenta.fecha}" filterBy="#{cuenta.fecha}"
 						filterMatchMode="contains" filterStyle="display:none;" style="width:80px;">
@@ -144,6 +146,10 @@
 						<p:commandButton value="volver" action="proveedores"/>
 					</f:facet>
 				</p:panelGrid>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			    </p:confirmDialog>	
 				<p:dialog header="Movimiento de Cuenta Corriente" widgetVar="dialogoMovimiento"
 					id="dialogo" modal="true">
 					<p:outputPanel id="outputPanel">

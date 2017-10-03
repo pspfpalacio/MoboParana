@@ -916,6 +916,28 @@ public class BeanCuentaCorriente implements Serializable {
 		}
 	}
 	
+	public void eliminarMovimientoProveedor(CuentasCorrientesProveedore ccProveedor) {
+		log.info("bajaMovimientoProveedor() - ccProveedor id: " + ccProveedor.getId());
+		try {
+			CuentaCorriente cuenta = new CuentaCorriente();
+			int deleteCC = cuenta.deleteCuentaCorrientePorId(ccProveedor);
+			
+			if (deleteCC != 0) {
+				listaCuentasCorrientesProveedores = new ArrayList<CuentasCorrientesProveedore>();
+				listaCuentasCorrientesProveedores = cuentaCorrienteDAO.getListaProveedor(proveedor);					
+				FacesContext.getCurrentInstance().addMessage(null, 
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de movimiento registrada!", null));				
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, 
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al dar de baja el movimiento!", null));
+			}			
+		} catch (Exception e) {
+			log.error("Error en bajaPagosClientes() - Error: " + e);
+			FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error grave al dar de baja el movimiento!", null));
+		}
+	}
+	
 	public void generarReporteCliente(){
 		Reporte reporte = new Reporte();
 		DecimalFormat formatoMonto = new DecimalFormat("##,##0.00");

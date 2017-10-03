@@ -56,6 +56,8 @@ public interface DAOCuentaCorriente {
 	
 	public int deletePorMovimientoProveedor(int idMovimiento, String nombreTabla, Proveedore proveedor);
 	
+	public int deleteMovimientoProveedor(int idCuentaProveedor);
+	
 	public List<CuentasCorrientesProveedore> getListaProveedorOrdenadaPorFecha(Proveedore proveedore);
 	
 	public List<CuentasCorrientesCliente> getListaClienteOrdenadaPorFecha(Cliente cliente);
