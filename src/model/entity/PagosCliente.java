@@ -56,6 +56,11 @@ public class PagosCliente implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="id_usuario_baja")
 	private Usuario usuario2;
+	
+	//bi-directional many-to-one association to Cheque
+	@ManyToOne
+	@JoinColumn(name="id_cheque")
+	private Cheque cheque;
 
 	public PagosCliente() {
 	}
@@ -160,6 +165,14 @@ public class PagosCliente implements Serializable {
 
 	public void setUsuario2(Usuario usuario2) {
 		this.usuario2 = usuario2;
+	}
+	
+	public Cheque getCheque() {
+		return this.cheque;
+	}
+
+	public void setCheque(Cheque cheque) {
+		this.cheque = cheque;
 	}
 
 }

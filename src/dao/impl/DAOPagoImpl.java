@@ -54,9 +54,9 @@ public class DAOPagoImpl implements Serializable, DAOPago {
 		try{
 			inicializar();
 			EntityTransaction tx = em.getTransaction();
-			Query locQuery = em.createQuery("UPDATE PagosCliente p SET p.cliente = :pCliente, p.concepto = :pConcepto, "
-					+ "p.fecha = :pFecha, p.fechaAlta = :pFechaAlta, p.monto = :pMonto, p.usuario1 = :pUsuarioAlta, "
-					+ "p.usuario2 = :pUsuarioBaja, p.fechaBaja = :pFechaBaja, p.enabled = :pEnabled "
+			Query locQuery = em.createQuery("UPDATE PagosCliente p SET p.cheque = :pCheque, p.cliente = :pCliente, "
+					+ "p.concepto = :pConcepto, p.fecha = :pFecha, p.fechaAlta = :pFechaAlta, p.monto = :pMonto, "
+					+ "p.usuario1 = :pUsuarioAlta, p.usuario2 = :pUsuarioBaja, p.fechaBaja = :pFechaBaja, p.enabled = :pEnabled "
 					+ "WHERE p.id = :pId");
 			locQuery.setParameter("pCliente", pagosCliente.getCliente());
 			locQuery.setParameter("pConcepto", pagosCliente.getConcepto());

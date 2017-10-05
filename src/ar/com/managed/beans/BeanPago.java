@@ -35,6 +35,7 @@ import model.entity.PagosProveedore;
 import model.entity.Proveedore;
 import model.entity.UnidadMovil;
 import model.entity.Usuario;
+import dao.interfaces.DAOCheque;
 import dao.interfaces.DAOCliente;
 import dao.interfaces.DAOEquipoPendientePago;
 import dao.interfaces.DAOPago;
@@ -66,6 +67,9 @@ public class BeanPago implements Serializable {
 	
 	@ManagedProperty(value = "#{BeanUnidadMovilDAO}")
 	private DAOUnidadMovil unidadMovilDAO;
+	
+	@ManagedProperty(value = "#{BeanChequeDAO}")
+	private DAOCheque chequeDAO;
 	
 	private List<Cliente> listaClientes;
 	private List<Proveedore> listaProveedores;
@@ -139,6 +143,14 @@ public class BeanPago implements Serializable {
 
 	public void setUnidadMovilDAO(DAOUnidadMovil unidadMovilDAO) {
 		this.unidadMovilDAO = unidadMovilDAO;
+	}
+
+	public DAOCheque getChequeDAO() {
+		return chequeDAO;
+	}
+
+	public void setChequeDAO(DAOCheque chequeDAO) {
+		this.chequeDAO = chequeDAO;
 	}
 
 	public void setListaProveedores(List<Proveedore> listaProveedores) {

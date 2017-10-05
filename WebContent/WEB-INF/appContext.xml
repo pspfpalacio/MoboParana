@@ -9,6 +9,7 @@
 	<context:annotation-config />
 	<context:component-scan base-package="dao.impl" />
 	<bean id="BeanCajaDAO" class="dao.impl.DAOCajaImpl" />
+	<bean id="BeanChequeDAO" class="dao.impl.DAOChequeImpl" />
 	<bean id="BeanClienteDAO" class="dao.impl.DAOClienteImpl" />
 	<bean id="BeanCompraDAO" class="dao.impl.DAOCompraImpl" />
 	<bean id="BeanCompraDetalleDAO" class="dao.impl.DAOCompraDetalleImpl" />
