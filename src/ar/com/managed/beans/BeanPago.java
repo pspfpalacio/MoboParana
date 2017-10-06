@@ -26,6 +26,7 @@ import ar.com.clases.MovimientoCaja;
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Pagos;
 import model.entity.Caja;
+import model.entity.Cheque;
 import model.entity.Cliente;
 import model.entity.CuentasCorrientesCliente;
 import model.entity.CuentasCorrientesProveedore;
@@ -81,6 +82,7 @@ public class BeanPago implements Serializable {
 	private List<EquipoPendientePago> equiposParaPagar;
 	private Cliente cliente;
 	private Usuario usuario;
+	private Cheque cheque;
 	private Date fechaPago;
 	private Date fechaDesde;
 	private Date fechaHasta;
@@ -88,6 +90,7 @@ public class BeanPago implements Serializable {
 	private int idProveedor;
 	private String destinatarios;
 	private boolean envioEmail;
+	private boolean registrarCheque;
 	private boolean skip;	
 	private boolean first;
 
@@ -221,6 +224,14 @@ public class BeanPago implements Serializable {
 		this.usuario = usuario;
 	}
 
+	public Cheque getCheque() {
+		return cheque;
+	}
+
+	public void setCheque(Cheque cheque) {
+		this.cheque = cheque;
+	}
+
 	public Date getFechaPago() {
 		return fechaPago;
 	}
@@ -277,6 +288,14 @@ public class BeanPago implements Serializable {
 		this.envioEmail = envioEmail;
 	}
 
+	public boolean isRegistrarCheque() {
+		return registrarCheque;
+	}
+
+	public void setRegistrarCheque(boolean registrarCheque) {
+		this.registrarCheque = registrarCheque;
+	}
+
 	public boolean isSkip() {
 		return skip;
 	}
@@ -301,6 +320,7 @@ public class BeanPago implements Serializable {
 		equiposParaPagar = new ArrayList<EquipoPendientePago>();
 		listadoPagosClientes = new ArrayList<PagosCliente>();
 		idCliente = 0;
+		cheque = new Cheque();
 		pagoCliente = new PagosCliente();
 		pagoCliente.setFecha(null);
 		pagoCliente.setConcepto("");
@@ -310,6 +330,7 @@ public class BeanPago implements Serializable {
 		usuario = user;
 		destinatarios = "";
 		envioEmail = false;
+		registrarCheque = false;
 		return "pagocliente";
 	}
 	
@@ -347,6 +368,9 @@ public class BeanPago implements Serializable {
 			log.info("Cliente: " + cliente.getApellidoNombre());
 			log.info("Mail cliente: " + destinatarios);
 		}
+		if (event.getNewStep().equals("cheques")) {
+			cheque.setImporte(pagoCliente.getMonto());
+		}
 		if(skip) {
             skip = false;   //reset in case user goes back
             return "confirm";
@@ -381,6 +405,9 @@ public class BeanPago implements Serializable {
 			log.info("Cliente: " + cliente.getApellidoNombre());
 			log.info("Mail cliente: " + destinatarios);
 		}		
+		if (event.getNewStep().equals("cheques")) {
+			cheque.setImporte(pagoCliente.getMonto());
+		}
 		if(skip) {
             skip = false;   //reset in case user goes back
             return "confirm";
@@ -479,11 +506,16 @@ public class BeanPago implements Serializable {
 	}
 	
 	public void guardarPagoCliente(){
-		log.info("guardarPagoCliente() - fecha: " + pagoCliente.getFecha() + " - idCliente: " + idCliente + " - monto: " + pagoCliente.getMonto() + " - envioEmail: " + envioEmail + " - destinatarios: " + destinatarios + " - concepto: " + pagoCliente.getConcepto());
+		log.info("guardarPagoCliente() - fecha: " + pagoCliente.getFecha() + " - idCliente: " + idCliente + " - monto: " + pagoCliente.getMonto() + " - envioEmail: " + envioEmail + " - destinatarios: " + destinatarios + " - concepto: " + pagoCliente.getConcepto() + " - registraCheque: " + registrarCheque);
 		FacesMessage msg = null;		
 		if(pagoCliente.getFecha() != null && idCliente != 0 && pagoCliente.getMonto() != 0){
 			cliente = clienteDAO.get(idCliente);
 			log.info("Cliente: " + cliente.getApellidoNombre());
+			if (registrarCheque) {
+				int idCheque = chequeDAO.insertar(cheque);
+				cheque.setId(idCheque);
+				pagoCliente.setCheque(cheque);
+			}
 			pagoCliente.setCliente(cliente);
 			pagoCliente.setFechaAlta(new Date());
 			pagoCliente.setUsuario1(usuario);

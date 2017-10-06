@@ -22,19 +22,16 @@
 		   					itemValue="#{cliente.id}"/>
 		   				</p:selectOneMenu>
 	   				</p:column>
-	   				<p:column>
-	   					<p:outputLabel value="Fecha desde: " />
-	   					<p:calendar value="#{beanPago.fechaDesde}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
-	   					<p:outputLabel value="hasta: " />
-	   					<p:calendar value="#{beanPago.fechaHasta}" pattern="dd/MM/yyyy" mask="true" locale="tr" />
-	   					<p:commandButton icon="ui-icon-refresh" value="Actualizar" action="#{beanPago.buscarPagosClientes()}" update="dataPagos" />
-	   				</p:column>
 	   				
 					<p:dataTable id="dataPagos" value="#{beanPago.listadoPagosClientes}" var="pago" emptyMessage="No existen registros de pagos" 
 		   				paginator="true" rows="10" resizableColumns="true" >
 						<f:facet name="header">
 							<p:outputLabel value="Pagos registrados" style="width:20px;"/>		
 						</f:facet>
+						
+						<p:column style="width:10px;">
+							<p:rowToggler/>
+						</p:column>
 						
 						<p:column headerText="Baja" style="text-align: center; width:70px;" id="act_desact">									
 							<p:row rendered="#{pago.enabled}">																
@@ -72,7 +69,70 @@
 						
 						<p:column headerText="Usuario" style="text-align:center;">
 							<h:outputText value="#{pago.usuario1.username}" />
-						</p:column>					
+						</p:column>		
+						
+						<p:rowExpansion>
+							<p:panel header="Cheque Asociado">
+				                <h:panelGrid columns="1" columnClasses="label, value" rendered="#{pago.cheque == null}">		                    
+									<h:outputText value="No existen cheques asociados al pago." />														
+								</h:panelGrid>
+							
+								<h:panelGrid columns="2" style="width:900px;" columnClasses="label, value" rendered="#{pago.cheque != null}">
+									<p:column>										
+										<h:outputText value="Entidad Bancaria: " />
+										<h:outputText value="#{pago.cheque.datosEntidad}" />
+									</p:column>
+									<p:column style="text-align:right;">
+										<h:outputText value="CCC: " />
+										<h:outputText value="#{pago.cheque.codigoCuentaCliente}" />
+									</p:column>
+								</h:panelGrid>
+						
+								<h:panelGrid columns="1" style="width:900px;text-align: right;" columnClasses="label, value" rendered="#{pago.cheque != null}">
+									<p:column>
+										<h:outputText value="Importe: " />
+										<h:outputText value="#{pago.cheque.importe}" >
+											<f:convertNumber pattern="$###,##0.00"/>
+										</h:outputText>
+									</p:column>
+								</h:panelGrid>
+							
+								<h:panelGrid columns="1" style="width:900px;" columnClasses="label, value" rendered="#{pago.cheque != null}">							
+									<p:column>										
+										<h:outputLabel value="Persona a favor: " />
+										<h:outputText value="#{pago.cheque.persona}" cols="70" rows="1" />
+									</p:column>							
+								</h:panelGrid>
+						
+								<h:panelGrid columns="2" style="width:900px;text-align: right;" columnClasses="label, value" rendered="#{pago.cheque != null}">
+									<p:column>
+										<h:outputText value="Lugar: " />
+										<h:outputText value="#{pago.cheque.lugar}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="Fecha: " />
+										<h:outputText value="#{pago.cheque.fecha}" >
+											<f:convertDateTime pattern="dd/MM/yyyy" locale="tr"/>
+										</h:outputText>
+									</p:column>
+								</h:panelGrid>
+						
+								<h:panelGrid columns="3" style="width:900px;" columnClasses="label, value" rendered="#{pago.cheque != null}">
+									<p:column>
+										<h:outputText value="Serie: " />
+										<h:outputText value="#{pago.cheque.serie}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="Tipo: " />
+										<h:outputText value="#{pago.cheque.tipo}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="Número: " />
+										<h:outputText value="#{pago.cheque.numero}" />
+									</p:column>
+								</h:panelGrid>
+		            		</p:panel>
+						</p:rowExpansion>			
 					</p:dataTable>
                 </h:panelGrid>
 			</p:panel>

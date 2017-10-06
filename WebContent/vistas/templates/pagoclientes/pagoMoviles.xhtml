@@ -87,6 +87,66 @@
 		                </h:panelGrid>
 		            </p:panel>
 		        </p:tab>
+		        
+		        <p:tab id="cheques" title="Cheque">
+		            <p:panel header="Detalle del cheque">
+		                <h:panelGrid columns="2" columnClasses="label, value">		                    
+							<h:outputText value="Registrar cheque:" />
+							<p:selectBooleanCheckbox value="#{beanPago.registrarCheque}" />					
+						</h:panelGrid>
+							
+						<h:panelGrid columns="2" style="width: 870px;" columnClasses="label, value">
+							<p:column>
+								<h:outputText value="Entidad Bancaria:" />
+								<p:inputText value="#{beanPago.cheque.datosEntidad}" />
+							</p:column>
+							<p:column style="text-align:right;">
+								<h:outputText value="CCC:" />
+								<p:inputText value="#{beanPago.cheque.codigoCuentaCliente}" />
+							</p:column>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="1" style="width:870px;text-align: right;" columnClasses="label, value">
+							<p:column>
+								<h:outputText value="Importe($):" />
+								<p:inputText value="#{beanPago.cheque.importe}" disabled="true" />
+							</p:column>
+						</h:panelGrid>
+							
+						<h:panelGrid columns="2" style="width: 900px;" columnClasses="label, value">
+							
+								<h:outputText value="Persona a favor:" />
+								<p:inputTextarea value="#{beanPago.cheque.persona}" cols="70" rows="1" />
+							
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2" style="width:870px;text-align: right;" columnClasses="label, value">
+							<p:column>
+								<h:outputText value="Lugar:" />
+								<p:inputText value="#{beanPago.cheque.lugar}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="Fecha:" />
+								<p:calendar value="#{beanPago.cheque.fecha}" pattern="dd/MM/yyyy" locale="tr" />
+							</p:column>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="3" style="width: 900px;" columnClasses="label, value">
+							<p:column>
+								<h:outputText value="Serie:" />
+								<p:inputText value="#{beanPago.cheque.serie}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="Tipo:" />
+								<p:inputText value="#{beanPago.cheque.tipo}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="Número:" />
+								<p:inputText value="#{beanPago.cheque.numero}" />
+							</p:column>
+						</h:panelGrid>
+		            </p:panel>
+		        </p:tab>
 		 
 		        <p:tab id="email" title="Envío email">
 		            <p:panel header="Detalle email">
