@@ -15,9 +15,13 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import ar.com.clases.CostoPromedio;
+import ar.com.clases.Mail;
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.ListaDePrecio;
+import ar.com.managed.beans.cliente.BeanVentaCliente;
 import model.entity.Cliente;
 import model.entity.ListaPrecio;
 import model.entity.ListaPrecioProducto;
@@ -32,6 +36,8 @@ import dao.interfaces.DAORubro;
 @ManagedBean
 @SessionScoped
 public class BeanListaPrecio implements Serializable {
+	
+	private final static Logger log = Logger.getLogger(BeanVentaCliente.class);
 
 	/**
 	 * 
@@ -57,6 +63,8 @@ public class BeanListaPrecio implements Serializable {
 	private List<ListaDePrecio> listaPrecioDinamica;
 	private List<ListaDePrecio> filteredPrecioDinamica;
 	private List<ListaPrecioProducto> selectedPrecioDinamica;
+	private List<Cliente> listaCliente;
+	private List<Cliente> listaClienteSelectos;
 	private ListaPrecio listaPrecio;
 	private Usuario usuario;
 	private String headerText;
@@ -64,6 +72,7 @@ public class BeanListaPrecio implements Serializable {
 	private int porcentaje;
 	private int tipo;
 	private int idRubro; 
+	private boolean envioEmail;
 
 	public DAOListaPrecio getListaPrecioDAO() {
 		return listaPrecioDAO;
@@ -155,13 +164,29 @@ public class BeanListaPrecio implements Serializable {
 			List<ListaPrecioProducto> selectedPrecioDinamica) {
 		this.selectedPrecioDinamica = selectedPrecioDinamica;
 	}
-
+	
 	public ListaPrecio getListaPrecio() {
 		return listaPrecio;
 	}
 
 	public void setListaPrecio(ListaPrecio listaPrecio) {
 		this.listaPrecio = listaPrecio;
+	}
+
+	public List<Cliente> getListaCliente() {
+		return listaCliente;
+	}
+
+	public void setListaCliente(List<Cliente> listaCliente) {
+		this.listaCliente = listaCliente;
+	}
+
+	public List<Cliente> getListaClienteSelectos() {
+		return listaClienteSelectos;
+	}
+
+	public void setListaClienteSelectos(List<Cliente> listaClienteSelectos) {
+		this.listaClienteSelectos = listaClienteSelectos;
 	}
 
 	public Usuario getUsuario() {
@@ -212,6 +237,14 @@ public class BeanListaPrecio implements Serializable {
 		this.idRubro = idRubro;
 	}
 
+	public boolean isEnvioEmail() {
+		return envioEmail;
+	}
+
+	public void setEnvioEmail(boolean envioEmail) {
+		this.envioEmail = envioEmail;
+	}
+
 	public String goListasPrecios(Usuario user){
 		listaPrecios = new ArrayList<ListaPrecio>();
 		filteredPrecios = new ArrayList<ListaPrecio>();
@@ -254,7 +287,9 @@ public class BeanListaPrecio implements Serializable {
 		filteredPrecioProductos = new ArrayList<ListaPrecioProducto>();
 		List<ListaPrecioProducto> listaProductos = new ArrayList<ListaPrecioProducto>();
 		List<ListaPrecioProducto> filteredProductos = new ArrayList<ListaPrecioProducto>();
-		listaPrecio = listaPre;				
+		listaPrecio = listaPre;		
+		listaCliente = new ArrayList<Cliente>();
+		listaCliente = clienteDAO.getLista(listaPre);
 		
 		if (listaPre.getRelacionBase()) {
 			List<ListaPrecioProducto> listPreProds = listaPrecioDAO.getListaPrecioProducto(listaPre);
@@ -465,7 +500,7 @@ public class BeanListaPrecio implements Serializable {
 		System.out.println("Relacion Base " + listaPrecio.getRelacionBase());
 		if (listaPrecio.getBase()) {			
 			if (tipo == 2){//Relacion con Base
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible realizar el cambio a lista de relación con base, realice las bajas correspondientes!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible realizar el cambio a listas relacionadas con base, realice las bajas correspondientes!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
 			if (tipo == 3) {//Ninguna
@@ -479,10 +514,10 @@ public class BeanListaPrecio implements Serializable {
 					filteredPrecios = new ArrayList<ListaPrecio>();
 					listaPrecios = listaPrecioDAO.getLista(true);
 					filteredPrecios = listaPrecios;
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Listas de precio actualizadas con éxito!", null);
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Listas de precio actualizadas correctamente!", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				} else {
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible realizar el cambio en lista, realice las bajas de listas con relación!", null);
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible realizar el cambio en lista, realice las bajas de listas relacionadas!", null);
 					FacesContext.getCurrentInstance().addMessage(null, msg);
 				}
 			}
@@ -514,7 +549,7 @@ public class BeanListaPrecio implements Serializable {
 					}
 				}
 				listaPrecioDAO.update(listaPrecio);
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Listas de precio actualizadas con éxito!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Listas de precio actualizadas correctamente!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
 		}
@@ -555,7 +590,7 @@ public class BeanListaPrecio implements Serializable {
 			filteredPrecios = new ArrayList<ListaPrecio>();
 			listaPrecios = listaPrecioDAO.getLista(true);
 			filteredPrecios = listaPrecios;
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Listas de precio actualizadas con éxito!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Listas de precio actualizadas correctamente!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		
@@ -592,10 +627,10 @@ public class BeanListaPrecio implements Serializable {
 				filteredPrecios = new ArrayList<ListaPrecio>();
 				listaPrecios = listaPrecioDAO.getLista(true);
 				filteredPrecios = listaPrecios;
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Listas de precio actualizadas con éxito!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Listas de precio actualizadas correctamente!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			} else {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede crear relación con base, porque no existe seleccionada una lista como base!", null);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No existe seleccionada una lista como base!", null);
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}			
 		}
@@ -684,8 +719,8 @@ public class BeanListaPrecio implements Serializable {
 		if(listaPrecioDAO.update(listaPre) != 0){
 			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alta de Lista de Precio!", null);
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al dar de Alta la Lista de Precio, "
-					+ "inténtelo nuevamente!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al dar de Alta la Lista de Precio, "
+					+ "intente nuevamente!", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
@@ -701,8 +736,8 @@ public class BeanListaPrecio implements Serializable {
 			if(listaPrecioDAO.update(listaPre) != 0){
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Lista de Precio!", null);
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al dar de Baja la Lista de Precio, "
-						+ "inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al dar de Baja la Lista de Precio, "
+						+ "intente nuevamente!", null);
 			}
 		} else {
 			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible registrar la baja de la Lista, tiene Clientes asociados!", null);
@@ -723,6 +758,7 @@ public class BeanListaPrecio implements Serializable {
 				listaPrecio.setRubro(null);
 			}
 			if(listaPrecio.getId() != 0){
+				log.info("idListaPrecio: " + listaPrecio.getId());
 				listaPrecio.setFechaMod(new Date());
 				listaPrecio.setUsuario3(usuario);
 				idListaPrecio = listaPrecioDAO.update(listaPrecio);
@@ -736,6 +772,7 @@ public class BeanListaPrecio implements Serializable {
 			if(idListaPrecio != 0){
 				listaPrecio.setId(idListaPrecio);
 				if(update){
+					log.info("update: " + update);
 					listaPrecioDAO.deleteProductosPorLista(listaPrecio);
 				}
 				boolean insert = true;
@@ -763,18 +800,38 @@ public class BeanListaPrecio implements Serializable {
 					}
 				}
 				if(insert){
+					
+					if(update && listaClienteSelectos.size() > 0) {
+						String cuerpo = generarHtml(listaPrecioProductos);
+						List<Cliente> listaCliente = new ArrayList<Cliente>();
+						listaCliente = clienteDAO.getLista(listaPrecio);
+						String destinatarios = "";
+						for(Cliente cli : listaClienteSelectos) {
+							destinatarios = destinatarios + cli.getEmail() +",";
+						}
+						
+						Mail mail = new Mail();
+				    	mail.setAsunto("CB TelefonÃ­a - Actualizacion de lista de precios");
+				    	mail.setCuerpo(cuerpo);
+				    	mail.setDestinatarios(destinatarios);
+				    	log.info(cuerpo);
+				    	log.info(destinatarios);
+				    	int send = mail.send();
+						
+					}
+					
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Lista de Precio guardada!", null);
 					retorno = "listasprecios";
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar los Productos asociados a la Lista, "
-							+ "inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar los Productos asociados a la Lista, "
+							+ "intente nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar la Lista de Precio, "
-						+ "inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar la Lista de Precio, "
+						+ "intente nuevamente!", null);
 			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Nombre No puede estar vacío!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Nombre es requerido!", null);
 		}
 		listaPrecios = new ArrayList<ListaPrecio>();
 		filteredPrecios = new ArrayList<ListaPrecio>();
@@ -849,4 +906,52 @@ public class BeanListaPrecio implements Serializable {
 		}		
 	}
 
+    public String generarHtml(List<ListaPrecioProducto> listaPrecioProductos2) {
+    	SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
+    	
+    	String html = "";
+    	html += "<html>" + 
+    			"<head>" + 
+    			"<style>" + 
+    			"table {" + 
+    			"    font-family: arial, sans-serif;" + 
+    			"    border-collapse: collapse;" + 
+    			"    width: 100%;" + 
+    			"}" +  
+    			"td, th {" + 
+    			"    border: 1px solid #dddddd;" + 
+    			"    text-align: left;" + 
+    			"    padding: 8px;" + 
+    			"}" +  
+    			"tr:nth-child(even) {" + 
+    			"    background-color: #dddddd;" + 
+    			"}" + 
+    			".cabecera {" + 
+    			"  font-family: arial, sans-serif;" + 
+    			"    width: 100%;" + 
+    			"}"+ 
+    			"</style>" + 
+    			"</head>" + 
+    			"<body>" +  
+    			"<table>" + 
+    			"  <tr>" + 
+    			"    <th>PRODUCTO</th>" + 
+    			"    <th>PRECIO</th>" + 
+    			"  </tr>";
+    	
+    	for (ListaPrecioProducto lpp : listaPrecioProductos2) {
+    		if(lpp.getPrecioVenta() > 0) {
+	    		html += "<tr>" + 
+				"    <th>" + lpp.getProducto().getNombre() + "</th>" + 
+				"    <th>$" + Float.toString(lpp.getPrecioVenta()) + "</th>" + 
+				"  </tr>";
+    		}
+    	}
+    	
+    	html += "</table>" + 
+    			"" + 
+    			"</body>" + 
+    			"</html>";
+    	return html;
+    }
 }

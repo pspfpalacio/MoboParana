@@ -18,7 +18,7 @@
 		<div class="wrapper">
 			<ui:include src="/includes/header.xhtml" />
 			<h:form id="formulario">
-			<p:panel style="background:#D27C7A;min-height:900px;">
+			<p:panel id="panel" style="background:#D27C7A;min-height:900px;">
 				<p:growl id="messages" showDetail="false" />
 				<ui:include src="/includes/menubar.xhtml" />
 				<br/>
@@ -111,12 +111,29 @@
     			</p:dataTable>
     			<p:panelGrid columns="1" style="width:100%;">    				
    					<f:facet name="footer">
-   						<p:commandButton value="Guardar" update="messages" onclick="return confirm('ESTA SEGURO QUE DESEA GUARDAR LA LISTA DE PRECIO?')" 
-   						action="#{beanListaPrecio.guardar()}" />
+   						<p:commandButton value="Guardar"  onclick="PF('dialog').show();"/>
    						<p:commandButton value="Cancelar" onclick="return confirm('CANCELAR LISTA DE PRECIO Y VOLVER?')"
    						action="listasprecios"/>
    					</f:facet>	
    				</p:panelGrid>
+   				
+   				
+   				<p:dialog id="dialogo" header="Esta seguro?" widgetVar="dialog" minHeight="150" minWidth="150" closable="true" closeOnEscape="true" modal="true">
+   				<p:commandButton value="Confirmar" update="panel" action="#{beanListaPrecio.guardar()}" oncomplete="PF('dialog').hide();"/>
+						<p:dataTable id="eppTable" value="#{beanListaPrecio.listaCliente}" var="cli" emptyMessage="No existen clientes asociados a la lista" scrollable="true"
+						selection="#{beanListaPrecio.listaClienteSelectos}" rowKey="#{cli.id}" style="width:300px; height:250px;">
+							<f:facet name="header">
+								<p:outputLabel value="Seleccione clientes para enviar listado" style="width:20px;"/>		
+							</f:facet>   	
+							
+							<p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+											
+							<p:column headerText="Nombre" style="text-align:center;">
+								<h:outputText value="#{cli.apellidoNombre}" />
+							</p:column>
+						</p:dataTable>
+				</p:dialog>	
+
    			</p:panel>
 	    	</h:form>
 	    </div>
