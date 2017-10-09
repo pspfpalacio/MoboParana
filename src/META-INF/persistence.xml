@@ -57,7 +57,7 @@
 			<property name="javax.persistence.jdbc.password" value="mysqlserver" />
 			<property name="javax.persistence.jdbc.user" value="root" />
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mobodb_des" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mobodb" />
 			<property name="javax.persistence.logging.level" value="ALL" />
 		</properties>
 	</persistence-unit>

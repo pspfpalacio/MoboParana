@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import model.entity.Cliente;
 import model.entity.Compra;
 import model.entity.ComprasDetalle;
+import model.entity.ComprasDetalleUnidad;
 import model.entity.Consignacion;
 import model.entity.ConsignacionsDetalle;
 import model.entity.ConsignacionsDetalleUnidad;
@@ -795,11 +796,11 @@ public class BeanLogueo implements Serializable {
 			if(usuarioDAO.update(usuario) != 0){
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario modificado!", null);
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al modificar el Usuario, "
-						+ "inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un error al modificar el Usuario, "
+						+ "intï¿½ntelo nuevamente!", null);
 			}
 		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Username no puede estar vacío!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Username no puede estar vacï¿½o!", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
@@ -1379,7 +1380,7 @@ public class BeanLogueo implements Serializable {
 						ventaCon.setMonto(monto);
 						ccCliente.setCliente(cliente);
 						ccCliente.setDebe(monto);
-						ccCliente.setDetalle("Venta Consignación nro: " + ventaCon.getId());
+						ccCliente.setDetalle("Venta Consignaciï¿½n nro: " + ventaCon.getId());
 						ccCliente.setFecha(ventaCon.getFecha());
 						ccCliente.setIdMovimiento(ventaCon.getId());
 						ccCliente.setMonto(monto);
@@ -1420,7 +1421,7 @@ public class BeanLogueo implements Serializable {
 						ventaConsignacionDetalleUnidadDAO.insertar(ventaUnidad);
 						ccCliente.setCliente(cliente);
 						ccCliente.setDebe(precioVenta);
-						ccCliente.setDetalle("Venta Consignación nro: " + idVenta);
+						ccCliente.setDetalle("Venta Consignaciï¿½n nro: " + idVenta);
 						ccCliente.setFecha(fecVenta);
 						ccCliente.setIdMovimiento(idVenta);
 						ccCliente.setMonto(precioVenta);
@@ -1514,8 +1515,45 @@ public class BeanLogueo implements Serializable {
 			}
 			producto.setPrecioCosto(ultimoCosto);
 			int updateo = productoDAO.update(producto);
-			System.out.println("Móvil: " + producto.getNombre() + " Actualizó: " + updateo + " con ultimo costo: " + ultimoCosto);
+			System.out.println("Mï¿½vil: " + producto.getNombre() + " Actualizï¿½: " + updateo + " con ultimo costo: " + ultimoCosto);
 		}
+	}
+	
+	public void procesoActualizaCompraDetalle() {
+		List<ComprasDetalle> CDList = new ArrayList<ComprasDetalle>();
+		CDList = compraDetalleDAO.getLista();
+		for(ComprasDetalle CD : CDList) {
+			List<ComprasDetalleUnidad> CDUList = new ArrayList<ComprasDetalleUnidad>();
+			CDUList = CD.getComprasDetalleUnidads();
+			boolean deleteFlag = true;
+			for(ComprasDetalleUnidad CDU : CDUList) {
+				if(!CD.getEliminado()) {
+					ComprasDetalle cd = new ComprasDetalle();
+					cd.setCompra(CD.getCompra());
+					cd.setPrecioCompra(CD.getPrecioCompra());
+					cd.setProducto(CD.getProducto());
+					cd.setAccesorio(CD.getAccesorio());
+					cd.setImei(CDU.getNroImei());
+					cd.setConFalla(CDU.getConFalla());
+					int idInsert = 0;
+					idInsert = compraDetalleDAO.insertar(cd);
+					if (idInsert == 0) {
+						log.info(CD.getImei() + " - " +  idInsert + " - ERROR" );
+						deleteFlag = false;
+					} else {
+						log.info(CD.getImei() + " - " +  idInsert + " - EXITO" );
+						deleteFlag = true;
+					}
+				}
+			}
+			
+			if(deleteFlag) {
+				int eliminado = compraDetalleDAO.deleteDetalleCompra(CD);
+				log.info("ELIMINADO: " + eliminado);
+			}
+		}
+		
+
 	}
 
 }

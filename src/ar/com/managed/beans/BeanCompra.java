@@ -419,6 +419,10 @@ public class BeanCompra implements Serializable {
 		return "compra";
 	}
 	
+	/**
+	 * @param comp
+	 * @return
+	 */
 	public String goCompraEditar(Compra comp){
 		compra = new Compra();		
 		listaProveedores = new ArrayList<Proveedore>();
@@ -440,17 +444,17 @@ public class BeanCompra implements Serializable {
 		montoTotal = comp.getMonto();
 		nroCompra = comp.getId();
 		idProveedor = comp.getProveedore().getId();
-		List<ComprasDetalle> listAux = getDetalleDeCompra(comp);
+		/*List<ComprasDetalle> listAux = getDetalleDeCompra(comp);
 		for(ComprasDetalle compDetalle : listAux){
 			compDetalle.setComprasDetalleUnidads(getUnidadDetalle(compDetalle));
 			listaComprasDetalles.add(compDetalle);
 			cantidadTotal = cantidadTotal + compDetalle.getCantidad();
-		}
+		}*/
 		tipo = comp.getTipo();
 		return "editarcompra";
 	}
 	
-	public void onChangeTipo(){
+	/*public void onChangeTipo(){
 		Rubro rubro = new Rubro();
 		if(idTipo == 0){
 			panelMovil = false;
@@ -532,7 +536,7 @@ public class BeanCompra implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
 		}else{
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Nro de Imei no puede estar vacío!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Nro de Imei no puede estar vacï¿½o!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
@@ -634,7 +638,7 @@ public class BeanCompra implements Serializable {
 					nroImei = "";
 				} else {
 					if (listaComprasDetalleUnidads.isEmpty()) {
-						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La lista de Unidades Móviles no puede estar vacía!", null);
+						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La lista de Unidades Mï¿½viles no puede estar vacï¿½a!", null);
 						FacesContext.getCurrentInstance().addMessage(null, msg);
 					}
 					if (idProducto == 0) {
@@ -732,7 +736,7 @@ public class BeanCompra implements Serializable {
 				VentasDetalleUnidad ventaUnidad = ventaDetalleUnidadDAO.get(imei);
 				UnidadMovil unidad = unidadMovilDAO.get(imei);
 				if (unidad.getEnGarantiaCliente() || unidad.getEnGarantiaProveedor()) {
-					mensaje = mensaje + "Garantía ";
+					mensaje = mensaje + "Garantï¿½a ";
 					disponible = false;
 				}
 				if (comprasDetalleUnidad.getConFalla()) {
@@ -745,7 +749,7 @@ public class BeanCompra implements Serializable {
 				}
 				ConsignacionsDetalleUnidad consignacionUnidad = consignacionDetalleUnidadDAO.get(imei);
 				if(consignacionUnidad.getId() != 0){
-					mensaje = mensaje + "Consignación ";
+					mensaje = mensaje + "Consignaciï¿½n ";
 					disponible = false;
 				}
 			}
@@ -819,8 +823,8 @@ public class BeanCompra implements Serializable {
 			if(updateComp != 0 && actualizo){
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Compra!", null);
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un Error al dar de Baja la Compra! "
-						+ "Inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un Error al dar de Baja la Compra! "
+						+ "Intï¿½ntelo nuevamente!", null);
 			}
 		}else{
 			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible dar de baja la Compra, "
@@ -943,15 +947,15 @@ public class BeanCompra implements Serializable {
 					listaProveedores = proveedorDAO.getLista(true);
 					retorno = "compras";
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al guardar el detalle de la Compra, "
-							+ "inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un error al guardar el detalle de la Compra, "
+							+ "intï¿½ntelo nuevamente!", null);
 				}
 			} else {
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al guardar la Compra, "
-						+ "inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un error al guardar la Compra, "
+						+ "intï¿½ntelo nuevamente!", null);
 			}
 		} else {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Proveedor, Monto Total y Detalles de Compra no pueden estar vacíos!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Proveedor, Monto Total y Detalles de Compra no pueden estar vacï¿½os!", null);
 		}
 		listaCompras = new ArrayList<Compra>();
 		filteredCompras = new ArrayList<Compra>();
@@ -1031,15 +1035,15 @@ public class BeanCompra implements Serializable {
 						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Compra guardada!", null);
 						retorno = "compras";
 					}else{
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al guardar el detalle de la Compra, "
-								+ "inténtelo nuevamente!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un error al guardar el detalle de la Compra, "
+								+ "intï¿½ntelo nuevamente!", null);
 					}
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al modificar la Compra, "
-							+ "inténtelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un error al modificar la Compra, "
+							+ "intï¿½ntelo nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Proveedor, Monto Total y Detalles de Compra no pueden estar vacíos!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Proveedor, Monto Total y Detalles de Compra no pueden estar vacï¿½os!", null);
 			}
 			listaCompras = new ArrayList<Compra>();
 			filteredCompras = new ArrayList<Compra>();
@@ -1049,8 +1053,8 @@ public class BeanCompra implements Serializable {
 			return retorno;
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al modificar la Compra, "
-					+ "inténtelo nuevamente!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un error al modificar la Compra, "
+					+ "intï¿½ntelo nuevamente!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return retorno;
 		}
@@ -1335,7 +1339,7 @@ public class BeanCompra implements Serializable {
 		compra = new Compra();
 		compra = comp;
 		tipo = comp.getTipo();
-	}
+	}*/
 	
 	public void editarTipo() {
 		CuentaCorriente cuenta = new CuentaCorriente();

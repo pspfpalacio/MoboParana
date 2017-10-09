@@ -1,9 +1,7 @@
 package model.entity;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
 import java.util.List;
 
 
@@ -18,19 +16,19 @@ public class ComprasDetalle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	private boolean accesorio;
 
-	private int cantidad;
-	
+	@Column(name="con_falla")
+	private boolean conFalla;
+
 	private boolean eliminado;
+
+	private String imei;
 
 	@Column(name="precio_compra")
 	private float precioCompra;
-
-	private float subtotal;
 
 	//bi-directional many-to-one association to Compra
 	@ManyToOne
@@ -65,14 +63,14 @@ public class ComprasDetalle implements Serializable {
 		this.accesorio = accesorio;
 	}
 
-	public int getCantidad() {
-		return this.cantidad;
+	public boolean getConFalla() {
+		return this.conFalla;
 	}
 
-	public void setCantidad(int cantidad) {
-		this.cantidad = cantidad;
+	public void setConFalla(boolean conFalla) {
+		this.conFalla = conFalla;
 	}
-	
+
 	public boolean getEliminado() {
 		return this.eliminado;
 	}
@@ -81,20 +79,20 @@ public class ComprasDetalle implements Serializable {
 		this.eliminado = eliminado;
 	}
 
+	public String getImei() {
+		return this.imei;
+	}
+
+	public void setImei(String imei) {
+		this.imei = imei;
+	}
+
 	public float getPrecioCompra() {
 		return this.precioCompra;
 	}
 
 	public void setPrecioCompra(float precioCompra) {
 		this.precioCompra = precioCompra;
-	}
-
-	public float getSubtotal() {
-		return this.subtotal;
-	}
-
-	public void setSubtotal(float subtotal) {
-		this.subtotal = subtotal;
 	}
 
 	public Compra getCompra() {

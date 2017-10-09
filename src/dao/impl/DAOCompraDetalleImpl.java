@@ -57,11 +57,11 @@ public class DAOCompraDetalleImpl implements Serializable, DAOCompraDetalle {
 			Query locQuery = em.createQuery("UPDATE ComprasDetalle c SET c.cantidad = :pCantidad, c.compra = :pCompra, "
 					+ "c.precioCompra = :pPrecioCompra, c.producto = :pProducto, c.subtotal = :pSubtotal, c.accesorio = :pAccesorio "
 					+ "WHERE c.id = :pId");
-			locQuery.setParameter("pCantidad", comprasDetalle.getCantidad());
+			//locQuery.setParameter("pCantidad", comprasDetalle.getCantidad());
 			locQuery.setParameter("pCompra", comprasDetalle.getCompra());
 			locQuery.setParameter("pPrecioCompra", comprasDetalle.getPrecioCompra());
 			locQuery.setParameter("pProducto", comprasDetalle.getProducto());
-			locQuery.setParameter("pSubtotal", comprasDetalle.getSubtotal());
+			//locQuery.setParameter("pSubtotal", comprasDetalle.getSubtotal());
 			locQuery.setParameter("pAccesorio", comprasDetalle.getAccesorio());
 			locQuery.setParameter("pId", comprasDetalle.getId());
 			tx.begin();
