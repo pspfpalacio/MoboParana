@@ -1517,5 +1517,48 @@ public class BeanLogueo implements Serializable {
 			System.out.println("Móvil: " + producto.getNombre() + " Actualizó: " + updateo + " con ultimo costo: " + ultimoCosto);
 		}
 	}
+	
+	public void procesoActualizaDetalleVenta() {
+		try {
+			List<Venta>	lista = ventaDAO.getLista(true);
+			boolean flag = true;
+			for (Venta venta : lista) {
+				List<VentasDetalle> listaDetalle = ventaDetalleDAO.getLista(venta);
+				for (VentasDetalle ventasDetalle : listaDetalle) {
+					if (!ventasDetalle.getAccesorio()) {
+						ventasDetalle.setEliminado(true);
+						if (ventaDetalleDAO.update(ventasDetalle) == 0) {
+							flag = false;
+						}
+						List<VentasDetalleUnidad> listaUnidads = ventaDetalleUnidadDAO.getLista(ventasDetalle);
+						for (VentasDetalleUnidad ventasDetalleUnidad : listaUnidads) {
+							VentasDetalle newVentaDetalle = new VentasDetalle();
+							newVentaDetalle.setAccesorio(false);
+							newVentaDetalle.setCantidad(ventasDetalle.getCantidad());
+							newVentaDetalle.setEliminado(false);
+							newVentaDetalle.setListaPrecio(ventasDetalleUnidad.getListaPrecio());
+							newVentaDetalle.setNroImei(ventasDetalleUnidad.getNroImei());
+							newVentaDetalle.setPrecioCompra(ventasDetalleUnidad.getPrecioCompra());
+							newVentaDetalle.setPrecioVenta(ventasDetalleUnidad.getPrecioVenta());
+							newVentaDetalle.setProducto(ventasDetalle.getProducto());
+							newVentaDetalle.setSubtotal(ventasDetalle.getSubtotal());
+							newVentaDetalle.setVenta(venta);
+							if (ventaDetalleDAO.insertar(newVentaDetalle) == 0) {
+								flag = false;
+							}
+						}
+					}
+				}
+			}
+			if (flag) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito!", null));
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", null));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: " + e.getMessage(), null));
+		}		
+	}
 
 }

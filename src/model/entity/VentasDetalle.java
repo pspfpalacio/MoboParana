@@ -26,6 +26,12 @@ public class VentasDetalle implements Serializable {
 	private int cantidad;
 	
 	private boolean eliminado;
+	
+	@Column(name="nro_imei")
+	private String nroImei;
+
+	@Column(name="precio_compra")
+	private float precioCompra;
 
 	@Column(name="precio_venta")
 	private float precioVenta;
@@ -88,6 +94,22 @@ public class VentasDetalle implements Serializable {
 
 	public void setEliminado(boolean eliminado) {
 		this.eliminado = eliminado;
+	}
+	
+	public String getNroImei() {
+		return this.nroImei;
+	}
+
+	public void setNroImei(String nroImei) {
+		this.nroImei = nroImei;
+	}
+
+	public float getPrecioCompra() {
+		return this.precioCompra;
+	}
+
+	public void setPrecioCompra(float precioCompra) {
+		this.precioCompra = precioCompra;
 	}
 
 	public float getPrecioVenta() {
