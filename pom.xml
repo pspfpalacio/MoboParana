@@ -6,7 +6,7 @@
   <packaging>war</packaging>
   <name>MoboParana</name>
   <properties>
-	 <primefaces-version>5.2</primefaces-version>
+	 <primefaces-version>6.1</primefaces-version>
 	 <spring-version>4.2.1.RELEASE</spring-version>
   </properties>
   <repositories>
