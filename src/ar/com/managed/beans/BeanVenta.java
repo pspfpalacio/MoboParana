@@ -20,6 +20,7 @@ import ar.com.clases.MovimientoCaja;
 import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Comprobante;
 import ar.com.clases.auxiliares.DetalleComprobante;
+import ar.com.clases.auxiliares.DetalleVenta;
 import model.entity.Caja;
 import model.entity.Cliente;
 import model.entity.CuentasCorrientesCliente;
@@ -1021,10 +1022,39 @@ public class BeanVenta implements Serializable {
 		listaVentasDetalles = listAux1;
 	}
 	
-	public List<VentasDetalle> getDetalleDeVenta(Venta vent){
-		List<VentasDetalle> listAux = new ArrayList<VentasDetalle>();
-		listAux = ventaDetalleDAO.getLista(vent);
-		return listAux;
+	public List<DetalleVenta> getDetalleDeVenta(Venta vent){
+		List<VentasDetalle> listAux = ventaDetalleDAO.getListaOrderByProducto(vent);
+		List<DetalleVenta> lista = new ArrayList<DetalleVenta>();
+		int cant = 0;
+		float subtot = 0;
+		int idProd = 0;		
+		for (VentasDetalle ventasDetalle : listAux) {			
+			if (idProd == ventasDetalle.getProducto().getId()) {
+				cantidad = cantidad + 1;
+				subtot = subtot + ventasDetalle.getPrecioVenta();
+			} else if (idProd != 0) {
+				DetalleVenta detalle = new DetalleVenta();
+				Producto prod = productoDAO.get(idProd);
+				detalle.setCantidad(cant);
+				detalle.setSubtotal(subtot);
+				detalle.setProducto(prod);
+				lista.add(detalle);
+				idProd = ventasDetalle.getProducto().getId();
+				cant = 1;
+				subtot = ventasDetalle.getPrecioVenta();
+			} else {
+				idProd = ventasDetalle.getProducto().getId();
+				cantidad = 1;
+				subtot = ventasDetalle.getPrecioVenta();
+			}
+		}
+		DetalleVenta detalle = new DetalleVenta();
+		Producto prod = productoDAO.get(idProd);
+		detalle.setCantidad(cant);
+		detalle.setSubtotal(subtot);
+		detalle.setProducto(prod);
+		lista.add(detalle);
+		return lista;
 	}
 	
 	public void filtro(){
@@ -1584,11 +1614,11 @@ public class BeanVenta implements Serializable {
 		for (Venta vent : filteredVentas) {
 			Comprobante comprobante = new Comprobante();
 			List<DetalleComprobante> listDetalleComprobante = new ArrayList<DetalleComprobante>();
-			for (VentasDetalle ventaDetalle : getDetalleDeVenta(vent)) {
+			for (DetalleVenta ventaDetalle : getDetalleDeVenta(vent)) {
 				DetalleComprobante detalle = new DetalleComprobante();
 				detalle.setCantidad(ventaDetalle.getCantidad());
 				detalle.setDetalle(ventaDetalle.getProducto().getNombre());
-				detalle.setPrecioUnitario(formatoMonto.format(ventaDetalle.getPrecioVenta()));
+				detalle.setPrecioUnitario(" - ");
 				detalle.setSubtotal(formatoMonto.format(ventaDetalle.getSubtotal()));
 				listDetalleComprobante.add(detalle);
 			}
@@ -1636,11 +1666,11 @@ public class BeanVenta implements Serializable {
 		Map<String, Object> parametros = new HashMap<String, Object>();
 		List<DetalleComprobante> listaDetalle = new ArrayList<DetalleComprobante>();
 		int cant = 0;
-		for(VentasDetalle ventaDetalle : getDetalleDeVenta(vent)){
+		for(DetalleVenta ventaDetalle : getDetalleDeVenta(vent)){
 			DetalleComprobante detalle = new DetalleComprobante();
 			detalle.setCantidad(ventaDetalle.getCantidad());
 			detalle.setDetalle(ventaDetalle.getProducto().getNombre());
-			detalle.setPrecioUnitario(formatoMonto.format(ventaDetalle.getPrecioVenta()));
+			detalle.setPrecioUnitario(" - ");
 			detalle.setSubtotal(formatoMonto.format(ventaDetalle.getSubtotal()));
 			listaDetalle.add(detalle);
 			cant = cant + ventaDetalle.getCantidad();

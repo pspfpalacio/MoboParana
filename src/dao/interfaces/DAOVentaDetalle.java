@@ -25,6 +25,8 @@ public interface DAOVentaDetalle {
 	
 	public List<VentasDetalle> getLista(Venta venta);
 	
+	public List<VentasDetalle> getListaOrderByProducto(Venta venta);
+	
 	public List<VentasDetalle> getLista(Producto producto);
 	
 	public List<VentasDetalle> getLista(Producto producto, boolean estadoVenta);

@@ -164,6 +164,16 @@ public class DAOVentaDetalleImpl implements Serializable, DAOVentaDetalle {
 		List<VentasDetalle> lista = locQuery.getResultList();
 		return lista;
 	}
+	
+	public List<VentasDetalle> getListaOrderByProducto(Venta venta) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT v FROM VentasDetalle v WHERE v.venta = :pVenta "
+				+ "AND v.eliminado = :pEliminado ORDER BY v.producto", VentasDetalle.class);
+		locQuery.setParameter("pVenta", venta);
+		locQuery.setParameter("pEliminado", false);
+		List<VentasDetalle> lista = locQuery.getResultList();
+		return lista;
+	}
 
 	public List<VentasDetalle> getLista(Producto producto) {
 		inicializar();
