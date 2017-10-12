@@ -1533,6 +1533,10 @@ public class BeanLogueo implements Serializable {
 					cd.setPrecioCompra(CD.getPrecioCompra());
 					cd.setProducto(CD.getProducto());
 					cd.setAccesorio(CD.getAccesorio());
+					if(CD.getAccesorio()) {
+						cd.setCantidad(CD.getCantidad());
+						cd.setSubtotal(CD.getSubtotal());
+					}
 					cd.setImei(CDU.getNroImei());
 					cd.setConFalla(CDU.getConFalla());
 					int idInsert = 0;

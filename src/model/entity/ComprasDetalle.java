@@ -20,6 +20,8 @@ public class ComprasDetalle implements Serializable {
 
 	private boolean accesorio;
 
+	private int cantidad;
+
 	@Column(name="con_falla")
 	private boolean conFalla;
 
@@ -29,6 +31,8 @@ public class ComprasDetalle implements Serializable {
 
 	@Column(name="precio_compra")
 	private float precioCompra;
+
+	private float subtotal;
 
 	//bi-directional many-to-one association to Compra
 	@ManyToOne
@@ -63,6 +67,14 @@ public class ComprasDetalle implements Serializable {
 		this.accesorio = accesorio;
 	}
 
+	public int getCantidad() {
+		return this.cantidad;
+	}
+
+	public void setCantidad(int cantidad) {
+		this.cantidad = cantidad;
+	}
+
 	public boolean getConFalla() {
 		return this.conFalla;
 	}
@@ -93,6 +105,14 @@ public class ComprasDetalle implements Serializable {
 
 	public void setPrecioCompra(float precioCompra) {
 		this.precioCompra = precioCompra;
+	}
+
+	public float getSubtotal() {
+		return this.subtotal;
+	}
+
+	public void setSubtotal(float subtotal) {
+		this.subtotal = subtotal;
 	}
 
 	public Compra getCompra() {
