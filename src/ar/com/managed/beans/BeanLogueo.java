@@ -1524,8 +1524,8 @@ public class BeanLogueo implements Serializable {
 		CDList = compraDetalleDAO.getLista();
 		for(ComprasDetalle CD : CDList) {
 			List<ComprasDetalleUnidad> CDUList = new ArrayList<ComprasDetalleUnidad>();
-			CDUList = CD.getComprasDetalleUnidads();
-			boolean deleteFlag = true;
+			CDUList = compraDetalleUnidadDAO.getLista(CD);
+			boolean deleteFlag = false;
 			for(ComprasDetalleUnidad CDU : CDUList) {
 				if(!CD.getEliminado()) {
 					ComprasDetalle cd = new ComprasDetalle();
@@ -1536,6 +1536,8 @@ public class BeanLogueo implements Serializable {
 					if(CD.getAccesorio()) {
 						cd.setCantidad(CD.getCantidad());
 						cd.setSubtotal(CD.getSubtotal());
+					}else {
+						cd.setCantidad(1);
 					}
 					cd.setImei(CDU.getNroImei());
 					cd.setConFalla(CDU.getConFalla());

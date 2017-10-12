@@ -429,7 +429,7 @@ public class BeanCompra implements Serializable {
 		listaProductos = new ArrayList<Producto>();
 		listaProveedores = proveedorDAO.getLista();
 		listaComprasDetalles = new ArrayList<ComprasDetalle>();
-		listaComprasDetalleUnidads = new ArrayList<ComprasDetalleUnidad>();
+		//listaComprasDetalleUnidads = new ArrayList<ComprasDetalleUnidad>();
 		idProveedor = 0;
 		idProducto = 0;
 		idTipo = 0;
@@ -444,12 +444,7 @@ public class BeanCompra implements Serializable {
 		montoTotal = comp.getMonto();
 		nroCompra = comp.getId();
 		idProveedor = comp.getProveedore().getId();
-		/*List<ComprasDetalle> listAux = getDetalleDeCompra(comp);
-		for(ComprasDetalle compDetalle : listAux){
-			compDetalle.setComprasDetalleUnidads(getUnidadDetalle(compDetalle));
-			listaComprasDetalles.add(compDetalle);
-			cantidadTotal = cantidadTotal + compDetalle.getCantidad();
-		}*/
+		listaComprasDetalles = getDetalleDeCompra(comp);
 		tipo = comp.getTipo();
 		return "editarcompra";
 	}
@@ -497,13 +492,38 @@ public class BeanCompra implements Serializable {
 		}
 		filteredCompras = listaCompras;
 	}
-	
+	*/
 	public List<ComprasDetalle> getDetalleDeCompra(Compra comp){
 		List<ComprasDetalle> listAux = new ArrayList<ComprasDetalle>();
 		listAux = compraDetalleDAO.getLista(comp);
 		return listAux;
 	}
 	
+	public int getCantidadDetalleCompra(Compra comp){
+		List<ComprasDetalle> listAux = getDetalleDeCompra(comp);
+		int cantidad = 0;
+		for(ComprasDetalle cd : listAux){
+			cantidad += cd.getCantidad();
+		}
+		return cantidad;
+	}
+	
+	public float getSubtotalDetalleCompra(Compra comp, Producto prod){
+		List<ComprasDetalle> listAux = getDetalleDeCompra(comp);
+		float subtotal = 0;
+		for(ComprasDetalle cd : listAux){
+			if(cd.getProducto().getId() == prod.getId()) {
+				if(cd.getAccesorio()) {
+					subtotal += cd.getSubtotal();
+				} else {
+					subtotal += cd.getPrecioCompra();
+				}
+			}	
+		}
+		return subtotal;
+	}
+	
+	/*
 	public List<ComprasDetalleUnidad> getUnidadDetalle(ComprasDetalle compDetalle){
 		List<ComprasDetalleUnidad> listAux = new ArrayList<ComprasDetalleUnidad>();
 		listAux = compraDetalleUnidadDAO.getLista(compDetalle);

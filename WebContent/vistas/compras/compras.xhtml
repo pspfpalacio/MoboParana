@@ -149,31 +149,29 @@
 					</p:column>
 					
 					<p:rowExpansion>
-						<p:dataTable value="#{beanCompra.getDetalleDeCompra(compra)}" var="detalle">
+						<p:dataTable value="#{beanCompra.getDetalleDeCompra(compra)}" var="detalle" emptyMessage="No existen detalles" sortBy="#{detalle.producto.id}" expandableRowGroups="true">
 							<f:facet name="header">
-								<h:outputText value="Detalle" />
+								<h:outputText value="Detalle de Compra" />
 							</f:facet>
-							
-							<p:column headerText="Cantidad" style="text-align:center;">
+							<p:headerRow>
+								<p:column>
+									<h:outputText value="Cantidad: #{beanCompra.getCantidadDetalleCompra(compra)}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{detalle.producto.nombre}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="Subtotal: $#{beanCompra.getSubtotalDetalleCompra(compra, detalle.producto)}" />
+								</p:column>
+							</p:headerRow>
+							<p:column>
 								<h:outputText value="#{detalle.cantidad}" />
 							</p:column>
-							
-							<p:column headerText="Producto">
-								<h:outputText value="#{detalle.producto.nombre}" />
+							<p:column>
+								<h:outputText value="#{detalle.imei}" />
 							</p:column>
-							
-							<p:column headerText="Precio de Compra">
-								<h:outputText value="$" />
-								<h:outputText value="#{detalle.precioCompra}" >
-									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
-								</h:outputText>
-							</p:column>
-							
-							<p:column headerText="Subtotal">
-								<h:outputText value="$" />
-								<h:outputText value="#{detalle.subtotal}" >
-									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
-								</h:outputText>
+							<p:column>
+								<h:outputText value="#{detalle.precioCompra}" />
 							</p:column>
 						</p:dataTable>
 					</p:rowExpansion>
