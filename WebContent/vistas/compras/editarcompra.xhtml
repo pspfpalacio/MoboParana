@@ -108,14 +108,14 @@
 	   					update="foco, unidadList, imei, messages"/>
 	   					<p:defaultCommand target="add" />
    					</p:column>
-   					<p:dataList id="unidadList" value="#{beanCompra.listaComprasDetalleUnidads}" var="unidad" type="unordered" 
+   					<p:dataList id="unidadList" value="#{beanCompra.listaComprasDetalles}" var="unidad" type="unordered" 
    						emptyMessage="No existen items" style="width:200px;height:200px;" rows="10" paginator="true" paginatorAlwaysVisible="false" itemType="none">
    						<f:facet name="header">
 				            <h:outputText value="Cantidad de Móviles" />
 				        </f:facet>
 				        <p:commandLink style="float:left;margin-right:10px" styleClass="ui-icon ui-icon-close" 
-				        	action="#{beanCompra.quitarUnidad(unidad.nroImei)}" update="unidadList" />
-				        <h:outputText value="#{unidad.nroImei}" style="display:inline-block"/>				        	
+				        	action="#{beanCompra.quitarUnidad(unidad.imei)}" update="unidadList" />
+				        <h:outputText value="#{unidad.imei}" style="display:inline-block"/>				        	
    					</p:dataList>
    				</p:panelGrid>
    				<p:panelGrid id="panel3" columns="6" style="width:100%;" rendered="#{beanCompra.panelAccesorio}">
@@ -138,56 +138,40 @@
    						update="detalleTable, unidadList, imei, producto, precioCompra, messages"/>
    					</f:facet>
    				</p:panelGrid>
-   				<p:dataTable id="detalleTable" value="#{beanCompra.listaComprasDetalles}" var="detalle" emptyMessage="No existen detalles">
-   					<f:facet name="header">
-   						<h:outputText value="Detalle de Compra" />
-   					</f:facet>   					
-   					<p:column headerText="Cantidad" style="text-align:center; width:120px;">
-   						<h:outputText value="#{detalle.cantidad}" />
-   						<p:rowToggler rendered="#{!detalle.accesorio}"/>
-   					</p:column>
-   					<p:column headerText="Producto">
-   						<h:outputText value="#{detalle.producto.nombre}" />
-   					</p:column>
-   					<p:column headerText="Precio de Compra" style="text-align:right; width:160px;">
-   						<h:outputText value="$" />
-   						<h:outputText value="#{detalle.precioCompra}" >
-   							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
-   						</h:outputText>
-   					</p:column>
-   					<p:column headerText="Subtotal" style="text-align:right; width:120px;">
-   						<h:outputText value="$" />
-   						<h:outputText value="#{detalle.subtotal}" >
-   							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
-   						</h:outputText>
-   					</p:column>
-   					<p:column headerText="Quitar" style="text-align:center; width:120px;">
-   						<p:commandButton icon="ui-icon-close" action="#{beanCompra.quitarDetalle(detalle)}" 
-   						update=":formulario:detalleTable" disabled="#{beanCompra.noBaja(detalle)}"/>
-   					</p:column>
-   					<p:rowExpansion>
-   						<p:dataList value="#{detalle.comprasDetalleUnidads}" var="unidad" type="unordered" itemType="none">
-   							<f:facet name="header">
-					            <h:outputText value="Cantidad de Móviles" />
-					        </f:facet>
-					        <p:commandLink style="float:left;margin-right:10px" styleClass="ui-icon ui-icon-close" disabled="#{beanCompra.noBajaUnidad(unidad)}"
-				        	action="#{beanCompra.quitarUnidadDetalle(detalle, unidad)}" update=":formulario:detalleTable" />
-   							<h:outputText value="#{unidad.nroImei}" />
-   						</p:dataList>
-   					</p:rowExpansion>
-   					<f:facet name="footer" style="text-align:right;">
-   						<p:column style="text-align:right;">
-   							<p:outputLabel value="Cantidad Total:" />
-   							<h:outputText value="#{beanCompra.cantidadTotal}" />
-   							<h:outputText value="   " />
-   							<p:outputLabel value="Monto Total:" />
-   							<h:outputText value="$" />
-   							<h:outputText value="#{beanCompra.montoTotal}" >
-   								<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
-   							</h:outputText>
-   						</p:column>
-   					</f:facet>
-   				</p:dataTable>
+   				
+   				
+   				<p:dataTable id="detalleTable" value="#{beanCompra.listaComprasDetalles}" var="detalle" emptyMessage="No existen detalles" sortBy="#{detalle.producto.id}" expandableRowGroups="true">
+					<f:facet name="header">
+						<h:outputText value="Detalle de Compra" />
+					</f:facet>
+					<p:headerRow>
+						<p:column>
+							<h:outputText value="Cantidad total: #{beanCompra.getCantidadDetalleCompra(detalle.producto)}" />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{detalle.producto.nombre}" />
+						</p:column>
+						<p:column>
+							<h:outputText value="Subtotal: $#{beanCompra.getSubtotalDetalleCompra(detalle.producto)}" />
+						</p:column>
+						<p:column>
+							<h:outputText value="" />
+						</p:column>
+					</p:headerRow>
+					<p:column>
+						<h:outputText value="#{detalle.cantidad}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{detalle.imei}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="$#{detalle.precioCompra}" />
+					</p:column>
+					<p:column headerText="Quitar" style="text-align:center; width:120px;">
+						<p:commandButton icon="ui-icon-close" action="#{beanCompra.quitarDetalle(detalle)}" 
+						update=":formulario:detalleTable" disabled="#{beanCompra.noBaja(detalle)}"/>
+					</p:column>
+               </p:dataTable>
    				<p:panelGrid columns="2" style="width:100%;">
    					<f:facet name="header">
    						<p:commandButton value="Aceptar" onclick="return confirm('ESTA SEGURO QUE QUIERE CONFIRMAR LA COMPRA?')" action="#{beanCompra.modificarCompra()}" />

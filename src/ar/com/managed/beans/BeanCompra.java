@@ -15,6 +15,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import ar.com.clases.CostoPromedio;
 import ar.com.clases.CuentaCorriente;
 import ar.com.clases.MovimientoCaja;
@@ -33,7 +35,6 @@ import model.entity.Rubro;
 import model.entity.Stock;
 import model.entity.UnidadMovil;
 import model.entity.Usuario;
-import model.entity.VentasDetalleUnidad;
 import dao.interfaces.DAOCompra;
 import dao.interfaces.DAOCompraDetalle;
 import dao.interfaces.DAOCompraDetalleUnidad;
@@ -53,6 +54,8 @@ public class BeanCompra implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final static Logger log = Logger.getLogger(BeanCompra.class);
 	
 	@ManagedProperty(value = "#{BeanCompraDAO}")
 	private DAOCompra compraDAO;
@@ -89,7 +92,7 @@ public class BeanCompra implements Serializable {
 	private List<Proveedore> listaProveedores;
 	private List<Producto> listaProductos;
 	private List<ComprasDetalle> listaComprasDetalles;
-	private List<ComprasDetalleUnidad> listaComprasDetalleUnidads;
+	private List<ComprasDetalle> listaComprasDetalleAdd;
 	private Compra compra;
 	private Usuario usuario;
 	private Date fechaInicio;
@@ -229,14 +232,13 @@ public class BeanCompra implements Serializable {
 	public void setListaComprasDetalles(List<ComprasDetalle> listaComprasDetalles) {
 		this.listaComprasDetalles = listaComprasDetalles;
 	}
-
-	public List<ComprasDetalleUnidad> getListaComprasDetalleUnidads() {
-		return listaComprasDetalleUnidads;
+	
+	public List<ComprasDetalle> getListaComprasDetalleAdd() {
+		return listaComprasDetalleAdd;
 	}
 
-	public void setListaComprasDetalleUnidads(
-			List<ComprasDetalleUnidad> listaComprasDetalleUnidads) {
-		this.listaComprasDetalleUnidads = listaComprasDetalleUnidads;
+	public void setListaComprasDetalleAdd(List<ComprasDetalle> listaComprasDetalleAdd) {
+		this.listaComprasDetalleAdd = listaComprasDetalleAdd;
 	}
 
 	public Compra getCompra() {
@@ -376,6 +378,7 @@ public class BeanCompra implements Serializable {
 	}
 
 	public String goCompras(Usuario user){
+		log.info("goCOmpras, Usuario: " + user.getId() );
 		listaCompras = new ArrayList<Compra>();
 		filteredCompras = new ArrayList<Compra>();
 		listaProveedores = new ArrayList<Proveedore>();
@@ -392,14 +395,15 @@ public class BeanCompra implements Serializable {
 	}
 	
 	public String goCompraNueva(){
+		log.info("goCompraNueva, Usuario: " + usuario.getId() );
 		compra = new Compra();
 		compra.setFecha(new Date());
 		listaProveedores = new ArrayList<Proveedore>();
 		listaProveedores = proveedorDAO.getLista(true);
 		listaProductos = new ArrayList<Producto>();
-//		listaProductos = productoDAO.getLista(true);
+		listaProductos = productoDAO.getLista(true);
 		listaComprasDetalles = new ArrayList<ComprasDetalle>();
-		listaComprasDetalleUnidads = new ArrayList<ComprasDetalleUnidad>();
+		listaComprasDetalleAdd  = new ArrayList<ComprasDetalle>();
 		idProveedor = 0;
 		idProducto = 0;
 		idTipo = 0;
@@ -424,12 +428,13 @@ public class BeanCompra implements Serializable {
 	 * @return
 	 */
 	public String goCompraEditar(Compra comp){
+		log.info("goCompraEditar, Usuario: " + usuario.getId() + " Compra: " + comp.getId());
 		compra = new Compra();		
 		listaProveedores = new ArrayList<Proveedore>();
 		listaProductos = new ArrayList<Producto>();
 		listaProveedores = proveedorDAO.getLista();
 		listaComprasDetalles = new ArrayList<ComprasDetalle>();
-		//listaComprasDetalleUnidads = new ArrayList<ComprasDetalleUnidad>();
+		listaComprasDetalleAdd  = new ArrayList<ComprasDetalle>();
 		idProveedor = 0;
 		idProducto = 0;
 		idTipo = 0;
@@ -449,7 +454,7 @@ public class BeanCompra implements Serializable {
 		return "editarcompra";
 	}
 	
-	/*public void onChangeTipo(){
+	public void onChangeTipo(){
 		Rubro rubro = new Rubro();
 		if(idTipo == 0){
 			panelMovil = false;
@@ -472,6 +477,7 @@ public class BeanCompra implements Serializable {
 	}
 	
 	public void filtro(){
+		log.info("filtro");
 		listaCompras = new ArrayList<Compra>();
 		filteredCompras = new ArrayList<Compra>();
 		if(fechaInicio == null && fechaFin == null && idProveedor == 0){
@@ -492,26 +498,55 @@ public class BeanCompra implements Serializable {
 		}
 		filteredCompras = listaCompras;
 	}
-	*/
+	
 	public List<ComprasDetalle> getDetalleDeCompra(Compra comp){
+		log.info("getDetalleDeCompra, Compra: " + comp.getId());
 		List<ComprasDetalle> listAux = new ArrayList<ComprasDetalle>();
 		listAux = compraDetalleDAO.getLista(comp);
 		return listAux;
 	}
 	
-	public int getCantidadDetalleCompra(Compra comp){
+	public int getCantidadDetalleCompra(Compra comp, Producto prod){
+		log.info("getCantidadDetalleCompra, Compra: " + comp.getId() + " Producto: " + prod.getNombre());
 		List<ComprasDetalle> listAux = getDetalleDeCompra(comp);
 		int cantidad = 0;
 		for(ComprasDetalle cd : listAux){
-			cantidad += cd.getCantidad();
+			if(cd.getProducto().getId() == prod.getId()) {
+				cantidad += cd.getCantidad();
+			}
+		}
+		return cantidad;
+	}
+	
+	public int getCantidadDetalleCompra(Producto prod){
+		int cantidad = 0;
+		for(ComprasDetalle cd : listaComprasDetalles){
+			if(cd.getProducto().getId() == prod.getId()) {
+				cantidad += cd.getCantidad();
+			}
 		}
 		return cantidad;
 	}
 	
 	public float getSubtotalDetalleCompra(Compra comp, Producto prod){
+		log.info("getSubtotalDetalleCompra, Compra: " + comp.getId() + " Producto: " + prod.getNombre());
 		List<ComprasDetalle> listAux = getDetalleDeCompra(comp);
 		float subtotal = 0;
 		for(ComprasDetalle cd : listAux){
+			if(cd.getProducto().getId() == prod.getId()) {
+				if(cd.getAccesorio()) {
+					subtotal += cd.getSubtotal();
+				} else {
+					subtotal += cd.getPrecioCompra();
+				}
+			}	
+		}
+		return subtotal;
+	}
+	
+	public float getSubtotalDetalleCompra(Producto prod){
+		float subtotal = 0;
+		for(ComprasDetalle cd : listaComprasDetalles){
 			if(cd.getProducto().getId() == prod.getId()) {
 				if(cd.getAccesorio()) {
 					subtotal += cd.getSubtotal();
@@ -529,23 +564,28 @@ public class BeanCompra implements Serializable {
 		listAux = compraDetalleUnidadDAO.getLista(compDetalle);
 		return listAux;
 	}
-	
+	*/
 	public void agregarUnidad(){
+		log.info("agregarUnidad");
 		if(!nroImei.isEmpty()){
+			log.info("Imei: " + nroImei);
 			UnidadMovil unidadMovil = new UnidadMovil();
 			unidadMovil = unidadMovilDAO.get(nroImei);
 			if(unidadMovil.getId() == 0){
 				boolean noExiste = true;
-				for(ComprasDetalleUnidad compraDetalleUnidad : listaComprasDetalleUnidads){
-					if(nroImei.equals(compraDetalleUnidad.getNroImei())){
+				for(ComprasDetalle compraDetalle : listaComprasDetalleAdd){
+					if(nroImei.equals(compraDetalle.getImei())){
 						noExiste = false;
 					}
 				}
 				if(noExiste){
-					ComprasDetalleUnidad compraUnidad = new ComprasDetalleUnidad();
-					compraUnidad.setNroImei(nroImei);
-					compraUnidad.setPrecioCompra(precioCompra);
-					listaComprasDetalleUnidads.add(compraUnidad);
+					ComprasDetalle cDetalle = new ComprasDetalle();
+					cDetalle.setImei(nroImei);
+					cDetalle.setPrecioCompra(precioCompra);
+					cDetalle.setCompra(compra);
+					cDetalle.setCantidad(1);
+					cDetalle.setProducto(unidadMovil.getProducto());
+					listaComprasDetalleAdd.add(cDetalle);
 					nroImei = "";
 				}else{
 					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Nro de Imei ya se encuentra registrado, modifiquelo por favor!", null);
@@ -556,109 +596,86 @@ public class BeanCompra implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 			}
 		}else{
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Nro de Imei no puede estar vac�o!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Nro de imei es requerido!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}
 	
 	public void quitarUnidad(String imei){
-		List<ComprasDetalleUnidad> listAux = new ArrayList<ComprasDetalleUnidad>();
-		for(ComprasDetalleUnidad comprasDetalleUnidad : listaComprasDetalleUnidads){
-			if(!comprasDetalleUnidad.getNroImei().equals(imei)){
-				listAux.add(comprasDetalleUnidad);
+		List<ComprasDetalle> listAux = new ArrayList<ComprasDetalle>();
+		for(ComprasDetalle comprasDetalle : listaComprasDetalleAdd){
+			if(!comprasDetalle.getImei().equals(imei)){
+				listAux.add(comprasDetalle);
 			}
 		}
-		listaComprasDetalleUnidads = new ArrayList<ComprasDetalleUnidad>();
-		listaComprasDetalleUnidads = listAux;
+		listaComprasDetalleAdd = new ArrayList<ComprasDetalle>();
+		listaComprasDetalleAdd = listAux;
 	}
 	
-	public void quitarUnidadDetalle(ComprasDetalle detalle, ComprasDetalleUnidad imei){
-		List<ComprasDetalleUnidad> listAux = new ArrayList<ComprasDetalleUnidad>();
-		for(ComprasDetalleUnidad unidadDetalle : detalle.getComprasDetalleUnidads()){
-			if(!unidadDetalle.getNroImei().equals(imei.getNroImei())){
-				listAux.add(unidadDetalle);
+	public void quitarUnidadDetalle(ComprasDetalle detalle){
+		log.info("quitarUnidadDetalle: " + detalle.getProducto().getNombre() + " - " + detalle.getId());
+		List<ComprasDetalle> listAux = new ArrayList<ComprasDetalle>();
+		for(ComprasDetalle cd :listaComprasDetalles) {
+			if(detalle.getAccesorio()) {
+				if(!(cd.getProducto().getId() == detalle.getProducto().getId())){
+					listAux.add(cd);
+				}
+			}else {
+				if(!cd.getImei().equals(detalle.getImei())){
+					listAux.add(cd);
+				}
 			}
+			
 		}
-		montoTotal = montoTotal - imei.getPrecioCompra();
-		float subtot = detalle.getSubtotal() -  imei.getPrecioCompra();
-		cantidadTotal = cantidadTotal - 1;
-		int cant = detalle.getCantidad() - 1;
-		detalle.setComprasDetalleUnidads(listAux);
-		detalle.setSubtotal(subtot);
-		detalle.setCantidad(cant);
-		List<ComprasDetalle> listAux1 = new ArrayList<ComprasDetalle>();
-		for(ComprasDetalle compraDetalle : listaComprasDetalles){
-			if(compraDetalle.getProducto().getId() != detalle.getProducto().getId()){
-				listAux1.add(compraDetalle);
-			}else{
-				listAux1.add(detalle);
-			}
+		
+		if(detalle.getAccesorio()) {
+			montoTotal = montoTotal - detalle.getSubtotal();
+			cantidadTotal = cantidadTotal - detalle.getCantidad();
+			
+		}else {
+			montoTotal = montoTotal - detalle.getPrecioCompra();
+			cantidadTotal = cantidadTotal - 1;
 		}
+
 		listaComprasDetalles = new ArrayList<ComprasDetalle>();
-		listaComprasDetalles = listAux1;
+		listaComprasDetalles = listAux;
 	}
-	
+
 	public void agregarDetalle(){
 		if(!panelMovil && !panelAccesorio){
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe seleccionar un tipo de producto a comprar!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}else{
 			if(panelMovil){
-				if(!listaComprasDetalleUnidads.isEmpty() && idProducto != 0 && precioCompra != 0){
-					boolean noExiste = true;
-					List<ComprasDetalle> listAux = new ArrayList<ComprasDetalle>();
-					for(ComprasDetalle compraDetalle : listaComprasDetalles){
-						if(compraDetalle.getProducto().getId() == idProducto){
-							noExiste = false;
-							List<ComprasDetalleUnidad> listAux2 = compraDetalle.getComprasDetalleUnidads();
-							List<ComprasDetalleUnidad> listAux1 = new ArrayList<ComprasDetalleUnidad>();
-							for (ComprasDetalleUnidad comprasDetalleUnidad : listAux2) {
-								comprasDetalleUnidad.setPrecioCompra(precioCompra);
-								listAux1.add(comprasDetalleUnidad);
+				List<ComprasDetalle> listAux = new ArrayList<ComprasDetalle>();
+				if(!listaComprasDetalleAdd.isEmpty() && idProducto != 0 && precioCompra != 0){
+					for(ComprasDetalle cdAdd: listaComprasDetalleAdd) {
+						boolean seProcesa = true;
+						if(listaProductos.size()> 0) {
+							for(ComprasDetalle cd : listaComprasDetalles){
+								listAux.add(cd);
+								if(cd.getImei().equals(cdAdd.getImei())) {
+									seProcesa = false;
+								}
 							}
-							for(ComprasDetalleUnidad compraDetalleUnidad : listaComprasDetalleUnidads){
-								compraDetalleUnidad.setPrecioCompra(precioCompra);
-								listAux1.add(compraDetalleUnidad);
-							}
-							int cant = listAux1.size();
-							montoTotal = montoTotal - compraDetalle.getSubtotal();
-							cantidadTotal = cantidadTotal - compraDetalle.getCantidad();
-							float subtotal = precioCompra * cant;
-							compraDetalle.setComprasDetalleUnidads(listAux1);
-							compraDetalle.setCantidad(cant);
-							compraDetalle.setPrecioCompra(precioCompra);
-							compraDetalle.setSubtotal(subtotal);
-							compraDetalle.setAccesorio(false);
-							cantidadTotal = cantidadTotal + cant;
-							montoTotal = montoTotal + subtotal;
 						}
-						listAux.add(compraDetalle);
+						if(seProcesa) {
+							log.info(cdAdd.getPrecioCompra());
+							cdAdd.setProducto(productoDAO.get(idProducto));
+							listAux.add(cdAdd);
+							cantidadTotal ++;
+							montoTotal = montoTotal + cdAdd.getPrecioCompra();
+						}
 					}
-					if(noExiste){
-						ComprasDetalle compraDetalle = new ComprasDetalle();
-						int cant = listaComprasDetalleUnidads.size();
-						Producto prod = productoDAO.get(idProducto);
-						float subtotal = cant * precioCompra;
-						compraDetalle.setCantidad(cant);
-						compraDetalle.setComprasDetalleUnidads(listaComprasDetalleUnidads);
-						compraDetalle.setPrecioCompra(precioCompra);
-						compraDetalle.setProducto(prod);				
-						compraDetalle.setSubtotal(subtotal);
-						compraDetalle.setAccesorio(false);
-						listaComprasDetalles.add(compraDetalle);
-						montoTotal = montoTotal + subtotal;
-						cantidadTotal = cantidadTotal + cant;
-					}else{
-						listaComprasDetalles = new ArrayList<ComprasDetalle>();
-						listaComprasDetalles = listAux;
-					}
-					listaComprasDetalleUnidads = new ArrayList<ComprasDetalleUnidad>();
+					listaComprasDetalles = new ArrayList<ComprasDetalle>();
+					listaComprasDetalles = listAux;
+					listaComprasDetalleAdd = new ArrayList<ComprasDetalle>();
 					idProducto = 0;
 					precioCompra = 0;
 					nroImei = "";
 				} else {
-					if (listaComprasDetalleUnidads.isEmpty()) {
-						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La lista de Unidades M�viles no puede estar vac�a!", null);
+					if (listaComprasDetalleAdd.isEmpty()) {
+						FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La lista de Unidades no puede estar vacia!", null);
 						FacesContext.getCurrentInstance().addMessage(null, msg);
 					}
 					if (idProducto == 0) {
@@ -722,7 +739,6 @@ public class BeanCompra implements Serializable {
 			}
 		}
 	}
-	
 	public void quitarDetalle(ComprasDetalle comprasDetalle){
 		List<ComprasDetalle> listAux = new ArrayList<ComprasDetalle>();
 		for(ComprasDetalle comprasDetalle2 : listaComprasDetalles){
@@ -730,14 +746,21 @@ public class BeanCompra implements Serializable {
 				listAux.add(comprasDetalle2);
 			}
 		}
-		montoTotal = montoTotal - comprasDetalle.getSubtotal();
-		cantidadTotal = cantidadTotal - comprasDetalle.getCantidad();
+		if(comprasDetalle.getAccesorio()) {
+			montoTotal = montoTotal - comprasDetalle.getSubtotal();
+			cantidadTotal = cantidadTotal - comprasDetalle.getCantidad();
+		}else {
+			montoTotal = montoTotal - comprasDetalle.getPrecioCompra();
+			cantidadTotal --;
+		}
+		
 		listaComprasDetalles = null;
 		listaComprasDetalles = new ArrayList<ComprasDetalle>();
 		listaComprasDetalles = listAux;
 	}
 	
 	public void baja(Compra comp){
+		log.info("baja, Compra: " + comp.getId());
 		FacesMessage msg = null;
 		boolean disponible = true;
 		String mensaje = "";
@@ -750,29 +773,31 @@ public class BeanCompra implements Serializable {
 					mensaje = "Venta";
 				}
 			}
-			List<ComprasDetalleUnidad> listaUnidades = compraDetalleUnidadDAO.getLista(comprasDetalle);
-			for (ComprasDetalleUnidad comprasDetalleUnidad : listaUnidades) {
-				String imei = comprasDetalleUnidad.getNroImei();
-				VentasDetalleUnidad ventaUnidad = ventaDetalleUnidadDAO.get(imei);
-				UnidadMovil unidad = unidadMovilDAO.get(imei);
-				if (unidad.getEnGarantiaCliente() || unidad.getEnGarantiaProveedor()) {
-					mensaje = mensaje + "Garant�a ";
-					disponible = false;
-				}
-				if (comprasDetalleUnidad.getConFalla()) {
-					mensaje = mensaje + "Falla ";
-					disponible = false;
-				}
-				if(ventaUnidad.getId() != 0){
-					mensaje = mensaje + "Venta ";
-					disponible = false;
-				}
-				ConsignacionsDetalleUnidad consignacionUnidad = consignacionDetalleUnidadDAO.get(imei);
-				if(consignacionUnidad.getId() != 0){
-					mensaje = mensaje + "Consignaci�n ";
-					disponible = false;
-				}
+			
+			String imei = comprasDetalle.getImei();
+			log.info("Imei:" + imei);
+			
+			UnidadMovil unidad = unidadMovilDAO.get(imei);
+			if (unidad.getEnGarantiaCliente() || unidad.getEnGarantiaProveedor()) {
+				mensaje = mensaje + "Garantia ";
+				disponible = false;
 			}
+			if (comprasDetalle.getConFalla()) {
+				mensaje = mensaje + "Falla ";
+				disponible = false;
+			}
+			// VER CUANDO SE MERGEE LA MODIFICACION DE VENTAS
+//          VentasDetalleUnidad ventaUnidad = ventaDetalleUnidadDAO.get(imei);
+//			if(ventaUnidad.getId() != 0){
+//				mensaje = mensaje + "Venta ";
+//				disponible = false;
+//			}
+			// VER CUANDO SE MERGEE LA MODIFICACION DE CONSIGNACIONES
+//			ConsignacionsDetalleUnidad consignacionUnidad = consignacionDetalleUnidadDAO.get(imei);
+//			if(consignacionUnidad.getId() != 0){
+//				mensaje = mensaje + "Consignaci�n ";
+//				disponible = false;
+//			}
 		}
 		if(disponible){
 			boolean actualizo = true;
@@ -780,11 +805,14 @@ public class BeanCompra implements Serializable {
 			CuentasCorrientesProveedore ccProveedor = new CuentasCorrientesProveedore();
 			int idProv = comp.getProveedore().getId();
 			Proveedore prov = proveedorDAO.get(idProv); 
+			log.info("Proveedor: " + prov.getApellidoNombre());
+			log.info("Tipo Compra: " + comp.getTipo());
 			if(comp.getTipo().equals("c.c.")){
 				int idComp = comp.getId();
 				ccProveedor.setIdMovimiento(idComp);
 				ccProveedor.setNombreTabla("Compra");
 				ccProveedor.setProveedore(prov);
+				log.info("deleteCuentaCorriente");
 				int deleteCC = cuenta.deleteCuentaCorriente(ccProveedor);
 				if(deleteCC == 0){
 					actualizo = false;
@@ -800,6 +828,7 @@ public class BeanCompra implements Serializable {
 				Caja mov = new Caja();				
 				mov.setIdMovimiento(idComp);
 				mov.setNombreTabla("Compra");
+				log.info("deleteCaja");
 				int deleteCaja = movCaja.deleteCaja(mov);
 				if(deleteCaja == 0){
 					actualizo = false;
@@ -808,22 +837,18 @@ public class BeanCompra implements Serializable {
 			List<ComprasDetalle> listaCompDeta = compraDetalleDAO.getLista(comp);
 			for(ComprasDetalle comprasDetalle : listaCompDeta){
 				int cantDetalle = comprasDetalle.getCantidad();
-				System.out.println("Cant Detalle: " + cantDetalle);
-				List<ComprasDetalleUnidad> listaCompDetaUnid = compraDetalleUnidadDAO.getLista(comprasDetalle);
-				for(ComprasDetalleUnidad compraUnidad : listaCompDetaUnid){
-					String nroImei = compraUnidad.getNroImei();
-					UnidadMovil unidadBaja = unidadMovilDAO.getBajaStock(nroImei);
-					System.out.println("Nro Imei: " + nroImei);
-					System.out.println("getBajaStock: " + unidadBaja.getBajaStock());
-					if (unidadBaja.getBajaStock()) {
-						cantDetalle = cantDetalle - 1;
-					}
-					int deleteUnidImei = unidadMovilDAO.deletePorImei(nroImei);
-					if(deleteUnidImei == 0){
-						actualizo = false;
-					}					
+				log.info("Cant Detalle: " + cantDetalle);
+				String nroImei = comprasDetalle.getImei();
+				UnidadMovil unidadBaja = unidadMovilDAO.getBajaStock(nroImei);
+				if (unidadBaja.getBajaStock()) {
+					cantDetalle = cantDetalle - 1;
 				}
+				int deleteUnidImei = unidadMovilDAO.deletePorImei(nroImei);
+				if(deleteUnidImei == 0){
+					actualizo = false;
+				}	
 				int idProd = comprasDetalle.getProducto().getId();
+				log.info("Producto: "+ idProd);
 				Producto prod = productoDAO.get(idProd);
 				int stock = prod.getStock() - cantDetalle;
 				prod.setStock(stock);
@@ -832,6 +857,7 @@ public class BeanCompra implements Serializable {
 					actualizo = false;
 				}				
 				int deleteDetUnid = compraDetalleUnidadDAO.deleteDetalleUnidadPorDetalle(comprasDetalle);
+				log.info("deleteDetUnid: "+ deleteDetUnid);
 				if(deleteDetUnid == 0){
 					actualizo = false;
 				}				
@@ -843,7 +869,7 @@ public class BeanCompra implements Serializable {
 			if(updateComp != 0 && actualizo){
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Compra!", null);
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurri� un Error al dar de Baja la Compra! "
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al dar de Baja la Compra! "
 						+ "Int�ntelo nuevamente!", null);
 			}
 		}else{
@@ -852,6 +878,8 @@ public class BeanCompra implements Serializable {
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
+	
+	/*
 	
 	public String guardar() {
 		FacesMessage msg = null;
@@ -1055,12 +1083,12 @@ public class BeanCompra implements Serializable {
 						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Compra guardada!", null);
 						retorno = "compras";
 					}else{
-						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurri� un error al guardar el detalle de la Compra, "
-								+ "int�ntelo nuevamente!", null);
+						msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al guardar el detalle de la Compra, "
+								+ "intente nuevamente!", null);
 					}
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurri� un error al modificar la Compra, "
-							+ "int�ntelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al modificar la Compra, "
+							+ "intente nuevamente!", null);
 				}
 			}else{
 				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Proveedor, Monto Total y Detalles de Compra no pueden estar vac�os!", null);
@@ -1073,8 +1101,8 @@ public class BeanCompra implements Serializable {
 			return retorno;
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurri� un error al modificar la Compra, "
-					+ "int�ntelo nuevamente!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al modificar la Compra, "
+					+ "intente nuevamente!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return retorno;
 		}
@@ -1180,7 +1208,7 @@ public class BeanCompra implements Serializable {
 	}
 	
 	public boolean bajaDetalleAnterior(List<ComprasDetalle> listaCompraDetalleAnterior) {
-		System.out.println("BajaDetalleAnterior()");
+		log.info("BajaDetalleAnterior");
 		boolean baja = true;
 		for(ComprasDetalle detalleCompra : listaCompraDetalleAnterior){
 			int cantDetalle = detalleCompra.getCantidad();
@@ -1217,49 +1245,48 @@ public class BeanCompra implements Serializable {
 		}
 		return baja;
 	}
-	
+	*/
 	public boolean noBaja(ComprasDetalle compraDetalle){
+		log.info("noBaja: " + compraDetalle.getId());
 		boolean nobaja = false;
 		if(compraDetalle.getId() != 0){
+			log.info("Accesorio: " + compraDetalle.getAccesorio());
 			if(compraDetalle.getAccesorio()){
 				if(compraDetalle.getProducto().getStock() < compraDetalle.getCantidad()){
 					nobaja = true;
 				}
 			}else{
-				if(compraDetalle.getComprasDetalleUnidads() != null){
-					for(ComprasDetalleUnidad compraUnidad : compraDetalle.getComprasDetalleUnidads()){
-						UnidadMovil unidad = new UnidadMovil(); 
-						unidad = unidadMovilDAO.get(compraUnidad.getNroImei());
-						if(unidad.getId() != 0){
-							if(!unidad.getEnStock()){
-								nobaja = true;
-							}
-							if(!unidad.getEstado()){
-								nobaja = true;
-							}
-							if(unidad.getEnConsignacion()){
-								nobaja = true;
-							}
-							if(unidad.getEnVenta()){
-								nobaja = true;
-							}
-							if (unidad.getConFalla()) {
-								nobaja = true;
-							}
-							if (unidad.getEnGarantiaCliente() || unidad.getEnGarantiaProveedor()) {
-								nobaja = true;
-							}
-							if (compraUnidad.getConFalla()) {
-								nobaja = true;
-							}
-						}
+				UnidadMovil unidad = new UnidadMovil(); 
+				unidad = unidadMovilDAO.get(compraDetalle.getImei());
+				if(unidad.getId() != 0){
+					if(!unidad.getEnStock()){
+						nobaja = true;
+					}
+					if(!unidad.getEstado()){
+						nobaja = true;
+					}
+					if(unidad.getEnConsignacion()){
+						nobaja = true;
+					}
+					if(unidad.getEnVenta()){
+						nobaja = true;
+					}
+					if (unidad.getConFalla()) {
+						nobaja = true;
+					}
+					if (unidad.getEnGarantiaCliente() || unidad.getEnGarantiaProveedor()) {
+						nobaja = true;
+					}
+					if (compraDetalle.getConFalla()) {
+						nobaja = true;
 					}
 				}
 			}
 		}
+		log.info("nobaja: " + nobaja);
 		return nobaja;
 	}
-	
+	/*
 	public boolean noBajaUnidad(ComprasDetalleUnidad compraUnidad){
 		boolean nobaja = false;
 		UnidadMovil unidad = unidadMovilDAO.get(compraUnidad.getNroImei());
@@ -1288,8 +1315,9 @@ public class BeanCompra implements Serializable {
 		}
 		return nobaja;
 	}
-	
+	*/
 	public void generarReporteLista(){
+		log.info("generarReporteLista");
 		Reporte reporte = new Reporte();
 		DecimalFormat formatoMonto = new DecimalFormat("##,##0.00");
 		SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
@@ -1314,12 +1342,14 @@ public class BeanCompra implements Serializable {
 			comprobante.setTipo(comp.getTipo());
 			listComprobante.add(comprobante);
 		}
+		log.info("idProveedor: " + idProveedor);
 		if(idProveedor == 0){
 			parametros.put("proveedor", "Todos");
 		}else{
 			Proveedore prov = proveedorDAO.get(idProveedor);
 			parametros.put("proveedor", prov.getNombreNegocio());
 		}
+		log.info("fechaInicio: " + fechaInicio + " fechaFin: " + fechaFin);
 		if(fechaInicio != null && fechaFin != null){
 			parametros.put("desde", formatoFecha.format(fechaInicio));
 			parametros.put("hasta", formatoFecha.format(fechaFin));			
@@ -1327,10 +1357,12 @@ public class BeanCompra implements Serializable {
 			parametros.put("desde", "Todas");
 			parametros.put("hasta", "Todas");
 		}
+		log.info("generar reporte-> compras");
 		reporte.generar(parametros, listComprobante, "compras", "inline");
 	}
 	
 	public void generarReporteComprobante(Compra comp){
+		log.info("generarReporteComprobante, Compra: " + comp.getId());
 		Reporte reporte = new Reporte();
 		DecimalFormat formatoMonto = new DecimalFormat("##,##0.00");
 		SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
@@ -1339,10 +1371,15 @@ public class BeanCompra implements Serializable {
 		int cant = 0;
 		for(ComprasDetalle compraDetalle : getDetalleDeCompra(comp)){
 			DetalleComprobante detalle = new DetalleComprobante();
+			if(compraDetalle.getAccesorio()) {
+				detalle.setDetalle(compraDetalle.getProducto().getNombre());
+				detalle.setSubtotal(formatoMonto.format(compraDetalle.getSubtotal()));
+			}else {
+				detalle.setDetalle(compraDetalle.getProducto().getNombre() + " - " + compraDetalle.getImei());
+				detalle.setSubtotal(formatoMonto.format(compraDetalle.getPrecioCompra()));
+			}
 			detalle.setCantidad(compraDetalle.getCantidad());
-			detalle.setDetalle(compraDetalle.getProducto().getNombre());
 			detalle.setPrecioUnitario(formatoMonto.format(compraDetalle.getPrecioCompra()));
-			detalle.setSubtotal(formatoMonto.format(compraDetalle.getSubtotal()));
 			listaDetalle.add(detalle);
 			cant = cant + compraDetalle.getCantidad();
 		}
@@ -1352,16 +1389,19 @@ public class BeanCompra implements Serializable {
 		parametros.put("tipo", comp.getTipo());
 		parametros.put("cantidadTotal", cant);
 		parametros.put("montoTotal", formatoMonto.format(comp.getMonto()));
+		log.info("generar reporte-> compra");
 		reporte.generar(parametros, listaDetalle, "compra", "attachment");
 	}
 	
 	public void goEditarTipo(Compra comp) {
+		log.info("goEditarTipo, Compra: " + comp.getId());
 		compra = new Compra();
 		compra = comp;
 		tipo = comp.getTipo();
-	}*/
+	}
 	
 	public void editarTipo() {
+		log.info("editarTipo, Tipo Compra: " + compra.getTipo());
 		CuentaCorriente cuenta = new CuentaCorriente();
 		CuentasCorrientesProveedore ccProveedor = new CuentasCorrientesProveedore();		
 		if(compra.getTipo().equals("c.c.")){
@@ -1416,6 +1456,7 @@ public class BeanCompra implements Serializable {
 			movimientoCaja.insertarCaja(caja);
 		}
 		int idCompra = compraDAO.update(compra);
+		log.info("idCompra " + idCompra);
 		if (idCompra != 0) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "CAMBIO DE TIPO DE COMPRA REGISTRADO", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
