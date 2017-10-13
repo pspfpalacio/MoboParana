@@ -163,7 +163,7 @@
    						<p:defaultCommand target="add" />
    					</f:facet>
    				</p:panelGrid>
-   				<p:dataTable id="detalleTable" value="#{beanVenta.listaVentasDetalles}" var="detalle" emptyMessage="No existen detalles">
+   				<p:dataTable id="detalleTable" value="#{beanVenta.listaDetalleVentas}" var="detalle" emptyMessage="No existen detalles">
    					<f:facet name="header">
    						<h:outputText value="Detalle de Venta" />
    					</f:facet>   					
@@ -174,10 +174,9 @@
    					<p:column headerText="Marca y modelo">
    						<h:outputText value="#{detalle.producto.nombre}" />
    					</p:column>
-   					<p:column headerText="Subtotal" style="width:150px;text-align:right;">
-   						<h:outputText value="$" />
+   					<p:column headerText="Subtotal" style="width:150px;text-align:right;">   						
    						<h:outputText value="#{detalle.subtotal}" >
-   							<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
+   							<f:convertNumber maxFractionDigits="2" pattern="$###,##0.00"/>
    						</h:outputText>
    					</p:column>
    					<p:column headerText="Quitar" style="width:100px;text-align:center;">
@@ -185,7 +184,7 @@
    						update="detalleTable" />
    					</p:column>
    					<p:rowExpansion>
-   						<p:dataTable value="#{detalle.ventasDetalleUnidads}" var="unidad"  
+   						<p:dataTable value="#{detalle.listaVentasDetalleUnidads}" var="unidad"  
    						emptyMessage="No existen items" style="width:100%;" resizableColumns="true">
    							<f:facet name="header">
    								<h:outputText value="Móviles" />

@@ -441,13 +441,6 @@
 								<h:outputText value="#{detalle.producto.nombre}" />
 							</p:column>
 							
-							<p:column headerText="Precio de Venta">
-								<h:outputText value="$" />
-								<h:outputText value="#{detalle.precioVenta}" >
-									<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
-								</h:outputText>
-							</p:column>
-							
 							<p:column headerText="Subtotal">
 								<h:outputText value="$" />
 								<h:outputText value="#{detalle.subtotal}" >
@@ -546,12 +539,6 @@
     				</p:column>
     				<p:column headerText="Producto">
     					<h:outputText value="#{detalle.producto.nombre}" />
-    				</p:column>
-    				<p:column headerText="Precio Unitario" style="width:150px;">
-    					<h:outputText value="$" />
-    					<h:outputText value="#{detalle.precioVenta}" >
-    						<f:convertNumber maxFractionDigits="2" pattern="#,##0.00"/>
-    					</h:outputText>
     				</p:column>
     				<p:column headerText="Subtotal" style="width:150px;">
     					<h:outputText value="$" />

@@ -196,6 +196,11 @@ public class VentasDetalle implements Serializable {
 		this.listaPrecio = listaPrecio;
 	}
 	
+	public Integer getProductoId() {
+		int idProducto = producto.getId();
+		return idProducto;
+	}
+	
 	public String getProductoString(){
 		String nombre = producto.getNombre();
 		return nombre;

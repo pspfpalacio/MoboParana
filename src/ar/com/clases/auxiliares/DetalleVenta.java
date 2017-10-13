@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import model.entity.Producto;
-import model.entity.VentasDetalleUnidad;
+import model.entity.VentasDetalle;
 
 public class DetalleVenta implements Serializable {
 
@@ -18,7 +18,7 @@ public class DetalleVenta implements Serializable {
 	private float subtotal;
 	private boolean accesorio;
 	private boolean noBaja;
-	private List<VentasDetalleUnidad> listaVentasDetalleUnidads;
+	private List<VentasDetalle> listaVentasDetalleUnidads;
 
 	public int getCantidad() {
 		return cantidad;
@@ -60,12 +60,12 @@ public class DetalleVenta implements Serializable {
 		this.noBaja = noBaja;
 	}
 
-	public List<VentasDetalleUnidad> getListaVentasDetalleUnidads() {
+	public List<VentasDetalle> getListaVentasDetalleUnidads() {
 		return listaVentasDetalleUnidads;
 	}
 
 	public void setListaVentasDetalleUnidads(
-			List<VentasDetalleUnidad> listaVentasDetalleUnidads) {
+			List<VentasDetalle> listaVentasDetalleUnidads) {
 		this.listaVentasDetalleUnidads = listaVentasDetalleUnidads;
 	}
 

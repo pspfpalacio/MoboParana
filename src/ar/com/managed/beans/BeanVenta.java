@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,7 @@ import ar.com.clases.Reporte;
 import ar.com.clases.auxiliares.Comprobante;
 import ar.com.clases.auxiliares.DetalleComprobante;
 import ar.com.clases.auxiliares.DetalleVenta;
+import ar.com.clases.reportes.VentasRanking;
 import model.entity.Caja;
 import model.entity.Cliente;
 import model.entity.CuentasCorrientesCliente;
@@ -100,6 +103,7 @@ public class BeanVenta implements Serializable {
 	private List<VentasDetalle> listaVentasDetalles;
 	private List<Producto> listaProductos;
 	private List<ListaPrecio> listaPrecios;
+	private List<DetalleVenta> listaDetalleVentas;
 	private Venta venta;
 	private Usuario usuario;
 	private ListaPrecio listaPrecio;
@@ -279,6 +283,14 @@ public class BeanVenta implements Serializable {
 
 	public void setListaPrecios(List<ListaPrecio> listaPrecios) {
 		this.listaPrecios = listaPrecios;
+	}
+
+	public List<DetalleVenta> getListaDetalleVentas() {
+		return listaDetalleVentas;
+	}
+
+	public void setListaDetalleVentas(List<DetalleVenta> listaDetalleVentas) {
+		this.listaDetalleVentas = listaDetalleVentas;
 	}
 
 	public Venta getVenta() {
@@ -585,6 +597,7 @@ public class BeanVenta implements Serializable {
 		listaClientes = new ArrayList<Cliente>();
 		listaVentasDetalles = new ArrayList<VentasDetalle>();
 		listaPrecios = new ArrayList<ListaPrecio>();
+		listaDetalleVentas = new ArrayList<DetalleVenta>();
 		listaClientes = clienteDAO.getLista(true);
 		listaPrecios = listaPrecioDAO.getLista(true);
 		producto = new Producto();
@@ -856,94 +869,182 @@ public class BeanVenta implements Serializable {
 		}
 		if(imeiValido && !ningunProducto && !productoVenta && !productoConsignacion && stockProducto && precioVenta != 0){
 			if(producto.getId() != 0 && unidadMovil != null){
-				List<VentasDetalle> listAux = new ArrayList<VentasDetalle>();
-				boolean noExiste = true;
-				for (VentasDetalle ventasDetalle : listaVentasDetalles) {
-					if(producto.getId() == ventasDetalle.getProducto().getId()){
-						noExiste = false;
-						if(panelMovil){
-							List<VentasDetalleUnidad> listaUnidades = ventasDetalle.getVentasDetalleUnidads();
-//							List<VentasDetalleUnidad> listaAux = new ArrayList<VentasDetalleUnidad>();
-//							for (VentasDetalleUnidad ventasDetalleUnidad : listaUnidades) {
-//								ventasDetalleUnidad.setPrecioVenta(precioVenta);
-//								listaAux.add(ventasDetalleUnidad);
-//							}
-							VentasDetalleUnidad unidad = new VentasDetalleUnidad();
-							unidad.setNroImei(unidadMovil.getNroImei());
-							unidad.setPrecioCompra(unidadMovil.getPrecioCompra());
-							unidad.setPrecioVenta(precioVenta);
-							unidad.setUnidadMovil(unidadMovil);
-							unidad.setListaPrecio(listaPrecio);
-							listaUnidades.add(unidad);
-							ventasDetalle.setAccesorio(false);
-							cantidadTotal = cantidadTotal - ventasDetalle.getCantidad();
-							montoTotal = montoTotal - ventasDetalle.getSubtotal();
-							ventasDetalle.setCantidad(ventasDetalle.getCantidad() + 1);
-							ventasDetalle.setPrecioVenta(precioVenta);
-							ventasDetalle.setProducto(producto);
-							float subtotal = ventasDetalle.getSubtotal() + precioVenta;
-							ventasDetalle.setSubtotal(subtotal);
-							ventasDetalle.setVentasDetalleUnidads(listaUnidades);
-							montoTotal = montoTotal + subtotal;
-							cantidadTotal = cantidadTotal + ventasDetalle.getCantidad();
-						}
-						if(panelAccesorio){
+//				List<VentasDetalle> listAux = new ArrayList<VentasDetalle>();
+//				boolean noExiste = true;				
+				if (panelMovil) {
+					VentasDetalle ventaDetalle = new VentasDetalle();
+					ventaDetalle.setAccesorio(false);
+					ventaDetalle.setEliminado(false);
+					ventaDetalle.setListaPrecio(listaPrecio);
+					ventaDetalle.setNroImei(unidadMovil.getNroImei());
+					ventaDetalle.setPrecioCompra(unidadMovil.getPrecioCompra());
+					ventaDetalle.setPrecioVenta(precioVenta);
+					ventaDetalle.setProducto(producto);
+					listaVentasDetalles.add(ventaDetalle);
+				}
+				if (panelAccesorio) {
+					boolean noExisteAccesorio = true;
+					List<VentasDetalle> listAux = new ArrayList<VentasDetalle>();					
+					for (VentasDetalle ventasDetalle : listaVentasDetalles) {
+						if (producto.getId() == ventasDetalle.getProducto().getId()) {
+							noExisteAccesorio = false;
 							ventasDetalle.setAccesorio(true);
-							cantidadTotal = cantidadTotal - ventasDetalle.getCantidad();
-							montoTotal = montoTotal - ventasDetalle.getSubtotal();
+							ventasDetalle.setEliminado(false);
+//							cantidadTotal = cantidadTotal - ventasDetalle.getCantidad();
+//							montoTotal = montoTotal - ventasDetalle.getSubtotal();
 							ventasDetalle.setCantidad(ventasDetalle.getCantidad() + cantidad);
 							ventasDetalle.setPrecioVenta(precioVenta);
 							ventasDetalle.setProducto(producto);
 							ventasDetalle.setListaPrecio(listaPrecio);
-							ventasDetalle.setSubtotal(precioVenta * ventasDetalle.getCantidad());
-							montoTotal = montoTotal + ventasDetalle.getSubtotal();
-							cantidadTotal = cantidadTotal + ventasDetalle.getCantidad();
+							ventasDetalle.setSubtotal(precioVenta * ventasDetalle.getCantidad());							
+//							montoTotal = montoTotal + ventasDetalle.getSubtotal();
+//							cantidadTotal = cantidadTotal + ventasDetalle.getCantidad();
 						}
+						listAux.add(ventasDetalle);
 					}
-					listAux.add(ventasDetalle);
+					if (noExisteAccesorio) {
+						VentasDetalle ventaDetalle = new VentasDetalle();
+						ventaDetalle.setAccesorio(true);						
+						ventaDetalle.setCantidad(cantidad);
+						ventaDetalle.setEliminado(false);						
+						ventaDetalle.setPrecioVenta(precioVenta);
+						ventaDetalle.setProducto(producto);
+						ventaDetalle.setListaPrecio(listaPrecio);
+						ventaDetalle.setSubtotal((cantidad * precioVenta));
+						listAux.add(ventaDetalle);
+					}
+					listaVentasDetalles = new ArrayList<VentasDetalle>();
+					listaVentasDetalles = listAux;
+				}	
+				
+				Collections.sort(listaVentasDetalles, new Comparator(){
+					@Override
+					public int compare(Object p1, Object p2) {
+						// TODO Auto-generated method stub
+						return ((VentasDetalle) p2).getProductoId()
+								.compareTo(((VentasDetalle) p1).getProductoId());
+					}
+				});				
+				
+				listaDetalleVentas = new ArrayList<DetalleVenta>();
+				int cant = 0;
+				float subtot = 0;
+				int idProd = 0;		
+				for (VentasDetalle ventasDetalle : listaVentasDetalles) {			
+					if (idProd == ventasDetalle.getProducto().getId()) {
+						cant = cant + 1;
+						subtot = subtot + ventasDetalle.getPrecioVenta();
+					} else if (idProd != 0) {
+						DetalleVenta detalle = new DetalleVenta();
+						Producto prod = productoDAO.get(idProd);
+						detalle.setCantidad(cant);
+						detalle.setSubtotal(subtot);
+						detalle.setProducto(prod);
+						listaDetalleVentas.add(detalle);
+						idProd = ventasDetalle.getProducto().getId();
+						cant = 1;
+						subtot = ventasDetalle.getPrecioVenta();
+					} else {
+						idProd = ventasDetalle.getProducto().getId();
+						cant = 1;
+						subtot = ventasDetalle.getPrecioVenta();
+					}
 				}
-				if(noExiste){
-					VentasDetalle detalle = new VentasDetalle();
-					if(panelMovil){
-						List<VentasDetalleUnidad> listaUnidades = new ArrayList<VentasDetalleUnidad>();
-						VentasDetalleUnidad unidad = new VentasDetalleUnidad();
-						unidad.setNroImei(unidadMovil.getNroImei());
-						unidad.setPrecioCompra(unidadMovil.getPrecioCompra());
-						unidad.setPrecioVenta(precioVenta);
-						unidad.setUnidadMovil(unidadMovil);
-						unidad.setListaPrecio(listaPrecio);
-						listaUnidades.add(unidad);
-						detalle.setAccesorio(false);
-						detalle.setCantidad(1);
-						detalle.setPrecioVenta(precioVenta);
-						detalle.setProducto(producto);
-						detalle.setSubtotal(precioVenta);
-						detalle.setVentasDetalleUnidads(listaUnidades);
-						listAux.add(detalle);
-						montoTotal = montoTotal + precioVenta;
-						cantidadTotal = cantidadTotal + 1;
-					}
-					if(panelAccesorio){
-						detalle.setAccesorio(true);
-						detalle.setCantidad(cantidad);
-						detalle.setPrecioVenta(precioVenta);
-						detalle.setProducto(producto);
-						detalle.setListaPrecio(listaPrecio);
-						detalle.setSubtotal((cantidad * precioVenta));
-						listAux.add(detalle);
-						montoTotal = montoTotal + detalle.getSubtotal();
-						cantidadTotal = cantidadTotal + cantidad;
-					}
-				}
-				listaVentasDetalles = new ArrayList<VentasDetalle>();
-				listaVentasDetalles = listAux;
-				producto = new Producto();
-				unidadMovil = new UnidadMovil();
-				nroImei = "";
-				precioVenta = 0;
-				cantidad = 0;
-				idProducto = 0;
-				stockDisponible = 0;
+				DetalleVenta detalle = new DetalleVenta();
+				Producto prod = productoDAO.get(idProd);
+				detalle.setCantidad(cant);
+				detalle.setSubtotal(subtot);
+				detalle.setProducto(prod);
+				listaDetalleVentas.add(detalle);
+			
+//				
+//				
+//				for (VentasDetalle ventasDetalle : listaVentasDetalles) {
+//					if(producto.getId() == ventasDetalle.getProducto().getId()){
+//						noExiste = false;
+//						if(panelMovil){
+//							List<VentasDetalleUnidad> listaUnidades = ventasDetalle.getVentasDetalleUnidads();
+////							List<VentasDetalleUnidad> listaAux = new ArrayList<VentasDetalleUnidad>();
+////							for (VentasDetalleUnidad ventasDetalleUnidad : listaUnidades) {
+////								ventasDetalleUnidad.setPrecioVenta(precioVenta);
+////								listaAux.add(ventasDetalleUnidad);
+////							}
+//							VentasDetalleUnidad unidad = new VentasDetalleUnidad();
+//							unidad.setNroImei(unidadMovil.getNroImei());
+//							unidad.setPrecioCompra(unidadMovil.getPrecioCompra());
+//							unidad.setPrecioVenta(precioVenta);
+//							unidad.setUnidadMovil(unidadMovil);
+//							unidad.setListaPrecio(listaPrecio);
+//							listaUnidades.add(unidad);
+//							ventasDetalle.setAccesorio(false);
+//							cantidadTotal = cantidadTotal - ventasDetalle.getCantidad();
+//							montoTotal = montoTotal - ventasDetalle.getSubtotal();
+//							ventasDetalle.setCantidad(ventasDetalle.getCantidad() + 1);
+//							ventasDetalle.setPrecioVenta(precioVenta);
+//							ventasDetalle.setProducto(producto);
+//							float subtotal = ventasDetalle.getSubtotal() + precioVenta;
+//							ventasDetalle.setSubtotal(subtotal);
+//							ventasDetalle.setVentasDetalleUnidads(listaUnidades);
+//							montoTotal = montoTotal + subtotal;
+//							cantidadTotal = cantidadTotal + ventasDetalle.getCantidad();
+//						}
+//						if(panelAccesorio){
+//							ventasDetalle.setAccesorio(true);
+//							cantidadTotal = cantidadTotal - ventasDetalle.getCantidad();
+//							montoTotal = montoTotal - ventasDetalle.getSubtotal();
+//							ventasDetalle.setCantidad(ventasDetalle.getCantidad() + cantidad);
+//							ventasDetalle.setPrecioVenta(precioVenta);
+//							ventasDetalle.setProducto(producto);
+//							ventasDetalle.setListaPrecio(listaPrecio);
+//							ventasDetalle.setSubtotal(precioVenta * ventasDetalle.getCantidad());
+//							montoTotal = montoTotal + ventasDetalle.getSubtotal();
+//							cantidadTotal = cantidadTotal + ventasDetalle.getCantidad();
+//						}
+//					}
+//					listAux.add(ventasDetalle);
+//				}
+//				if(noExiste){
+//					VentasDetalle detalle = new VentasDetalle();
+//					if(panelMovil){
+//						List<VentasDetalleUnidad> listaUnidades = new ArrayList<VentasDetalleUnidad>();
+//						VentasDetalleUnidad unidad = new VentasDetalleUnidad();
+//						unidad.setNroImei(unidadMovil.getNroImei());
+//						unidad.setPrecioCompra(unidadMovil.getPrecioCompra());
+//						unidad.setPrecioVenta(precioVenta);
+//						unidad.setUnidadMovil(unidadMovil);
+//						unidad.setListaPrecio(listaPrecio);
+//						listaUnidades.add(unidad);
+//						detalle.setAccesorio(false);
+//						detalle.setCantidad(1);
+//						detalle.setPrecioVenta(precioVenta);
+//						detalle.setProducto(producto);
+//						detalle.setSubtotal(precioVenta);
+//						detalle.setVentasDetalleUnidads(listaUnidades);
+//						listAux.add(detalle);
+//						montoTotal = montoTotal + precioVenta;
+//						cantidadTotal = cantidadTotal + 1;
+//					}
+//					if(panelAccesorio){
+//						detalle.setAccesorio(true);
+//						detalle.setCantidad(cantidad);
+//						detalle.setPrecioVenta(precioVenta);
+//						detalle.setProducto(producto);
+//						detalle.setListaPrecio(listaPrecio);
+//						detalle.setSubtotal((cantidad * precioVenta));
+//						listAux.add(detalle);
+//						montoTotal = montoTotal + detalle.getSubtotal();
+//						cantidadTotal = cantidadTotal + cantidad;
+//					}
+//				}
+//				listaVentasDetalles = new ArrayList<VentasDetalle>();
+//				listaVentasDetalles = listAux;
+//				producto = new Producto();
+//				unidadMovil = new UnidadMovil();
+//				nroImei = "";
+//				precioVenta = 0;
+//				cantidad = 0;
+//				idProducto = 0;
+//				stockDisponible = 0;
 			}else{
 				nroImei = "";
 				precioVenta = 0;
@@ -1030,7 +1131,7 @@ public class BeanVenta implements Serializable {
 		int idProd = 0;		
 		for (VentasDetalle ventasDetalle : listAux) {			
 			if (idProd == ventasDetalle.getProducto().getId()) {
-				cantidad = cantidad + 1;
+				cant = cant + 1;
 				subtot = subtot + ventasDetalle.getPrecioVenta();
 			} else if (idProd != 0) {
 				DetalleVenta detalle = new DetalleVenta();
@@ -1044,7 +1145,7 @@ public class BeanVenta implements Serializable {
 				subtot = ventasDetalle.getPrecioVenta();
 			} else {
 				idProd = ventasDetalle.getProducto().getId();
-				cantidad = 1;
+				cant = 1;
 				subtot = ventasDetalle.getPrecioVenta();
 			}
 		}
