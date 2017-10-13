@@ -2,6 +2,7 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="MoboParana">
 		<class>model.entity.Caja</class>
+		<class>model.entity.Cheque</class>
 		<class>model.entity.Cliente</class>
 		<class>model.entity.Compra</class>
 		<class>model.entity.ComprasDetalle</class>
@@ -46,11 +47,17 @@
 		<class>model.entity.EConsignacionsDetalle</class>
 		<class>model.entity.EConsignacionsDetalleUnidad</class>
 		<class>model.entity.Tecnico</class>
+		<class>model.entity.EquipoPendientePago</class>
+		<class>model.entity.DatosEmail</class>
+		
+		<shared-cache-mode>NONE</shared-cache-mode>
+		
 		<properties>
-			<property name="javax.persistence.jdbc.password" value="37zoBUsupo" />
+			<property name="eclipselink.cache.shared.default" value="false" />	
+			<property name="javax.persistence.jdbc.password" value="mysqlserver" />
 			<property name="javax.persistence.jdbc.user" value="root" />
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mobodb" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mobodb_des" />
 			<property name="javax.persistence.logging.level" value="ALL" />
 		</properties>
 	</persistence-unit>

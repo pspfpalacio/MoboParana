@@ -64,7 +64,7 @@
     				
     				<p:outputLabel value="Cliente: " />
     				<p:selectOneMenu value="#{beanVenta.idCliente}" filter="true" filterMatchMode="contains"
-    				style="width:250px;" disabled="#{!beanVenta.nueva}">
+    				style="width:250px;" disabled="true">
     					<p:ajax event="change" listener="#{beanVenta.onChangeCliente()}" 
     					update="cabecera, tipoVenta, saldo, saldo2, consumidor, consumidor2, panelFooter"/>
     					<f:selectItem itemLabel="Venta Directa" itemValue="0"/>
@@ -158,7 +158,7 @@
    				</p:panel>
    				<p:panelGrid columns="1" style="width:100%;">	
    					<f:facet name="header">
-   						<p:commandButton id="add" value="Agregar" action="#{beanVenta.agregarProducto()}" 
+   						<p:commandButton id="add" value="Agregar" action="#{beanVenta.agregarProductoEnModif()}" 
    						update="detalleTable, messages, nroImei, precio, producto, producto1, producto2, precioVenta2, accesorio, cantidad, stockDisponible"/>
    						<p:defaultCommand target="add" />
    					</f:facet>
@@ -180,7 +180,7 @@
    						</h:outputText>
    					</p:column>
    					<p:column headerText="Quitar" style="width:100px;text-align:center;">
-   						<p:commandButton icon="ui-icon-close" action="#{beanVenta.quitarProducto(detalle)}"
+   						<p:commandButton icon="ui-icon-close" action="#{beanVenta.quitarProducto(detalle)}" disabled="#{detalle.noBaja}" 
    						update="detalleTable" />
    					</p:column>
    					<p:rowExpansion>
@@ -190,7 +190,7 @@
    								<h:outputText value="Móviles" />
    							</f:facet>
    							<p:column headerText="Quitar" style="width:45px;text-align:center;">				        		
-				        		<p:commandLink style="float:left;margin-right:10px" styleClass="ui-icon ui-icon-close" 
+				        		<p:commandLink style="float:left;margin-right:10px" styleClass="ui-icon ui-icon-close" disabled="#{beanVenta.noBajaUnidad(unidad)}"
 				        		action="#{beanVenta.quitarUnidadDetalle(detalle, unidad)}" update=":formulario:detalleTable" />
 				        	</p:column>
 				        	<p:column headerText="Nro Imei">
@@ -217,7 +217,10 @@
    				</p:dataTable>
    				<p:panelGrid id="panelFooter" columns="2" style="width:100%;">
    					<f:facet name="header">
-   						<p:commandButton value="Aceptar" onclick="return confirm('REGISTRAR VENTA #{beanVenta.tipo.toUpperCase()}?')" action="#{beanVenta.guardar()}" />
+   						<p:commandButton value="Aceptar" onclick="return confirm('REGISTRAR VENTA #{beanVenta.tipo.toUpperCase()}?')" action="#{beanVenta.guardar()}" 
+   						rendered="#{beanVenta.nueva}"/>
+   						<p:commandButton value="Aceptar" onclick="return confirm('REGISTRAR EDICIÓN VENTA #{beanVenta.tipo.toUpperCase()}?')" action="#{beanVenta.modifcar()}" 
+   						rendered="#{!beanVenta.nueva}"/>
    						<p:commandButton value="Cancelar" onclick="return confirm('CANCELAR VENTA Y VOLVER?')" action="ventas"/>
    					</f:facet>
    				</p:panelGrid>		

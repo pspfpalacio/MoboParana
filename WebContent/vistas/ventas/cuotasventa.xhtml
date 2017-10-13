@@ -52,7 +52,7 @@
 						<h:outputText value="Equipos en Venta" />
 						<p:selectManyMenu id="manymenu" value="#{beanCuotaVenta.selectedMoviles}" showCheckbox="true" style="width:800px;">
 							<f:selectItems value="#{beanCuotaVenta.listaVentasDetalleUnidads}" var="unidad" 
-							itemLabel="#{unidad.nroImei} - #{unidad.unidadMovil.producto.nombre}" itemValue="#{unidad.nroImei}"/>
+							itemLabel="#{unidad.nroImei} - #{beanCuotaVenta.getNombreProducto(unidad.nroImei)}" itemValue="#{unidad.nroImei}"/>
 						</p:selectManyMenu>
 						<p:column>
 							<p:outputLabel value="Primer Vencimiento: " />

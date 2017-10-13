@@ -15,6 +15,8 @@ public interface DAOVentaDetalle {
 	
 	public VentasDetalle get(int id);
 	
+	public VentasDetalle get(String nroImei);
+	
 	public VentasDetalle get(Venta venta, Producto producto);
 	
 	public int delete(Venta venta);

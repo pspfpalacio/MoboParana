@@ -28,7 +28,7 @@ import model.entity.CuotasVentasDetalle;
 import model.entity.UnidadMovil;
 import model.entity.Usuario;
 import model.entity.Venta;
-import model.entity.VentasDetalleUnidad;
+import model.entity.VentasDetalle;
 import dao.interfaces.DAOCuotaVenta;
 import dao.interfaces.DAOCuotaVentaDetalle;
 import dao.interfaces.DAOProducto;
@@ -69,7 +69,7 @@ public class BeanCuotaVenta implements Serializable {
 	
 	private List<CuotasVenta> listaCuotasVenta;
 	private List<CuotasVentasDetalle> listaCuotasVentasDetalles;
-	private List<VentasDetalleUnidad> listaVentasDetalleUnidads;
+	private List<VentasDetalle> listaVentasDetalleUnidads;
 	private List<String> selectedMoviles;
 	private CuotasVenta cuotasVenta;
 	private Usuario usuario;
@@ -151,12 +151,12 @@ public class BeanCuotaVenta implements Serializable {
 		this.listaCuotasVentasDetalles = listaCuotasVentasDetalles;
 	}
 
-	public List<VentasDetalleUnidad> getListaVentasDetalleUnidads() {
+	public List<VentasDetalle> getListaVentasDetalleUnidads() {
 		return listaVentasDetalleUnidads;
 	}
 
 	public void setListaVentasDetalleUnidads(
-			List<VentasDetalleUnidad> listaVentasDetalleUnidads) {
+			List<VentasDetalle> listaVentasDetalleUnidads) {
 		this.listaVentasDetalleUnidads = listaVentasDetalleUnidads;
 	}
 
@@ -227,12 +227,12 @@ public class BeanCuotaVenta implements Serializable {
 				usuario = new Usuario();
 				venta = ven;
 				usuario = user;
-				List<VentasDetalleUnidad> listaAuxVentaDet = new ArrayList<VentasDetalleUnidad>();
-				listaAuxVentaDet = ventaDetalleUnidadDAO.getLista(ven);
+				List<VentasDetalle> listaAuxVentaDet = new ArrayList<VentasDetalle>();
+				listaAuxVentaDet = ventaDetalleDAO.getLista(ven);
 				List<CuotasVenta> listCuot = new ArrayList<CuotasVenta>();
 				List<CuotasVenta> listaAuxCuot = new ArrayList<CuotasVenta>();
 				listaAuxCuot = cuotaVentaDAO.getLista(true, ven);
-				listaVentasDetalleUnidads = new ArrayList<VentasDetalleUnidad>();
+				listaVentasDetalleUnidads = new ArrayList<VentasDetalle>();
 				listaCuotasVenta = new ArrayList<CuotasVenta>();
 				listaCuotasVentasDetalles = new ArrayList<CuotasVentasDetalle>();
 				//listaCuotas = listaAuxCuot;
@@ -251,7 +251,7 @@ public class BeanCuotaVenta implements Serializable {
 				}
 				date = formato.parse(fechaFiltro);
 				listaCuotasVentasDetalles = cuotaVentaDetalleDAO.getListaPorVencer(ven, date);
-				for (VentasDetalleUnidad ventaDetalleUnidad : listaAuxVentaDet) {
+				for (VentasDetalle ventaDetalleUnidad : listaAuxVentaDet) {
 					String imei = ventaDetalleUnidad.getNroImei();
 					boolean noExiste = true;
 					for (CuotasVenta cuota : listaAuxCuot) {
@@ -277,7 +277,7 @@ public class BeanCuotaVenta implements Serializable {
 				return "cuotasventa";
 			}			
 		} catch (Exception e){
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible acceder a la vista de Cuotas, Inténtelo nuevamente!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible acceder a la vista de Cuotas, Intï¿½ntelo nuevamente!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
 		}		
@@ -305,10 +305,22 @@ public class BeanCuotaVenta implements Serializable {
 			listaCuotasVentasDetalles = cuotaVentaDetalleDAO.getListaPorVencer(date);			
 			return "vercuotasventa";
 		} catch (Exception e){
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible acceder a la vista de Cuotas, Inténtelo nuevamente!", null);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible acceder a la vista de Cuotas, Intï¿½ntelo nuevamente!", null);
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return "";
 		}		
+	}
+	
+	public String getNombreProducto(String nroImei) {
+		String nombre = "";
+		try {
+			UnidadMovil unidad = unidadMovilDAO.get(nroImei);
+			nombre = unidad.getProducto().getNombre();
+			return nombre;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return nombre;			
+		}
 	}
 	
 	public void verDetalle(CuotasVenta cuot) {
@@ -323,7 +335,7 @@ public class BeanCuotaVenta implements Serializable {
 				List<CuotasVenta> listaAuxCuota = new ArrayList<CuotasVenta>();
 				for (String imei : selectedMoviles) {
 					UnidadMovil unidad = unidadMovilDAO.get(imei);
-					VentasDetalleUnidad ventaUnidad = ventaDetalleUnidadDAO.get(imei);
+					VentasDetalle ventaUnidad = ventaDetalleDAO.get(imei);
 					CuotasVenta cuo = new CuotasVenta();
 					cuo.setCantCuotas(cantCuota);
 					cuo.setVenta(venta);
@@ -387,18 +399,18 @@ public class BeanCuotaVenta implements Serializable {
 					}
 				}
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cuotas generadas!", null);
-				List<VentasDetalleUnidad> listaAuxVentaDet = new ArrayList<VentasDetalleUnidad>();
-				listaAuxVentaDet = ventaDetalleUnidadDAO.getLista(venta);
+				List<VentasDetalle> listaAuxVentaDet = new ArrayList<VentasDetalle>();
+				listaAuxVentaDet = ventaDetalleDAO.getLista(venta);
 				primerVencimiento = null;
 				cantCuota = 0;
 				interes = 0;
 				selectedMoviles = new ArrayList<String>();
 				listaCuotasVenta = new ArrayList<CuotasVenta>();
 				listaCuotasVentasDetalles = new ArrayList<CuotasVentasDetalle>();
-				listaVentasDetalleUnidads = new ArrayList<VentasDetalleUnidad>();
+				listaVentasDetalleUnidads = new ArrayList<VentasDetalle>();
 				List<CuotasVenta> listaCuot = new ArrayList<CuotasVenta>(); 
 				List<CuotasVenta> listCuotAux = cuotaVentaDAO.getLista(true, venta);
-				for (VentasDetalleUnidad ventaDetalleUnidad : listaAuxVentaDet) {
+				for (VentasDetalle ventaDetalleUnidad : listaAuxVentaDet) {
 					String imei = ventaDetalleUnidad.getNroImei();
 					boolean noExiste = true;
 					for (CuotasVenta cuota : listCuotAux) {
@@ -433,7 +445,7 @@ public class BeanCuotaVenta implements Serializable {
 				listaCuotasVentasDetalles = cuotaVentaDetalleDAO.getListaPorVencer(venta, date);
 			} catch (Exception e) {
 				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrio un Error al generar las cuotas, "
-						+ "inténtelo nuevamente mas tarde!, Error original: " + e.getMessage(), null);
+						+ "intï¿½ntelo nuevamente mas tarde!, Error original: " + e.getMessage(), null);
 			}
 		} else {
 			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Al menos un equipo, el primer venc., cant. cuotas, "
@@ -479,8 +491,8 @@ public class BeanCuotaVenta implements Serializable {
 		if (idCaja != 0 && idCuentaCorriente != 0 && idCuotDet != 0) {
 			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago de Cuota Registrado!", null);
 		} else {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al registrar el pago de la cuota, "
-					+ "inténtelo nuevamente!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurriï¿½ un error al registrar el pago de la cuota, "
+					+ "intï¿½ntelo nuevamente!", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
@@ -518,8 +530,8 @@ public class BeanCuotaVenta implements Serializable {
 		if (idCaja != 0 && idCuentaCorriente != 0 && idCuotDet != 0) {
 			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago de Cuota Registrado!", null);
 		} else {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al registrar el pago de la cuota, "
-					+ "inténtelo nuevamente!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurriï¿½ un error al registrar el pago de la cuota, "
+					+ "intï¿½ntelo nuevamente!", null);
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
@@ -560,8 +572,8 @@ public class BeanCuotaVenta implements Serializable {
 				listaCuotasVentasDetalles = cuotaVentaDetalleDAO.getListaPorVencer(venta, date);
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de pago de cuota!", null);
 			} else {
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al dar de baja el pago de la Cuota, "
-						+ "inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurriï¿½ un error al dar de baja el pago de la Cuota, "
+						+ "intï¿½ntelo nuevamente!", null);
 			}
 		} catch (Exception e) {
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se pudo registrar la baja del pago! Error originial: " + e.getMessage(), null);
@@ -621,8 +633,8 @@ public class BeanCuotaVenta implements Serializable {
 				listaCuotasVentasDetalles = cuotaVentaDetalleDAO.getListaPorVencer(venta, date);
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Cuotas!", null);
 			} else {
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al dar de baja la Cuota, "
-						+ "inténtelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurriï¿½ un error al dar de baja la Cuota, "
+						+ "intï¿½ntelo nuevamente!", null);
 			}
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		} catch (Exception e) {

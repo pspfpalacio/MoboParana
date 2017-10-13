@@ -93,6 +93,21 @@ public class DAOVentaDetalleImpl implements Serializable, DAOVentaDetalle {
 		}
 		return ventasDetalle;
 	}
+	
+	public VentasDetalle get(String nroImei) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT v FROM VentasDetalle v WHERE v.nroImei = :pNroImei AND v.eliminado = :pEliminado", VentasDetalle.class);
+		locQuery.setParameter("pNroImei", nroImei);
+		locQuery.setParameter("pEliminado", false);
+		VentasDetalle ventasDetalle = new VentasDetalle();
+		try{
+			ventasDetalle = (VentasDetalle) locQuery.getSingleResult();
+		}catch(Exception e){
+			e.printStackTrace();
+			ventasDetalle = new VentasDetalle();
+		}
+		return ventasDetalle;
+	}
 
 	public VentasDetalle get(Venta venta, Producto producto) {
 		inicializar();
