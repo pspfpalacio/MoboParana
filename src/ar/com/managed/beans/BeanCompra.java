@@ -740,12 +740,15 @@ public class BeanCompra implements Serializable {
 		}
 	}
 	public void quitarDetalle(ComprasDetalle comprasDetalle){
+		log.info("id comprasDetalle: " + comprasDetalle.getId());
 		List<ComprasDetalle> listAux = new ArrayList<ComprasDetalle>();
+		log.info("listaComprasDetalles.size:  " + listaComprasDetalles.size());
 		for(ComprasDetalle comprasDetalle2 : listaComprasDetalles){
-			if(comprasDetalle2.getProducto().getId() != comprasDetalle.getProducto().getId()){
+			if(comprasDetalle2.getId() != comprasDetalle.getId()){
 				listAux.add(comprasDetalle2);
 			}
 		}
+		log.info("listAux.size:  " + listAux.size());
 		if(comprasDetalle.getAccesorio()) {
 			montoTotal = montoTotal - comprasDetalle.getSubtotal();
 			cantidadTotal = cantidadTotal - comprasDetalle.getCantidad();
@@ -795,7 +798,7 @@ public class BeanCompra implements Serializable {
 			// VER CUANDO SE MERGEE LA MODIFICACION DE CONSIGNACIONES
 //			ConsignacionsDetalleUnidad consignacionUnidad = consignacionDetalleUnidadDAO.get(imei);
 //			if(consignacionUnidad.getId() != 0){
-//				mensaje = mensaje + "Consignaci�n ";
+//				mensaje = mensaje + "Consignacion ";
 //				disponible = false;
 //			}
 		}
@@ -870,7 +873,7 @@ public class BeanCompra implements Serializable {
 				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Baja de Compra!", null);
 			}else{
 				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al dar de Baja la Compra! "
-						+ "Int�ntelo nuevamente!", null);
+						+ "Intente nuevamente!", null);
 			}
 		}else{
 			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No es posible dar de baja la Compra, "
@@ -995,15 +998,15 @@ public class BeanCompra implements Serializable {
 					listaProveedores = proveedorDAO.getLista(true);
 					retorno = "compras";
 				} else {
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurri� un error al guardar el detalle de la Compra, "
-							+ "int�ntelo nuevamente!", null);
+					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al guardar el detalle de la Compra, "
+							+ "intente nuevamente!", null);
 				}
 			} else {
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurri� un error al guardar la Compra, "
-						+ "int�ntelo nuevamente!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al guardar la Compra, "
+						+ "intente nuevamente!", null);
 			}
 		} else {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Proveedor, Monto Total y Detalles de Compra no pueden estar vac�os!", null);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Proveedor, Monto Total y Detalles de Compra son requeridos!", null);
 		}
 		listaCompras = new ArrayList<Compra>();
 		filteredCompras = new ArrayList<Compra>();
@@ -1091,7 +1094,7 @@ public class BeanCompra implements Serializable {
 							+ "intente nuevamente!", null);
 				}
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Proveedor, Monto Total y Detalles de Compra no pueden estar vac�os!", null);
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Proveedor, Monto Total y Detalles de Compra son requeridos", null);
 			}
 			listaCompras = new ArrayList<Compra>();
 			filteredCompras = new ArrayList<Compra>();
