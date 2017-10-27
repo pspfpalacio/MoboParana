@@ -359,12 +359,15 @@ public class BeanPago implements Serializable {
 	}
 	
 	public String onFlowProcess(FlowEvent event) {
-		log.info("onFlowProcess() - idCliente: " + idCliente + " - destinatarios: " + destinatarios + " - event newStep: " + event.getNewStep());				
-		if (idCliente != 0 && !event.getNewStep().equals("confirm")) {
-			destinatarios = "";
+		log.info("onFlowProcess() - idCliente: " + idCliente + " - destinatarios: " + destinatarios + " - event newStep: " + event.getNewStep());
+		if (idCliente != 0 && event.getNewStep().equals("email") && !event.getOldStep().equals("cheques")) {
 			cliente = new Cliente();
 			cliente = clienteDAO.get(idCliente);
 			destinatarios = cliente.getEmail();
+		}
+		if (idCliente != 0 && !event.getNewStep().equals("confirm")) {			
+			cliente = new Cliente();
+			cliente = clienteDAO.get(idCliente);			
 			log.info("Cliente: " + cliente.getApellidoNombre());
 			log.info("Mail cliente: " + destinatarios);
 		}
@@ -382,6 +385,9 @@ public class BeanPago implements Serializable {
 	public String onFlowProcessMoviles(FlowEvent event) {
 		log.info("onFlowProcess() - idCliente: " + idCliente + " - event newStep: " + event.getNewStep());
 		String newStep = event.getNewStep();
+		if (idCliente != 0 && event.getNewStep().equals("email") && !event.getOldStep().equals("confirm")) {			
+			destinatarios = cliente.getEmail();
+		}
 		if (idCliente != 0 && event.getNewStep().equals("concepto") && event.getOldStep().equals("principal")) {
 			log.info("cantidad seleccionados: " + equiposSelectos.size());
 			cliente = clienteDAO.get(idCliente);
@@ -398,8 +404,7 @@ public class BeanPago implements Serializable {
 				}
 			}
 		}
-		if (idCliente != 0 && event.getNewStep().equals("email") && event.getOldStep().equals("concepto")) {
-			destinatarios = "";
+		if (idCliente != 0 && event.getNewStep().equals("email") && event.getOldStep().equals("concepto")) {			
 			cliente = clienteDAO.get(idCliente);
 			destinatarios = cliente.getEmail();
 			log.info("Cliente: " + cliente.getApellidoNombre());
@@ -507,106 +512,111 @@ public class BeanPago implements Serializable {
 	
 	public void guardarPagoCliente(){
 		log.info("guardarPagoCliente() - fecha: " + pagoCliente.getFecha() + " - idCliente: " + idCliente + " - monto: " + pagoCliente.getMonto() + " - envioEmail: " + envioEmail + " - destinatarios: " + destinatarios + " - concepto: " + pagoCliente.getConcepto() + " - registraCheque: " + registrarCheque);
-		FacesMessage msg = null;		
-		if(pagoCliente.getFecha() != null && idCliente != 0 && pagoCliente.getMonto() != 0){
-			cliente = clienteDAO.get(idCliente);
-			log.info("Cliente: " + cliente.getApellidoNombre());
-			if (registrarCheque) {
-				int idCheque = chequeDAO.insertar(cheque);
-				cheque.setId(idCheque);
-				pagoCliente.setCheque(cheque);
-			}
-			pagoCliente.setCliente(cliente);
-			pagoCliente.setFechaAlta(new Date());
-			pagoCliente.setUsuario1(usuario);
-			pagoCliente.setEnabled(true);
-			int idPago = pagoDAO.insertar(pagoCliente);
-			if(idPago != 0){
-				log.info("idPago: " + idPago);
-				pagoCliente.setId(idPago);
-				MovimientoCaja movimientoCaja = new MovimientoCaja();
-				CuentaCorriente cuenta = new CuentaCorriente();
-				CuentasCorrientesCliente ccCliente = new CuentasCorrientesCliente();
-				String conceptoP = pagoCliente.getConcepto();
-				Date fechaP = pagoCliente.getFecha();
-				float montoP = pagoCliente.getMonto();
-				String nombreNegocio = cliente.getNombreNegocio();
-				ccCliente.setCliente(cliente);
-				ccCliente.setDetalle("Pago recibido - Concepto: " + conceptoP);
-				ccCliente.setFecha(fechaP);
-				ccCliente.setHaber(montoP);
-				ccCliente.setIdMovimiento(idPago);
-				ccCliente.setNombreTabla("PagosCliente");
-				ccCliente.setMonto(montoP);
-				ccCliente.setUsuario(usuario);
-				int idCuentaCorriente = cuenta.insertarCC(ccCliente);
-				log.info("idCuentaCorriente "+ idCuentaCorriente);
-				Caja caja = new Caja();
-				caja.setConcepto("Pago recibido de: " + nombreNegocio + " - Concepto : " + conceptoP);
-				caja.setFecha(fechaP);
-				caja.setIdMovimiento(idPago);
-				caja.setMonto(montoP);
-				caja.setNombreTabla("PagosCliente");
-				caja.setUsuario(usuario);
-				int idCaja = movimientoCaja.insertarCaja(caja);
-				log.info("idCaja "+ idCaja);				
-				int tipoComprobante = 1;
-				if(equiposSelectos.size() == 0) {					
-					tipoComprobante = 0;
+		FacesMessage msg = null;
+		try {
+			if(pagoCliente.getFecha() != null && idCliente != 0 && pagoCliente.getMonto() != 0){
+				cliente = clienteDAO.get(idCliente);
+				log.info("Cliente: " + cliente.getApellidoNombre());
+				if (registrarCheque) {
+					int idCheque = chequeDAO.insertar(cheque);
+					cheque.setId(idCheque);
+					pagoCliente.setCheque(cheque);
 				}
-				log.info("Equipos Por Pagar: " + equiposSelectos.size());
-				boolean flagEpp = true;
-				for(EquipoPendientePago epp : equiposSelectos) {
-					epp.setPagado(true);
-					epp.setPagosCliente(pagoCliente);
-					epp.setFechaMod(new Date());
-					epp.setUsuario2(usuario);
-					if (equipoPendientePagoDAO.update(epp) == 0) {
-						flagEpp = false;
-					}					
-				}
-					
-				if(idCuentaCorriente != 0 && idCaja != 0 && flagEpp){
-					int send = 1;
-					String sendMje = "";
-				    	if(envioEmail) {
-				    		String cuerpoMail = generarComprobante(tipoComprobante);
-					    	log.info("Cuerpo de email: " + cuerpoMail);
-				    		Mail mail = new Mail();
-					    	mail.setAsunto("CB Telefonía - Comprobante de pago");
-					    	mail.setCuerpo(cuerpoMail);
-					    	mail.setDestinatarios(destinatarios);
-					    	send = mail.send();
-					    	log.info("SEND " + send);
-					    	if(send == 1) {
-					    		sendMje = ", Comprobante enviado";
-					    	}else {
-					    		sendMje = ", Comprobante NO enviado";
+				pagoCliente.setCliente(cliente);
+				pagoCliente.setFechaAlta(new Date());
+				pagoCliente.setUsuario1(usuario);
+				pagoCliente.setEnabled(true);
+				int idPago = pagoDAO.insertar(pagoCliente);
+				if(idPago != 0){
+					log.info("idPago: " + idPago);
+					pagoCliente.setId(idPago);
+					MovimientoCaja movimientoCaja = new MovimientoCaja();
+					CuentaCorriente cuenta = new CuentaCorriente();
+					CuentasCorrientesCliente ccCliente = new CuentasCorrientesCliente();
+					String conceptoP = pagoCliente.getConcepto();
+					Date fechaP = pagoCliente.getFecha();
+					float montoP = pagoCliente.getMonto();
+					String nombreNegocio = cliente.getNombreNegocio();
+					ccCliente.setCliente(cliente);
+					ccCliente.setDetalle("Pago recibido - Concepto: " + conceptoP);
+					ccCliente.setFecha(fechaP);
+					ccCliente.setHaber(montoP);
+					ccCliente.setIdMovimiento(idPago);
+					ccCliente.setNombreTabla("PagosCliente");
+					ccCliente.setMonto(montoP);
+					ccCliente.setUsuario(usuario);
+					int idCuentaCorriente = cuenta.insertarCC(ccCliente);
+					log.info("idCuentaCorriente "+ idCuentaCorriente);
+					Caja caja = new Caja();
+					caja.setConcepto("Pago recibido de: " + nombreNegocio + " - Concepto : " + conceptoP);
+					caja.setFecha(fechaP);
+					caja.setIdMovimiento(idPago);
+					caja.setMonto(montoP);
+					caja.setNombreTabla("PagosCliente");
+					caja.setUsuario(usuario);
+					int idCaja = movimientoCaja.insertarCaja(caja);
+					log.info("idCaja "+ idCaja);				
+					int tipoComprobante = 1;
+					if(equiposSelectos.size() == 0) {					
+						tipoComprobante = 0;
+					}
+					log.info("Equipos Por Pagar: " + equiposSelectos.size());
+					boolean flagEpp = true;
+					for(EquipoPendientePago epp : equiposSelectos) {
+						epp.setPagado(true);
+						epp.setPagosCliente(pagoCliente);
+						epp.setFechaMod(new Date());
+						epp.setUsuario2(usuario);
+						if (equipoPendientePagoDAO.update(epp) == 0) {
+							flagEpp = false;
+						}					
+					}
+						
+					if(idCuentaCorriente != 0 && idCaja != 0 && flagEpp){
+						int send = 1;
+						String sendMje = "";
+					    	if(envioEmail) {
+					    		String cuerpoMail = generarComprobante(tipoComprobante);
+						    	log.info("Cuerpo de email: " + cuerpoMail);
+					    		Mail mail = new Mail();
+						    	mail.setAsunto("CB Telefonia - Comprobante de pago");
+						    	mail.setCuerpo(cuerpoMail);
+						    	mail.setDestinatarios(destinatarios);
+						    	send = mail.send();
+						    	log.info("SEND " + send);
+						    	if(send == 1) {
+						    		sendMje = ", Comprobante enviado";
+						    	}else {
+						    		sendMje = ", Comprobante NO enviado";
+						    	}
 					    	}
-				    	}
-					
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago registrado" + sendMje, null);
-					idCliente = 0;
-					cliente = new Cliente();
-					pagoCliente = new PagosCliente();
-					pagoCliente.setFecha(null);
-					listaEpp = new ArrayList<EquipoPendientePago>();
-					equiposSelectos = new ArrayList<EquipoPendientePago>();
-					pagoCliente.setConcepto("");
-					destinatarios = "";
-					envioEmail = false;		
-					first = true;
+						
+						msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago registrado" + sendMje, null);
+						idCliente = 0;
+						cliente = new Cliente();
+						pagoCliente = new PagosCliente();
+						pagoCliente.setFecha(null);
+						listaEpp = new ArrayList<EquipoPendientePago>();
+						equiposSelectos = new ArrayList<EquipoPendientePago>();
+						pagoCliente.setConcepto("");
+						destinatarios = "";
+						envioEmail = false;		
+						first = true;
+					}else{
+						msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrio un error al guardar el Pago, "
+								+ "intentelo nuevamente!", null);
+					}
 				}else{
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Pago, "
-							+ "inténtelo nuevamente!", null);
-				}
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrio un error al guardar el Pago, "
+							+ "intentelo nuevamente!", null);
+				}			
 			}else{
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocurrió un error al guardar el Pago, "
-						+ "inténtelo nuevamente!", null);
-			}			
-		}else{
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Cliente y Monto no pueden estar vacíos!", null);
-		}
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Fecha, Cliente y Monto no pueden estar vacios!", null);
+			}
+		} catch (Exception e) {
+			log.error("Error al registrar el pago regular. Error: " + e);
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrio un error grave al registrar el pago. Contactese con el administrador del sistema.", null);
+		}		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 //		return retorno;
 	}

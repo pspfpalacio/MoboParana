@@ -58,8 +58,8 @@
 							<p:selectBooleanCheckbox value="#{beanPago.registrarCheque}" />					
 						</h:panelGrid>
 							
-						<h:panelGrid columns="2" style="width: 870px;" columnClasses="label, value">
-							<p:column>
+						<h:panelGrid columns="2" style="width: 900px;text-align: right;" columnClasses="label, value">
+							<p:column style="text-align: left;">
 								<h:outputText value="Entidad Bancaria:" />
 								<p:inputText value="#{beanPago.cheque.datosEntidad}" />
 							</p:column>
@@ -69,21 +69,21 @@
 							</p:column>
 						</h:panelGrid>
 						
-						<h:panelGrid columns="1" style="width:870px;text-align: right;" columnClasses="label, value">
+						<h:panelGrid columns="1" style="width:900px;text-align: right;" columnClasses="label, value">
 							<p:column>
 								<h:outputText value="Importe($):" />
 								<p:inputText value="#{beanPago.cheque.importe}" disabled="true" />
 							</p:column>
 						</h:panelGrid>
 							
-						<h:panelGrid columns="2" style="width: 900px;" columnClasses="label, value">
+						<h:panelGrid columns="2" style="width:900px;" columnClasses="label, value">
 							
 								<h:outputText value="Persona a favor:" />
 								<p:inputTextarea value="#{beanPago.cheque.persona}" cols="70" rows="1" />
 							
 						</h:panelGrid>
 						
-						<h:panelGrid columns="2" style="width:870px;text-align: right;" columnClasses="label, value">
+						<h:panelGrid columns="2" style="width:900px;text-align: right;" columnClasses="label, value">
 							<p:column>
 								<h:outputText value="Lugar:" />
 								<p:inputText value="#{beanPago.cheque.lugar}" />

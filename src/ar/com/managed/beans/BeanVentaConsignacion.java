@@ -562,7 +562,7 @@ public class BeanVentaConsignacion implements Serializable {
 				//CONTROL SI LAS UNIDADES MOVILES VENDIDAS POSEEN PAGOS
 				EquipoPendientePago epp = equipoPendientePagoDAO.get(nroImei, true, true);
 				log.info("EquipoPendientePago id: " + epp.getId());
-				if (epp.getId() != 0) {
+				if (epp.getId() != 0 && epp.getPagosCliente() != null) {
 					enPago = true;
 				}				
 				for (Cuota cuota : listaCuotas) {
@@ -826,7 +826,7 @@ public class BeanVentaConsignacion implements Serializable {
 							String imeiUndadMvile = ventaUnidad.getNroImei();
 							UnidadMovil unidad = unidadMovilDAO.get(imeiUndadMvile);
 							imeiListOld.add(imeiUndadMvile);
-							ConsignacionsDetalleUnidad unidadConsignacion = consignacionDetalleUnidadDAO.get(imeiUndadMvile);
+							ConsignacionsDetalleUnidad unidadConsignacion = consignacionDetalleUnidadDAO.get(imeiUndadMvile);							
 							unidadConsignacion.setVendido(false);
 							unidadConsignacion.setTipoVenta(null);							
 							unidadConsignacion.setFechaVenta(null);	
@@ -1124,7 +1124,7 @@ public class BeanVentaConsignacion implements Serializable {
 		for (VentasConsDetalleUnidad ventasDetalleUnidad : listAux) {			
 			UnidadMovil unidad = unidadMovilDAO.get(ventasDetalleUnidad.getNroImei());
 			EquipoPendientePago epp = equipoPendientePagoDAO.get(ventasDetalleUnidad.getNroImei(), true, true);
-			if (epp.getId() != 0) {
+			if (epp.getId() != 0 && epp.getPagosCliente() != null) {
 				noBaja = true;
 			}
 			if(unidad.getConFalla()){
@@ -1147,7 +1147,7 @@ public class BeanVentaConsignacion implements Serializable {
 			noBaja = true;
 		}
 		EquipoPendientePago epp = equipoPendientePagoDAO.get(ventaUnidad.getNroImei(), true, true);
-		if (epp.getId() != 0) {
+		if (epp.getId() != 0 && epp.getPagosCliente() != null) {
 			noBaja = true;
 		}
 		return noBaja;
