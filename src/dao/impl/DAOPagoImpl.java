@@ -58,6 +58,7 @@ public class DAOPagoImpl implements Serializable, DAOPago {
 					+ "p.concepto = :pConcepto, p.fecha = :pFecha, p.fechaAlta = :pFechaAlta, p.monto = :pMonto, "
 					+ "p.usuario1 = :pUsuarioAlta, p.usuario2 = :pUsuarioBaja, p.fechaBaja = :pFechaBaja, p.enabled = :pEnabled "
 					+ "WHERE p.id = :pId");
+			locQuery.setParameter("pCheque", pagosCliente.getCheque());
 			locQuery.setParameter("pCliente", pagosCliente.getCliente());
 			locQuery.setParameter("pConcepto", pagosCliente.getConcepto());
 			locQuery.setParameter("pFecha", pagosCliente.getFecha());

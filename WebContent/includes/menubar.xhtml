@@ -41,8 +41,6 @@
 					rendered="#{beanLogueo.menuPagoCliente}" process="@this"/>
 					<p:menuitem value="Pago a Proveedor" action="#{beanPago.goPagoProveedor(beanLogueo.usuario)}"
 					rendered="#{beanLogueo.menuPagoProveedor}" process="@this"/>
-					<p:menuitem value="Marcar equipos como pagos" action="#{beanPago.goMarcarPagados(beanLogueo.usuario)}"
-					rendered="#{beanLogueo.menuPagoCliente}" process="@this"/>
 				</p:submenu>
 				<p:submenu label="Crédito/Débito" rendered="#{beanLogueo.submenuCreditoDebito}">
 					<p:menuitem value="Crédito/Débito a Cliente" action="#{beanCreditoDebito.goCreditoDebitoCliente(beanLogueo.usuario)}"

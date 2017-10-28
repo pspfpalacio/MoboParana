@@ -687,7 +687,7 @@ public class BeanVentaConsignacion implements Serializable {
 			
 			ccCliente.setCliente(client);
 			ccCliente.setDebe(montoTotal);
-			ccCliente.setDetalle("Venta Consignaci�n nro: " + idVenta);				
+			ccCliente.setDetalle("Venta Consignacion nro: " + idVenta);				
 			ccCliente.setFecha(fechaVen);
 			ccCliente.setIdMovimiento(idVenta);
 			ccCliente.setMonto(montoTotal);
