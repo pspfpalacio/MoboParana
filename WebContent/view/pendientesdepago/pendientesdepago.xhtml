@@ -65,31 +65,31 @@
 							        </p:outputPanel>		
 			   					</f:facet>   	
 			   									
-			   					<p:column headerText="Imei" style="text-align:center;">
+			   					<p:column headerText="Imei" style="text-align:center;width:180px;">
 			   						<h:outputText value="#{epp.imei}" />
 			   					</p:column>
 			   					
-			   					<p:column headerText="Nombre" style="text-align:center;">
+			   					<p:column headerText="Nombre">
 			   						<h:outputText value="#{beanPendientePago.getNombrePorImei(epp.imei)}"/>
 			   					</p:column>
 			   					
-			   					<p:column headerText="Precio" style="text-align:center;">
+			   					<p:column headerText="Precio" style="text-align:center;width:100px;">
 			   						<h:outputText value="#{epp.monto}" >
 			   							<f:convertNumber pattern="$###,##0.00"/>
 		   							</h:outputText>
 			   					</p:column>
 			   					
-			   					<p:column headerText="Fecha Venta" style="text-align:center;">
+			   					<p:column headerText="Fecha Venta" style="text-align:center;width:160px;">
 			   						<h:outputText value="#{epp.fechaAlta}" >
 			   							<f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
 			   						</h:outputText>
 			   					</p:column>
 			   					
-			   					<p:column headerText="Pagado" style="text-align:center;">
+			   					<p:column headerText="Pago" style="text-align:center;width:35px;">
 			   						<h:outputText value="#{beanPendientePago.getStringPagado(epp.pagado)}" />
 			   					</p:column>
 			   					
-			   					<p:column headerText="Usuario venta" style="text-align:center;">
+			   					<p:column headerText="Usuario venta" style="text-align:center;width:120px;">
 			   						<h:outputText value="#{epp.usuario1.apellidoNombre}" />
 			   					</p:column>
 			   					

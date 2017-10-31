@@ -120,21 +120,37 @@ public class BeanPendientePago implements Serializable {
 	public void changeFiltro() {
 		log.info("Filtro: " + filtro);
 		listaEpp = new ArrayList<EquipoPendientePago>();
+		montoTotal = 0;
 		switch (filtro) {
 		case 1:
 			listaEpp = equipoPendientePagoDAO.getListaPorCliente(cliente);
+			for(EquipoPendientePago epp : listaEpp)  {
+				if(epp.getEnabled()) {
+					montoTotal = montoTotal + epp.getMonto();
+				}
+			}
 			break;
 		case 2:
 			listaEpp = equipoPendientePagoDAO.getListaPagosPorCliente(cliente);
+			for(EquipoPendientePago epp : listaEpp)  {
+				if(epp.getEnabled()) {
+					montoTotal = montoTotal + epp.getMonto();
+				}
+			}
 			break;
 		case 3:
 			listaEpp = equipoPendientePagoDAO.getListaNoPagosPorCliente(cliente);
+			for(EquipoPendientePago epp : listaEpp)  {
+				if(epp.getEnabled()) {
+					montoTotal = montoTotal + epp.getMonto();
+				}
+			}			
 			break;
 		default: 
 			break;
 		}
-		log.info("Cantidad registros: " + listaEpp.size());
-		
+		log.info("Monto total: " + montoTotal);
+		log.info("Cantidad registros: " + listaEpp.size());				
 	}
 	
 	public String getNombrePorImei(String imei) {

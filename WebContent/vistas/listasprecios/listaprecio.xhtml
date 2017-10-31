@@ -118,20 +118,40 @@
    				</p:panelGrid>
    				
    				
-   				<p:dialog id="dialogo" header="Esta seguro?" widgetVar="dialog" minHeight="150" minWidth="150" closable="true" closeOnEscape="true" modal="true">
-   				<p:commandButton value="Confirmar" update="panel" action="#{beanListaPrecio.guardar()}" oncomplete="PF('dialog').hide();"/>
-						<p:dataTable id="eppTable" value="#{beanListaPrecio.listaCliente}" var="cli" emptyMessage="No existen clientes asociados a la lista" scrollable="true"
-						selection="#{beanListaPrecio.listaClienteSelectos}" rowKey="#{cli.id}" style="width:300px; height:250px;">
-							<f:facet name="header">
-								<p:outputLabel value="Seleccione clientes para enviar listado" style="width:20px;"/>		
+   				<p:dialog id="dialogo" header="Esta seguro que quiere guardar los cambios?" widgetVar="dialog" minHeight="150" minWidth="150" closable="true" closeOnEscape="true" modal="true">
+   					<h:panelGrid columns="1" style="width:100%">
+   						<f:facet name="header">
+   							<p:outputLabel value="Seleccione clientes para enviar e-mail con lista" style="width:20px;"/>
+   						</f:facet>
+   						<p:dataTable id="eppTable" value="#{beanListaPrecio.listaCliente}" widgetVar="clienteBusqueda" var="cli" 
+   						emptyMessage="No existen clientes asociados a la lista" scrollable="true" selection="#{beanListaPrecio.listaClienteSelectos}" 
+   						rowKey="#{cli.id}" scrollRows="20" scrollHeight="250" style="width:700px;">
+							<f:facet name="header">								
+								<p:spacer width="20" />
+								<p:inputText id="globalFilter" onblur="PF('clienteBusqueda').filter()" placeholder="Buscar"/>
 							</f:facet>   	
 							
 							<p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 											
-							<p:column headerText="Nombre" style="text-align:center;">
+							<p:column headerText="Nombre" filterBy="#{cli.apellidoNombre}" 
+							filterStyle="display:none;">
 								<h:outputText value="#{cli.apellidoNombre}" />
 							</p:column>
+							
+							<p:column headerText="E-mail" filterBy="#{cli.email}" 
+							filterStyle="display:none;">
+								<h:outputText value="#{cli.email}" />
+								
+							</p:column>
 						</p:dataTable>
+					</h:panelGrid>	
+					<h:panelGrid columns="1" style="width:100%">
+   						<f:facet name="header">
+   							<p:commandButton value="Aceptar" update="panel" action="#{beanListaPrecio.guardar()}" 
+   							oncomplete="PF('dialog').hide();"/>
+   							<p:commandButton value="Cancelar" update="panel" oncomplete="PF('dialog').hide();"/>
+   						</f:facet>
+   					</h:panelGrid>
 				</p:dialog>	
 
    			</p:panel>

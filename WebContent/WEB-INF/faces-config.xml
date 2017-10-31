@@ -73,7 +73,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -356,7 +356,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -639,7 +639,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -922,7 +922,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -1205,7 +1205,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -1488,7 +1488,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -1771,7 +1771,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -2054,7 +2054,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -2342,7 +2342,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -2625,7 +2625,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -2908,7 +2908,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -3191,7 +3191,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -3474,7 +3474,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -3692,7 +3692,7 @@
    <to-view-id>/index.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -3760,11 +3760,6 @@
   <navigation-case>
    <from-outcome>pagocliente</from-outcome>
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
-   <redirect/>
-  </navigation-case>
-    <navigation-case>
-   <from-outcome>marcarpagados</from-outcome>
-   <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
   <navigation-case>
@@ -4045,7 +4040,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -4328,7 +4323,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -4611,7 +4606,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -4894,7 +4889,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -5177,7 +5172,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -5460,7 +5455,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -5743,7 +5738,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -6026,7 +6021,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -6309,7 +6304,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -6592,7 +6587,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -6885,7 +6880,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -7168,7 +7163,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -7451,7 +7446,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -7734,7 +7729,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -8077,7 +8072,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -8365,7 +8360,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -8648,7 +8643,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -8931,7 +8926,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -9214,7 +9209,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -9497,7 +9492,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -9785,7 +9780,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -10068,7 +10063,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -10351,7 +10346,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -10634,7 +10629,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -10917,7 +10912,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -11200,7 +11195,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -11483,7 +11478,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -11766,7 +11761,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -12049,7 +12044,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -12332,7 +12327,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -12615,7 +12610,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -12898,7 +12893,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -13181,7 +13176,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -13464,7 +13459,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -13747,7 +13742,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -14035,7 +14030,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -14328,7 +14323,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -14636,7 +14631,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -14939,7 +14934,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -15252,7 +15247,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -15570,7 +15565,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -15853,7 +15848,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -16136,7 +16131,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -16419,7 +16414,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -16737,7 +16732,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -17025,7 +17020,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -17318,7 +17313,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -17606,7 +17601,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -17894,7 +17889,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -18182,7 +18177,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -18470,7 +18465,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -18763,7 +18758,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -19046,7 +19041,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -19329,7 +19324,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -19754,7 +19749,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -20042,7 +20037,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -20363,7 +20358,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -20646,7 +20641,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -20934,7 +20929,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -21222,7 +21217,7 @@
    <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
-    <navigation-case>
+  <navigation-case>
    <from-outcome>marcarpagados</from-outcome>
    <to-view-id>/vistas/pagos/marcarpagados.xhtml</to-view-id>
    <redirect/>
@@ -21479,12 +21474,7 @@
    <redirect/>
   </navigation-case>
   <navigation-case>
-   <from-outcome>comprobante</from-outcome>
-   <to-view-id>/view/ventas/comprobante.xhtml</to-view-id>
-   <redirect/>
-  </navigation-case>
-  <navigation-case>
-   <from-outcome>ventas</from-outcome>
+   <from-outcome>ventasCliente</from-outcome>
    <to-view-id>/view/ventas/ventas.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
@@ -21499,7 +21489,7 @@
    <redirect/>
   </navigation-case>
   <navigation-case>
-   <from-outcome>venta</from-outcome>
+   <from-outcome>ventaCliente</from-outcome>
    <to-view-id>/view/ventas/venta.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
@@ -21779,11 +21769,6 @@
   <navigation-case>
    <from-outcome>tecnicos</from-outcome>
    <to-view-id>/vistas/tecnicos/tecnicos.xhtml</to-view-id>
-   <redirect/>
-  </navigation-case>
-    <navigation-case>
-   <from-outcome>pagocliente</from-outcome>
-   <to-view-id>/vistas/pagos/pagocliente.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>

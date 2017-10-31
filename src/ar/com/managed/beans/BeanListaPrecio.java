@@ -803,21 +803,19 @@ public class BeanListaPrecio implements Serializable {
 					
 					if(update && listaClienteSelectos.size() > 0) {
 						String cuerpo = generarHtml(listaPrecioProductos);
-						List<Cliente> listaCliente = new ArrayList<Cliente>();
-						listaCliente = clienteDAO.getLista(listaPrecio);
 						String destinatarios = "";
 						for(Cliente cli : listaClienteSelectos) {
 							destinatarios = destinatarios + cli.getEmail() +",";
 						}
 						
 						Mail mail = new Mail();
-				    	mail.setAsunto("CB Telefonía - Actualizacion de lista de precios");
+				    	mail.setAsunto("CB Telefonia - Actualizacion de lista de precios");
 				    	mail.setCuerpo(cuerpo);
 				    	mail.setDestinatarios(destinatarios);
 				    	log.info(cuerpo);
 				    	log.info(destinatarios);
 				    	int send = mail.send();
-						
+						log.info("Email enviado: " + send);
 					}
 					
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Lista de Precio guardada!", null);
@@ -907,7 +905,7 @@ public class BeanListaPrecio implements Serializable {
 	}
 
     public String generarHtml(List<ListaPrecioProducto> listaPrecioProductos2) {
-    	SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
+//    	SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
     	
     	String html = "";
     	html += "<html>" + 

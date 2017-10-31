@@ -436,7 +436,7 @@ public class BeanVentaCliente implements Serializable {
 									} else {
 										float precioLista = consignacionUnidad.getPrecioLista();
 										FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El precio que debe abonar por el movil es PRECIO: $" + precioVenta 
-												+ ", el movil se consignó al PRECIO: $" + precioLista + ".", null);
+												+ ", el movil se consigno al PRECIO: $" + precioLista + ".", null);
 										FacesContext.getCurrentInstance().addMessage(null, msg);
 										agregar = false;
 									}
@@ -474,7 +474,20 @@ public class BeanVentaCliente implements Serializable {
 	}
 	
 	public void agregarProducto(){
-		if(producto.getId() != 0 && unidadMovil != null && precioVenta != 0){
+		boolean noAgregado = true;
+		log.info("Lista detalles size() - " + listaConsignacionsDetalles.size());
+		for (ConsignacionsDetalle consignacionDetalle : listaConsignacionsDetalles) {
+			List<ConsignacionsDetalleUnidad> listaUnidades = consignacionDetalle.getConsignacionsDetalleUnidads();
+			log.info("Lista unidades size() - " + listaUnidades.size());
+			for (ConsignacionsDetalleUnidad consignacionsDetalleUnidad : listaUnidades) {
+				log.info("Nro imei listado: " + consignacionsDetalleUnidad.getNroImei());
+				log.info("Nro imei ingresado: " + unidadMovil.getNroImei());
+				if (consignacionsDetalleUnidad.getNroImei().equals(unidadMovil.getNroImei())) {
+					noAgregado = false;
+				}
+			}
+		}
+		if(producto.getId() != 0 && unidadMovil != null && precioVenta != 0 && noAgregado){
 			List<ConsignacionsDetalle> listAux = new ArrayList<ConsignacionsDetalle>();
 			boolean noExiste = true;
 			for (ConsignacionsDetalle consignacionDetalle : listaConsignacionsDetalles) {
