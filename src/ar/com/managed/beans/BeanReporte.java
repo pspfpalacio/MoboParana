@@ -3078,7 +3078,7 @@ public class BeanReporte implements Serializable {
 			if (idTipoProducto == 1) {
 				for (Producto prod : listProducts) {									
 					List<UnidadMovil> listaUMovils = unidadMovilDAO.getListaEnStock(true, prod, false, true);
-					List<UnidadMovil> listaUConsig = unidadMovilDAO.getListaEnStock(false, prod, true, true);
+					List<UnidadMovil> listaUConsig = unidadMovilDAO.getListaEnStock(true, prod, true, true);
 					int stock = listaUMovils.size();
 					int consig = listaUConsig.size();
 					String marcaModelo = prod.getNombre();
