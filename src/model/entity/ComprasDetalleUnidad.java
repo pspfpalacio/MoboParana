@@ -1,9 +1,9 @@
 package model.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.*;
-
 
 /**
  * The persistent class for the compras_detalle_unidad database table.
@@ -23,12 +23,39 @@ public class ComprasDetalleUnidad implements Serializable {
 	private boolean conFalla;
 	
 	private boolean eliminado;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="fecha_alta")
+	private Date fechaAlta;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="fecha_baja")
+	private Date fechaBaja;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="fecha_mod")
+	private Date fechaMod;
 
 	@Column(name="nro_imei")
 	private String nroImei;
 
 	@Column(name="precio_compra")
 	private float precioCompra;
+	
+	//bi-directional many-to-one association to Usuario
+	@ManyToOne
+	@JoinColumn(name="id_usuario_alta")
+	private Usuario usuario1;
+
+	//bi-directional many-to-one association to Usuario
+	@ManyToOne
+	@JoinColumn(name="id_usuario_baja")
+	private Usuario usuario2;
+
+	//bi-directional many-to-one association to Usuario
+	@ManyToOne
+	@JoinColumn(name="id_usuario_mod")
+	private Usuario usuario3;
 
 	//bi-directional many-to-one association to ComprasDetalle
 	@ManyToOne
@@ -61,6 +88,30 @@ public class ComprasDetalleUnidad implements Serializable {
 	public void setEliminado(boolean eliminado) {
 		this.eliminado = eliminado;
 	}
+	
+	public Date getFechaAlta() {
+		return this.fechaAlta;
+	}
+
+	public void setFechaAlta(Date fechaAlta) {
+		this.fechaAlta = fechaAlta;
+	}
+
+	public Date getFechaBaja() {
+		return this.fechaBaja;
+	}
+
+	public void setFechaBaja(Date fechaBaja) {
+		this.fechaBaja = fechaBaja;
+	}
+
+	public Date getFechaMod() {
+		return this.fechaMod;
+	}
+
+	public void setFechaMod(Date fechaMod) {
+		this.fechaMod = fechaMod;
+	}
 
 	public String getNroImei() {
 		return this.nroImei;
@@ -76,6 +127,30 @@ public class ComprasDetalleUnidad implements Serializable {
 
 	public void setPrecioCompra(float precioCompra) {
 		this.precioCompra = precioCompra;
+	}
+	
+	public Usuario getUsuario1() {
+		return this.usuario1;
+	}
+
+	public void setUsuario1(Usuario usuario1) {
+		this.usuario1 = usuario1;
+	}
+
+	public Usuario getUsuario2() {
+		return this.usuario2;
+	}
+
+	public void setUsuario2(Usuario usuario2) {
+		this.usuario2 = usuario2;
+	}
+
+	public Usuario getUsuario3() {
+		return this.usuario3;
+	}
+
+	public void setUsuario3(Usuario usuario3) {
+		this.usuario3 = usuario3;
 	}
 
 	public ComprasDetalle getComprasDetalle() {

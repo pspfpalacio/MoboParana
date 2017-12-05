@@ -70,6 +70,30 @@ public class Usuario implements Serializable {
 	//bi-directional many-to-one association to Compra
 	@OneToMany(mappedBy="usuario3")
 	private List<Compra> compras3;
+	
+	//bi-directional many-to-one association to ComprasDetalle
+	@OneToMany(mappedBy="usuario1")
+	private List<ComprasDetalle> comprasDetalles1;
+
+	//bi-directional many-to-one association to ComprasDetalle
+	@OneToMany(mappedBy="usuario2")
+	private List<ComprasDetalle> comprasDetalles2;
+
+	//bi-directional many-to-one association to ComprasDetalle
+	@OneToMany(mappedBy="usuario3")
+	private List<ComprasDetalle> comprasDetalles3;
+
+	//bi-directional many-to-one association to ComprasDetalleUnidad
+	@OneToMany(mappedBy="usuario1")
+	private List<ComprasDetalleUnidad> comprasDetalleUnidads1;
+
+	//bi-directional many-to-one association to ComprasDetalleUnidad
+	@OneToMany(mappedBy="usuario2")
+	private List<ComprasDetalleUnidad> comprasDetalleUnidads2;
+
+	//bi-directional many-to-one association to ComprasDetalleUnidad
+	@OneToMany(mappedBy="usuario3")
+	private List<ComprasDetalleUnidad> comprasDetalleUnidads3;
 
 	//bi-directional many-to-one association to CuentasCorrientesCliente
 	@OneToMany(mappedBy="usuario")
@@ -347,6 +371,10 @@ public class Usuario implements Serializable {
 	//bi-directional many-to-one association to Tecnico
 	@OneToMany(mappedBy="usuario3")
 	private List<Tecnico> tecnicos3;
+	
+	//bi-directional many-to-one association to HistoricoMovil
+	@OneToMany(mappedBy="usuario")
+	private List<HistoricoMovil> historicoMovils;
 
 	public Usuario() {
 	}
@@ -567,6 +595,138 @@ public class Usuario implements Serializable {
 		compras3.setUsuario3(null);
 
 		return compras3;
+	}
+	
+	public List<ComprasDetalle> getComprasDetalles1() {
+		return this.comprasDetalles1;
+	}
+
+	public void setComprasDetalles1(List<ComprasDetalle> comprasDetalles1) {
+		this.comprasDetalles1 = comprasDetalles1;
+	}
+
+	public ComprasDetalle addComprasDetalles1(ComprasDetalle comprasDetalles1) {
+		getComprasDetalles1().add(comprasDetalles1);
+		comprasDetalles1.setUsuario1(this);
+
+		return comprasDetalles1;
+	}
+
+	public ComprasDetalle removeComprasDetalles1(ComprasDetalle comprasDetalles1) {
+		getComprasDetalles1().remove(comprasDetalles1);
+		comprasDetalles1.setUsuario1(null);
+
+		return comprasDetalles1;
+	}
+
+	public List<ComprasDetalle> getComprasDetalles2() {
+		return this.comprasDetalles2;
+	}
+
+	public void setComprasDetalles2(List<ComprasDetalle> comprasDetalles2) {
+		this.comprasDetalles2 = comprasDetalles2;
+	}
+
+	public ComprasDetalle addComprasDetalles2(ComprasDetalle comprasDetalles2) {
+		getComprasDetalles2().add(comprasDetalles2);
+		comprasDetalles2.setUsuario2(this);
+
+		return comprasDetalles2;
+	}
+
+	public ComprasDetalle removeComprasDetalles2(ComprasDetalle comprasDetalles2) {
+		getComprasDetalles2().remove(comprasDetalles2);
+		comprasDetalles2.setUsuario2(null);
+
+		return comprasDetalles2;
+	}
+
+	public List<ComprasDetalle> getComprasDetalles3() {
+		return this.comprasDetalles3;
+	}
+
+	public void setComprasDetalles3(List<ComprasDetalle> comprasDetalles3) {
+		this.comprasDetalles3 = comprasDetalles3;
+	}
+
+	public ComprasDetalle addComprasDetalles3(ComprasDetalle comprasDetalles3) {
+		getComprasDetalles3().add(comprasDetalles3);
+		comprasDetalles3.setUsuario3(this);
+
+		return comprasDetalles3;
+	}
+
+	public ComprasDetalle removeComprasDetalles3(ComprasDetalle comprasDetalles3) {
+		getComprasDetalles3().remove(comprasDetalles3);
+		comprasDetalles3.setUsuario3(null);
+
+		return comprasDetalles3;
+	}
+	
+	public List<ComprasDetalleUnidad> getComprasDetalleUnidads1() {
+		return this.comprasDetalleUnidads1;
+	}
+
+	public void setComprasDetalleUnidads1(List<ComprasDetalleUnidad> comprasDetalleUnidads1) {
+		this.comprasDetalleUnidads1 = comprasDetalleUnidads1;
+	}
+
+	public ComprasDetalleUnidad addComprasDetalleUnidads1(ComprasDetalleUnidad comprasDetalleUnidads1) {
+		getComprasDetalleUnidads1().add(comprasDetalleUnidads1);
+		comprasDetalleUnidads1.setUsuario1(this);
+
+		return comprasDetalleUnidads1;
+	}
+
+	public ComprasDetalleUnidad removeComprasDetalleUnidads1(ComprasDetalleUnidad comprasDetalleUnidads1) {
+		getComprasDetalleUnidads1().remove(comprasDetalleUnidads1);
+		comprasDetalleUnidads1.setUsuario1(null);
+
+		return comprasDetalleUnidads1;
+	}
+
+	public List<ComprasDetalleUnidad> getComprasDetalleUnidads2() {
+		return this.comprasDetalleUnidads2;
+	}
+
+	public void setComprasDetalleUnidads2(List<ComprasDetalleUnidad> comprasDetalleUnidads2) {
+		this.comprasDetalleUnidads2 = comprasDetalleUnidads2;
+	}
+
+	public ComprasDetalleUnidad addComprasDetalleUnidads2(ComprasDetalleUnidad comprasDetalleUnidads2) {
+		getComprasDetalleUnidads2().add(comprasDetalleUnidads2);
+		comprasDetalleUnidads2.setUsuario2(this);
+
+		return comprasDetalleUnidads2;
+	}
+
+	public ComprasDetalleUnidad removeComprasDetalleUnidads2(ComprasDetalleUnidad comprasDetalleUnidads2) {
+		getComprasDetalleUnidads2().remove(comprasDetalleUnidads2);
+		comprasDetalleUnidads2.setUsuario2(null);
+
+		return comprasDetalleUnidads2;
+	}
+
+	public List<ComprasDetalleUnidad> getComprasDetalleUnidads3() {
+		return this.comprasDetalleUnidads3;
+	}
+
+	public void setComprasDetalleUnidads3(List<ComprasDetalleUnidad> comprasDetalleUnidads3) {
+		this.comprasDetalleUnidads3 = comprasDetalleUnidads3;
+	}
+
+	public ComprasDetalleUnidad addComprasDetalleUnidads3(ComprasDetalleUnidad comprasDetalleUnidads3) {
+		getComprasDetalleUnidads3().add(comprasDetalleUnidads3);
+		comprasDetalleUnidads3.setUsuario3(this);
+
+		return comprasDetalleUnidads3;
+	}
+
+	public ComprasDetalleUnidad removeComprasDetalleUnidads3(ComprasDetalleUnidad comprasDetalleUnidads3) {
+		getComprasDetalleUnidads3().remove(comprasDetalleUnidads3);
+		comprasDetalleUnidads3.setUsuario3(null);
+
+		return comprasDetalleUnidads3;
 	}
 
 	public List<CuentasCorrientesCliente> getCuentasCorrientesClientes() {
@@ -1993,6 +2153,28 @@ public class Usuario implements Serializable {
 		equipoPendientePagos3.setUsuario3(null);
 
 		return equipoPendientePagos3;
+	}
+	
+	public List<HistoricoMovil> getHistoricoMovils() {
+		return this.historicoMovils;
+	}
+
+	public void setHistoricoMovils(List<HistoricoMovil> historicoMovils) {
+		this.historicoMovils = historicoMovils;
+	}
+
+	public HistoricoMovil addHistoricoMovil(HistoricoMovil historicoMovil) {
+		getHistoricoMovils().add(historicoMovil);
+		historicoMovil.setUsuario(this);
+
+		return historicoMovil;
+	}
+
+	public HistoricoMovil removeHistoricoMovil(HistoricoMovil historicoMovil) {
+		getHistoricoMovils().remove(historicoMovil);
+		historicoMovil.setUsuario(null);
+
+		return historicoMovil;
 	}
 
 }
