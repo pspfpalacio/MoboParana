@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import model.entity.Producto;
+import model.entity.Rubro;
 import model.entity.VentasCon;
 import model.entity.VentasConsDetalle;
 
@@ -30,5 +31,7 @@ public int insertar(VentasConsDetalle ventasConsDetalle);
 	public List<VentasConsDetalle> getLista(Producto producto, boolean estadoVenta);
 	
 	public List<VentasConsDetalle> getLista(Producto producto, boolean estadoVenta, Date fechaDesde, Date fechaHasta);
+	
+	public List<VentasConsDetalle> getLista(Rubro rubro, boolean estadoVenta, Date fechaDesde, Date fechaHasta);
 
 }

@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import model.entity.Cliente;
 import model.entity.Consignacion;
 import model.entity.Producto;
+import model.entity.Rubro;
 import model.entity.Usuario;
 import model.entity.VentasCon;
 import dao.interfaces.DAOVentaConsignacion;
@@ -383,6 +384,20 @@ public class DAOVentaConsignacionImpl implements Serializable,
 		locQuery.setParameter("pProducto", producto);
 		locQuery.setParameter("pEliminado", false);
 		locQuery.setParameter("pClientes", clientes);
+		locQuery.setParameter("pInicio", fechaDesde);
+		locQuery.setParameter("pFin", fechaHasta);
+		List<VentasCon> lista = locQuery.getResultList();
+		return lista;
+	}
+	
+	public List<VentasCon> getLista(Rubro rubro, boolean estado, Date fechaDesde,
+			Date fechaHasta) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT v.ventasCon FROM VentasConsDetalle v WHERE v.ventasCon.estado = :pEstado "
+				+ "AND v.ventasCon.fecha BETWEEN :pInicio AND :pFin AND v.producto.rubro = :pRubro "
+				+ "ORDER BY v.ventasCon.fecha DESC", VentasCon.class);
+		locQuery.setParameter("pRubro", rubro);
+		locQuery.setParameter("pEstado", estado);
 		locQuery.setParameter("pInicio", fechaDesde);
 		locQuery.setParameter("pFin", fechaHasta);
 		List<VentasCon> lista = locQuery.getResultList();

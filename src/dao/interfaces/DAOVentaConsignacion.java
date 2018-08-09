@@ -6,6 +6,7 @@ import java.util.List;
 import model.entity.Cliente;
 import model.entity.Consignacion;
 import model.entity.Producto;
+import model.entity.Rubro;
 import model.entity.Usuario;
 import model.entity.VentasCon;
 
@@ -64,5 +65,7 @@ public interface DAOVentaConsignacion {
 	public List<VentasCon> getListaOrderFecha(boolean estado, List<Cliente> clientes, Producto producto, Date fechaDesde, Date fechaHasta);
 	
 	public List<VentasCon> getListaOrderMonto(boolean estado, List<Cliente> clientes, Producto producto, Date fechaDesde, Date fechaHasta);
+	
+	public List<VentasCon> getLista(Rubro rubro, boolean estado, Date fechaDesde, Date fechaHasta);
 
 }

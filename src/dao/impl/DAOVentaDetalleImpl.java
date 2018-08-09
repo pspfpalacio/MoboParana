@@ -11,6 +11,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import model.entity.Producto;
+import model.entity.Rubro;
 import model.entity.Venta;
 import model.entity.VentasDetalle;
 import dao.interfaces.DAOVentaDetalle;
@@ -188,6 +189,19 @@ public class DAOVentaDetalleImpl implements Serializable, DAOVentaDetalle {
 		Query locQuery = em.createQuery("SELECT v FROM VentasDetalle v WHERE v.producto = :pProducto AND v.venta.estado = :pEstado "
 				+ "AND v.eliminado = :pEliminado AND v.venta.fecha BETWEEN :pInicio AND :pFin", VentasDetalle.class);
 		locQuery.setParameter("pProducto", producto);
+		locQuery.setParameter("pEstado", estadoVenta);
+		locQuery.setParameter("pEliminado", false);
+		locQuery.setParameter("pInicio", fechaDesde);
+		locQuery.setParameter("pFin", fechaHasta);
+		List<VentasDetalle> lista = locQuery.getResultList();
+		return lista;
+	}
+	
+	public List<VentasDetalle> getLista(Rubro rubro, boolean estadoVenta, Date fechaDesde, Date fechaHasta) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT v FROM VentasDetalle v WHERE v.producto.rubro = :pRubro AND v.venta.estado = :pEstado "
+				+ "AND v.eliminado = :pEliminado AND v.venta.fecha BETWEEN :pInicio AND :pFin", VentasDetalle.class);
+		locQuery.setParameter("pRubro", rubro);
 		locQuery.setParameter("pEstado", estadoVenta);
 		locQuery.setParameter("pEliminado", false);
 		locQuery.setParameter("pInicio", fechaDesde);

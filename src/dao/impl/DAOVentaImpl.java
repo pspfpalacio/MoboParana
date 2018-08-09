@@ -12,6 +12,7 @@ import javax.persistence.Query;
 
 import model.entity.Cliente;
 import model.entity.Producto;
+import model.entity.Rubro;
 import model.entity.Venta;
 import model.entity.VentasDetalle;
 import dao.interfaces.DAOVenta;
@@ -301,6 +302,18 @@ public class DAOVentaImpl implements Serializable, DAOVenta {
 		locQuery.setParameter("pProducto", producto);
 		locQuery.setParameter("pEliminado", false);
 		locQuery.setParameter("pClientes", clientes);
+		locQuery.setParameter("pInicio", fechaDesde);
+		locQuery.setParameter("pFin", fechaHasta);
+		List<Venta> lista = locQuery.getResultList();
+		return lista;
+	}
+	
+	public List<Venta> getLista(Rubro rubro, boolean estado, Date fechaDesde, Date fechaHasta) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT DISTINCT v.venta FROM VentasDetalle v WHERE v.venta.estado = :pEstado "
+				+ "AND v.venta.fecha BETWEEN :pInicio AND :pFin AND v.producto.rubro = :pRubro ORDER BY v.venta.fecha DESC", Venta.class);
+		locQuery.setParameter("pRubro", rubro);
+		locQuery.setParameter("pEstado", estado);
 		locQuery.setParameter("pInicio", fechaDesde);
 		locQuery.setParameter("pFin", fechaHasta);
 		List<Venta> lista = locQuery.getResultList();
