@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import model.entity.Producto;
+import model.entity.Rubro;
 import model.entity.Venta;
 import model.entity.VentasDetalle;
 
@@ -30,5 +31,7 @@ public interface DAOVentaDetalle {
 	public List<VentasDetalle> getLista(Producto producto, boolean estadoVenta);
 	
 	public List<VentasDetalle> getLista(Producto producto, boolean estadoVenta, Date fechaDesde, Date fechaHasta);
+	
+	public List<VentasDetalle> getLista(Rubro rubro, boolean estadoVenta, Date fechaDesde, Date fechaHasta);
 
 }

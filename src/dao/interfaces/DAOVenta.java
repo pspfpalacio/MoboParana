@@ -5,6 +5,7 @@ import java.util.List;
 
 import model.entity.Cliente;
 import model.entity.Producto;
+import model.entity.Rubro;
 import model.entity.Venta;
 
 public interface DAOVenta {
@@ -39,11 +40,19 @@ public interface DAOVenta {
 	
 	public List<Venta> getListaOrderFecha(boolean estado, Date fechaDesde, Date fechaHasta);
 	
+	public List<Venta> getListaOrderFecha(boolean estado, Rubro rubro, Date fechaDesde, Date fechaHasta);
+	
 	public List<Venta> getListaOrderMonto(boolean estado, Date fechaDesde, Date fechaHasta);
+	
+	public List<Venta> getListaOrderMonto(boolean estado, Rubro rubro, Date fechaDesde, Date fechaHasta);
 	
 	public List<Venta> getListaOrderFecha(boolean estado, List<Cliente> clientes, Date fechaDesde, Date fechaHasta);
 	
+	public List<Venta> getListaOrderFecha(boolean estado, List<Cliente> clientes, Rubro rubro, Date fechaDesde, Date fechaHasta);
+	
 	public List<Venta> getListaOrderMonto(boolean estado, List<Cliente> clientes, Date fechaDesde, Date fechaHasta);
+	
+	public List<Venta> getListaOrderMonto(boolean estado, List<Cliente> clientes, Rubro rubro, Date fechaDesde, Date fechaHasta);
 	
 	public List<Venta> getListaOrderFecha(Producto producto, boolean estado, Date fechaDesde, Date fechaHasta);
 	
@@ -52,4 +61,7 @@ public interface DAOVenta {
 	public List<Venta> getListaOrderFecha(Producto producto, List<Cliente> clientes, boolean estado, Date fechaDesde, Date fechaHasta);
 	
 	public List<Venta> getListaOrderMonto(Producto producto, List<Cliente> clientes, boolean estado, Date fechaDesde, Date fechaHasta);
+	
+	public List<Venta> getLista(Rubro rubro, boolean estado, Date fechaDesde, Date fechaHasta);
+	
 }
