@@ -71,12 +71,12 @@
 				<p:menuitem value="Ranking de Clientes" action="#{beanReporte.goRankingCliente(beanLogueo.usuario)}"
 				rendered="#{beanLogueo.menuRankingCliente}" process="@this" />
 				<p:menuitem value="Ranking de Proveedores" action="#{beanReporte.goRankingProveedor(beanLogueo.usuario)}" 
-				rendered="#{beanLogueo.menuRankingProveedor}" style="width:240px;" process="@this"/>
-				<p:menuitem value="Ranking de Productos" action="#{beanReporte.goRankingProducto(beanLogueo.usuario)}" 
-				rendered="#{beanLogueo.menuProducto}" process="@this"/>
+				rendered="#{beanLogueo.menuRankingProveedor}" style="width:240px;" process="@this"/>				
 				<p:menuitem value="Ganancias" action="#{beanReporte.goGanacias(beanLogueo.usuario)}" 
 				rendered="#{beanLogueo.menuGanancia}" process="@this"/>
-				<p:menuitem value="Ganancias Por Venta" action="#{beanReporte.goGanaciasVenta(beanLogueo.usuario)}" 
+				<p:menuitem value="Ganancia de Productos" action="#{beanReporte.goRankingProducto(beanLogueo.usuario)}" 
+				rendered="#{beanLogueo.menuProducto}" process="@this"/>
+				<p:menuitem value="Ganancias por Venta" action="#{beanReporte.goGanaciasVenta(beanLogueo.usuario)}" 
 				rendered="#{beanLogueo.menuGanancia}" process="@this"/>
 				<p:menuitem value="Patrimonio" action="#{beanReporte.goPatrimonio(beanLogueo.usuario)}" 
 				rendered="#{beanLogueo.menuPatrimonio}" process="@this"/>

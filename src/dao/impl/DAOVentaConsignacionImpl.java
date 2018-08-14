@@ -288,11 +288,43 @@ public class DAOVentaConsignacionImpl implements Serializable,
 		return lista;
 	}
 	
+	public List<VentasCon> getListaOrderFecha(boolean estado, Rubro rubro, Date fechaDesde,
+			Date fechaHasta) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT DISTINCT v.ventasCon FROM VentasConsDetalle v "
+				+ "WHERE v.eliminado = :pEliminado AND v.producto.rubro = :pRubro "
+				+ "AND v.ventasCon.estado = :pEstado AND v.ventasCon.fecha BETWEEN :pInicio AND :pFin "
+				+ "ORDER BY v.ventasCon.fecha DESC", VentasCon.class);
+		locQuery.setParameter("pEliminado", false);
+		locQuery.setParameter("pRubro", rubro);
+		locQuery.setParameter("pEstado", estado);
+		locQuery.setParameter("pInicio", fechaDesde);
+		locQuery.setParameter("pFin", fechaHasta);
+		List<VentasCon> lista = locQuery.getResultList();
+		return lista;
+	}
+	
 	public List<VentasCon> getListaOrderMonto(boolean estado, Date fechaDesde,
 			Date fechaHasta) {
 		inicializar();
 		Query locQuery = em.createQuery("SELECT v FROM VentasCon v WHERE v.estado = :pEstado "
 				+ "AND v.fecha BETWEEN :pInicio AND :pFin ORDER BY v.monto DESC", VentasCon.class);
+		locQuery.setParameter("pEstado", estado);
+		locQuery.setParameter("pInicio", fechaDesde);
+		locQuery.setParameter("pFin", fechaHasta);
+		List<VentasCon> lista = locQuery.getResultList();
+		return lista;
+	}
+	
+	public List<VentasCon> getListaOrderMonto(boolean estado, Rubro rubro, Date fechaDesde,
+			Date fechaHasta) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT DISTINCT v.ventasCon FROM VentasConsDetalle v "
+				+ "WHERE v.eliminado = :pEliminado AND v.producto.rubro = :pRubro "
+				+ "AND v.ventasCon.estado = :pEstado AND v.ventasCon.fecha BETWEEN :pInicio AND :pFin "
+				+ "ORDER BY v.ventasCon.monto DESC", VentasCon.class);
+		locQuery.setParameter("pEliminado", false);
+		locQuery.setParameter("pRubro", rubro);
 		locQuery.setParameter("pEstado", estado);
 		locQuery.setParameter("pInicio", fechaDesde);
 		locQuery.setParameter("pFin", fechaHasta);
@@ -314,12 +346,46 @@ public class DAOVentaConsignacionImpl implements Serializable,
 		return lista;
 	}
 	
+	public List<VentasCon> getListaOrderFecha(boolean estado, List<Cliente> clientes, Rubro rubro, Date fechaDesde,
+			Date fechaHasta) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT DISTINCT v.ventasCon FROM VentasConsDetalle v "
+				+ "WHERE v.eliminado = :pEliminado AND v.producto.rubro = :pRubro "
+				+ "AND v.ventasCon.estado = :pEstado AND v.ventasCon.cliente IN :pClientes AND v.ventasCon.fecha BETWEEN :pInicio AND :pFin "
+				+ "ORDER BY v.ventasCon.fecha DESC", VentasCon.class);
+		locQuery.setParameter("pEliminado", false);
+		locQuery.setParameter("pRubro", rubro);
+		locQuery.setParameter("pEstado", estado);
+		locQuery.setParameter("pClientes", clientes);
+		locQuery.setParameter("pInicio", fechaDesde);
+		locQuery.setParameter("pFin", fechaHasta);
+		List<VentasCon> lista = locQuery.getResultList();
+		return lista;
+	}
+	
 	public List<VentasCon> getListaOrderMonto(boolean estado, List<Cliente> clientes, Date fechaDesde,
 			Date fechaHasta) {
 		inicializar();
 		Query locQuery = em.createQuery("SELECT v FROM VentasCon v WHERE v.estado = :pEstado "
 				+ "AND v.cliente IN :pClientes "
 				+ "AND v.fecha BETWEEN :pInicio AND :pFin ORDER BY v.monto DESC", VentasCon.class);
+		locQuery.setParameter("pEstado", estado);
+		locQuery.setParameter("pClientes", clientes);
+		locQuery.setParameter("pInicio", fechaDesde);
+		locQuery.setParameter("pFin", fechaHasta);
+		List<VentasCon> lista = locQuery.getResultList();
+		return lista;
+	}
+	
+	public List<VentasCon> getListaOrderMonto(boolean estado, List<Cliente> clientes, Rubro rubro, Date fechaDesde,
+			Date fechaHasta) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT DISTINCT v.ventasCon FROM VentasConsDetalle v "
+				+ "WHERE v.eliminado = :pEliminado AND v.producto.rubro = :pRubro "
+				+ "AND v.ventasCon.estado = :pEstado AND v.ventasCon.cliente IN :pClientes AND v.ventasCon.fecha BETWEEN :pInicio AND :pFin "
+				+ "ORDER BY v.ventasCon.monto DESC", VentasCon.class);
+		locQuery.setParameter("pEliminado", false);
+		locQuery.setParameter("pRubro", rubro);
 		locQuery.setParameter("pEstado", estado);
 		locQuery.setParameter("pClientes", clientes);
 		locQuery.setParameter("pInicio", fechaDesde);

@@ -52,11 +52,19 @@ public interface DAOVentaConsignacion {
 	
 	public List<VentasCon> getListaOrderFecha(boolean estado, Date fechaDesde, Date fechaHasta);
 	
+	public List<VentasCon> getListaOrderFecha(boolean estado, Rubro rubro, Date fechaDesde, Date fechaHasta);
+	
 	public List<VentasCon> getListaOrderMonto(boolean estado, Date fechaDesde, Date fechaHasta);
+	
+	public List<VentasCon> getListaOrderMonto(boolean estado, Rubro rubro, Date fechaDesde, Date fechaHasta);
 	
 	public List<VentasCon> getListaOrderFecha(boolean estado, List<Cliente> clientes, Date fechaDesde, Date fechaHasta);
 	
+	public List<VentasCon> getListaOrderFecha(boolean estado, List<Cliente> clientes, Rubro rubro, Date fechaDesde, Date fechaHasta);
+	
 	public List<VentasCon> getListaOrderMonto(boolean estado, List<Cliente> clientes, Date fechaDesde, Date fechaHasta);
+	
+	public List<VentasCon> getListaOrderMonto(boolean estado, List<Cliente> clientes, Rubro rubro, Date fechaDesde, Date fechaHasta);
 	
 	public List<VentasCon> getListaOrderFecha(boolean estado, Producto producto, Date fechaDesde, Date fechaHasta);
 	
@@ -67,5 +75,4 @@ public interface DAOVentaConsignacion {
 	public List<VentasCon> getListaOrderMonto(boolean estado, List<Cliente> clientes, Producto producto, Date fechaDesde, Date fechaHasta);
 	
 	public List<VentasCon> getLista(Rubro rubro, boolean estado, Date fechaDesde, Date fechaHasta);
-
 }

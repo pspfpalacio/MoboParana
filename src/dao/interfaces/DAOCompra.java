@@ -6,6 +6,7 @@ import java.util.List;
 import model.entity.Compra;
 import model.entity.Producto;
 import model.entity.Proveedore;
+import model.entity.Rubro;
 
 public interface DAOCompra {
 	
@@ -35,11 +36,19 @@ public interface DAOCompra {
 	
 	public List<Compra> getListaOrderFecha(boolean estado, Date fechaInicio, Date fechaFin);
 	
+	public List<Compra> getListaOrderFecha(boolean estado, Rubro rubro, Date fechaInicio, Date fechaFin);
+	
 	public List<Compra> getListaOrderMonto(boolean estado, Date fechaInicio, Date fechaFin);
+	
+	public List<Compra> getListaOrderMonto(boolean estado, Rubro rubro, Date fechaInicio, Date fechaFin);
 	
 	public List<Compra> getListaOrderFecha(boolean estado, List<Proveedore> proveedores, Date fechaInicio, Date fechaFin);
 	
+	public List<Compra> getListaOrderFecha(boolean estado, List<Proveedore> proveedores, Rubro rubro, Date fechaInicio, Date fechaFin);
+	
 	public List<Compra> getListaOrderMonto(boolean estado, List<Proveedore> proveedores, Date fechaInicio, Date fechaFin);
+	
+	public List<Compra> getListaOrderMonto(boolean estado, List<Proveedore> proveedores, Rubro rubro, Date fechaInicio, Date fechaFin);
 	
 	public List<Compra> getListaOrderFecha(Producto producto, boolean estado, Date fechaInicio, Date fechaFin);
 	

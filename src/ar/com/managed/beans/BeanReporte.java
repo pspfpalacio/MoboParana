@@ -138,7 +138,7 @@ public class BeanReporte implements Serializable {
 	private List<String> listaIdClientes;
 	private List<String> listaIdProveedores;
 	private List<Compra> listaCompras;
-	private List<Rubro> listaRubros;
+	private List<Rubro> listaRubros;	
 	private Usuario usuario;
 	private Producto producto;
 	private Ganancia gananciaObj;
@@ -1751,6 +1751,7 @@ public class BeanReporte implements Serializable {
 			fechaDesde = null;
 			fechaHasta = null;
 			idTipoMovimiento = 0;
+			idTipoProducto = 0;
 			idProducto = 0;
 			idTipoReporte = 0;
 			habilitaPersona = false;
@@ -1762,10 +1763,12 @@ public class BeanReporte implements Serializable {
 			listaProductos = new ArrayList<Producto>();
 			listaClientes = new ArrayList<Cliente>();
 			listaProveedores = new ArrayList<Proveedore>();
+			listaRubros = new ArrayList<Rubro>();			
 			
 			listaProductos = productoDAO.getLista(true);
 			listaClientes = clienteDAO.getLista(true);
 			listaProveedores = proveedorDAO.getLista(true);
+			listaRubros = rubroDAO.getLista(true);
 			return "reporteDinamico";
 		} catch (Exception e) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Ocurrió un error al cargar el formulario! Error: " 
@@ -1812,7 +1815,7 @@ public class BeanReporte implements Serializable {
 			gananciaProductos = false;
 			if (idTipoMovimiento == 1) {//Compras
 				if (idProducto == 0) {//Todos los productos
-					listaCompras = buscarPorProveedorTodosProductos(listaIdProveedores, idTipoReporte, fechaDesde, fechaHasta);
+					listaCompras = buscarPorProveedorTodosProductos(listaIdProveedores, idTipoReporte, idTipoProducto, fechaDesde, fechaHasta);
 				} else {//Producto en particular
 					listaCompras = buscarPorProveedorProducto(idProducto, listaIdProveedores, idTipoReporte, fechaDesde, fechaHasta);
 				}
@@ -1822,7 +1825,7 @@ public class BeanReporte implements Serializable {
 			}
 			if (idTipoMovimiento == 2) {//Ventas
 				if (idProducto == 0) {//Todos los productos
-					listaGanancia = buscarVentasPorClienteTodosProductos(listaIdClientes, idTipoReporte, fechaDesde, fechaHasta);					
+					listaGanancia = buscarVentasPorClienteTodosProductos(listaIdClientes, idTipoReporte, idTipoProducto, fechaDesde, fechaHasta);					
 				} else {//Producto seleccionado
 					listaGanancia = buscarVentasPorClienteProducto(idProducto, listaIdClientes, idTipoReporte, fechaDesde, fechaHasta);					
 				}
@@ -1832,7 +1835,7 @@ public class BeanReporte implements Serializable {
 			}
 			if (idTipoMovimiento == 3) {//VentasConsignacion
 				if (idProducto == 0) {//Todos los productos
-					listaGanancia = buscarVentasConsigPorClienteTodosProductos(listaIdClientes, idTipoReporte, fechaDesde, fechaHasta);					
+					listaGanancia = buscarVentasConsigPorClienteTodosProductos(listaIdClientes, idTipoReporte, idTipoProducto, fechaDesde, fechaHasta);					
 				} else {//Producto seleccionado
 					listaGanancia = buscarVentasConsigPorClienteProducto(idProducto, listaIdClientes, idTipoReporte, fechaDesde, fechaHasta);					
 				}
@@ -1848,7 +1851,7 @@ public class BeanReporte implements Serializable {
 		}		
 	}
 	
-	public List<Compra> buscarPorProveedorTodosProductos(List<String> listProvs, int idReporte, Date desde, Date hasta) {
+	public List<Compra> buscarPorProveedorTodosProductos(List<String> listProvs, int idReporte, int idRubro, Date desde, Date hasta) {
 		List<Compra> listaCompra = new ArrayList<Compra>();
 		if (desde != null && hasta != null) {
 			int mesDesde = desde.getMonth();
@@ -1859,7 +1862,12 @@ public class BeanReporte implements Serializable {
 					if (idReporte == 0) {//Ninguno
 						montoTotal = 0;
 						cantidadTotal = 0;
-						listaCompra = compraDAO.getListaOrderFecha(true, fechaDesde, fechaHasta);
+						if (idRubro == 0) {
+							listaCompra = compraDAO.getListaOrderFecha(true, fechaDesde, fechaHasta);
+						} else  {
+							Rubro rubro = rubroDAO.get(idRubro);							
+							listaCompra = compraDAO.getListaOrderFecha(true, rubro, fechaDesde, fechaHasta);
+						}						
 						for (Compra compra : listaCompra) {
 							montoTotal = montoTotal + compra.getMonto();
 							cantidadTotal = cantidadTotal + 1;
@@ -1868,7 +1876,12 @@ public class BeanReporte implements Serializable {
 					if (idReporte == 1) {//Monto
 						montoTotal = 0;
 						cantidadTotal = 0;
-						listaCompra = compraDAO.getListaOrderMonto(true, fechaDesde, fechaHasta);
+						if (idRubro == 0) {
+							listaCompra = compraDAO.getListaOrderMonto(true, fechaDesde, fechaHasta);
+						} else  {
+							Rubro rubro = rubroDAO.get(idRubro);							
+							listaCompra = compraDAO.getListaOrderMonto(true, rubro, fechaDesde, fechaHasta);
+						}						
 						for (Compra compra : listaCompra) {
 							montoTotal = montoTotal + compra.getMonto();
 							cantidadTotal = cantidadTotal + 1;
@@ -1883,7 +1896,12 @@ public class BeanReporte implements Serializable {
 							Proveedore prov = proveedorDAO.get(Integer.parseInt(string));
 							listaP.add(prov);
 						}
-						listaCompra = compraDAO.getListaOrderFecha(true, listaP, fechaDesde, fechaHasta);
+						if (idRubro == 0) {
+							listaCompra = compraDAO.getListaOrderFecha(true, listaP, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaCompra = compraDAO.getListaOrderFecha(true, listaP, rubro, fechaDesde, fechaHasta);
+						}						
 						for (Compra compra : listaCompra) {
 							montoTotal = montoTotal + compra.getMonto();
 							cantidadTotal = cantidadTotal + 1;
@@ -1897,7 +1915,12 @@ public class BeanReporte implements Serializable {
 							Proveedore prov = proveedorDAO.get(Integer.parseInt(string));
 							listaP.add(prov);
 						}
-						listaCompra = compraDAO.getListaOrderMonto(true, listaP, fechaDesde, fechaHasta);
+						if (idRubro == 0) {
+							listaCompra = compraDAO.getListaOrderMonto(true, listaP, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaCompra = compraDAO.getListaOrderMonto(true, listaP, rubro, fechaDesde, fechaHasta);
+						}						
 						for (Compra compra : listaCompra) {
 							montoTotal = montoTotal + compra.getMonto();
 							cantidadTotal = cantidadTotal + 1;
@@ -1990,7 +2013,7 @@ public class BeanReporte implements Serializable {
 		}
 	}
 	
-	public List<Ganancia> buscarVentasPorClienteTodosProductos(List<String> listClients, int idReporte, Date desde, Date hasta) {
+	public List<Ganancia> buscarVentasPorClienteTodosProductos(List<String> listClients, int idReporte, int idRubro, Date desde, Date hasta) {
 		if (desde != null && hasta != null) {
 			int mesDesde = desde.getMonth();
 			int mesHasta = hasta.getMonth();
@@ -2001,9 +2024,14 @@ public class BeanReporte implements Serializable {
 					if (idReporte == 0) {//Fecha
 						cantidadTotal = 0;
 						montoTotal = 0;
-						gananciaTotal = 0;
-//						List<Ganancia> listAux = new ArrayList<Ganancia>();			
-						List<Venta> listaVenta = ventaDAO.getListaOrderFecha(true, fechaDesde, fechaHasta);
+						gananciaTotal = 0;		
+						List<Venta> listaVenta = new ArrayList<Venta>();
+						if (idRubro == 0) {
+							listaVenta = ventaDAO.getListaOrderFecha(true, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaVenta = ventaDAO.getListaOrderFecha(true, rubro, fechaDesde, fechaHasta);
+						}
 						for (Venta venta : listaVenta) {
 							Ganancia ganancia = new Ganancia();
 							float costo = 0;
@@ -2048,7 +2076,13 @@ public class BeanReporte implements Serializable {
 						montoTotal = 0;
 						gananciaTotal = 0;
 //						List<Ganancia> listAux = new ArrayList<Ganancia>();			
-						List<Venta> listaVenta = ventaDAO.getListaOrderMonto(true, fechaDesde, fechaHasta);
+						List<Venta> listaVenta = new ArrayList<Venta>();
+						if (idRubro == 0) {
+							listaVenta = ventaDAO.getListaOrderMonto(true, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaVenta = ventaDAO.getListaOrderMonto(true, rubro, fechaDesde, fechaHasta);
+						}
 						for (Venta venta : listaVenta) {
 							Ganancia ganancia = new Ganancia();
 							float costo = 0;
@@ -2092,8 +2126,14 @@ public class BeanReporte implements Serializable {
 						cantidadTotal = 0;
 						montoTotal = 0;
 						gananciaTotal = 0;
-//						List<Ganancia> listAux = new ArrayList<Ganancia>();			
-						List<Venta> listaVenta = ventaDAO.getListaOrderFecha(true, fechaDesde, fechaHasta);
+//						List<Ganancia> listAux = new ArrayList<Ganancia>();	
+						List<Venta> listaVenta = new ArrayList<Venta>();
+						if (idRubro == 0) {
+							listaVenta = ventaDAO.getListaOrderFecha(true, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaVenta = ventaDAO.getListaOrderFecha(true, rubro, fechaDesde, fechaHasta);
+						}
 						for (Venta venta : listaVenta) {
 							Ganancia ganancia = new Ganancia();
 							float costo = 0;
@@ -2151,7 +2191,13 @@ public class BeanReporte implements Serializable {
 							Cliente cli = clienteDAO.get(Integer.parseInt(string));
 							listaC.add(cli);
 						}
-						List<Venta> listaVenta = ventaDAO.getListaOrderFecha(true, listaC, fechaDesde, fechaHasta);
+						List<Venta> listaVenta = new ArrayList<Venta>();
+						if (idRubro == 0) {
+							listaVenta = ventaDAO.getListaOrderFecha(true, listaC, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaVenta = ventaDAO.getListaOrderFecha(true, listaC, rubro, fechaDesde, fechaHasta);
+						}
 						for (Venta venta : listaVenta) {
 							Ganancia ganancia = new Ganancia();
 							float costo = 0;
@@ -2199,8 +2245,14 @@ public class BeanReporte implements Serializable {
 						for (String string : listClients) {
 							Cliente cli = clienteDAO.get(Integer.parseInt(string));
 							listaC.add(cli);
+						}						
+						List<Venta> listaVenta = new ArrayList<Venta>();
+						if (idRubro == 0) {
+							listaVenta = ventaDAO.getListaOrderMonto(true, listaC, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaVenta = ventaDAO.getListaOrderMonto(true, listaC, rubro, fechaDesde, fechaHasta);
 						}
-						List<Venta> listaVenta = ventaDAO.getListaOrderMonto(true, listaC, fechaDesde, fechaHasta);
 						for (Venta venta : listaVenta) {
 							Ganancia ganancia = new Ganancia();
 							float costo = 0;
@@ -2249,7 +2301,13 @@ public class BeanReporte implements Serializable {
 							Cliente cli = clienteDAO.get(Integer.parseInt(string));
 							listaC.add(cli);
 						}
-						List<Venta> listaVenta = ventaDAO.getListaOrderFecha(true, listaC, fechaDesde, fechaHasta);
+						List<Venta> listaVenta = new ArrayList<Venta>();
+						if (idRubro == 0) {
+							listaVenta = ventaDAO.getListaOrderFecha(true, listaC, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaVenta = ventaDAO.getListaOrderFecha(true, listaC, rubro, fechaDesde, fechaHasta);
+						}
 						for (Venta venta : listaVenta) {
 							Ganancia ganancia = new Ganancia();
 							float costo = 0;
@@ -2641,7 +2699,7 @@ public class BeanReporte implements Serializable {
 		}
 	}
 	
-	public List<Ganancia> buscarVentasConsigPorClienteTodosProductos(List<String> listClients, int idReporte, Date desde, Date hasta) {
+	public List<Ganancia> buscarVentasConsigPorClienteTodosProductos(List<String> listClients, int idReporte, int idRubro, Date desde, Date hasta) {
 		if (desde != null && hasta != null) {
 			int mesDesde = desde.getMonth();
 			int mesHasta = hasta.getMonth();
@@ -2653,8 +2711,13 @@ public class BeanReporte implements Serializable {
 						cantidadTotal = 0;
 						montoTotal = 0;
 						gananciaTotal = 0;
-//						List<Ganancia> listAux = new ArrayList<Ganancia>();						
-						List<VentasCon> listaVentasCon = ventaConsignacionDAO.getListaOrderFecha(true, fechaDesde, fechaHasta);
+						List<VentasCon> listaVentasCon = new ArrayList<VentasCon>();
+						if (idRubro == 0) {
+							listaVentasCon = ventaConsignacionDAO.getListaOrderFecha(true, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaVentasCon = ventaConsignacionDAO.getListaOrderFecha(true, rubro, fechaDesde, fechaHasta);
+						}
 						for (VentasCon ventCon : listaVentasCon) {
 							Ganancia ganancia = new Ganancia();
 							float costo = 0;
@@ -2682,8 +2745,13 @@ public class BeanReporte implements Serializable {
 						cantidadTotal = 0;
 						montoTotal = 0;
 						gananciaTotal = 0;
-//						List<Ganancia> listAux = new ArrayList<Ganancia>();						
-						List<VentasCon> listaVentasCon = ventaConsignacionDAO.getListaOrderMonto(true, fechaDesde, fechaHasta);
+						List<VentasCon> listaVentasCon = new ArrayList<VentasCon>();
+						if (idRubro == 0) {
+							listaVentasCon = ventaConsignacionDAO.getListaOrderMonto(true, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaVentasCon = ventaConsignacionDAO.getListaOrderMonto(true, rubro, fechaDesde, fechaHasta);
+						}
 						for (VentasCon ventCon : listaVentasCon) {
 							Ganancia ganancia = new Ganancia();
 							float costo = 0;
@@ -2711,8 +2779,13 @@ public class BeanReporte implements Serializable {
 						cantidadTotal = 0;
 						montoTotal = 0;
 						gananciaTotal = 0;
-//						List<Ganancia> listAux = new ArrayList<Ganancia>();						
-						List<VentasCon> listaVentasCon = ventaConsignacionDAO.getListaOrderFecha(true, fechaDesde, fechaHasta);
+						List<VentasCon> listaVentasCon = new ArrayList<VentasCon>();
+						if (idRubro == 0) {
+							listaVentasCon = ventaConsignacionDAO.getListaOrderFecha(true, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaVentasCon = ventaConsignacionDAO.getListaOrderFecha(true, rubro, fechaDesde, fechaHasta);
+						}
 						for (VentasCon ventCon : listaVentasCon) {
 							Ganancia ganancia = new Ganancia();
 							float costo = 0;
@@ -2754,7 +2827,13 @@ public class BeanReporte implements Serializable {
 							Cliente cli = clienteDAO.get(Integer.parseInt(string));
 							listaC.add(cli);
 						}
-						List<VentasCon> listaVentasCon = ventaConsignacionDAO.getListaOrderFecha(true, listaC, fechaDesde, fechaHasta);
+						List<VentasCon> listaVentasCon = new ArrayList<VentasCon>();
+						if (idRubro == 0) {
+							listaVentasCon = ventaConsignacionDAO.getListaOrderFecha(true, listaC, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaVentasCon = ventaConsignacionDAO.getListaOrderFecha(true, listaC, rubro, fechaDesde, fechaHasta);
+						}
 						for (VentasCon ventCon : listaVentasCon) {
 							Ganancia ganancia = new Ganancia();
 							float costo = 0;
@@ -2787,7 +2866,13 @@ public class BeanReporte implements Serializable {
 							Cliente cli = clienteDAO.get(Integer.parseInt(string));
 							listaC.add(cli);
 						}
-						List<VentasCon> listaVentasCon = ventaConsignacionDAO.getListaOrderMonto(true, listaC, fechaDesde, fechaHasta);
+						List<VentasCon> listaVentasCon = new ArrayList<VentasCon>();
+						if (idRubro == 0) {
+							listaVentasCon = ventaConsignacionDAO.getListaOrderMonto(true, listaC, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaVentasCon = ventaConsignacionDAO.getListaOrderMonto(true, listaC, rubro, fechaDesde, fechaHasta);
+						}
 						for (VentasCon ventCon : listaVentasCon) {
 							Ganancia ganancia = new Ganancia();
 							float costo = 0;
@@ -2820,7 +2905,13 @@ public class BeanReporte implements Serializable {
 							Cliente cli = clienteDAO.get(Integer.parseInt(string));
 							listaC.add(cli);
 						}
-						List<VentasCon> listaVentasCon = ventaConsignacionDAO.getListaOrderFecha(true, listaC, fechaDesde, fechaHasta);
+						List<VentasCon> listaVentasCon = new ArrayList<VentasCon>();
+						if (idRubro == 0) {
+							listaVentasCon = ventaConsignacionDAO.getListaOrderFecha(true, listaC, fechaDesde, fechaHasta);
+						} else {
+							Rubro rubro = rubroDAO.get(idRubro);
+							listaVentasCon = ventaConsignacionDAO.getListaOrderFecha(true, listaC, rubro, fechaDesde, fechaHasta);
+						}
 						for (VentasCon ventCon : listaVentasCon) {
 							Ganancia ganancia = new Ganancia();
 							float costo = 0;

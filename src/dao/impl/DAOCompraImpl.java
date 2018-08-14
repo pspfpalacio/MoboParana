@@ -14,6 +14,7 @@ import model.entity.Compra;
 import model.entity.ComprasDetalle;
 import model.entity.Producto;
 import model.entity.Proveedore;
+import model.entity.Rubro;
 import dao.interfaces.DAOCompra;
 
 public class DAOCompraImpl implements Serializable, DAOCompra {
@@ -191,6 +192,22 @@ public class DAOCompraImpl implements Serializable, DAOCompra {
 		return lista;
 	}
 	
+	public List<Compra> getListaOrderFecha(boolean estado, Rubro rubro, Date fechaInicio, Date fechaFin) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT DISTINCT c.compra FROM ComprasDetalle c WHERE c.eliminado = :pEliminado "
+				+ "AND c.producto.rubro = :pRubro AND c.accesorio = :pAccesorio"
+				+ "AND c.compra.estado = :pEstado AND c.compra.fecha BETWEEN :pInicio AND :pFin "
+				+ "ORDER BY c.compra.fecha DESC", Compra.class);
+		locQuery.setParameter("pEliminado", false);
+		locQuery.setParameter("pAccesorio", true);
+		locQuery.setParameter("pEstado", estado);
+		locQuery.setParameter("pRubro", rubro);
+		locQuery.setParameter("pInicio", fechaInicio);
+		locQuery.setParameter("pFin", fechaFin);
+		List<Compra> lista = locQuery.getResultList();
+		return lista;
+	}
+	
 	public List<Compra> getListaOrderMonto(boolean estado, Date fechaInicio, Date fechaFin) {
 		inicializar();
 		Query locQuery = em.createQuery("SELECT c FROM Compra c WHERE c.estado = :pEstado "
@@ -201,6 +218,22 @@ public class DAOCompraImpl implements Serializable, DAOCompra {
 		List<Compra> lista = locQuery.getResultList();
 		return lista;
 	}
+	
+	public List<Compra> getListaOrderMonto(boolean estado, Rubro rubro, Date fechaInicio, Date fechaFin) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT DISTINCT c.compra FROM ComprasDetalle c "
+				+ "WHERE c.accesorio = :pAccesorio AND c.eliminado = :pEliminado AND c.producto.rubro = :pRubro "
+				+ "AND c.compra.estado = :pEstado AND c.compra.fecha BETWEEN :pInicio AND :pFin "
+				+ "ORDER BY c.compra.monto DESC", Compra.class);
+		locQuery.setParameter("pAccesorio", true);
+		locQuery.setParameter("pEliminado", false);
+		locQuery.setParameter("pRubro", rubro);
+		locQuery.setParameter("pEstado", estado);
+		locQuery.setParameter("pInicio", fechaInicio);
+		locQuery.setParameter("pFin", fechaFin);
+		List<Compra> lista = locQuery.getResultList();
+		return lista;
+	}	
 	
 	public List<Compra> getListaOrderFecha(boolean estado, List<Proveedore> proveedores, Date fechaInicio, Date fechaFin) {
 		inicializar();
@@ -214,10 +247,44 @@ public class DAOCompraImpl implements Serializable, DAOCompra {
 		return lista;
 	}
 	
+	public List<Compra> getListaOrderFecha(boolean estado, List<Proveedore> proveedores, Rubro rubro, Date fechaInicio, Date fechaFin) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT DISTINCT c.compra FROM ComprasDetalle c "
+				+ "WHERE c.accesorio = :pAccesorio AND c.eliminado = :pEliminado AND c.producto.rubro = :pRubro "
+				+ "AND c.compra.estado = :pEstado AND c.compra.proveedore IN :pProveedores AND c.compra.fecha BETWEEN :pInicio AND :pFin "
+				+ "ORDER BY c.compra.fecha DESC", Compra.class);
+		locQuery.setParameter("pAccesorio", true);
+		locQuery.setParameter("pEliminado", false);
+		locQuery.setParameter("pRubro", rubro);
+		locQuery.setParameter("pEstado", estado);
+		locQuery.setParameter("pProveedores", proveedores);
+		locQuery.setParameter("pInicio", fechaInicio);
+		locQuery.setParameter("pFin", fechaFin);
+		List<Compra> lista = locQuery.getResultList();
+		return lista;
+	}
+	
 	public List<Compra> getListaOrderMonto(boolean estado, List<Proveedore> proveedores, Date fechaInicio, Date fechaFin) {
 		inicializar();
 		Query locQuery = em.createQuery("SELECT c FROM Compra c WHERE c.estado = :pEstado "
 				+ "AND c.proveedore IN :pProveedores AND c.fecha BETWEEN :pInicio AND :pFin ORDER BY c.monto DESC", Compra.class);
+		locQuery.setParameter("pEstado", estado);
+		locQuery.setParameter("pProveedores", proveedores);
+		locQuery.setParameter("pInicio", fechaInicio);
+		locQuery.setParameter("pFin", fechaFin);
+		List<Compra> lista = locQuery.getResultList();
+		return lista;
+	}
+	
+	public List<Compra> getListaOrderMonto(boolean estado, List<Proveedore> proveedores, Rubro rubro, Date fechaInicio, Date fechaFin) {
+		inicializar();
+		Query locQuery = em.createQuery("SELECT DISTINCT c.compra FROM ComprasDetalle c "
+				+ "WHERE c.accesorio = :pAccesorio AND c.eliminado = :pEliminado AND c.producto.rubro = :pRubro "
+				+ "AND c.compra.estado = :pEstado AND c.compra.proveedore IN :pProveedores AND c.compra.fecha BETWEEN :pInicio AND :pFin "
+				+ "ORDER BY c.compra.monto DESC", Compra.class);
+		locQuery.setParameter("pAccesorio", true);
+		locQuery.setParameter("pEliminado", false);
+		locQuery.setParameter("pRubro", rubro);
 		locQuery.setParameter("pEstado", estado);
 		locQuery.setParameter("pProveedores", proveedores);
 		locQuery.setParameter("pInicio", fechaInicio);
